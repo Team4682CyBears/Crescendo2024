@@ -22,7 +22,7 @@ The table below highlights various challanges that coder members will be assigne
 ## Second/Third Year Coders (or others already completed AP Comp Science)
 |Input Hardware | Output Hardware | Expected Outcome | Target Owner | Owner |
 |--|--|--|--|--|
-| Talon Motor | bag motor | Negative/positive encoder values from talon control speed input into bag motor, zero to maximum limits scaled to use one full encoder rotation (positive or negative) from boot position | 2nd year | ??  |
+| Talon Motor | bag motor | Negative/positive encoder values from talon control speed input into bag motor, zero to maximum limits scaled to use one full encoder rotation (positive or negative) from boot position | 2nd year | Asher  |
 | Beam break sensor | bag motor on/off in a single direction | Every time a beam break sensor is broken turn motor on, otherwise turn off motor | 2nd year | ??  |
 | Distance sensor | Small neo | As something comes into view of the sensor closer and closer motor speed increases.  When nothing is in view the motor is off | 2nd year | ??  |
 | NavX various movements | Musical notes functionality on a Talon motor | Every time an axis movement on the navx occurs one of 6 notes is played on the Talon. | 2nd year | ??  |
