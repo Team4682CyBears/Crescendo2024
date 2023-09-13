@@ -37,9 +37,6 @@ public class ControlledFalconDefualt extends CommandBase {
 
     subsystems = collection;
 
-    if(this.subsystems.getFalconSubsystem() != null) {
-    addRequirements(this.subsystems.getFalconSubsystem());
-    }
 
 }
 

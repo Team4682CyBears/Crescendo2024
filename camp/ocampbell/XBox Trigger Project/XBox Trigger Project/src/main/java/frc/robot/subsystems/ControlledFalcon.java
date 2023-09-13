@@ -27,8 +27,8 @@ public class ControlledFalcon extends SubsystemBase {
 
 
   public ControlledFalcon() {
-    this.intitalizeControlledFalconState();
-    CommandScheduler.getInstance().registerSubsystem(this);
+    //this.intitalizeControlledFalconState();
+    //CommandScheduler.getInstance().registerSubsystem(this);
 
     config.supplyCurrLimit.enable = true;
     config.supplyCurrLimit.triggerThresholdCurrent = 40; // the peak supply current, in amps
@@ -40,6 +40,8 @@ public class ControlledFalcon extends SubsystemBase {
 
   public void setFalconRelitiveSpeed(double controlledFalconSpeed) {
     motor.set(TalonFXControlMode.PercentOutput, controlledFalconSpeed);
+    System.out.print(controlledFalconSpeed);
+    System.out.print("test");
   }
 
 

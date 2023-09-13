@@ -1,7 +1,6 @@
 // ************************************************************
 // Bishop Blanchet Robotics
 // Home of the Cybears
-// FRC - Charged Up - 2023
 // File: TelescopingArm.java
 // Intent: Forms a container that stores references to the current subsystems.
 // ************************************************************
