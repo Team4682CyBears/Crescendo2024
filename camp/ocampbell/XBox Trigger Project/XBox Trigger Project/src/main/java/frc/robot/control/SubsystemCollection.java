@@ -1,7 +1,7 @@
 // ************************************************************
 // Bishop Blanchet Robotics
 // Home of the Cybears
-// File: TelescopingArm.java
+// File: SubsystemCollection.java
 // Intent: Forms a container that stores references to the current subsystems.
 // ************************************************************
 
