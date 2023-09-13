@@ -111,7 +111,7 @@ public class ManualInputInterfaces {
    * A method to get the every bot expell trigger
    * @return - a double value associated with the magnitude of the left trigger pull
    */
-  public double getInputLeftTrigger()
+  public static double getInputLeftTrigger()
   {
     // use the co drivers left trigger
     double inputValue = 0.0;

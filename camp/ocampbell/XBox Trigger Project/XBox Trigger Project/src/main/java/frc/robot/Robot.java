@@ -89,7 +89,13 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    CommandScheduler.getInstance().schedule(new ControlledFalconDefualt(motor, ManualInputInterfaces.getInputRightTrigger()));
+
+    //TODO get this all out into a helper command
+    if(ManualInputInterfaces.getInputLeftTrigger() > 0){
+      CommandScheduler.getInstance().schedule(new ControlledFalconDefualt(motor, ManualInputInterfaces.getInputLeftTrigger()));
+    } else if(ManualInputInterfaces.getInputRightTrigger() > 0) {
+      CommandScheduler.getInstance().schedule(new ControlledFalconDefualt(motor, ManualInputInterfaces.getInputRightTrigger() * -1));
+    }
 
   }
 
