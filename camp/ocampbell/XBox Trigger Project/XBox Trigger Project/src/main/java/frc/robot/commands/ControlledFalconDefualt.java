@@ -7,7 +7,6 @@ package frc.robot.commands;
 import frc.robot.control.ManualInputInterfaces;
 import frc.robot.control.SubsystemCollection;
 import frc.robot.subsystems.ControlledFalcon;
-import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
@@ -21,7 +20,8 @@ public class ControlledFalconDefualt extends CommandBase {
    * @param subsystem The subsystem used by this command.
    */
 
-  
+  private SubsystemCollection subsystems;
+
 
   private ControlledFalcon motor;
   private double speed = 0.0;
@@ -29,11 +29,18 @@ public class ControlledFalconDefualt extends CommandBase {
 
 
 
-  public ControlledFalconDefualt(ControlledFalcon motor, double speed) {
+  public ControlledFalconDefualt(SubsystemCollection collection, ControlledFalcon motor, double speed) {
       this.motor = motor;
       this.speed = speed;
 
     addRequirements(motor);
+
+    subsystems = collection;
+
+    if(this.subsystems.getFalconSubsystem() != null) {
+    addRequirements(this.subsystems.getFalconSubsystem());
+    }
+
 }
 
   // Called when the command is initially scheduled.

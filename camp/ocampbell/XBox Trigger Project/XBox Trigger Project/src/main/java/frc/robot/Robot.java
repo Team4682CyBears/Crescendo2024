@@ -19,9 +19,10 @@ import frc.robot.subsystems.ControlledFalcon;
  * project.
  */
 public class Robot extends TimedRobot {
-  private Command m_autonomousCommand;
+  //private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+  private SubsystemCollection subsystemCollection;
 
 
   /**
@@ -61,12 +62,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-    // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
-    }
   }
 
   /** This function is called periodically during autonomous. */
@@ -75,13 +71,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    // This makes sure that the autonomous stops running when
-    // teleop starts running. If you want the autonomous to
-    // continue until interrupted by another command, remove
-    // this line or comment it out.
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
-    }
+
   }
 
   private final ControlledFalcon motor = new ControlledFalcon();
@@ -90,12 +80,14 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
-    //TODO get this all out into a helper command
-    if(ManualInputInterfaces.getInputLeftTrigger() > 0){
-      CommandScheduler.getInstance().schedule(new ControlledFalconDefualt(motor, ManualInputInterfaces.getInputLeftTrigger()));
-    } else if(ManualInputInterfaces.getInputRightTrigger() > 0) {
-      CommandScheduler.getInstance().schedule(new ControlledFalconDefualt(motor, ManualInputInterfaces.getInputRightTrigger() * -1));
-    }
+    //TODO get this all out to a helper or command method 
+    double lTrigger = ManualInputInterfaces.getInputLeftTrigger();
+    double rTrigger = ManualInputInterfaces.getInputRightTrigger();
+
+    double avg = (rTrigger+(lTrigger*-1))/2;
+
+    CommandScheduler.getInstance().schedule(new ControlledFalconDefualt(subsystemCollection, motor, avg));
+
 
   }
 

@@ -2,7 +2,6 @@ package frc.robot.control;
 // ***********************************************************
 // Bishop Blanchet Robotics
 // Home of the Cybears
-// FRC - Charged Up - 2023
 // File: InstalledHardware.java
 // Intent: Forms a listing of switches that will help to debug code better as hardware is available (or not available).
 // ************************************************************
@@ -19,22 +18,12 @@ package frc.robot.control;
 
 public class InstalledHardware
 {
-    // Installed I/O Electronic hardware
-    // Hardware that is N/A - mostly because these pieces of hardware have no communication with the RoboRio
-    // batteryInstalled = true;
-    // voltageRegulartorModuleInstalled = true;
-    // robotEnabledLightInstalled = true;
-    // roboRioInstalled = true; - if it wasn't installed then the code wouldn't be running
 
     // Basic Hardware
     public static final boolean powerDistributionPanelInstalled = true;
     
     // Onboard Hardware - Orentation/Navigation Hardware
     public static final boolean wifiRadioInstalled = true;
-    //public static final boolean navx2Installed = false;
-    //public static final boolean navx1Installed = true;
-    //public static final boolean navxInstalled = navx1Installed || navx2Installed;
-    //public static final boolean limelightInstalled = false;
 
     // External Input Hardware
     public static final boolean driverXboxControllerInstalled = true;

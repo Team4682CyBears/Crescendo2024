@@ -27,14 +27,19 @@ public final class Constants {
     public static final double RevNeoEncoderTicksPerRevolution = 42;
 
     // *****************************************************************
+
+
     // input device constants
     public static final int portDriverController = 0;
     public static final int portCoDriverController = 1;
 
 
+    // motor can ports
     public static final int portControleldFalcon = 1;
 
-  public static class OperatorConstants {
+  
+  
+    public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
 }

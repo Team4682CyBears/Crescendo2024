@@ -1,7 +1,6 @@
 // ************************************************************
 // Bishop Blanchet Robotics
 // Home of the Cybears
-// FRC - Charged Up - 2023
 // File: ManualInputInterfaces.java
 // Intent: Forms a class that grants access to driver controlled inputs.
 // ************************************************************
@@ -83,16 +82,6 @@ public class ManualInputInterfaces {
     return -1.0 * driverController.getLeftY();
   }
 
-  /**
-   * A method to get the arcade arm Z componet being input from humans
-   * @return - a double value associated with the magnitude of the Z componet
-   */
-  public double getInputArcadeArmZ()
-  {
-    // use the co drivers right Z to represent the vertical movement
-    // and multiply by -1.0 as xbox reports values flipped
-    return -1.0 * driverController.getRightY();
-  }
 
   /**
    * A method to get the every bot uptake trigger
