@@ -40,8 +40,38 @@ public class ControlledFalconDefault extends CommandBase {
   @Override
   public void execute() {
 
-    speed = -lTrigger + rTrigger;
+    lTrigger = -lTrigger;
+
+    //delta approach
+    speed = lTrigger + rTrigger;
     speed = Math.max(-1.0, Math.min(1.0, speed));
+
+    //left trigger wins 
+    if(Math.abs(lTrigger) > rTrigger){
+      speed = lTrigger;
+    } else {
+      speed = rTrigger;
+    }
+
+    //right trigger wins 
+    if(rTrigger >= Math.abs(lTrigger)){
+      speed = rTrigger;
+    } else {
+      speed = lTrigger;
+    } 
+
+    //gta approach (favors right trigger but if both are pulled it breaks(speed = 0))
+    if(rTrigger > 0){
+      speed = rTrigger;
+    } else if (rTrigger == Math.abs(lTrigger)){   //possibly needs deadband
+      speed = 0;
+    } else if (Math.abs(lTrigger) > 0) {
+      speed = lTrigger;
+    } 
+
+
+
+
 
     motor.setFalconRelativeSpeed(speed);
     done = true;
