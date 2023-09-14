@@ -19,13 +19,10 @@ public class SubsystemCollection
     private ControlledFalcon falconSubsystem = null;
 
 
-    /**
-     * Default constructor
-     */
     public SubsystemCollection() {}
 
     public ControlledFalcon getFalconSubsystem() { return falconSubsystem; }
-    public void getFalconSubsystem(ControlledFalcon value) { falconSubsystem = value; }
+    public void setFalconSubsystem(ControlledFalcon value) { falconSubsystem = value; }
 
     public ManualInputInterfaces getManualInputInterfaces() { return manualInput; }
     public void setManualInputInterfaces(ManualInputInterfaces value) { manualInput = value; }

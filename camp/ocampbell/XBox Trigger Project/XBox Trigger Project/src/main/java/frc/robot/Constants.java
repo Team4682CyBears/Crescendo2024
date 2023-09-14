@@ -19,32 +19,10 @@ package frc.robot;
  */
 public final class Constants {
 
-  
-      // *****************************************************************
-    // standard stuff constants - motors rotation, etc.
-    public static final double DegreesPerRevolution = 360.0;
-    // NEO maximum RPM 
-    public static final double neoMaximumRevolutionsPerMinute = 5676;
-    // NEO 550 maximum RPM - see: https://www.revrobotics.com/rev-21-1651/#:~:text=The%20following%20specifications%20for%20the%20NEO%20550%20Brushless,Motor%20Kv%3A%20917%20Kv%20Free%20Speed%3A%2011000%20RPM
-    public static final double neoFiveFiveZeroMaximumRevolutionsPerMinute = 11000;
-    // this uses the halls effect sensor when plugged into the spark max
-    // see: https://www.revrobotics.com/rev-21-1650/ where it says "42 counts per rev."
-    public static final double RevNeoEncoderTicksPerRevolution = 42;
-
-    // *****************************************************************
-
-
     // input device constants
     public static final int portDriverController = 0;
-    public static final int portCoDriverController = 1;
-
 
     // motor can ports
-    public static final int portControleldFalcon = 1;
-
-  
-  
-    public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
-  }
+    public static final int portControlledFalcon = 1;
+    
 }

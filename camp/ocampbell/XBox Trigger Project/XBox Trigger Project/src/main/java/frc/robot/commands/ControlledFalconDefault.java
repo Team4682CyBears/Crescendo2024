@@ -1,7 +1,7 @@
 // ************************************************************
 // Bishop Blanchet Robotics
 // Home of the Cybears
-// File: ControlledFalconDEfualt.java
+// File: ControlledFalconDefault.java
 // Intent: Assigns a motor speed value to a falcon.
 // ************************************************************
 
@@ -13,16 +13,7 @@ import frc.robot.control.SubsystemCollection;
 import frc.robot.subsystems.ControlledFalcon;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-/** An example command that uses an example subsystem. */
-public class ControlledFalconDefualt extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  //private final ExampleSubsystem m_subsystem;
-
-  /**
-   * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
-   */
+public class ControlledFalconDefault extends CommandBase {
 
   private SubsystemCollection subsystems;
 
@@ -30,39 +21,37 @@ public class ControlledFalconDefualt extends CommandBase {
   private ControlledFalcon motor;
   private double speed = 0.0;
   private boolean done = false;
+  private double lTrigger = 0.0;
+  private double rTrigger = 0.0;
 
 
-
-  public ControlledFalconDefualt(SubsystemCollection collection, ControlledFalcon motor, double speed) {
+  public ControlledFalconDefault(SubsystemCollection collection, ControlledFalcon motor, double lTrigger, double rTrigger) {
       this.motor = motor;
-      this.speed = speed;
+      this.lTrigger = lTrigger;
+      this.rTrigger = rTrigger;
 
     addRequirements(motor);
-
     subsystems = collection;
-
-
 }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
 
-  private void getImputs() {}
 
-
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    motor.setFalconRelitiveSpeed(speed);
+    lTrigger = ManualInputInterfaces.getInputLeftTrigger();
+    rTrigger = ManualInputInterfaces.getInputRightTrigger();
+
+    speed = (rTrigger+(lTrigger*-1))/2;
+
+    motor.setFalconRelativeSpeed(speed);
     done = true;
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return done;
