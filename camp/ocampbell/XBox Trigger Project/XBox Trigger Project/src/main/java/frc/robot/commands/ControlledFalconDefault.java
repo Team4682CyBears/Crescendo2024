@@ -8,7 +8,6 @@
 // ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
 package frc.robot.commands;
 
-import frc.robot.control.ManualInputInterfaces;
 import frc.robot.control.SubsystemCollection;
 import frc.robot.subsystems.ControlledFalcon;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -40,13 +39,13 @@ public class ControlledFalconDefault extends CommandBase {
 
   @Override
   public void execute() {
-    lTrigger = ManualInputInterfaces.getInputLeftTrigger();
-    rTrigger = ManualInputInterfaces.getInputRightTrigger();
 
-    speed = (rTrigger+(lTrigger*-1))/2;
+    double speed = rTrigger + -lTrigger;
+    speed = Math.max(-1.0, Math.min(1.0, speed));
 
     motor.setFalconRelativeSpeed(speed);
     done = true;
+
   }
 
   @Override
