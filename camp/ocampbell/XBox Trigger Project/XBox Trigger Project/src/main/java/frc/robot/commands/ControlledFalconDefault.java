@@ -40,7 +40,7 @@ public class ControlledFalconDefault extends CommandBase {
   @Override
   public void execute() {
 
-    double speed = rTrigger + -lTrigger;
+    speed = -lTrigger + rTrigger;
     speed = Math.max(-1.0, Math.min(1.0, speed));
 
     motor.setFalconRelativeSpeed(speed);

@@ -23,6 +23,9 @@ public class ControlledFalcon extends SubsystemBase {
     TalonFX motor = new TalonFX(Constants.portControlledFalcon);
     TalonFXConfiguration config = new TalonFXConfiguration();
 
+   private SubsystemCollection subsystemCollection;
+   private final ControlledFalcon falc = new ControlledFalcon();
+
   public ControlledFalcon() {
     setDefaultCommand(new ControlledFalconDefault(subsystemCollection, falc, ManualInputInterfaces.getInputLeftTrigger(), ManualInputInterfaces.getInputRightTrigger()));
 
@@ -38,8 +41,7 @@ public class ControlledFalcon extends SubsystemBase {
     System.out.print(controlledFalconSpeed);
   }  
   
-  private SubsystemCollection subsystemCollection;
-  private final ControlledFalcon falc = new ControlledFalcon();
+
 
   @Override
   public void periodic() {
