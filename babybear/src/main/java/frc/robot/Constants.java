@@ -123,4 +123,10 @@ public final class Constants {
     public static final int EveryBotMotorPdpPortId = 8;
     public static final double EveryBotMotorMaximuCurrentAmps = 45.5;
 
+    // ********************************************************************
+    //Wrist Constants
+    public static final double WRIST_ANGLE_PICKUP = 0.0; // Example angle for picking up items
+    public static final double WRIST_ANGLE_1 = 45.0; // Example angle for storing position
+    public static final double WRIST_ANGLE_2 = 100.0; // Example angle for deploying items
+
 }

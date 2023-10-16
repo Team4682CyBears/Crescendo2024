@@ -23,6 +23,7 @@ import frc.robot.*;
 import frc.robot.commands.DriveToPointCommand;
 import frc.robot.commands.DriveTrajectoryCommand;
 import frc.robot.commands.RumbleCommand;
+import frc.robot.commands.WristDefaultCommand;
 import frc.robot.common.ChargedUpGamePiece;
 import frc.robot.common.TestTrajectories;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -470,6 +471,33 @@ public class ManualInputInterfaces {
     if (InstalledHardware.coDriverXboxControllerInstalled) {
       // left trigger variable press will intake on the every bot picker
       // right trigger variable press will expell on the every bot picker
+
+     //TODO Intake Bumpers 
+
+
+    // Set wrist to pickup position when the X button is pressed:
+    this.coDriverController.a().onTrue(
+        new ParallelCommandGroup(
+            new WristDefaultCommand(subsystemCollection.getWristSubsystem(), Constants.WRIST_ANGLE_PICKUP),
+            new ButtonPressCommand("driverController.X()", "Set wrist to pickup (0st) position"))
+            .withTimeout(5.0)
+    );
+
+    this.coDriverController.b().onTrue(
+        new ParallelCommandGroup(
+            new WristDefaultCommand(subsystemCollection.getWristSubsystem(), Constants.WRIST_ANGLE_1),
+            new ButtonPressCommand("driverController.X()", "Set wrist to 1st position"))
+            .withTimeout(5.0)
+    );
+
+    this.coDriverController.y().onTrue(
+        new ParallelCommandGroup(
+            new WristDefaultCommand(subsystemCollection.getWristSubsystem(), Constants.WRIST_ANGLE_2),
+            new ButtonPressCommand("driverController.X()", "Set wrist to 2nd position"))
+            .withTimeout(5.0)
+    );
+
+
     }
   }
 }
