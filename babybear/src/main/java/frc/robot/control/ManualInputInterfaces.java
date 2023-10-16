@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.*;
 import frc.robot.commands.DriveToPointCommand;
 import frc.robot.commands.DriveTrajectoryCommand;
+import frc.robot.commands.EveryBotPickerDefaultCommand;
 import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.WristDefaultCommand;
 import frc.robot.common.ChargedUpGamePiece;
@@ -472,9 +473,30 @@ public class ManualInputInterfaces {
       // left trigger variable press will intake on the every bot picker
       // right trigger variable press will expell on the every bot picker
 
-     //TODO Intake Bumpers 
+     
+    //Intake Bumpers
+    // Start cargo uptake when the A button is pressed:
+    this.coDriverController.leftBumper().onTrue(
+        new ParallelCommandGroup(
+            new EveryBotPickerDefaultCommand(subsystemCollection.getEveryBotPickerSubsystem(), 
+                                            () -> 1.0, // Assuming full power uptake
+                                            () -> 0.0), // No expelling
+            new ButtonPressCommand("coDriverController.LeftBumper()", "Start cargo uptake"))
+            .withTimeout(5.0)
+    );
+
+    // Start cargo expulsion when the B button is pressed:
+    this.coDriverController.rightBumper().onTrue(
+        new ParallelCommandGroup(
+            new EveryBotPickerDefaultCommand(subsystemCollection.getEveryBotPickerSubsystem(), 
+                                            () -> 0.0, // No uptake
+                                            () -> 1.0), // Assuming full power expelling
+            new ButtonPressCommand("coDriverController.rightBumper()", "Start cargo expulsion"))
+            .withTimeout(5.0)
+    );
 
 
+    //Wrist Positions
     // Set wrist to pickup position when the X button is pressed:
     this.coDriverController.a().onTrue(
         new ParallelCommandGroup(
