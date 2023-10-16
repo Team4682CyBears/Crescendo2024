@@ -23,7 +23,7 @@ public class EveryBotPickerOverCurrentCommand extends CommandBase {
     private double zeroMotorDurationSeconds = 0.1;
 
     /**
-     * Ccnstructor for EveryBotPickerAutoUptakeCommand
+     * Constructor for EveryBotPickerAutoUptakeCommand
      * @param everyBotPickerSubsystem - the subsystem for the everybot picker
      * @param zeroDurationSeconds - the duration of the motor to stop it
      */

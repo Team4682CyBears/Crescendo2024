@@ -32,7 +32,7 @@ public class EveryBotPickerAutoCommand extends CommandBase {
     private double durationSeconds;
 
     /**
-     * Ccnstructor for EveryBotPickerAutoUptakeCommand
+     * Constructor for EveryBotPickerAutoUptakeCommand
      * @param everyBotPickerSubsystem - the subsystem for the everybot picker
      */
     public EveryBotPickerAutoCommand(EveryBotPickerAction action, EveryBotPickerSubsystem everyBotPickerSubsystem) {

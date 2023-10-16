@@ -55,4 +55,7 @@ public class InstalledHardware {
 
     // EveryBot Picker Related Hardware
     public static final boolean everyBotPickerInstalled = true;
+
+    // Wrist Related
+    public static final boolean wristInstalled = true;
 }

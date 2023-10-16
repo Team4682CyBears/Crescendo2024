@@ -29,6 +29,7 @@ import frc.robot.control.SubsystemCollection;
 import frc.robot.subsystems.DrivetrainPowerSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.EveryBotPickerSubsystem;
+import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.PowerDistributionPanelWatcherSubsystem;
 import frc.robot.common.PortSpy;
 
@@ -62,6 +63,9 @@ public class RobotContainer {
 
     // arm and picker later
     this.initializeEveryBotPickerSubsystem();
+
+    // init wrist system
+    this.initializeWristSubsystem();
 
     // calculate and update the current position of the robot
     this.calculateAndUpdateRobotPosition();
@@ -203,6 +207,17 @@ public class RobotContainer {
       System.out.println("FAIL: initializeEveryBotPicker");
     }
   }
+
+  /**
+   * A method init the wrist 
+   */
+  private void initializeWristSubsystem(){
+    if (InstalledHardware.wristInstalled) {
+      subsystems.setWristSubsystem(new WristSubsystem());
+      //TODO set default commands
+    }
+  }
+  
 
   /**
    * A method to init the stablizer

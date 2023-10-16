@@ -23,7 +23,7 @@ public class EveryBotPickerDefaultCommand extends CommandBase {
     private final double inputThreshold = 0.1;
 
     /**
-     * Ccnstructor for DefaultEveryBotPickerCommand
+     * Constructor for DefaultEveryBotPickerCommand
      * @param everyBotPickerSubsystem - the subsystem for the everybot picker
      * @param uptakeSupplier - trigger uptake value
      * @param expellSupplier - trigger expell value
