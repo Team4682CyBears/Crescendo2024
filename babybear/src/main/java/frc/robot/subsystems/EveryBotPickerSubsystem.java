@@ -24,7 +24,7 @@ import com.revrobotics.CANSparkMax.*;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 /**
- * A class intended to model the picker - checked with Simeon on 02/15/2023 name is now 'picker'
+ * A class intended to model the intake
  */
 public class EveryBotPickerSubsystem extends SubsystemBase {
 
