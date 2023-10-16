@@ -42,6 +42,7 @@ public class ControlledFalconDefault extends CommandBase {
 
     lTrigger = -lTrigger;
 
+    /* 
     //delta approach
     speed = lTrigger + rTrigger;
     speed = Math.max(-1.0, Math.min(1.0, speed));
@@ -59,6 +60,7 @@ public class ControlledFalconDefault extends CommandBase {
     } else {
       speed = lTrigger;
     } 
+    */
 
     //gta approach (favors right trigger but if both are pulled it breaks(speed = 0))
     if(rTrigger > 0){
@@ -68,7 +70,7 @@ public class ControlledFalconDefault extends CommandBase {
     } else if (Math.abs(lTrigger) > 0) {
       speed = lTrigger;
     } 
-
+    
 
 
 
