@@ -37,8 +37,7 @@ public class WristSubsystem extends SubsystemBase {
     private static final double wristMotorSpeedReductionFactor = 1.0;
 
     // Wrist gear reduction
-    // TODO - get proper values from Simeon/Grayson
-    private static final double wristGearReduction = 10.0/1.0;
+    private static final double wristGearReduction = 48.0/1.0;
 
     /**********************************************************************
     MEMBERS
