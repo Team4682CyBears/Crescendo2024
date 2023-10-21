@@ -137,6 +137,10 @@ public final class Constants {
           // Add more positions if needed.
     }
 
+    public static WristPosition currentWristPosition = WristPosition.PICKUP; // default
+
+    
+
     
 
 }

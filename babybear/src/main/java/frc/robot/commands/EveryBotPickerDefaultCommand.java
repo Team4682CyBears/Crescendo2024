@@ -11,6 +11,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.EveryBotPickerSubsystem;
 
 import java.util.function.DoubleSupplier;
@@ -42,9 +43,28 @@ public class EveryBotPickerDefaultCommand extends CommandBase {
     public void execute() {
         double uptakeValue = this.uptakeSupplier.getAsDouble();
         double expellValue = this.expellSupplier.getAsDouble();
+
+        switch(Constants.currentWristPosition) {
+            case PICKUP:
+                uptakeValue *= 0.3; 
+                expellValue *= 0.3;
+                break;
+            case POSITION_1:
+                uptakeValue *= 0.3; 
+                expellValue *= 0.5;
+                break;
+            case POSITION_2:
+                uptakeValue *= 0.3; 
+                expellValue *= 1.0;
+                break;
+            // ... add more as needed
+        }
+
+        //clean inputs
         double uptakeAbsValue = Math.abs(uptakeValue);
         double expellAbsValue = Math.abs(expellValue);
         double inputValue = 0.0;
+
         // we will always favor uptake over expell as this will help avoid accidental drops
         if(uptakeAbsValue >= this.inputThreshold) {
             inputValue = uptakeValue;
@@ -52,6 +72,7 @@ public class EveryBotPickerDefaultCommand extends CommandBase {
         else if (expellAbsValue > this.inputThreshold && expellAbsValue > uptakeAbsValue) {
             inputValue = expellValue;
         }
+
         this.everyBotPickerSub.setPickerRelativeSpeed(inputValue);
     }
 

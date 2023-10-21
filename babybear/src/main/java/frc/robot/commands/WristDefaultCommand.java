@@ -36,7 +36,6 @@ public class WristDefaultCommand extends CommandBase {
     }
 
 
-    private WristPosition currentWristPosition = WristPosition.PICKUP; // default
     
     @Override
     public void execute() {
@@ -45,11 +44,11 @@ public class WristDefaultCommand extends CommandBase {
         
         // Update the state based on target angle (this assumes unique angles for each position)
         if(targetAngle == Constants.WRIST_ANGLE_PICKUP) {
-            currentWristPosition = WristPosition.PICKUP;
+            Constants.currentWristPosition = WristPosition.PICKUP;
         } else if(targetAngle == Constants.WRIST_ANGLE_1) {
-            currentWristPosition = WristPosition.POSITION_1;
+            Constants.currentWristPosition = WristPosition.POSITION_1;
         } else if(targetAngle == Constants.WRIST_ANGLE_2) {
-            currentWristPosition = WristPosition.POSITION_2;
+            Constants.currentWristPosition = WristPosition.POSITION_2;
         }
         
     }
