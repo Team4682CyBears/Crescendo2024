@@ -129,4 +129,14 @@ public final class Constants {
     public static final double WRIST_ANGLE_1 = 45.0; // Example angle for storing position
     public static final double WRIST_ANGLE_2 = 100.0; // Example angle for deploying items
 
+    
+    public enum WristPosition {
+           PICKUP,
+           POSITION_1,
+           POSITION_2,
+          // Add more positions if needed.
+    }
+
+    
+
 }
