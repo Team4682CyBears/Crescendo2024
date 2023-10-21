@@ -15,7 +15,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 
 public final class Constants {
@@ -109,7 +108,8 @@ public final class Constants {
 
     // *****************************************************************
     // Every Bot picker constants
-    public static final int EveryBotPickerMotorCanId = 15;
+    public static final int SrxMotor1CanId = 15;
+    public static final int SrxMotor2CanId = 16;
 
     // ********************************************************************
     // Controller Constants
@@ -129,6 +129,7 @@ public final class Constants {
     public static final double WRIST_ANGLE_1 = 45.0; // Example angle for storing position
     public static final double WRIST_ANGLE_2 = 100.0; // Example angle for deploying items
 
+
     
     public enum WristPosition {
            PICKUP,
@@ -138,6 +139,7 @@ public final class Constants {
     }
 
     public static WristPosition currentWristPosition = WristPosition.PICKUP; // default
+    public static int wristMotorCanID;
 
     
 

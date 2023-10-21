@@ -42,7 +42,7 @@ public class WristSubsystem extends SubsystemBase {
     /**********************************************************************
     MEMBERS
     ************************************************************************/
-    private CANSparkMax wristMotor = new CANSparkMax(Constants.EveryBotPickerMotorCanId, MotorType.kBrushless);
+    private CANSparkMax wristMotor = new CANSparkMax(Constants.wristMotorCanID, MotorType.kBrushless);
     private SparkMaxPIDController wristPidController;
     private RelativeEncoder wristEncoder;
     private double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc, allowedErr;

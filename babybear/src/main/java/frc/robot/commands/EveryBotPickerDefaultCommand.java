@@ -3,7 +3,7 @@
 // Home of the Cybears
 // FRC - Charged Up - 2023
 // File: DefaultEveryBotPickerCommand.java
-// Intent: Forms a command to uptake/expell the cargo from the every bot picker.
+// Intent: Forms a command to uptake/expel the cargo from the every bot picker.
 // ************************************************************
 
 // ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
@@ -20,21 +20,21 @@ public class EveryBotPickerDefaultCommand extends CommandBase {
 
     private EveryBotPickerSubsystem everyBotPickerSub;
     private DoubleSupplier uptakeSupplier;
-    private DoubleSupplier expellSupplier;
+    private DoubleSupplier expelSupplier;
     private final double inputThreshold = 0.1;
 
     /**
      * Constructor for DefaultEveryBotPickerCommand
      * @param everyBotPickerSubsystem - the subsystem for the everybot picker
      * @param uptakeSupplier - trigger uptake value
-     * @param expellSupplier - trigger expell value
+     * @param expelSupplier - trigger expel value
      */
     public EveryBotPickerDefaultCommand(EveryBotPickerSubsystem everyBotPickerSubsystem,
                                DoubleSupplier uptakeInputSupplier,
-                               DoubleSupplier expellInputSupplier) {
+                               DoubleSupplier expelInputSupplier) {
         this.everyBotPickerSub = everyBotPickerSubsystem;
         this.uptakeSupplier = uptakeInputSupplier;
-        this.expellSupplier = expellInputSupplier;
+        this.expelSupplier = expelInputSupplier;
 
         addRequirements(this.everyBotPickerSub);
     }
@@ -42,35 +42,35 @@ public class EveryBotPickerDefaultCommand extends CommandBase {
     @Override
     public void execute() {
         double uptakeValue = this.uptakeSupplier.getAsDouble();
-        double expellValue = this.expellSupplier.getAsDouble();
+        double expelValue = this.expelSupplier.getAsDouble();
 
         switch(Constants.currentWristPosition) {
             case PICKUP:
                 uptakeValue *= 0.3; 
-                expellValue *= 0.3;
+                expelValue *= 0.3;
                 break;
             case POSITION_1:
                 uptakeValue *= 0.3; 
-                expellValue *= 0.5;
+                expelValue *= 0.5;
                 break;
             case POSITION_2:
                 uptakeValue *= 0.3; 
-                expellValue *= 1.0;
+                expelValue *= 1.0;
                 break;
             // ... add more as needed
         }
 
         //clean inputs
         double uptakeAbsValue = Math.abs(uptakeValue);
-        double expellAbsValue = Math.abs(expellValue);
+        double expelAbsValue = Math.abs(expelValue);
         double inputValue = 0.0;
 
-        // we will always favor uptake over expell as this will help avoid accidental drops
+        // we will always favor uptake over expel as this will help avoid accidental drops
         if(uptakeAbsValue >= this.inputThreshold) {
             inputValue = uptakeValue;
         }
-        else if (expellAbsValue > this.inputThreshold && expellAbsValue > uptakeAbsValue) {
-            inputValue = expellValue;
+        else if (expelAbsValue > this.inputThreshold && expelAbsValue > uptakeAbsValue) {
+            inputValue = expelValue;
         }
 
         this.everyBotPickerSub.setPickerRelativeSpeed(inputValue);
