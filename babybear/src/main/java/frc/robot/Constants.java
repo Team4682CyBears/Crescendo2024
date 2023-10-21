@@ -110,6 +110,7 @@ public final class Constants {
     // Every Bot picker constants
     public static final int SrxMotor1CanId = 15;
     public static final int SrxMotor2CanId = 16;
+    public static final double CURRENT_SPIKE_THRESHOLD = 60.0; // TODO Example value, adjust as needed
 
     // ********************************************************************
     // Controller Constants
