@@ -19,9 +19,8 @@ public class DriveTimeCommand extends CommandBase
   private DrivetrainSubsystem drivetrain;
   private Timer timer = new Timer();
   private boolean done = false;
-  private double xVelocity = 0.0;
-  private double yVelocity = 0.0;
-  private double rotVelocity = 0.0;
+  private ChassisSpeeds chassisSpeeds = new ChassisSpeeds();
+  private Boolean fieldRelativeMode = false;
   private double durationSecondsValue = 0.0;
   
   /** 
@@ -33,20 +32,34 @@ public class DriveTimeCommand extends CommandBase
   */
   public DriveTimeCommand(
     DrivetrainSubsystem drivetrainSubsystem,
-    double x,
-    double y,
-    double rot,
-    double durationSeconds)
+    ChassisSpeeds chassisSpeeds,
+    double durationSeconds,
+    Boolean fieldRelativeMode)
   {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drivetrain = drivetrainSubsystem;
     addRequirements(drivetrainSubsystem);
+    this.chassisSpeeds = chassisSpeeds;
+    this.fieldRelativeMode = fieldRelativeMode;
 
-    xVelocity = x;
-    yVelocity = y;
-    rotVelocity = rot;
     durationSecondsValue = durationSeconds;
   }
+
+    /**
+   * Create a new robot-centric drive time command.
+   * @param drivetrainSubsystem
+   * @param chassisSpeeds
+   * @param durationSeconds
+   */
+  public DriveTimeCommand(
+    DrivetrainSubsystem drivetrainSubsystem,
+    ChassisSpeeds chassisSpeeds,
+    double durationSeconds)
+  {
+    this(drivetrainSubsystem, chassisSpeeds, durationSeconds, false);
+  }
+
+
 
   // Called when the command is initially scheduled.
   @Override
@@ -62,8 +75,15 @@ public class DriveTimeCommand extends CommandBase
   @Override
   public void execute()
   {
-    drivetrain.drive(
-      new ChassisSpeeds(xVelocity, yVelocity, rotVelocity));
+    if(fieldRelativeMode) 
+    {
+      drivetrain.drive(ChassisSpeeds.fromFieldRelativeSpeeds(
+        chassisSpeeds,  
+        drivetrain.getGyroscopeRotation())); 
+    }
+    else{
+      drivetrain.drive(chassisSpeeds);
+    }
     if (timer.hasElapsed(this.durationSecondsValue))
     {
       done = true;

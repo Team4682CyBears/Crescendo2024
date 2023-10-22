@@ -85,9 +85,12 @@ public class RobotContainer {
 
     // Command to drive the chassis for zeroing the swerve modules.
     SmartDashboard.putData("Drive Forward Robot Centric",
-        new DriveTimeCommand(this.subsystems.getDriveTrainSubsystem(), 0.6, 0.0, 0.0, 3.0));
+      new DriveTimeCommand(this.subsystems.getDriveTrainSubsystem(), 
+      new ChassisSpeeds(0.6, 0.0, 0.0), 3.0));  
+
     SmartDashboard.putData("Drive Forward with rotation",
-        new DriveTimeCommand(this.subsystems.getDriveTrainSubsystem(), 0.6, 0.0, 0.2, 3.0));
+    new DriveTimeCommand(this.subsystems.getDriveTrainSubsystem(), 
+    new ChassisSpeeds(0.6, 0.0, 0.2), 3.0));
     SmartDashboard.putData("Print NavX State",
         new InstantCommand(this.subsystems.getDriveTrainSubsystem()::printState));
   }
