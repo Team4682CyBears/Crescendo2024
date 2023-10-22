@@ -39,6 +39,9 @@ public class AllStopCommand extends CommandBase {
         if (this.subsystems.getEveryBotPickerSubsystem() != null) {
             this.subsystems.getEveryBotPickerSubsystem().setPickerRelativeSpeed(0.0);
         }
+        if (this.subsystems.getWristSubsystem() != null) {
+            this.subsystems.getWristSubsystem().setWristSpeed(0);
+        }   
     }
 
     @Override

@@ -71,15 +71,15 @@ public class WristSubsystem extends SubsystemBase {
     ************************************************************************/
     /**
      * A method to set the wrist motor to a certain RPM based on a relative speed input
-     * @param everyBotPickerSpeed the relative speed -1.0 to 1.0 to run the everyBot arm motor at
+     * @param wristSpeed the relative speed -1.0 to 1.0 to run the everyBot arm motor at
      */
 
-    public void setPickerRelativeSpeed(double everyBotPickerSpeed) {
-      this.requestedWristMotorSpeed = MotorUtils.truncateValue(everyBotPickerSpeed, -1.0, 1.0);
+    public void setWristSpeed(double wristSpeed) {
+      this.requestedWristMotorSpeed = MotorUtils.truncateValue(wristSpeed, -1.0, 1.0);
       wristMotor.set(this.requestedWristMotorSpeed);
     }
 
-    public void setPickerAngle(double wristAngle) { 
+    public void setWristAngle(double wristAngle) { 
         double targetPositionTicks = wristAngle * TICKS_PER_DEGREE;
         double curPosition = wristEncoder.getPosition();
         
@@ -131,7 +131,7 @@ public class WristSubsystem extends SubsystemBase {
         kFF = 0.00001; 
         kMaxOutput = 1; 
         kMinOutput = -1;
-        maxRPM = Constants.neoFiveFiveZeroMaximumRevolutionsPerMinute;
+        maxRPM = Constants.neoMaximumRevolutionsPerMinute ;
         int smartMotionSlot = 0;
     
         // Smart Motion Coefficients

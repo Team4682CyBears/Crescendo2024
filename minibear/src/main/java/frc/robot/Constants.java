@@ -132,17 +132,6 @@ public final class Constants {
     public static final double SHOOT_SPEED_1 = 0.6;
     public static final double SHOOT_SPEED_2 = 1.0;
 
-
-    public enum WristPosition {
-           PICKUP,
-           POSITION_1,
-           POSITION_2,
-          // Add more positions if needed.
-    }
-
-
-    public static WristPosition currentWristPosition = WristPosition.PICKUP; // default
-
     
 
     

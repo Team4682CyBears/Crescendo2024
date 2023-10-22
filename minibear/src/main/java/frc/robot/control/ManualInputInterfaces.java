@@ -35,6 +35,8 @@ import frc.robot.commands.ButtonPressCommand;
 import frc.robot.commands.DriveFinePlacementCommand;
 import frc.robot.commands.DriveRampDownSpeedCommand;
 import frc.robot.commands.DriveRampUpSpeedCommand;
+import frc.robot.common.WristPosition;
+
 
 public class ManualInputInterfaces {
 
@@ -49,6 +51,7 @@ public class ManualInputInterfaces {
   // a member to hold the current game piece target - start with cube because
   // manual likely will target cube as start
   private ChargedUpGamePiece coDriverControllerGamePieceTarget = ChargedUpGamePiece.Cube;
+  public static WristPosition currentWristPosition = WristPosition.PICKUP; // default
 
   /**
    * The constructor to build this 'manual input' conduit
@@ -496,6 +499,11 @@ public class ManualInputInterfaces {
     );
 
 
+
+
+      
+
+
     //Wrist Positions
     // Set wrist to pickup position when the X button is pressed:
     this.coDriverController.a().onTrue(
@@ -522,4 +530,8 @@ public class ManualInputInterfaces {
 
     }
   }
+  
+  public WristPosition getWristPositionENUM() {
+    return this.currentWristPosition;
+    }   
 }

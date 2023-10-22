@@ -12,7 +12,8 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.Constants.WristPosition;
+import frc.robot.common.WristPosition;
+import frc.robot.control.ManualInputInterfaces;
 import frc.robot.subsystems.WristSubsystem;
 
 public class WristDefaultCommand extends CommandBase {
@@ -40,22 +41,22 @@ public class WristDefaultCommand extends CommandBase {
     @Override
     public void execute() {
         
-        wristSubsystem.setPickerAngle(targetAngle);
+        wristSubsystem.setWristAngle(targetAngle);
         
         // Update the state based on target angle (this assumes unique angles for each position)
         if(targetAngle == Constants.WRIST_ANGLE_PICKUP) {
-            Constants.currentWristPosition = WristPosition.PICKUP;
+            ManualInputInterfaces.currentWristPosition = WristPosition.PICKUP;
         } else if(targetAngle == Constants.WRIST_ANGLE_1) {
-            Constants.currentWristPosition = WristPosition.POSITION_1;
+            ManualInputInterfaces.currentWristPosition = WristPosition.POSITION_1;
         } else if(targetAngle == Constants.WRIST_ANGLE_2) {
-            Constants.currentWristPosition = WristPosition.POSITION_2;
+            ManualInputInterfaces.currentWristPosition = WristPosition.POSITION_2;
         }
         
     }
 
     @Override
     public void end(boolean interrupted) {
-        wristSubsystem.setPickerRelativeSpeed(0);
+        wristSubsystem.setWristSpeed(0);
     }
 
     @Override
