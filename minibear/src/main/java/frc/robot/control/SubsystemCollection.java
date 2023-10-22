@@ -19,7 +19,7 @@ public class SubsystemCollection {
     // declaring and init subsystems
     private DrivetrainSubsystem driveTrainSubsystem = null;
     private DrivetrainPowerSubsystem driveTrainPowerSubsystem = null;
-    private EveryBotPickerSubsystem everyBotPickerSubsystem = null;
+    private IntakeSubsystem intakeSubsystem = null;
     private WristSubsystem wristSubsystem = null;
     private PowerDistributionPanelWatcherSubsystem powerDistributionPanelWatcherSubsystem = null;
 
@@ -45,13 +45,13 @@ public class SubsystemCollection {
         driveTrainPowerSubsystem = value;
     }
 
-    public EveryBotPickerSubsystem getEveryBotPickerSubsystem() {
-        return everyBotPickerSubsystem;
+    public IntakeSubsystem getIntakeSubsystem() {
+        return intakeSubsystem;
     }
 
 
-    public void setEveryBotPickerSubsystem(EveryBotPickerSubsystem value) {
-        everyBotPickerSubsystem = value;
+    public void setIntakeSubsystem(IntakeSubsystem value) {
+        intakeSubsystem = value;
     }
 
    public WristSubsystem getWristSubsystem() {

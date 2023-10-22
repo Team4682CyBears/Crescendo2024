@@ -14,13 +14,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.common.WristPosition;
 import frc.robot.control.ManualInputInterfaces;
-import frc.robot.subsystems.EveryBotPickerSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
 import java.util.function.DoubleSupplier;
 
-public class EveryBotPickerDefaultCommand extends CommandBase {
+public class IntakeDefaultCommand extends CommandBase {
 
-    private EveryBotPickerSubsystem everyBotPickerSub;
+    private IntakeSubsystem intakeSub;
     private DoubleSupplier uptakeSupplier;
     private DoubleSupplier expelSupplier;
     private final double inputThreshold = 0.1;
@@ -31,14 +31,14 @@ public class EveryBotPickerDefaultCommand extends CommandBase {
      * @param uptakeSupplier - trigger uptake value
      * @param expelSupplier - trigger expel value
      */
-    public EveryBotPickerDefaultCommand(EveryBotPickerSubsystem everyBotPickerSubsystem,
+    public IntakeDefaultCommand(IntakeSubsystem intakeSubsystem,
                                DoubleSupplier uptakeInputSupplier,
                                DoubleSupplier expelInputSupplier) {
-        this.everyBotPickerSub = everyBotPickerSubsystem;
+        this.intakeSub = intakeSubsystem;
         this.uptakeSupplier = uptakeInputSupplier;
         this.expelSupplier = expelInputSupplier;
 
-        addRequirements(this.everyBotPickerSub);
+        addRequirements(this.intakeSub);
     }
 
     @Override
@@ -75,11 +75,11 @@ public class EveryBotPickerDefaultCommand extends CommandBase {
             inputValue = expelValue;
         }
 
-        this.everyBotPickerSub.setPickerRelativeSpeed(inputValue);
+        this.intakeSub.setIntakeRelativeSpeed(inputValue);
     }
 
     @Override
     public void end(boolean interrupted) {
-        this.everyBotPickerSub.setPickerRelativeSpeed(0.0);
+        this.intakeSub.setIntakeRelativeSpeed(0.0);
     }
 }

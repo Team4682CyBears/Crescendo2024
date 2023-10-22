@@ -15,7 +15,8 @@ public enum WristPosition {
     PICKUP,
     POSITION_1,
     POSITION_2,
-   // Add more positions if needed.
+   // TODO Add more positions if needed
+   // TODO Rename these to usefull names when we figure out what we are going to use each position for. 
 }
 
 

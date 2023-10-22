@@ -2,7 +2,7 @@
 // Bishop Blanchet Robotics
 // Home of the Cybears
 // FRC - Charged Up - 2023
-// File: EveryBotPickerSubsystem.java
+// File: Intake.java
 // Intent: Subsystem to model the every bot picker motor and associated subsystem.
 // ************************************************************
 
@@ -21,7 +21,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 /**
  * A class intended to model the intake
  */
-public class EveryBotPickerSubsystem extends SubsystemBase {
+public class IntakeSubsystem extends SubsystemBase {
 
     /* *********************************************************************
     CONSTANTS
@@ -45,7 +45,7 @@ public class EveryBotPickerSubsystem extends SubsystemBase {
     /**
     * constructor for EveryBotPickerSubsystem subsystem
     */
-    public EveryBotPickerSubsystem() {
+    public IntakeSubsystem() {
       CommandScheduler.getInstance().registerSubsystem(this);
     }
 
@@ -56,7 +56,7 @@ public class EveryBotPickerSubsystem extends SubsystemBase {
      * A method to set the every bot motor to a certain RPM based on a relative speed input
      * @param everyBotPickerSpeed the relative speed -1.0 to 1.0 to run the everyBot arm motors at
      */
-    public void setPickerRelativeSpeed(double srxMotorSpeed) {
+    public void setIntakeRelativeSpeed(double srxMotorSpeed) {
       requestedSrxMotor1Speed = MotorUtils.truncateValue(srxMotorSpeed, -1.0, 1.0);
       requestedSrxMotor2Speed = MotorUtils.truncateValue(srxMotorSpeed, -1.0, 1.0);
 

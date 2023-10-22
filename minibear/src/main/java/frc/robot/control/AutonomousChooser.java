@@ -24,7 +24,7 @@ import frc.robot.Constants;
 import frc.robot.commands.AutoBalanceCommand;
 import frc.robot.commands.AutoBalanceStepCommand;
 import frc.robot.commands.DriveTrajectoryCommand;
-import frc.robot.commands.EveryBotPickerAutoCommand;
+//import frc.robot.commands.EveryBotPickerAutoCommand;
 import frc.robot.common.SwerveTrajectoryConfig;
 import frc.robot.common.EveryBotPickerAction;
 import frc.robot.common.SwerveTrajectoryGenerator;
@@ -178,9 +178,9 @@ public class AutonomousChooser {
 
         // expel the game piece by either opening the claw or running the motors to
         // expell
-        if (this.subsystems.getEveryBotPickerSubsystem() != null) {// cube uses uptake command to expell
-            command.addCommands(new EveryBotPickerAutoCommand(EveryBotPickerAction.CubeExpel,
-                    subsystems.getEveryBotPickerSubsystem()));
+        if (this.subsystems.getIntakeSubsystem() != null) {// cube uses uptake command to expell
+     //       command.addCommands(new EveryBotPickerAutoCommand(EveryBotPickerAction.CubeExpel,
+     //               subsystems.getEveryBotPickerSubsystem()));
         }
 
         // drive out of the score position

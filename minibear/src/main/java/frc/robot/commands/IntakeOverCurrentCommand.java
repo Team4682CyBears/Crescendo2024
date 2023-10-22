@@ -11,13 +11,12 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.EveryBotPickerSubsystem;
-
+import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj.Timer;
 
-public class EveryBotPickerOverCurrentCommand extends CommandBase {
+public class IntakeOverCurrentCommand extends CommandBase {
 
-    private EveryBotPickerSubsystem everyBotPickerSub;
+    private IntakeSubsystem intakeSub;
     private Timer timer = new Timer();
     private boolean done = false;
     private double zeroMotorDurationSeconds = 0.1;
@@ -27,12 +26,12 @@ public class EveryBotPickerOverCurrentCommand extends CommandBase {
      * @param everyBotPickerSubsystem - the subsystem for the everybot picker
      * @param zeroDurationSeconds - the duration of the motor to stop it
      */
-    public EveryBotPickerOverCurrentCommand(
-        EveryBotPickerSubsystem everyBotPickerSubsystem,
+    public IntakeOverCurrentCommand(
+        IntakeSubsystem intakeSubsystem,
         double zeroDurationSeconds) {
-        this.everyBotPickerSub = everyBotPickerSubsystem;
+        this.intakeSub = intakeSubsystem;
         this.zeroMotorDurationSeconds = zeroDurationSeconds;
-        addRequirements(this.everyBotPickerSub);
+        addRequirements(this.intakeSub);
     }
 
     /**
@@ -50,7 +49,7 @@ public class EveryBotPickerOverCurrentCommand extends CommandBase {
      */
     @Override
     public void execute() {
-        everyBotPickerSub.setPickerRelativeSpeed(0.0);
+        intakeSub.setIntakeRelativeSpeed(0.0);
         if (timer.hasElapsed(this.zeroMotorDurationSeconds)) {
             done = true;
         }
@@ -61,7 +60,7 @@ public class EveryBotPickerOverCurrentCommand extends CommandBase {
      */
     @Override
     public void end(boolean interrupted) {
-        everyBotPickerSub.setPickerRelativeSpeed(0.0);
+        intakeSub.setIntakeRelativeSpeed(0.0);
         if(interrupted) {
           done = true;      
         }

@@ -17,20 +17,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.DefaultDriveCommand;
-import frc.robot.commands.DriveTimeCommand;
-import frc.robot.commands.EveryBotPickerDefaultCommand;
-import frc.robot.commands.EveryBotPickerOverCurrentCommand;
-import frc.robot.commands.RumbleCommand;
-import frc.robot.control.AutonomousChooser;
-import frc.robot.control.InstalledHardware;
-import frc.robot.control.ManualInputInterfaces;
-import frc.robot.control.SubsystemCollection;
-import frc.robot.subsystems.DrivetrainPowerSubsystem;
-import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.EveryBotPickerSubsystem;
-import frc.robot.subsystems.WristSubsystem;
-import frc.robot.subsystems.PowerDistributionPanelWatcherSubsystem;
+import frc.robot.commands.*;
+import frc.robot.control.*;
+import frc.robot.subsystems.*;
 import frc.robot.common.PortSpy;
 
 /**
@@ -62,7 +51,7 @@ public class RobotContainer {
     this.initializeManualInputInterfaces();
 
     // arm and picker later
-    this.initializeEveryBotPickerSubsystem();
+    this.initializeIntakeSubsystem();
 
     // init wrist system
     this.initializeWristSubsystem();
@@ -111,10 +100,10 @@ public class RobotContainer {
   public void teleopInit() {
     // NOTE this is enabled in teleop, because when enabled in Auto, it usurps the
     // rest of the auto routine.
-    if (this.subsystems.getEveryBotPickerSubsystem() != null) {
+    if (this.subsystems.getIntakeSubsystem() != null) {
       // add a watcher for overcurrent on the
-      EveryBotPickerOverCurrentCommand ebCmd = new EveryBotPickerOverCurrentCommand(
-          subsystems.getEveryBotPickerSubsystem(), Constants.overcurrentRumbleTimeSeconds);
+      IntakeOverCurrentCommand ebCmd = new IntakeOverCurrentCommand(
+          subsystems.getIntakeSubsystem(), Constants.overcurrentRumbleTimeSeconds);
       RumbleCommand rc = new RumbleCommand(
           this.subsystems.getManualInputInterfaces().getCoDriverController(),
           Constants.overcurrentRumbleTimeSeconds);
@@ -197,14 +186,14 @@ public class RobotContainer {
   /**
    * A method to init the every bot picker
    */
-  private void initializeEveryBotPickerSubsystem() {
+  private void initializeIntakeSubsystem() {
     if (InstalledHardware.everyBotPickerInstalled) {
-      subsystems.setEveryBotPickerSubsystem(new EveryBotPickerSubsystem());
-      subsystems.getEveryBotPickerSubsystem().setDefaultCommand(new EveryBotPickerDefaultCommand(
-          subsystems.getEveryBotPickerSubsystem(),
+      subsystems.setIntakeSubsystem(new IntakeSubsystem());
+      subsystems.getIntakeSubsystem().setDefaultCommand(new IntakeDefaultCommand(
+          subsystems.getIntakeSubsystem(),
           () -> modifyAxisSquare(subsystems.getManualInputInterfaces().getInputEveryBotUptakeTrigger()),
           () -> modifyAxisSquare(subsystems.getManualInputInterfaces().getInputEveryBotExpellTrigger())));
-      SmartDashboard.putData("Debug: EveryBotSub", subsystems.getEveryBotPickerSubsystem());
+      SmartDashboard.putData("Debug: EveryBotSub", subsystems.getIntakeSubsystem());
       System.out.println("SUCCESS: initializeEveryBotPicker");
     } else {
       System.out.println("FAIL: initializeEveryBotPicker");
