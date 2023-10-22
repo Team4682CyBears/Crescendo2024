@@ -30,14 +30,16 @@ public class WristSubsystem extends SubsystemBase {
    /**********************************************************************
     CONSTANTS
     ************************************************************************/
-    private static final double TICKS_PER_DEGREE = 5; //TODO SET THIS encoder ticks per arm degree (will corelate with gearbox)
+    // Wrist gear reduction
+    private static final double wristGearReduction = 48.0/1.0;
+    
+    private static final double TICKS_PER_DEGREE = 360/42 * wristGearReduction; //TODO SET THIS encoder ticks per arm degree (will corelate with gearbox)
     private static final double TOLERANCE = 5; // Encoder Tolerence, raise or lower if it bounces or doesn't reach the target.
 
     // TODO - use something less than 1.0 for testing
     private static final double wristMotorSpeedReductionFactor = 1.0;
 
-    // Wrist gear reduction
-    private static final double wristGearReduction = 48.0/1.0;
+    
 
     /**********************************************************************
     MEMBERS
