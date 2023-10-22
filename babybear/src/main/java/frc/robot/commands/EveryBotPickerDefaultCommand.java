@@ -46,16 +46,16 @@ public class EveryBotPickerDefaultCommand extends CommandBase {
 
         switch(Constants.currentWristPosition) {
             case PICKUP:
-                uptakeValue *= 0.3; 
-                expelValue *= 0.3;
+                uptakeValue *= Constants.INTAKE_SPEED; 
+                expelValue *= Constants.SHOOT_SPEED_0;
                 break;
             case POSITION_1:
-                uptakeValue *= 0.3; 
-                expelValue *= 0.5;
+                uptakeValue *= Constants.INTAKE_SPEED; 
+                expelValue *= Constants.SHOOT_SPEED_1;
                 break;
             case POSITION_2:
-                uptakeValue *= 0.3; 
-                expelValue *= 1.0;
+                uptakeValue *= Constants.INTAKE_SPEED; 
+                expelValue *= Constants.SHOOT_SPEED_2;
                 break;
             // ... add more as needed
         }

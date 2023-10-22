@@ -79,6 +79,7 @@ public final class Constants {
     public static final double TrajectoryMaxAcceleration = 1;
     public static final double TrajectoryMaxVelocity = 1;
     // tolerence on trajectory locations
+
     // TODO test tightening up these values
     public static final Pose2d TrajectoryPoseTol = new Pose2d(0.1, 0.1, Rotation2d.fromDegrees(5));
 
@@ -99,15 +100,8 @@ public final class Constants {
     public static final int StabilizerPneumaticsControlModuleForwardChannel = 0;
     public static final int StabilizerPneumaticsControlModuleReverseChannel = 1;
 
-    // *******************************************************************
-    // picker constants
-    public static final int PickerHorizontalPneumaticsControlModuleForwardChannel = 2;
-    public static final int PickerHorizontalPneumaticsControlModuleReverseChannel = 3;
-    public static final int PickerVerticalPneumaticsControlModuleForwardChannel = 4;
-    public static final int PickerVerticalPneumaticsControlModuleReverseChannel = 5;
-
     // *****************************************************************
-    // Every Bot picker constants
+    // Picker Constants
     public static final int SrxMotor1CanId = 15;
     public static final int SrxMotor2CanId = 16;
     public static final double CURRENT_SPIKE_THRESHOLD = 60.0; // TODO Example value, adjust as needed
@@ -126,12 +120,19 @@ public final class Constants {
 
     // ********************************************************************
     //Wrist Constants
+    public static int wristMotorCanID = 19;
+
     public static final double WRIST_ANGLE_PICKUP = 0.0; // Example angle for picking up items
     public static final double WRIST_ANGLE_1 = 45.0; // Example angle for storing position
     public static final double WRIST_ANGLE_2 = 100.0; // Example angle for deploying items
 
+    public static final double INTAKE_SPEED = 0.3;
 
-    
+    public static final double SHOOT_SPEED_0 = 0.3;
+    public static final double SHOOT_SPEED_1 = 0.6;
+    public static final double SHOOT_SPEED_2 = 1.0;
+
+
     public enum WristPosition {
            PICKUP,
            POSITION_1,
@@ -139,8 +140,8 @@ public final class Constants {
           // Add more positions if needed.
     }
 
+
     public static WristPosition currentWristPosition = WristPosition.PICKUP; // default
-    public static int wristMotorCanID;
 
     
 

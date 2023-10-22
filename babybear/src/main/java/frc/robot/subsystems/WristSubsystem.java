@@ -74,6 +74,7 @@ public class WristSubsystem extends SubsystemBase {
 
     public void setPickerRelativeSpeed(double everyBotPickerSpeed) {
       this.requestedWristMotorSpeed = MotorUtils.truncateValue(everyBotPickerSpeed, -1.0, 1.0);
+      wristMotor.set(this.requestedWristMotorSpeed);
     }
 
     public void setPickerAngle(double wristAngle) { 

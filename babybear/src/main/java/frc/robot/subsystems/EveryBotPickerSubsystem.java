@@ -54,7 +54,7 @@ public class EveryBotPickerSubsystem extends SubsystemBase {
     ************************************************************************/
     /**
      * A method to set the every bot motor to a certain RPM based on a relative speed input
-     * @param everyBotPickerSpeed the relative speed -1.0 to 1.0 to run the everyBot arm motor at
+     * @param everyBotPickerSpeed the relative speed -1.0 to 1.0 to run the everyBot arm motors at
      */
     public void setPickerRelativeSpeed(double srxMotorSpeed) {
       requestedSrxMotor1Speed = MotorUtils.truncateValue(srxMotorSpeed, -1.0, 1.0);
