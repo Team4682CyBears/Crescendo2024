@@ -37,7 +37,7 @@ public class AllStopCommand extends CommandBase {
     @Override
     public void execute() {
         if (this.subsystems.getIntakeSubsystem() != null) {
-            this.subsystems.getIntakeSubsystem().setIntakeRelativeSpeed(0.0);
+            this.subsystems.getIntakeSubsystem().setIntakeRelativeSpeed(0);
         }
         if (this.subsystems.getWristSubsystem() != null) {
             this.subsystems.getWristSubsystem().setWristSpeed(0);
