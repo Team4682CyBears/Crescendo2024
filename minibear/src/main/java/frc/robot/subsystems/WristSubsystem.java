@@ -68,37 +68,36 @@ public class WristSubsystem extends SubsystemBase {
     }
 
 
-
     /**********************************************************************
     PUBLIC METHODS
     ************************************************************************/
+
     /**
      * A method to set the wrist motor to a certain RPM based on a relative speed input
      * @param wristSpeed the relative speed -1.0 to 1.0 to run the everyBot arm motor at
      */
-
     public void setWristSpeed(double wristSpeed) {
-      this.targetWristPosition = WristPosition.None;
+      this.targetWristPosition = this.getApproximateWristPostionForCurrentAngle();
       this.requestedWristMotorSpeed = MotorUtils.truncateValue(wristSpeed, -1.0, 1.0);
       wristMotor.set(this.requestedWristMotorSpeed);
     }
 
     /**
-     * TODO - Need this owen
+     * TODO - Need this comment block Owen
      */
     public double getCurrentWristAngle() {
       return wristEncoder.getPosition() / TICKS_PER_DEGREE;
     }
 
     /**
-     * TODO - Need this owen
+     * TODO - Need this comment block Owen
      */
     public WristPosition getTargetWristPosition() {
       return this.targetWristPosition;
     }
 
     /**
-     * TODO - Need this owen
+     * TODO - Need this comment block Owen
      */
     public boolean isPositionMovementComplete() {
       boolean movementComplete = false;
@@ -116,7 +115,7 @@ public class WristSubsystem extends SubsystemBase {
     }
 
     /**
-     * TODO - Need this owen
+     * TODO - Need this comment block Owen
      * @param position
      */
     public void setTargetWristPosition(WristPosition position) {
@@ -124,7 +123,7 @@ public class WristSubsystem extends SubsystemBase {
     }
     
     /**
-     * TODO - Need this owen
+     * TODO - Need this comment block Owen
      */
     @Override
     public void periodic() {
@@ -136,7 +135,7 @@ public class WristSubsystem extends SubsystemBase {
     }
 
     /**
-     * TODO - Need this owen
+     * TODO - Need this comment block Owen
      */
     @Override
     public void simulationPeriodic() {
@@ -148,7 +147,7 @@ public class WristSubsystem extends SubsystemBase {
     ************************************************************************/
 
     /**
-     * TODO - Need this owen
+     * TODO - Need this comment block Owen
      */
     private double getWristAngleForPosition(WristPosition position) {
       double targetWristAngle = Double.NaN;
@@ -164,8 +163,31 @@ public class WristSubsystem extends SubsystemBase {
       return targetWristAngle;
     }
 
+    /**
+     * TODO - Need this comment block Owen
+     */
+    private WristPosition getApproximateWristPostionForCurrentAngle() {
+      double targetWristAngle = this.getCurrentWristAngle();
+      WristPosition discoveredPosition = WristPosition.None;
+
+      if(Constants.WRIST_ANGLE_PICKUP + WristSubsystem.TOLERANCE >= targetWristAngle && 
+         Constants.WRIST_ANGLE_PICKUP - WristSubsystem.TOLERANCE <= targetWristAngle) {
+        discoveredPosition = WristPosition.PickUp;
+      }
+      else if(Constants.WRIST_ANGLE_1 + WristSubsystem.TOLERANCE >= targetWristAngle && 
+              Constants.WRIST_ANGLE_1 - WristSubsystem.TOLERANCE <= targetWristAngle) {
+        discoveredPosition = WristPosition.PositionOne;
+      }
+      else if(Constants.WRIST_ANGLE_2 + WristSubsystem.TOLERANCE >= targetWristAngle && 
+              Constants.WRIST_ANGLE_2 - WristSubsystem.TOLERANCE <= targetWristAngle) {
+        discoveredPosition = WristPosition.PositionTwo;
+      }
+
+      return discoveredPosition;
+    }
+
     /*
-     * TODO - Need this owen
+     * TODO - Need this comment block Owen
      */
     private void setWristAngle(double wristAngle) { 
       double targetPositionTicks = wristAngle * TICKS_PER_DEGREE;
