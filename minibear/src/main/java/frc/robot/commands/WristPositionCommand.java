@@ -11,17 +11,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.common.WristPosition;
-import frc.robot.control.ManualInputInterfaces;
 import frc.robot.subsystems.WristSubsystem;
 
-public class WristDefaultCommand extends CommandBase {
+public class WristPositionCommand extends CommandBase {
 
-
-    private final double inputThreshold = 0.1;
     private WristSubsystem wristSubsystem;
-    private double targetAngle;
+    private WristPosition targetPosition = WristPosition.PositionTwo;
 
     /**
      * Creates a new SetWristAngleCommand.
@@ -30,39 +26,27 @@ public class WristDefaultCommand extends CommandBase {
      * @param targetAngle The target angle in degrees for the wrist.
      */
 
-    public WristDefaultCommand(WristSubsystem wristSubsystem, double targetAngle) {
+    public WristPositionCommand(WristSubsystem wristSubsystem, WristPosition targetPosition) {
         this.wristSubsystem = wristSubsystem;
-        this.targetAngle = targetAngle;
+        this.targetPosition = targetPosition;
         addRequirements(wristSubsystem);
     }
-
-
     
     @Override
     public void execute() {
-        
-        wristSubsystem.setWristAngle(targetAngle);
-        
-        // Update the state based on target angle (this assumes unique angles for each position)
-        if(targetAngle == Constants.WRIST_ANGLE_PICKUP) {
-            ManualInputInterfaces.currentWristPosition = WristPosition.PICKUP;
-        } else if(targetAngle == Constants.WRIST_ANGLE_1) {
-            ManualInputInterfaces.currentWristPosition = WristPosition.POSITION_1;
-        } else if(targetAngle == Constants.WRIST_ANGLE_2) {
-            ManualInputInterfaces.currentWristPosition = WristPosition.POSITION_2;
-        }
-        
+        wristSubsystem.setTargetWristPosition(this.targetPosition);
     }
 
     @Override
     public void end(boolean interrupted) {
-        wristSubsystem.setWristSpeed(0);
+        if(interrupted && !this.isFinished()){
+            wristSubsystem.setWristSpeed(0);
+        }
     }
 
     @Override
     public boolean isFinished() {
-        return true;
+        return wristSubsystem.isPositionMovementComplete();
     }
-
 
 }

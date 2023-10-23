@@ -2,7 +2,7 @@
 // Bishop Blanchet Robotics
 // Home of the Cybears
 // FRC - Charged Up - 2023
-// File: public enum ChargedUpGamePiece.java
+// File: public enum WristPosition.java
 // Intent: Forms enum to hold cube or cone.
 // ************************************************************
 
@@ -12,9 +12,10 @@ package frc.robot.common;
 
 
 public enum WristPosition {
-    PICKUP,
-    POSITION_1,
-    POSITION_2,
+    None,
+    PickUp,
+    PositionOne, // TODO - what is this? need better name here
+    PositionTwo, // TODO - what is this? need better name here
    // TODO Add more positions if needed
    // TODO Rename these to usefull names when we figure out what we are going to use each position for. 
 }

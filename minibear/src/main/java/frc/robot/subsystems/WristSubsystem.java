@@ -17,6 +17,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.RelativeEncoder;
+
+import java.lang.invoke.ConstantBootstraps;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.SparkMaxRelativeEncoder;
@@ -35,11 +38,10 @@ public class WristSubsystem extends SubsystemBase {
     
     private static final double TICKS_PER_DEGREE = 360/42 * wristGearReduction; //TODO SET THIS encoder ticks per arm degree (will corelate with gearbox)
     private static final double TOLERANCE = 5; // Encoder Tolerence, raise or lower if it bounces or doesn't reach the target.
+    private static final double ToleranceDegrees = 1.0;
 
     // TODO - use something less than 1.0 for testing
-    private static final double wristMotorSpeedReductionFactor = 1.0;
-
-    
+    private static final double wristMotorSpeedReductionFactor = 1.0;    
 
     /**********************************************************************
     MEMBERS
@@ -52,6 +54,7 @@ public class WristSubsystem extends SubsystemBase {
 
     private boolean isWristMotorInverted = false;
     private double requestedWristMotorSpeed = 0.0;
+    private WristPosition targetWristPosition = WristPosition.None;
 
     /**********************************************************************
     CONSTRUCTORS
@@ -75,25 +78,54 @@ public class WristSubsystem extends SubsystemBase {
      */
 
     public void setWristSpeed(double wristSpeed) {
+      this.targetWristPosition = WristPosition.None;
       this.requestedWristMotorSpeed = MotorUtils.truncateValue(wristSpeed, -1.0, 1.0);
       wristMotor.set(this.requestedWristMotorSpeed);
     }
 
-    public void setWristAngle(double wristAngle) { 
-        double targetPositionTicks = wristAngle * TICKS_PER_DEGREE;
-        double curPosition = wristEncoder.getPosition();
-        
-        if (Math.abs(curPosition - targetPositionTicks) > TOLERANCE) {
-            // If the current position is outside the tolerance range, use the PID controller to move the wrist to the target position
-            wristPidController.setReference(targetPositionTicks, ControlType.kPosition);
-        } else {
-            // If within tolerance, stop the wrist motor
-            wristMotor.set(0);
-        }
+    /**
+     * TODO - Need this owen
+     */
+    public double getCurrentWristAngle() {
+      return wristEncoder.getPosition() / TICKS_PER_DEGREE;
     }
 
+    /**
+     * TODO - Need this owen
+     */
+    public WristPosition getTargetWristPosition() {
+      return this.targetWristPosition;
+    }
+
+    /**
+     * TODO - Need this owen
+     */
+    public boolean isPositionMovementComplete() {
+      boolean movementComplete = false;
+      WristPosition targetPosition = this.targetWristPosition;
+      if(targetPosition == WristPosition.None) {
+        movementComplete = true;
+      }
+      else {
+        double targetAngle = this.getWristAngleForPosition(targetPosition);
+        double currentAngle = this.getCurrentWristAngle();
+        double deltaAsPos = Math.abs(targetAngle-currentAngle);
+        movementComplete = (deltaAsPos <= WristSubsystem.ToleranceDegrees);
+      }
+      return movementComplete;
+    }
+
+    /**
+     * TODO - Need this owen
+     * @param position
+     */
+    public void setTargetWristPosition(WristPosition position) {
+      this.setWristAngle(this.getWristAngleForPosition(position));
+    }
     
-    
+    /**
+     * TODO - Need this owen
+     */
     @Override
     public void periodic() {
       // confirm that the smart motion is setup - no-op after it is setup first time
@@ -103,6 +135,9 @@ public class WristSubsystem extends SubsystemBase {
 
     }
 
+    /**
+     * TODO - Need this owen
+     */
     @Override
     public void simulationPeriodic() {
 
@@ -111,6 +146,40 @@ public class WristSubsystem extends SubsystemBase {
     /* *********************************************************************
     PRIVATE METHODS
     ************************************************************************/
+
+    /**
+     * TODO - Need this owen
+     */
+    private double getWristAngleForPosition(WristPosition position) {
+      double targetWristAngle = Double.NaN;
+      if(position == WristPosition.PickUp) {
+        targetWristAngle = Constants.WRIST_ANGLE_PICKUP;
+      }
+      else if(position == WristPosition.PositionOne) {
+        targetWristAngle = Constants.WRIST_ANGLE_1;
+      }
+      else if(position == WristPosition.PositionTwo) {
+        targetWristAngle = Constants.WRIST_ANGLE_2;
+      }
+      return targetWristAngle;
+    }
+
+    /*
+     * TODO - Need this owen
+     */
+    private void setWristAngle(double wristAngle) { 
+      double targetPositionTicks = wristAngle * TICKS_PER_DEGREE;
+      double curPosition = wristEncoder.getPosition();
+      
+      if (Math.abs(curPosition - targetPositionTicks) > TOLERANCE) {
+          // If the current position is outside the tolerance range, use the PID controller to move the wrist to the target position
+          wristPidController.setReference(targetPositionTicks, ControlType.kPosition);
+      } else {
+          // If within tolerance, stop the wrist motor
+          wristMotor.set(0);
+      }
+    }
+
     /**
      * A function intended to be called from periodic to update encoder value of the motor.
      */

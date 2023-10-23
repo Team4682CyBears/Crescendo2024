@@ -15,12 +15,14 @@ import frc.robot.Constants;
 import frc.robot.common.WristPosition;
 import frc.robot.control.ManualInputInterfaces;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.WristSubsystem;
 
 import java.util.function.DoubleSupplier;
 
 public class IntakeDefaultCommand extends CommandBase {
 
     private IntakeSubsystem intakeSub;
+    private WristSubsystem wristSub;
     private DoubleSupplier uptakeSupplier;
     private DoubleSupplier expelSupplier;
     private final double inputThreshold = 0.1;
@@ -31,10 +33,12 @@ public class IntakeDefaultCommand extends CommandBase {
      * @param uptakeSupplier - trigger uptake value
      * @param expelSupplier - trigger expel value
      */
-    public IntakeDefaultCommand(IntakeSubsystem intakeSubsystem,
-                               DoubleSupplier uptakeInputSupplier,
-                               DoubleSupplier expelInputSupplier) {
+    public IntakeDefaultCommand(WristSubsystem wristSubsystem,
+                                IntakeSubsystem intakeSubsystem,
+                                DoubleSupplier uptakeInputSupplier,
+                                DoubleSupplier expelInputSupplier) {
         this.intakeSub = intakeSubsystem;
+        this.wristSub = wristSubsystem;
         this.uptakeSupplier = uptakeInputSupplier;
         this.expelSupplier = expelInputSupplier;
 
@@ -46,21 +50,20 @@ public class IntakeDefaultCommand extends CommandBase {
         double uptakeValue = this.uptakeSupplier.getAsDouble();
         double expelValue = this.expelSupplier.getAsDouble();
 
-        switch(ManualInputInterfaces.currentWristPosition) {
-            case PICKUP:
-                uptakeValue *= Constants.INTAKE_SPEED; 
-                expelValue *= Constants.SHOOT_SPEED_0;
-                break;
-            case POSITION_1:
-                uptakeValue *= Constants.INTAKE_SPEED; 
-                expelValue *= Constants.SHOOT_SPEED_1;
-                break;
-            case POSITION_2:
-                uptakeValue *= Constants.INTAKE_SPEED; 
-                expelValue *= Constants.SHOOT_SPEED_2;
-                break;
-            // ... add more as needed
+        WristPosition targetWristPosition = this.wristSub.getTargetWristPosition();
+        if(targetWristPosition == WristPosition.PickUp) {
+            uptakeValue *= Constants.INTAKE_SPEED; 
+            expelValue *= Constants.SHOOT_SPEED_0;
         }
+        else if(targetWristPosition == WristPosition.PositionOne) {
+            uptakeValue *= Constants.INTAKE_SPEED; 
+            expelValue *= Constants.SHOOT_SPEED_1;
+        }
+        else if(targetWristPosition == WristPosition.PositionTwo) {
+            uptakeValue *= Constants.INTAKE_SPEED; 
+            expelValue *= Constants.SHOOT_SPEED_2;
+        }
+            // ... add more as needed
 
         //clean inputs
         double uptakeAbsValue = Math.abs(uptakeValue);

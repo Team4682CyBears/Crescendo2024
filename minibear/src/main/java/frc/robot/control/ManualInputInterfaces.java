@@ -24,7 +24,7 @@ import frc.robot.commands.DriveToPointCommand;
 import frc.robot.commands.DriveTrajectoryCommand;
 import frc.robot.commands.IntakeDefaultCommand;
 import frc.robot.commands.RumbleCommand;
-import frc.robot.commands.WristDefaultCommand;
+import frc.robot.commands.WristPositionCommand;
 import frc.robot.common.ChargedUpGamePiece;
 import frc.robot.common.TestTrajectories;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -51,7 +51,6 @@ public class ManualInputInterfaces {
   // a member to hold the current game piece target - start with cube because
   // manual likely will target cube as start
   private ChargedUpGamePiece coDriverControllerGamePieceTarget = ChargedUpGamePiece.Cube;
-  public static WristPosition currentWristPosition = WristPosition.PICKUP; // default
 
   /**
    * The constructor to build this 'manual input' conduit
@@ -481,9 +480,10 @@ public class ManualInputInterfaces {
     // Start cargo uptake when the A button is pressed:
     this.coDriverController.leftBumper().onTrue(
         new ParallelCommandGroup(
-            new IntakeDefaultCommand(subsystemCollection.getIntakeSubsystem(), 
-                                            () -> 1.0, // Assuming full power uptake
-                                            () -> 0.0), // No expelling
+            new IntakeDefaultCommand(subsystemCollection.getWristSubsystem(),
+                                     subsystemCollection.getIntakeSubsystem(), 
+                                     () -> 1.0, // Assuming full power uptake
+                                     () -> 0.0), // No expelling
             new ButtonPressCommand("coDriverController.LeftBumper()", "Start cargo uptake"))
             .withTimeout(5.0)
     );
@@ -491,9 +491,10 @@ public class ManualInputInterfaces {
     // Start cargo expulsion when the B button is pressed:
     this.coDriverController.rightBumper().onTrue(
         new ParallelCommandGroup(
-            new IntakeDefaultCommand(subsystemCollection.getIntakeSubsystem(), 
-                                            () -> 0.0, // No uptake
-                                            () -> 1.0), // Assuming full power expelling
+            new IntakeDefaultCommand(subsystemCollection.getWristSubsystem(),
+                                     subsystemCollection.getIntakeSubsystem(), 
+                                     () -> 0.0, // No uptake
+                                     () -> 1.0), // Assuming full power expelling
             new ButtonPressCommand("coDriverController.rightBumper()", "Start cargo expulsion"))
             .withTimeout(5.0)
     );
@@ -508,21 +509,21 @@ public class ManualInputInterfaces {
     // Set wrist to pickup position when the X button is pressed:
     this.coDriverController.a().onTrue(
         new ParallelCommandGroup(
-            new WristDefaultCommand(subsystemCollection.getWristSubsystem(), Constants.WRIST_ANGLE_PICKUP),
+            new WristPositionCommand(subsystemCollection.getWristSubsystem(), WristPosition.PickUp),
             new ButtonPressCommand("driverController.X()", "Set wrist to pickup (0st) position"))
             .withTimeout(5.0)
     );
 
     this.coDriverController.b().onTrue(
         new ParallelCommandGroup(
-            new WristDefaultCommand(subsystemCollection.getWristSubsystem(), Constants.WRIST_ANGLE_1),
+            new WristPositionCommand(subsystemCollection.getWristSubsystem(), WristPosition.PositionOne),
             new ButtonPressCommand("driverController.X()", "Set wrist to 1st position"))
             .withTimeout(5.0)
     );
 
     this.coDriverController.y().onTrue(
         new ParallelCommandGroup(
-            new WristDefaultCommand(subsystemCollection.getWristSubsystem(), Constants.WRIST_ANGLE_2),
+            new WristPositionCommand(subsystemCollection.getWristSubsystem(), WristPosition.PositionTwo),
             new ButtonPressCommand("driverController.X()", "Set wrist to 2nd position"))
             .withTimeout(5.0)
     );
@@ -530,8 +531,5 @@ public class ManualInputInterfaces {
 
     }
   }
-  
-  public WristPosition getWristPositionENUM() {
-    return this.currentWristPosition;
-    }   
+
 }

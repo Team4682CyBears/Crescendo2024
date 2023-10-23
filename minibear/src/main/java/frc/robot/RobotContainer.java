@@ -50,11 +50,11 @@ public class RobotContainer {
     // init the input system
     this.initializeManualInputInterfaces();
 
-    // arm and picker later
-    this.initializeIntakeSubsystem();
-
     // init wrist system
     this.initializeWristSubsystem();
+
+    // arm and picker later
+    this.initializeIntakeSubsystem();
 
     // calculate and update the current position of the robot
     this.calculateAndUpdateRobotPosition();
@@ -187,9 +187,10 @@ public class RobotContainer {
    * A method to init the every bot picker
    */
   private void initializeIntakeSubsystem() {
-    if (InstalledHardware.everyBotPickerInstalled) {
+    if (InstalledHardware.everyBotPickerInstalled && InstalledHardware.wristInstalled) {
       subsystems.setIntakeSubsystem(new IntakeSubsystem());
       subsystems.getIntakeSubsystem().setDefaultCommand(new IntakeDefaultCommand(
+          subsystems.getWristSubsystem(),
           subsystems.getIntakeSubsystem(),
           () -> modifyAxisSquare(subsystems.getManualInputInterfaces().getInputEveryBotUptakeTrigger()),
           () -> modifyAxisSquare(subsystems.getManualInputInterfaces().getInputEveryBotExpellTrigger())));
