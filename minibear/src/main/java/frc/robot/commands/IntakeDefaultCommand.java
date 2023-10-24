@@ -52,15 +52,15 @@ public class IntakeDefaultCommand extends CommandBase {
 
         WristPosition targetWristPosition = this.wristSub.getTargetWristPosition();
         if(targetWristPosition == WristPosition.PickUp) {
-            uptakeValue *= Constants.INTAKE_SPEED; 
+            uptakeValue *= Constants.INTAKE_SPEED * -1; 
             expelValue *= Constants.SHOOT_SPEED_0;
         }
         else if(targetWristPosition == WristPosition.PositionOne) {
-            uptakeValue *= Constants.INTAKE_SPEED; 
+            uptakeValue *= Constants.INTAKE_SPEED * -1; 
             expelValue *= Constants.SHOOT_SPEED_1;
         }
         else if(targetWristPosition == WristPosition.PositionTwo) {
-            uptakeValue *= Constants.INTAKE_SPEED; 
+            uptakeValue *= Constants.INTAKE_SPEED * -1; 
             expelValue *= Constants.SHOOT_SPEED_2;
         }
             // ... add more as needed

@@ -126,7 +126,7 @@ public final class Constants {
     public static final double WRIST_ANGLE_1 = 45.0; // Example angle for storing position
     public static final double WRIST_ANGLE_2 = 100.0; // Example angle for deploying items
 
-    public static final double INTAKE_SPEED = 0.3;
+    public static final double INTAKE_SPEED = 0.3; //should be positive
 
     public static final double SHOOT_SPEED_0 = 0.3;
     public static final double SHOOT_SPEED_1 = 0.6;
