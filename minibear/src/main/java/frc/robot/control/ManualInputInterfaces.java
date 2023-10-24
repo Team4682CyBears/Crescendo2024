@@ -478,7 +478,7 @@ public class ManualInputInterfaces {
      
     //Intake Bumpers
     // Start cargo uptake when the A button is pressed:
-    this.coDriverController.leftBumper().onTrue(
+    this.coDriverController.leftBumper().whileTrue(
         new ParallelCommandGroup(
             new IntakeDefaultCommand(subsystemCollection.getWristSubsystem(),
                                      subsystemCollection.getIntakeSubsystem(), 
@@ -488,8 +488,10 @@ public class ManualInputInterfaces {
             .withTimeout(5.0)
     );
 
+    
+
     // Start cargo expulsion when the B button is pressed:
-    this.coDriverController.rightBumper().onTrue(
+    this.coDriverController.rightBumper().whileTrue(
         new ParallelCommandGroup(
             new IntakeDefaultCommand(subsystemCollection.getWristSubsystem(),
                                      subsystemCollection.getIntakeSubsystem(), 

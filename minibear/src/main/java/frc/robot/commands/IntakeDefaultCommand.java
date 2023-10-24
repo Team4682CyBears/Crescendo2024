@@ -83,6 +83,6 @@ public class IntakeDefaultCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        this.intakeSub.setIntakeRelativeSpeed(0.0);
+        this.intakeSub.stopMotors();
     }
 }

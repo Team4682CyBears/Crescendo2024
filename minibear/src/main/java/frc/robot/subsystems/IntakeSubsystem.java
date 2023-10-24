@@ -79,7 +79,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
    
 
-  private void stopMotors() {
+  public void stopMotors() {
     srxMotor1.set(ControlMode.PercentOutput, 0);
     srxMotor2.set(ControlMode.PercentOutput, 0);
   }
