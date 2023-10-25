@@ -52,16 +52,20 @@ public class IntakeDefaultCommand extends CommandBase {
 
         WristPosition targetWristPosition = this.wristSub.getTargetWristPosition();
         if(targetWristPosition == WristPosition.PickUp) {
-            uptakeValue *= Constants.INTAKE_SPEED * -1; 
+            uptakeValue *= Constants.INTAKE_SPEED; 
             expelValue *= Constants.SHOOT_SPEED_0;
         }
         else if(targetWristPosition == WristPosition.PositionOne) {
-            uptakeValue *= Constants.INTAKE_SPEED * -1; 
+            uptakeValue *= Constants.INTAKE_SPEED; 
             expelValue *= Constants.SHOOT_SPEED_1;
         }
         else if(targetWristPosition == WristPosition.PositionTwo) {
-            uptakeValue *= Constants.INTAKE_SPEED * -1; 
+            uptakeValue *= Constants.INTAKE_SPEED; 
             expelValue *= Constants.SHOOT_SPEED_2;
+        }
+        else if(targetWristPosition == WristPosition.PositionThree) {
+            uptakeValue *= Constants.INTAKE_SPEED; 
+            expelValue *= Constants.SHOOT_SPEED_3;
         }
             // ... add more as needed
 
@@ -75,7 +79,7 @@ public class IntakeDefaultCommand extends CommandBase {
             inputValue = uptakeValue;
         }
         else if (expelAbsValue > this.inputThreshold && expelAbsValue > uptakeAbsValue) {
-            inputValue = expelValue;
+            inputValue = expelValue * -1;
         }
 
         this.intakeSub.setIntakeRelativeSpeed(inputValue);

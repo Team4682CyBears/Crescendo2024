@@ -516,7 +516,7 @@ public class ManualInputInterfaces {
             .withTimeout(5.0)
     );
 
-    this.coDriverController.b().onTrue(
+    this.coDriverController.x().onTrue(
         new ParallelCommandGroup(
             new WristPositionCommand(subsystemCollection.getWristSubsystem(), WristPosition.PositionOne),
             new ButtonPressCommand("driverController.X()", "Set wrist to 1st position"))
@@ -526,6 +526,13 @@ public class ManualInputInterfaces {
     this.coDriverController.y().onTrue(
         new ParallelCommandGroup(
             new WristPositionCommand(subsystemCollection.getWristSubsystem(), WristPosition.PositionTwo),
+            new ButtonPressCommand("driverController.X()", "Set wrist to 2nd position"))
+            .withTimeout(5.0)
+    );
+
+    this.coDriverController.b().onTrue(
+        new ParallelCommandGroup(
+            new WristPositionCommand(subsystemCollection.getWristSubsystem(), WristPosition.PositionThree),
             new ButtonPressCommand("driverController.X()", "Set wrist to 2nd position"))
             .withTimeout(5.0)
     );

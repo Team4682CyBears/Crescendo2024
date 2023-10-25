@@ -39,9 +39,10 @@ public class WristPositionCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        if(interrupted && !this.isFinished()){
+        if(interrupted || !this.isFinished()){
             wristSubsystem.setWristSpeed(0);
         }
+        System.out.println("Wrist Position Target has been reached");
     }
 
     @Override

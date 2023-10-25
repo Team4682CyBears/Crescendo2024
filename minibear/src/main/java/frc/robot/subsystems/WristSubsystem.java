@@ -34,9 +34,9 @@ public class WristSubsystem extends SubsystemBase {
     CONSTANTS
     ************************************************************************/
     // Wrist gear reduction
-    private static final double wristGearReduction = 48.0/1.0;
+    private static final double wristGearReduction = 48/1;
     
-    private static final double TICKS_PER_DEGREE = 360/42 * wristGearReduction; //TODO SET THIS encoder ticks per arm degree (will corelate with gearbox)
+    private static final double TICKS_PER_DEGREE = (42 * 48)/360; //TODO SET THIS encoder ticks per arm degree (will corelate with gearbox)
     private static final double TOLERANCE = 5; // Encoder Tolerence, raise or lower if it bounces or doesn't reach the target.
     private static final double ToleranceDegrees = 1.0;
 
@@ -160,6 +160,9 @@ public class WristSubsystem extends SubsystemBase {
       else if(position == WristPosition.PositionTwo) {
         targetWristAngle = Constants.WRIST_ANGLE_2;
       }
+      else if(position == WristPosition.PositionThree) {
+        targetWristAngle = Constants.WRIST_ANGLE_3;
+      }
       return targetWristAngle;
     }
 
@@ -181,6 +184,10 @@ public class WristSubsystem extends SubsystemBase {
       else if(Constants.WRIST_ANGLE_2 + WristSubsystem.TOLERANCE >= targetWristAngle && 
               Constants.WRIST_ANGLE_2 - WristSubsystem.TOLERANCE <= targetWristAngle) {
         discoveredPosition = WristPosition.PositionTwo;
+      } 
+      else if(Constants.WRIST_ANGLE_3 + WristSubsystem.TOLERANCE >= targetWristAngle && 
+      Constants.WRIST_ANGLE_3 - WristSubsystem.TOLERANCE <= targetWristAngle) {
+    discoveredPosition = WristPosition.PositionThree;
       }
 
       return discoveredPosition;
@@ -226,13 +233,13 @@ public class WristSubsystem extends SubsystemBase {
     private void initializeMotorsSmartMotion() {
       if(this.motorInitializedForSmartMotion == false) { 
         // PID coefficients
-        kP = 2e-4; 
+        kP = 2e-4;
         kI = 0;
         kD = 0;
         kIz = 0; 
         kFF = 0.00001; 
-        kMaxOutput = 1; 
-        kMinOutput = -1;
+        kMaxOutput = 0.75; 
+        kMinOutput = -0.75;
         maxRPM = Constants.neoMaximumRevolutionsPerMinute ;
         int smartMotionSlot = 0;
     
