@@ -63,6 +63,8 @@ public class RobotContainer {
     System.out.println(">>>> Initializing button bindings.");
     this.subsystems.getManualInputInterfaces().initializeButtonCommandBindings();
     System.out.println(">>>> Finished initializing button bindings.");
+    new ZeroWristEncoder(this.subsystems.getWristSubsystem());
+    System.out.println(">>>> Finished Initing Wrist");
 
     this.initializeDebugDashboard();
     this.autonomousChooser = new AutonomousChooser(subsystems);
@@ -84,7 +86,7 @@ public class RobotContainer {
         new InstantCommand(this.subsystems.getDriveTrainSubsystem()::printState));
 
     SmartDashboard.putData("Zero Wrist", new ZeroWristEncoder(this.subsystems.getWristSubsystem()));
-    
+
 
   }
 
