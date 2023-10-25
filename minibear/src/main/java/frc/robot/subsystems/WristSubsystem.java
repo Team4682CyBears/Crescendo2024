@@ -245,7 +245,7 @@ public class WristSubsystem extends SubsystemBase {
     
         // Smart Motion Coefficients
         maxVel = maxRPM * wristMotorSpeedReductionFactor; // rpm
-        maxAcc = maxVel * 2; // 1/2 second to get up to full speed
+        maxAcc = maxVel * 8; // 1/2 second to get up to full speed
 
         wristMotor.restoreFactoryDefaults();
         wristMotor.setIdleMode(IdleMode.kBrake);
