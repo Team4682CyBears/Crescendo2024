@@ -82,6 +82,10 @@ public class RobotContainer {
     new ChassisSpeeds(0.6, 0.0, 0.2), 3.0));
     SmartDashboard.putData("Print NavX State",
         new InstantCommand(this.subsystems.getDriveTrainSubsystem()::printState));
+
+    SmartDashboard.putData("Zero Wrist", new ZeroWristEncoder(this.subsystems.getWristSubsystem()));
+    
+
   }
 
   /**

@@ -202,6 +202,17 @@ public class WristSubsystem extends SubsystemBase {
       }
     }
 
+    /*
+     * TODO
+     */
+    public void zeroWrist(){
+      wristEncoder.setPosition(0);
+    }
+
+    private void zeroWrist(double position){
+      wristEncoder.setPosition(position);
+    }
+
     /**
      * A function intended to be called from periodic to update encoder value of the motor.
      */
