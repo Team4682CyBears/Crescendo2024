@@ -94,6 +94,9 @@ public class IntakeAutoCommand extends CommandBase {
             intakeSubsystem, 
                     () -> 0.0, 
                     () -> 0.0); 
+        
+        new WristPositionCommand(wristSubsystem, WristPosition.PositionThree);
+
             
           done = true;      
         }
