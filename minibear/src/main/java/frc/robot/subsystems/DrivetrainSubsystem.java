@@ -25,6 +25,7 @@ import frc.robot.NavX.AHRS;
 import frc.robot.Constants;
 import frc.robot.common.EulerAngle;
 import frc.robot.common.VectorUtils;
+import frc.robot.control.InstalledHardware;
 import frc.robot.control.SwerveDriveMode;
 import frc.robot.common.MotorUtils;
 import frc.robot.common.SwerveDriveCenterOfRotation;
@@ -66,7 +67,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * From: https://docs.wcproducts.com/wcp-swervex/general-info/ratio-options
    * Gear ratio: 7.85:1. Free speed of 14.19 ft/s = 4.3251 m/s
    */
-  public static final double MAX_VELOCITY_METERS_PER_SECOND = 4.3251;
+
+   //4.3251
+  public static final double MAX_VELOCITY_METERS_PER_SECOND = 2.3251;
   public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 6.0;
 
   public static final double MIN_VELOCITY_BOUNDARY_METERS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND * 0.14; // 0.14 a magic number based on testing
