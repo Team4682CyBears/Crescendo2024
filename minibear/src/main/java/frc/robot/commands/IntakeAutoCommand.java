@@ -12,9 +12,11 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.common.WristPosition;
 
 
 public class IntakeAutoCommand extends CommandBase {
@@ -24,20 +26,18 @@ public class IntakeAutoCommand extends CommandBase {
     
     private Timer timer = new Timer();
     private boolean done = false;
-    private final double shootTimeStamp = 3;
-    private final double shootDoneTimeStamp = 3.5;
-
-    private double relativeSpeed;
-    private double durationSeconds;
+    private final double shootTimeStampSeconds = 3;
 
     /**
      * Constructor for EveryBotPickerAutoUptakeCommand
      * @param intakeSubsystem - the subsystem for the everybot picker
      * @return 
      */
-    public IntakeAutoCommand(IntakeSubsystem intakeSubsystem) {
+    public IntakeAutoCommand(IntakeSubsystem intakeSubsystem, WristSubsystem wristSubsystem) {
         this.intakeSubsystem = intakeSubsystem;
         addRequirements(this.intakeSubsystem);
+        this.wristSubsystem = wristSubsystem;
+        addRequirements(this.wristSubsystem);
     }
 
     /**
@@ -55,23 +55,14 @@ public class IntakeAutoCommand extends CommandBase {
      */
     @Override
     public void execute() {
-
-
-        if (timer.hasElapsed(shootTimeStamp)) {
-            new IntakeDefaultCommand(wristSubsystem,
-            intakeSubsystem, 
-                    () -> 0.0, // No uptake
-                    () -> 1.0); // Assuming full power expelling
+        if (timer.hasElapsed(shootTimeStampSeconds) == false) {
+            double shotSpeed = this.getExpelSpeedForCurrentWristPosition();
+            this.intakeSubsystem.setIntakeRelativeSpeed(shotSpeed);
         }
-
-        if (timer.hasElapsed(shootDoneTimeStamp)) {
-            new IntakeDefaultCommand(wristSubsystem,
-            intakeSubsystem, 
-                    () -> 0.0, // No uptake
-                    () -> 0.0); // No uptake
-
+        else {
+            this.intakeSubsystem.setIntakeRelativeSpeed(0.0);
+            done = true;      
         }
-
     }   
 
     /**
@@ -80,11 +71,7 @@ public class IntakeAutoCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         if(interrupted) {
-            new IntakeDefaultCommand(wristSubsystem,
-            intakeSubsystem, 
-                    () -> 0.0, 
-                    () -> 0.0); 
-            
+        this.intakeSubsystem.setIntakeRelativeSpeed(0.0);
           done = true;      
         }
       }
@@ -93,5 +80,27 @@ public class IntakeAutoCommand extends CommandBase {
     @Override
     public boolean isFinished() {
         return done;
+    }
+
+    /**
+     * A method that will get the proper expell speed associated with the current robot wrist position
+     * @return a double of expell speed that is appropriate for the curren wrist position
+     */
+    private double getExpelSpeedForCurrentWristPosition() {
+        double expelSpeed = Constants.SHOOT_SPEED_3;
+        WristPosition currentPosition = wristSubsystem.getTargetWristPosition();
+        if(currentPosition == WristPosition.PickUp) {
+            expelSpeed = Constants.SHOOT_SPEED_0; // assuming that pickup equates to shot speed 0 - change if this is incorrect assumption!!
+        }
+        else if(currentPosition == WristPosition.PositionOne) {
+            expelSpeed = Constants.SHOOT_SPEED_1; // assuming that position 1 equates to shot speed 2 - change if this is incorrect assumption!!
+        }
+        else if(currentPosition == WristPosition.PositionTwo) {
+            expelSpeed = Constants.SHOOT_SPEED_2; // assuming that position 2 equates to shot speed 2 - change if this is incorrect assumption!!
+        }
+        else if(currentPosition == WristPosition.PositionThree) {
+            expelSpeed = Constants.SHOOT_SPEED_3; // assuming that position 3 equates to shot speed 3 - change if this is incorrect assumption!!
+        }
+        return expelSpeed;
     }
 }
