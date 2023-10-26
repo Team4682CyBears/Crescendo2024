@@ -179,8 +179,7 @@ public class AutonomousChooser {
 
         // expel the game piece by either opening the claw or running the motors to
         if (this.subsystems.getIntakeSubsystem() != null) {
-            command.addCommands(new IntakeAutoCommand(subsystems.getIntakeSubsystem(),
-                    subsystems.getWristSubsystem()));
+            command.addCommands(new IntakeAutoCommand(subsystems.getIntakeSubsystem()));
         }
 
         // drive out of the score position

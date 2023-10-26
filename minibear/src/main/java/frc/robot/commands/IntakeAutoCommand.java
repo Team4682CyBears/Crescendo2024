@@ -12,7 +12,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.common.WristPosition;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import edu.wpi.first.wpilibj.Timer;
@@ -25,7 +24,6 @@ public class IntakeAutoCommand extends CommandBase {
     
     private Timer timer = new Timer();
     private boolean done = false;
-    private final double moveToPositionTimeStamp = 1.7; //TODO set times
     private final double shootTimeStamp = 3;
     private final double shootDoneTimeStamp = 3.5;
 
@@ -37,12 +35,9 @@ public class IntakeAutoCommand extends CommandBase {
      * @param intakeSubsystem - the subsystem for the everybot picker
      * @return 
      */
-    public IntakeAutoCommand(IntakeSubsystem intakeSubsystem, WristSubsystem wristSubsystem) {
+    public IntakeAutoCommand(IntakeSubsystem intakeSubsystem) {
         this.intakeSubsystem = intakeSubsystem;
         addRequirements(this.intakeSubsystem);
-
-        this.wristSubsystem = wristSubsystem;
-        addRequirements(this.wristSubsystem);
     }
 
     /**
@@ -60,9 +55,7 @@ public class IntakeAutoCommand extends CommandBase {
      */
     @Override
     public void execute() {
-        if (timer.hasElapsed(moveToPositionTimeStamp)) {
-            new WristPositionCommand(wristSubsystem, WristPosition.PositionTwo);
-        } 
+
 
         if (timer.hasElapsed(shootTimeStamp)) {
             new IntakeDefaultCommand(wristSubsystem,
@@ -77,11 +70,8 @@ public class IntakeAutoCommand extends CommandBase {
                     () -> 0.0, // No uptake
                     () -> 0.0); // No uptake
 
-        new WristPositionCommand(wristSubsystem, WristPosition.PositionThree);
-
         }
 
-        done = true;
     }   
 
     /**
@@ -94,9 +84,6 @@ public class IntakeAutoCommand extends CommandBase {
             intakeSubsystem, 
                     () -> 0.0, 
                     () -> 0.0); 
-        
-        new WristPositionCommand(wristSubsystem, WristPosition.PositionThree);
-
             
           done = true;      
         }
