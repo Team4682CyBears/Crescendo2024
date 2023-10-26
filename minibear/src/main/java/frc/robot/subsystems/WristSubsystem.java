@@ -41,7 +41,7 @@ public class WristSubsystem extends SubsystemBase {
     private static final double ToleranceDegrees = 1.0;
 
     // TODO - use something less than 1.0 for testing
-    private static final double wristMotorSpeedReductionFactor = 1.0;    
+    private static final double wristMotorSpeedReductionFactor = 0.3;    
 
     /**********************************************************************
     MEMBERS
@@ -238,14 +238,14 @@ public class WristSubsystem extends SubsystemBase {
         kD = 0;
         kIz = 0; 
         kFF = 0.00001; 
-        kMaxOutput = 0.75; 
-        kMinOutput = -0.75;
+        kMaxOutput = wristMotorSpeedReductionFactor; 
+        kMinOutput = wristMotorSpeedReductionFactor * -1;
         maxRPM = Constants.neoMaximumRevolutionsPerMinute ;
         int smartMotionSlot = 0;
     
         // Smart Motion Coefficients
         maxVel = maxRPM * wristMotorSpeedReductionFactor; // rpm
-        maxAcc = maxVel * 8; // 1/2 second to get up to full speed
+        maxAcc = maxVel * 2; // 1/2 second to get up to full speed
 
         wristMotor.restoreFactoryDefaults();
         wristMotor.setIdleMode(IdleMode.kBrake);
