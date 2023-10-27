@@ -150,7 +150,7 @@ public class RobotContainer {
   }
 
   /**
-   * A method to init items for the debug dashboard
+   * A method to init items for the debug dashboard a
    */
   private void initializeDebugDashboard() {
     SmartDashboard.putData("Debug: CommandScheduler", CommandScheduler.getInstance());
