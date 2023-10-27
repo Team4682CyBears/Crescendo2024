@@ -233,11 +233,11 @@ public class WristSubsystem extends SubsystemBase {
     private void initializeMotorsSmartMotion() {
       if(this.motorInitializedForSmartMotion == false) { 
         // PID coefficients
-        kP = 2e-4;
+        kP = 2e-3;
         kI = 0;
         kD = 0;
         kIz = 0; 
-        kFF = 0.00001; 
+        kFF = 0.0000; 
         kMaxOutput = wristMotorSpeedReductionFactor; 
         kMinOutput = wristMotorSpeedReductionFactor * -1;
         maxRPM = Constants.neoMaximumRevolutionsPerMinute ;

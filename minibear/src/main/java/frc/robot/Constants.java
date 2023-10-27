@@ -122,16 +122,18 @@ public final class Constants {
     //Wrist Constants
     public static int wristMotorCanID = 19;
 
-    public static final double WRIST_ANGLE_PICKUP = 130.0; // Example angle for picking up items
-    public static final double WRIST_ANGLE_1 = 60.0; // Example angle for storing position //TODO might need to be negitive if zero is at the top positon?
-    public static final double WRIST_ANGLE_2 = 45.0; // Example angle for deploying items
+
+    // THESE ARE NOT DEGRESS THEY ARE JUST ARBITRARY UNITS 
+    public static final double WRIST_ANGLE_PICKUP = 160.0; // Example angle for picking up items
+    public static final double WRIST_ANGLE_1 = 80.0; // Example angle for storing position //TODO might need to be negitive if zero is at the top positon?
+    public static final double WRIST_ANGLE_2 = 80.0; // Example angle for deploying items
     public static final double WRIST_ANGLE_3 = 0.0; // Example angle for deploying items
 
     public static final double INTAKE_SPEED = 0.3; //should be positive
 
     public static final double SHOOT_SPEED_0 = 0.3;
-    public static final double SHOOT_SPEED_1 = 0.6;
-    public static final double SHOOT_SPEED_2 = 1.0;
+    public static final double SHOOT_SPEED_1 = 1.0;
+    public static final double SHOOT_SPEED_2 = 0.6;
     public static final double SHOOT_SPEED_3 = 1.0;
 
 
