@@ -26,7 +26,7 @@ public class IntakeAutoCommand extends CommandBase {
     
     private Timer timer = new Timer();
     private boolean done = false;
-    private final double shootTimeStampSeconds = 3;
+    private final double shootTimeStampSeconds = 1;
 
     /**
      * Constructor for EveryBotPickerAutoUptakeCommand

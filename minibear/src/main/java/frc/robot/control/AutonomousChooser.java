@@ -12,6 +12,7 @@ package frc.robot.control;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.concurrent.TimeoutException;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -25,11 +26,13 @@ import frc.robot.commands.AutoBalanceCommand;
 import frc.robot.commands.AutoBalanceStepCommand;
 import frc.robot.commands.DriveTrajectoryCommand;
 import frc.robot.commands.IntakeAutoCommand;
+import frc.robot.commands.WristPositionCommand;
 //import frc.robot.commands.EveryBotPickerAutoCommand;
 import frc.robot.common.SwerveTrajectoryConfig;
 import frc.robot.common.EveryBotPickerAction;
 import frc.robot.common.SwerveTrajectoryGenerator;
 import frc.robot.common.VectorUtils;
+import frc.robot.common.WristPosition;
 
 /**
  * A class for choosing different auto mode routines from shuffleboard
@@ -179,6 +182,8 @@ public class AutonomousChooser {
 
         // expel the game piece by either opening the claw or running the motors to
         if (this.subsystems.getIntakeSubsystem() != null) {
+            command.addCommands(new WristPositionCommand(subsystems.getWristSubsystem(), WristPosition.PositionTwo));
+            command.addCommands(new WaitCommand(0.5));
             command.addCommands(new IntakeAutoCommand(subsystems.getIntakeSubsystem(), subsystems.getWristSubsystem()));
         }
 
