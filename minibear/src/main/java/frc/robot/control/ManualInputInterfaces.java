@@ -502,6 +502,19 @@ public class ManualInputInterfaces {
     );
 
 
+    // Start cargo expulsion when the B button is pressed:
+    this.coDriverController.povDown().whileTrue(
+        new ParallelCommandGroup(
+            new IntakeDefaultCommand(subsystemCollection.getWristSubsystem(),
+                                     subsystemCollection.getIntakeSubsystem(), 
+                                     () -> 0.0, // No uptake
+                                     () -> 1.0), // Assuming full power expelling
+            new ButtonPressCommand("coDriverController.rightBumper()", "Start cargo expulsion"))
+            .withTimeout(5.0)
+    );
+
+
+
 
 
       
