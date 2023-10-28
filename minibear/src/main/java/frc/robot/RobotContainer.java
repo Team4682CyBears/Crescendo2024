@@ -10,6 +10,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,6 +23,7 @@ import frc.robot.commands.*;
 import frc.robot.control.*;
 import frc.robot.subsystems.*;
 import frc.robot.common.PortSpy;
+import frc.robot.common.WristPosition;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -58,6 +61,9 @@ public class RobotContainer {
 
     // calculate and update the current position of the robot
     this.calculateAndUpdateRobotPosition();
+
+    //init the PathPlanner NamedCommands
+    this.registerNamedCommands();
 
     // Configure the button bindings
     System.out.println(">>>> Initializing button bindings.");
@@ -109,7 +115,7 @@ public class RobotContainer {
     if (this.subsystems.getIntakeSubsystem() != null) {
       // add a watcher for overcurrent on the
       IntakeOverCurrentCommand ebCmd = new IntakeOverCurrentCommand(
-          subsystems.getIntakeSubsystem(), Constants.overcurrentRumbleTimeSeconds);
+          subsystems.getIntakeSubsystem(), 0.1);
       RumbleCommand rc = new RumbleCommand(
           this.subsystems.getManualInputInterfaces().getCoDriverController(),
           Constants.overcurrentRumbleTimeSeconds);
@@ -123,7 +129,14 @@ public class RobotContainer {
               "EveryBotMotorOvercurrentProtection"));
     }
   }
-
+  /**
+   * A method to init commands for PathPlanner
+   */
+  private void registerNamedCommands(){
+      NamedCommands.registerCommand("Intake Position", new WristPositionCommand(subsystems.getWristSubsystem(), WristPosition.PickUp));
+      NamedCommands.registerCommand("Auto Intake/Shoot", new IntakeAutoCommand(subsystems.getIntakeSubsystem(),subsystems.getWristSubsystem()));
+      NamedCommands.registerCommand("OverShoulder Shoot Position", new WristPositionCommand(subsystems.getWristSubsystem(), WristPosition.PositionThree));
+  }
   /**
    * A method to init the input interfaces
    */

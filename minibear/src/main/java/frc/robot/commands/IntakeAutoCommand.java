@@ -19,14 +19,18 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.common.WristPosition;
 
 
+
 public class IntakeAutoCommand extends CommandBase {
 
     private IntakeSubsystem intakeSubsystem;
     private WristSubsystem wristSubsystem;
-    
+    private WristPosition currentPosition;
     private Timer timer = new Timer();
     private boolean done = false;
-    private final double shootTimeStampSeconds = 3;
+    private final double shootTimeStampSeconds = 0.3;
+    private final double intakeTimeStampSeconds = 2;
+
+    
 
     /**
      * Constructor for EveryBotPickerAutoUptakeCommand
@@ -55,7 +59,12 @@ public class IntakeAutoCommand extends CommandBase {
      */
     @Override
     public void execute() {
-        if (timer.hasElapsed(shootTimeStampSeconds) == false) {
+        
+        currentPosition = wristSubsystem.getTargetWristPosition();
+        if (currentPosition==WristPosition.PickUp&&timer.hasElapsed(intakeTimeStampSeconds)==false){
+            this.intakeSubsystem.setIntakeRelativeSpeed(Constants.SHOOT_SPEED_0);
+        }
+        else if (currentPosition!=WristPosition.PickUp&&timer.hasElapsed(shootTimeStampSeconds) == false) {
             double shotSpeed = this.getExpelSpeedForCurrentWristPosition();
             this.intakeSubsystem.setIntakeRelativeSpeed(shotSpeed);
         }
@@ -88,7 +97,7 @@ public class IntakeAutoCommand extends CommandBase {
      */
     private double getExpelSpeedForCurrentWristPosition() {
         double expelSpeed = Constants.SHOOT_SPEED_3;
-        WristPosition currentPosition = wristSubsystem.getTargetWristPosition();
+        currentPosition = wristSubsystem.getTargetWristPosition();
         if(currentPosition == WristPosition.PickUp) {
             expelSpeed = Constants.SHOOT_SPEED_0; // assuming that pickup equates to shot speed 0 - change if this is incorrect assumption!!
         }
