@@ -23,6 +23,7 @@ import frc.robot.*;
 import frc.robot.commands.DriveToPointCommand;
 import frc.robot.commands.DriveTrajectoryCommand;
 import frc.robot.commands.IntakeDefaultCommand;
+import frc.robot.commands.IntakePonderCommand;
 import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.WristPositionCommand;
 import frc.robot.common.ChargedUpGamePiece;
@@ -505,7 +506,7 @@ public class ManualInputInterfaces {
     // Start cargo expulsion when the B button is pressed:
     this.coDriverController.povDown().whileTrue(
         new ParallelCommandGroup(
-            new IntakeDefaultCommand(subsystemCollection.getWristSubsystem(),
+            new IntakePonderCommand(subsystemCollection.getWristSubsystem(),
                                      subsystemCollection.getIntakeSubsystem(), 
                                      () -> 0.0, // No uptake
                                      () -> 1.0), // Assuming full power expelling
