@@ -50,7 +50,6 @@ public class AutonomousChooser {
     private Command node2Routine;
     private Command node8Routine;
     private Command testScoreRoutine;
-    private Command testPPlannerRoutine;
 
     // true if robot starts behind the line and has to drive into node
     // false if robot starts already engaged into node
@@ -81,7 +80,6 @@ public class AutonomousChooser {
             autonomousPathChooser.addOption("Node 8 (Right) Routine", AutonomousPath.NODE8_ROUTINE);
             autonomousPathChooser.addOption("Node 9 (Right) Routine", AutonomousPath.RIGHT_PATH);
             autonomousPathChooser.addOption("Test Node5 Score Routine", AutonomousPath.TEST_NODE5_SCORE_ROUTINE);
-            autonomousPathChooser.addOption("Test PPlanner", AutonomousPath.TEST_PPLANNER);
 
             balanceChooser.setDefaultOption("Do Balance", AutonomousBalance.DO_BALANCE);
             balanceChooser.addOption("Do NOT Balance", AutonomousBalance.DO_NOT_BALANCE);
@@ -129,8 +127,6 @@ public class AutonomousChooser {
                 return this.node8Routine;
             case TEST_NODE5_SCORE_ROUTINE:
                 return this.testScoreRoutine;
-            case TEST_PPLANNER:
-                return this.testPPlannerRoutine;
         }
         return new InstantCommand();
     }
@@ -318,8 +314,7 @@ public class AutonomousChooser {
         DIRECT_PATH,
         TEST_NODE5_SCORE_ROUTINE,
         NODE2_ROUTINE,
-        NODE8_ROUTINE,
-        TEST_PPLANNER
+        NODE8_ROUTINE
     }
 
     private enum AutonomousBalance {
