@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
 import static frc.robot.Constants.*;
 
 // Use navx2 workaround from https://github.com/Thunderstamps/navx2workaround, 
@@ -69,7 +71,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    */
 
    //4.3251
-  public static final double MAX_VELOCITY_METERS_PER_SECOND = 2.3251;
+  public static final double MAX_VELOCITY_METERS_PER_SECOND = 5.190744;
   public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 6.0;
 
   public static final double MIN_VELOCITY_BOUNDARY_METERS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND * 0.14; // 0.14 a magic number based on testing
@@ -191,8 +193,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     // We assume the robot is level at startup.  Take out any bias the NavX is reading on Pitch/Roll.  
     removePitchRollBias(); 
-    
-    
+
+    AutoBuilder.configureHolonomic(this::getRobotPosition, zeroRobotPosition();, , null, null, null);
   }
 
   /**
