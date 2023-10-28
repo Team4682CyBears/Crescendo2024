@@ -13,8 +13,8 @@ package frc.robot.control;
 import java.util.ArrayList;
 import java.util.Map;
 
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.commands.FollowPathWithEvents;
+
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -279,7 +279,7 @@ public class AutonomousChooser {
         return command;
     }
     public Command getPPlannerTest(){
-        return new PathPlannerTrajectory(null, null, null, null, shouldDriveIntoNode);
+        return new PathPlannerAuto("Test Path");
     }
 
     /**
