@@ -660,7 +660,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    */
   private double getNavxPitch(){
     // if using NavX2, flip the sign of the pitch
-    double pitchOrientation = InstalledHardware.navx2Installed? -1 : 1;
+    double pitchOrientation = InstalledHardware.navx2Installed? 1 : -1;
     return (swerveNavx.getPitch() + this.pitchOffsetDegrees) * pitchOrientation;
   }
 
