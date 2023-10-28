@@ -77,6 +77,22 @@ public class IntakeSubsystem extends SubsystemBase {
       return srxMotor1.getStatorCurrent() > Constants.CURRENT_SPIKE_THRESHOLD || 
              srxMotor2.getStatorCurrent() > Constants.CURRENT_SPIKE_THRESHOLD;
   }
+
+  public void setIntakePonder(double srxMotorSpeed) {
+    requestedSrxMotor1Speed = -0.9 *MotorUtils.truncateValue(srxMotorSpeed, -1.0, 1.0);
+    requestedSrxMotor2Speed = MotorUtils.truncateValue(srxMotorSpeed, -1.0, 1.0);
+
+    if(isCurrentSpikeDetected()) {
+      stopMotors();
+    } else {
+      srxMotor1.set(ControlMode.PercentOutput, requestedSrxMotor1Speed * isSrxMotor1Inverted);
+      srxMotor2.set(ControlMode.PercentOutput, requestedSrxMotor2Speed * isSrxMotor2Inverted);
+    }
+
+  }
+
+
+
    
 
   public void stopMotors() {
