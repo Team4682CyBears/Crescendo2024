@@ -136,7 +136,8 @@ public class RobotContainer {
       NamedCommands.registerCommand("Intake Position", new WristPositionCommand(subsystems.getWristSubsystem(), WristPosition.PickUp));
       NamedCommands.registerCommand("Auto Intake/Shoot", new IntakeAutoCommand(subsystems.getIntakeSubsystem(),subsystems.getWristSubsystem()));
       NamedCommands.registerCommand("OverShoulder Shoot Position", new WristPositionCommand(subsystems.getWristSubsystem(), WristPosition.PositionThree));
-  }
+  */
+    }
   /**
    * A method to init the input interfaces
    */

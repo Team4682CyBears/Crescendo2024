@@ -16,10 +16,10 @@ import java.util.ArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.pathplanner.lib.auto.AutoBuilder;
+/**import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
+import com.pathplanner.lib.util.ReplanningConfig;*/
 
 import static frc.robot.Constants.*;
 
@@ -197,8 +197,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // We assume the robot is level at startup.  Take out any bias the NavX is reading on Pitch/Roll.  
     removePitchRollBias(); 
 
-    AutoBuilder.configureHolonomic(this::getRobotPosition, this::initializeSwerveOdometry, this::getChassisSpeeds, this::drive, new HolonomicPathFollowerConfig(new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-    new PIDConstants(5.0, 0.0, 0.0), MAX_VELOCITY_METERS_PER_SECOND,Constants.DRIVETRAIN_WHEEL_RADIUS_METERS, new ReplanningConfig()), this);
+    //AutoBuilder.configureHolonomic(this::getRobotPosition, this::initializeSwerveOdometry, this::getChassisSpeeds, this::drive, new HolonomicPathFollowerConfig(new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants new PIDConstants(5.0, 0.0, 0.0), MAX_VELOCITY_METERS_PER_SECOND,Constants.DRIVETRAIN_WHEEL_RADIUS_METERS, new ReplanningConfig()), this);
   }
 
   /**

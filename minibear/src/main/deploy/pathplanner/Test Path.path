@@ -50,10 +50,9 @@
   "isReversed": null,
   "markers": [
     {
-      "position": 0.5000000000000001,
+      "position": 0.5090909090909091,
       "names": [
-        "event",
-        "OverShoulder Shoot Position"
+        "event"
       ]
     }
   ]

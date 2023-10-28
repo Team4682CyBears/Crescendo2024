@@ -13,7 +13,8 @@ package frc.robot.control;
 import java.util.ArrayList;
 import java.util.Map;
 
-import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.FollowPathWithEvents;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -100,7 +101,7 @@ public class AutonomousChooser {
             this.node2Routine = getNode2Routine();
             this.node8Routine = getNode8Routine();
             this.testScoreRoutine = this.getScoreRoutine(trajectories.getNode5Position(), trajectories.getConfig());
-            this.testPPlannerRoutine = getPPlannerTest();
+            //this.testPPlannerRoutine = getPPlannerTest();
         } else {
             System.out.println(">>>> NO auto trajectories because no drive train subsystem");
         }
@@ -278,7 +279,7 @@ public class AutonomousChooser {
         return command;
     }
     public Command getPPlannerTest(){
-        return new PathPlannerAuto("Test Path");
+        return new PathPlannerTrajectory(null, null, null, null, shouldDriveIntoNode);
     }
 
     /**
