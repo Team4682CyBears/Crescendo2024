@@ -43,7 +43,7 @@ public class Trajectories {
         // trajectory config with a fast starting velocity for ramp driving. 
         // have to get a new config so that changes to this one don't affect the original
         SwerveTrajectoryConfig fastConfig = drivetrain.getTrajectoryConfig();
-        fastConfig.setStartVelocity(fastConfig.getMaxVelocity() * 0.6); // less than max speed
+        fastConfig.setStartVelocity(fastConfig.getMaxVelocity() * 0.4); // less than max speed
         // trajectory config that will start limit to a slow velocity for driving off ramp
         double offOfRampSpeed = 1.25; 
         SwerveTrajectoryConfig offOfRampConfig = new SwerveTrajectoryConfig(
