@@ -10,11 +10,10 @@
 
 package frc.robot;
 
-
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.util.concurrent.Event;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -134,7 +133,10 @@ public class RobotContainer {
    * A method to init commands for PathPlanner
    */
   private void registerNamedCommands(){
-      
+      NamedCommands.registerCommand("Intake Position", new WristPositionCommand(subsystems.getWristSubsystem(), WristPosition.PickUp));
+      NamedCommands.registerCommand("Auto Intake/Shoot", new IntakeAutoCommand(subsystems.getIntakeSubsystem(),subsystems.getWristSubsystem()));
+      NamedCommands.registerCommand("OverShoulder Shoot Position", new WristPositionCommand(subsystems.getWristSubsystem(), WristPosition.PositionThree));
+  */
     }
   /**
    * A method to init the input interfaces
