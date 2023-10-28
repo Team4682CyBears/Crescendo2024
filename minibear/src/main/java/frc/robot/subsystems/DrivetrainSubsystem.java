@@ -17,6 +17,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 
 import static frc.robot.Constants.*;
 
@@ -70,7 +73,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * Gear ratio: 7.85:1. Free speed of 14.19 ft/s = 4.3251 m/s
    */
 
-   //4.3251
+   //5.190744
   public static final double MAX_VELOCITY_METERS_PER_SECOND = 5.190744;
   public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 6.0;
 
@@ -194,7 +197,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // We assume the robot is level at startup.  Take out any bias the NavX is reading on Pitch/Roll.  
     removePitchRollBias(); 
 
-    AutoBuilder.configureHolonomic(this::getRobotPosition, zeroRobotPosition();, , null, null, null);
+    AutoBuilder.configureHolonomic(this::getRobotPosition, this::initializeSwerveOdometry, this::getChassisSpeeds, this::drive, new HolonomicPathFollowerConfig(new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+    new PIDConstants(5.0, 0.0, 0.0), MAX_VELOCITY_METERS_PER_SECOND,Constants.DRIVETRAIN_WHEEL_RADIUS_METERS, new ReplanningConfig()), this);
   }
 
   /**
@@ -302,6 +306,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public Pose2d getRobotPosition()
   {
     return currentPosition;
+  }
+
+  public ChassisSpeeds getChassisSpeeds(){
+    return chassisSpeeds;
   }
 
   /**

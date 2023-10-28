@@ -32,6 +32,12 @@ public final class Constants {
      * Should be measured from center to center.
      */
     public static final double DRIVETRAIN_WHEELBASE_METERS = Units.inchesToMeters(17.179);
+    /**
+    *The radius of the drivetrain wheels from the robot center
+    *
+    *pythag theroem
+     */
+    public static final double DRIVETRAIN_WHEEL_RADIUS_METERS = Math.sqrt(2)*(DRIVETRAIN_WHEELBASE_METERS/2);
 
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 1;
     public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 2;
