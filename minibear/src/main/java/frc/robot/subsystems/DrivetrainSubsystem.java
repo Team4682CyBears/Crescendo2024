@@ -808,6 +808,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("RobotFieldYCoordinateMeters", currentPosition.getY());
     SmartDashboard.putNumber("RobotPitchDegrees", this.getEulerAngle().getPitch());
     SmartDashboard.putNumber("RobotRollDegrees", this.getEulerAngle().getRoll());
+    SmartDashboard.putBoolean("NavX is Connected", swerveNavx.isConnected());
     if(positions != null){
       SmartDashboard.putNumber("FrontLeftAngleDegrees", positions[0].angle.getDegrees());
       SmartDashboard.putNumber("FrontLeftDistanceMeters", positions[0].distanceMeters);
