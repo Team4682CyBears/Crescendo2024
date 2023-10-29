@@ -82,7 +82,7 @@ public class IntakePonderCommand extends CommandBase {
             inputValue = expelValue * -1;
         }
 
-        this.intakeSub.setIntakeRelativeSpeed(inputValue);
+        this.intakeSub.setIntakePonder(inputValue);
     }
 
     @Override

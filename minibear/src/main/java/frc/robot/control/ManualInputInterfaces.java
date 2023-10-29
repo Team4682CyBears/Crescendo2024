@@ -486,7 +486,6 @@ public class ManualInputInterfaces {
                                      () -> 1.0, // Assuming full power uptake
                                      () -> 0.0), // No expelling
             new ButtonPressCommand("coDriverController.LeftBumper()", "Start cargo uptake"))
-            .withTimeout(5.0)
     );
 
     
@@ -497,9 +496,8 @@ public class ManualInputInterfaces {
             new IntakeDefaultCommand(subsystemCollection.getWristSubsystem(),
                                      subsystemCollection.getIntakeSubsystem(), 
                                      () -> 0.0, // No uptake
-                                     () -> 1.0), // Assuming full power expelling
+                                     () -> 0.3), // Assuming full power expelling
             new ButtonPressCommand("coDriverController.rightBumper()", "Start cargo expulsion"))
-            .withTimeout(5.0)
     );
 
 
@@ -509,18 +507,9 @@ public class ManualInputInterfaces {
             new IntakePonderCommand(subsystemCollection.getWristSubsystem(),
                                      subsystemCollection.getIntakeSubsystem(), 
                                      () -> 0.0, // No uptake
-                                     () -> 1.0), // Assuming full power expelling
+                                     () -> 0.9), // Assuming full power expelling
             new ButtonPressCommand("coDriverController.rightBumper()", "Ponder"))
-            .withTimeout(5.0)
     );
-
-
-
-
-
-
-      
-
 
     //Wrist Positions
     // Set wrist to pickup position when the X button is pressed:
