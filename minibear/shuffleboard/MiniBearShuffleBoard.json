@@ -65,7 +65,7 @@
               "Colors/Color when false": "#000000FF"
             }
           },
-          "3,1": {
+          "3,2": {
             "size": [
               2,
               1
@@ -88,7 +88,7 @@
             "content": {
               "_type": "Boolean Box",
               "_source0": "network_table:///SmartDashboard/NavX is Connected",
-              "_title": "SmartDashboard/NavX is Connected",
+              "_title": "/SmartDashboard/NavX is Connected",
               "_glyph": 148,
               "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
@@ -221,7 +221,8 @@
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 1.0,
               "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul"
+              "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/EveryBotMotorOvercurrentProtection": true
             }
           },
           "0,2": {
