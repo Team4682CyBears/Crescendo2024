@@ -10,16 +10,12 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
-
 import java.util.ArrayDeque;
-import java.util.Iterator;
 
-public class ButtonPressCommand extends CommandBase implements Sendable
+public class ButtonPressCommand extends CommandBase
 {
   private static final int maxPreviousButtonCount = 10;
   private static final double roundPrecision = 100.0;

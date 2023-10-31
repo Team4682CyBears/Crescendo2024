@@ -24,7 +24,6 @@ import frc.robot.commands.DriveToPointCommand;
 import frc.robot.commands.DriveTrajectoryCommand;
 import frc.robot.commands.IntakeDefaultCommand;
 import frc.robot.commands.IntakePonderCommand;
-import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.WristPositionCommand;
 import frc.robot.common.ChargedUpGamePiece;
 import frc.robot.common.TestTrajectories;
@@ -34,8 +33,6 @@ import frc.robot.commands.AllStopCommand;
 import frc.robot.commands.AutoBalanceStepCommand;
 import frc.robot.commands.ButtonPressCommand;
 import frc.robot.commands.DriveFinePlacementCommand;
-import frc.robot.commands.DriveRampDownSpeedCommand;
-import frc.robot.commands.DriveRampUpSpeedCommand;
 import frc.robot.common.WristPosition;
 
 

@@ -44,7 +44,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -580,48 +579,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     && (chassisSpeeds.omegaRadiansPerSecond == 0.0);
   }
   
-  /**
-   * Clamps the chassis speeds between a min and max.  
-   * Separete min and max for translational (x,y) vs. rotational speeds
-   * @param chassisSpeeds
-   * @param translationMin
-   * @param translationMax
-   * @param rotationMin
-   * @param rotationMax
-   * @return clamped chassisSpeeds
-   */
-  private ChassisSpeeds clampChassisSpeeds(
-    ChassisSpeeds chassisSpeeds, 
-    double translationMin,
-    double translationMax,
-    double rotationMin,
-    double rotationMax){
-    // do not scale omega
-    //double clampedOmega = MotorUtils.doubleSidedClamp(chassisSpeeds.omegaRadiansPerSecond, rotationMin, rotationMax);
-    // if one or both of X or Y needs to be clamped, we need to scale both proportionally
-    // form a Translation2d of x, y so the math is easier
-    Translation2d translation = new Translation2d(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond);
-    double velocity = translation.getNorm();
-    double clampedVelocity = MotorUtils.doubleSidedClamp(velocity, translationMin, translationMax);
-    // scale the translation by the clamped velocity scale factor
-    double scale = clampedVelocity/velocity;
-    translation = translation.times(scale);
-    return new ChassisSpeeds(translation.getX(), translation.getY(), chassisSpeeds.omegaRadiansPerSecond);
-  }
-
-  /**
-   * Clamps the chassis speeds between the drivetrain min and max velocities
-   * @param chassisSpeeds
-   * @return clamped chassisSpeeds
-   */
-  private ChassisSpeeds clampChassisSpeeds(ChassisSpeeds chassisSpeeds){
-    return this.clampChassisSpeeds(chassisSpeeds, 
-    MIN_VELOCITY_BOUNDARY_METERS_PER_SECOND,
-    MAX_VELOCITY_METERS_PER_SECOND, 
-    MIN_ANGULAR_VELOCITY_BOUNDARY_RADIANS_PER_SECOND, 
-    MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND);
-  }
-
   private ChassisSpeeds discretize(ChassisSpeeds speeds) {
     // a fudge factor to increase the size of the discretization correction. 
     // other teams use [1..4]

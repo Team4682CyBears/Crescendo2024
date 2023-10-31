@@ -18,8 +18,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.RelativeEncoder;
 
-import java.lang.invoke.ConstantBootstraps;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.SparkMaxRelativeEncoder;
@@ -30,13 +28,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
  * A class intended to model the intake - 1 Geared neo550 to move the arm to a up or down position.
  */
 public class WristSubsystem extends SubsystemBase {
-   /**********************************************************************
-    CONSTANTS
-    ************************************************************************/
-    // Wrist gear reduction
-    private static final double wristGearReduction = 48/1;
-    
-    private static final double TICKS_PER_DEGREE = (42 * 48)/360; //TODO SET THIS encoder ticks per arm degree (will corelate with gearbox)
+   private static final double TICKS_PER_DEGREE = (42 * 48)/360; //TODO SET THIS encoder ticks per arm degree (will corelate with gearbox)
     private static final double TOLERANCE = 5; // Encoder Tolerence, raise or lower if it bounces or doesn't reach the target.
     private static final double ToleranceDegrees = 1.0;
 
@@ -214,10 +206,6 @@ public class WristSubsystem extends SubsystemBase {
      */
     public void zeroWrist(){
       wristEncoder.setPosition(0);
-    }
-
-    private void zeroWrist(double position){
-      wristEncoder.setPosition(position);
     }
 
     /**

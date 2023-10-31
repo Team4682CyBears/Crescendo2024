@@ -34,11 +34,7 @@ public class Trajectories {
     public SwerveTrajectoryConfig middleSegmentConfig;
     public SwerveTrajectoryConfig lastSegmentConfig;
 
-    private DrivetrainSubsystem drivetrain;
-
     public Trajectories(DrivetrainSubsystem drivetrain){
-        this.drivetrain = drivetrain; 
-
         config = drivetrain.getTrajectoryConfig();
         // trajectory config with a fast starting velocity for ramp driving. 
         // have to get a new config so that changes to this one don't affect the original

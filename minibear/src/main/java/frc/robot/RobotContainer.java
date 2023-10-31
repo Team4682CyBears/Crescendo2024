@@ -132,13 +132,10 @@ public class RobotContainer {
     // controllers is present
     // because button binding assignment code checks that each is installed later
     // (see: initializeButtonCommandBindings)
-    if (InstalledHardware.driverXboxControllerInstalled ||
-        InstalledHardware.coDriverXboxControllerInstalled) {
+    if (InstalledHardware.driverXboxControllerInstalled) {
       subsystems.setManualInputInterfaces(new ManualInputInterfaces(subsystems));
       System.out.println("SUCCESS: initializeManualInputInterfaces");
-    } else {
-      System.out.println("FAIL: initializeManualInputInterfaces");
-    }
+    } 
   }
 
   /**
@@ -160,51 +157,39 @@ public class RobotContainer {
    * A method to init the drive train
    */
   private void initializeDrivetrainSubsystem() {
-    if (InstalledHardware.leftFrontDriveInstalled &&
-        InstalledHardware.leftRearDriveInstalled &&
-        InstalledHardware.rightFrontDriveInstalled &&
-        InstalledHardware.rightRearDriveInstalled &&
-        InstalledHardware.navxInstalled) {
-      // The robot's subsystems and commands are defined here...
-      subsystems.setDriveTrainSubsystem(new DrivetrainSubsystem());
-      subsystems.setDriveTrainPowerSubsystem(new DrivetrainPowerSubsystem(subsystems.getDriveTrainSubsystem()));
-      SmartDashboard.putData("Debug: DrivetrainSub", subsystems.getDriveTrainSubsystem());
-      System.out.println("SUCCESS: initializeDrivetrain");
+    // The robot's subsystems and commands are defined here...
+    subsystems.setDriveTrainSubsystem(new DrivetrainSubsystem());
+    subsystems.setDriveTrainPowerSubsystem(new DrivetrainPowerSubsystem(subsystems.getDriveTrainSubsystem()));
+    SmartDashboard.putData("Debug: DrivetrainSub", subsystems.getDriveTrainSubsystem());
+    System.out.println("SUCCESS: initializeDrivetrain");
 
-      // Set up the default command for the drivetrain.
-      // The controls are for field-oriented driving:
-      // Left stick Y axis -> forward and backwards movement
-      // Left stick X axis -> left and right movement
-      // Right stick X axis -> rotation
-      subsystems.getDriveTrainSubsystem().setDefaultCommand(new DefaultDriveCommand(
-          subsystems.getDriveTrainSubsystem(),
-          () -> -modifyAxisSquare(subsystems.getManualInputInterfaces().getInputArcadeDriveY())
-              * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
-          () -> -modifyAxisSquare(subsystems.getManualInputInterfaces().getInputArcadeDriveX())
-              * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
-          () -> -modifyAxisSquare(subsystems.getManualInputInterfaces().getInputSpinDriveX())
-              * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND));
-    } else {
-      System.out.println("FAIL: initializeDrivetrain");
-    }
+    // Set up the default command for the drivetrain.
+    // The controls are for field-oriented driving:
+    // Left stick Y axis -> forward and backwards movement
+    // Left stick X axis -> left and right movement
+    // Right stick X axis -> rotation
+    subsystems.getDriveTrainSubsystem().setDefaultCommand(new DefaultDriveCommand(
+        subsystems.getDriveTrainSubsystem(),
+        () -> -modifyAxisSquare(subsystems.getManualInputInterfaces().getInputArcadeDriveY())
+            * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+        () -> -modifyAxisSquare(subsystems.getManualInputInterfaces().getInputArcadeDriveX())
+            * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+        () -> -modifyAxisSquare(subsystems.getManualInputInterfaces().getInputSpinDriveX())
+            * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND));
   }
 
   /**
    * A method to init the every bot picker
    */
   private void initializeIntakeSubsystem() {
-    if (InstalledHardware.everyBotPickerInstalled && InstalledHardware.wristInstalled) {
-      subsystems.setIntakeSubsystem(new IntakeSubsystem());
-      subsystems.getIntakeSubsystem().setDefaultCommand(new IntakeDefaultCommand(
-          subsystems.getWristSubsystem(),
-          subsystems.getIntakeSubsystem(),
-          () -> modifyAxisSquare(subsystems.getManualInputInterfaces().getInputEveryBotUptakeTrigger()),
-          () -> modifyAxisSquare(subsystems.getManualInputInterfaces().getInputEveryBotExpellTrigger())));
-      SmartDashboard.putData("Debug: EveryBotSub", subsystems.getIntakeSubsystem());
-      System.out.println("SUCCESS: initializeEveryBotPicker");
-    } else {
-      System.out.println("FAIL: initializeEveryBotPicker");
-    }
+    subsystems.setIntakeSubsystem(new IntakeSubsystem());
+    subsystems.getIntakeSubsystem().setDefaultCommand(new IntakeDefaultCommand(
+        subsystems.getWristSubsystem(),
+        subsystems.getIntakeSubsystem(),
+        () -> modifyAxisSquare(subsystems.getManualInputInterfaces().getInputEveryBotUptakeTrigger()),
+        () -> modifyAxisSquare(subsystems.getManualInputInterfaces().getInputEveryBotExpellTrigger())));
+    SmartDashboard.putData("Debug: EveryBotSub", subsystems.getIntakeSubsystem());
+    System.out.println("SUCCESS: initializeEveryBotPicker");
   }
 
   /**
@@ -257,16 +242,6 @@ public class RobotContainer {
 
     // Joystick input exponent
     value = Math.copySign(value * value, value);
-
-    return value;
-  }
-
-  private static double modifyAxisLinear(double value) {
-    // Deadband
-    value = deadband(value, 0.05);
-
-    // Joystick input exponent
-    value = Math.copySign(value, value);
 
     return value;
   }

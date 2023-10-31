@@ -12,24 +12,19 @@ package frc.robot.control;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.concurrent.TimeoutException;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
-import frc.robot.commands.AutoBalanceCommand;
 import frc.robot.commands.AutoBalanceStepCommand;
 import frc.robot.commands.DriveTrajectoryCommand;
 import frc.robot.commands.IntakeAutoCommand;
 import frc.robot.commands.WristPositionCommand;
 //import frc.robot.commands.EveryBotPickerAutoCommand;
 import frc.robot.common.SwerveTrajectoryConfig;
-import frc.robot.common.EveryBotPickerAction;
 import frc.robot.common.SwerveTrajectoryGenerator;
 import frc.robot.common.VectorUtils;
 import frc.robot.common.WristPosition;

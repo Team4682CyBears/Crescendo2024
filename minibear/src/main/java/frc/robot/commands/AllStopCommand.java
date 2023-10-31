@@ -10,10 +10,8 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.control.SubsystemCollection;
-import frc.robot.control.SwerveDriveMode;
 
 /**
  * Class to form a command to stop all subsystems
@@ -34,6 +32,7 @@ public class AllStopCommand extends CommandBase {
     public void initialize() {
     }
 
+    
     @Override
     public void execute() {
         if (this.subsystems.getIntakeSubsystem() != null) {
