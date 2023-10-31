@@ -83,7 +83,7 @@ public class Trajectories {
         ArrayList<Translation2d> LeftWaypoints = new ArrayList<Translation2d>();
         LeftWaypoints.add(new Translation2d(2.1, 4.67));
         LeftWaypoints.add(new Translation2d(3.7, 4.67));
-        Pose2d LeftTrajectoryEndPosition = new Pose2d(5.3, 4.67, Rotation2d.fromDegrees(0));
+        Pose2d LeftTrajectoryEndPosition = new Pose2d(5.45, 4.67, Rotation2d.fromDegrees(0));
         this.LeftTrajectory = SwerveTrajectoryGenerator.generateTrajectory(Node1Position, LeftWaypoints, LeftTrajectoryEndPosition, config);
         this.Node2Trajectory = SwerveTrajectoryGenerator.generateTrajectory(Node2Position, LeftWaypoints, LeftTrajectoryEndPosition, config);
         
@@ -91,7 +91,7 @@ public class Trajectories {
         ArrayList<Translation2d> RightWaypoints = new ArrayList<Translation2d>();
         RightWaypoints.add(new Translation2d(2.1, .69));
         RightWaypoints.add(new Translation2d(3.7, .69));
-        Pose2d RightTrajectoryEndPosition = new Pose2d(5.3, .69, Rotation2d.fromDegrees(0));
+        Pose2d RightTrajectoryEndPosition = new Pose2d(5.45, .69, Rotation2d.fromDegrees(0));
         this.RightTrajectory = SwerveTrajectoryGenerator.generateTrajectory(Node9Position, RightWaypoints, RightTrajectoryEndPosition, config);
         this.Node8Trajectory = SwerveTrajectoryGenerator.generateTrajectory(Node8Position, RightWaypoints, RightTrajectoryEndPosition, config);
 
