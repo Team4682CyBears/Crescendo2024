@@ -27,7 +27,7 @@ public class RobotContainer {
   private final Stop theStop = new Stop(m_motor);
   private final Back theBackward = new Back(m_motor);
   
-  // Replace with CommandPS4Controller or CommandJoystick if needed
+  // Declares Xbox Controller
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
@@ -43,12 +43,7 @@ public class RobotContainer {
       String inputAction = inputActionDescription;
       return inputAction + inputDevice;
   }
-
-  
-
-  
-
-  /**
+/**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
    * predicate, or via the named factories in {@link
@@ -58,11 +53,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    /*/ Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_motor::exampleCondition)
-        .onTrue(new forward(m_motor));
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
+    // Schedule Forward or Back command when the Xbox controller's left bumper or right bumper are pressed,
     // cancelling on release.*/
     m_driverController.leftBumper().onTrue(theBackward);
     m_driverController.leftBumper().onFalse(theStop);
@@ -70,13 +61,4 @@ public class RobotContainer {
     m_driverController.rightBumper().onFalse(theStop);
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  /*public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return stop.exampleAuto(m_exampleSubsystem);
-  }*/
 }

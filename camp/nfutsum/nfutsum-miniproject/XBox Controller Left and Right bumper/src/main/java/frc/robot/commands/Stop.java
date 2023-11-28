@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
 public class Stop extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final Motor m_subsystem;
 
   /**
@@ -23,23 +22,15 @@ public class Stop extends CommandBase {
     addRequirements(subsystem);
   }
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
-
   // Stops motor movement when command is called
   @Override
   public void execute() {
     this.m_subsystem.stop();
   }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
-
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

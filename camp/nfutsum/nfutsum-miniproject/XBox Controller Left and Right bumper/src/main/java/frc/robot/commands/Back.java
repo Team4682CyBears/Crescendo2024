@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
 public class Back extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final Motor m_subsystem;
 
   /**
@@ -25,26 +24,17 @@ public class Back extends CommandBase {
   
   }
 
-
-
-// Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    
-  }
-
   // Runs motor backward whenever command is called
   @Override
   public void execute() {
     this.m_subsystem.backward();
-    
-
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     //need to stop the motor here.
+    this.m_subsystem.stop();
   }
 
   // Returns true when the command should end.

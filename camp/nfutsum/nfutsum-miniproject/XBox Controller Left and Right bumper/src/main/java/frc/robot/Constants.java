@@ -16,7 +16,6 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
     
-    
   }
   public static final int motorCanId = 16;
   public static final double speed = 1.0;
