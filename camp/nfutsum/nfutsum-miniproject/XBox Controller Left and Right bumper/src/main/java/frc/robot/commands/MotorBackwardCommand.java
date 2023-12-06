@@ -4,35 +4,37 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.Motor;
+import frc.robot.subsystems.MotorSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
+
 /** An example command that uses an example subsystem. */
-public class Forward extends CommandBase {
-  private final Motor m_subsystem;
+public class MotorBackwardCommand extends CommandBase {
+  private final MotorSubsystem theSubsystem;
 
   /**
-   * Creates a new ExampleCommand.
+   * Constructer that takes the motor subsystem
    *
-   * @param subsystem The subsystem used by this command.
+   * @param m_motor The motor subsystem
    */
-  public Forward(Motor subsystem) {
-    m_subsystem = subsystem;
+  public MotorBackwardCommand(MotorSubsystem m_motor) {
+    theSubsystem = m_motor;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem);
+    addRequirements(m_motor);
+  
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
+  // Runs motor backward whenever command is called
   @Override
   public void execute() {
-    this.m_subsystem.forward();
-    
+    this.theSubsystem.setBackward();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    this.m_subsystem.stop();
+    //need to stop the motor here.
+    this.theSubsystem.setStop();
   }
 
   // Returns true when the command should end.

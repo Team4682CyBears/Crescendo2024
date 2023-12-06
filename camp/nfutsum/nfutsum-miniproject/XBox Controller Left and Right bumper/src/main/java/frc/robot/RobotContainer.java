@@ -4,11 +4,10 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Stop;
-import frc.robot.commands.Back;
-import frc.robot.commands.Forward;
-import frc.robot.subsystems.Motor;
+import frc.robot.commands.MotorStopCommand;
+import frc.robot.commands.MotorBackwardCommand;
+import frc.robot.commands.MotorForwardCommand;
+import frc.robot.subsystems.MotorSubsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -21,15 +20,15 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final Motor m_motor = new Motor();
+  private final MotorSubsystem motor = new MotorSubsystem();
 
-  private final Forward theForward = new Forward(m_motor);
-  private final Stop theStop = new Stop(m_motor);
-  private final Back theBackward = new Back(m_motor);
+  private final MotorForwardCommand theForward = new MotorForwardCommand(motor);
+  private final MotorStopCommand theStop = new MotorStopCommand(motor);
+  private final MotorBackwardCommand theBackward = new MotorBackwardCommand(motor);
   
   // Declares Xbox Controller
   private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+      new CommandXboxController(Constants.kDriverControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {

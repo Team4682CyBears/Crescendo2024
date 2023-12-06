@@ -1,6 +1,10 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+// ************************************************************
+// Bishop Blanchet Robotics
+// Home of the Cybears
+// FRC - Crescendo - 2024
+// File: Constants.java
+// Intent: Creates necessary constants
+// ************************************************************
 
 package frc.robot;
 
@@ -13,10 +17,8 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
-    
-  }
+  public static final int kDriverControllerPort = 0;
   public static final int motorCanId = 16;
   public static final double speed = 1.0;
+  public static final double reverseValue = -1.0;
 }
