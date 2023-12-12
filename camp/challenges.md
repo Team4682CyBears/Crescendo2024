@@ -3,7 +3,7 @@
 # FRC Code / Electrical Bootcamp
 CyBears coders new to FRC will ideally go through training to learn how FRC electronics and code work together.  The general idea behind a boot camp is to accelerate learning.  To attempt to take advantage of a bit of rapid learning, CyBears will therefore attempt to have each coding team member work through a key 'example project'.
 
-The idea behind an example project will have each individual project interact with some form of input and have that signal control a form of robot output.  Successful completion of the project includes both checking in of the full project into the ChargedUp2023\camp\{team member} repo directory as well as demonstrating the functionality checked in works on the project test bed.
+The idea behind an example project will have each individual project interact with some form of input and have that signal control a form of robot output.  Successful completion of the project includes both checking in of the full project into the Crescendo2024\camp\\{team member} repo directory as well as demonstrating the functionality checked in works on the project test bed.
 
 # Input and Output Pairings / Assignments
 
@@ -41,7 +41,7 @@ All team members should follow the getting starting guide.  See: [2023 Getting S
 
 ##  Sign Up As the Owner for an Example Project
 
-1. Create a feature branch from the [ChargedUp2023 Repo](https://github.com/Team4682CyBears/Crescendo2024)
+1. Create a feature branch from the [Crescendo2024 Repo](https://github.com/Team4682CyBears/Crescendo2024)
 2. Make an edit to this file [challenges.md](https://github.com/Team4682CyBears/Crescendo2024/blob/main/camp/challenges.md) and add your name as the 'owner' in one of the unassigned '??' above 
 3. Create a pull request with the change
 4. Have a mentor approve your pull request
