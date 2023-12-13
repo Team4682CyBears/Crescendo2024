@@ -31,7 +31,7 @@ public class RobotContainer {
   private final MotorBackwardCommand theBackward = new MotorBackwardCommand(motor);
   
   // Declares Xbox Controller
-  private final CommandXboxController m_driverController =
+  private final CommandXboxController driverController =
       new CommandXboxController(Constants.kDriverControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -58,10 +58,10 @@ public class RobotContainer {
   private void configureBindings() {
     // Schedule Forward or Back command when the Xbox controller's left bumper or right bumper are pressed,
     // cancelling on release.*/
-    m_driverController.leftBumper().onTrue(theBackward);
-    m_driverController.leftBumper().onFalse(theStop);
-    m_driverController.rightBumper().onTrue(theForward);
-    m_driverController.rightBumper().onFalse(theStop);
+    driverController.leftBumper().onTrue(theBackward);
+    driverController.leftBumper().onFalse(theStop);
+    driverController.rightBumper().onTrue(theForward);
+    driverController.rightBumper().onFalse(theStop);
   }
 
 }
