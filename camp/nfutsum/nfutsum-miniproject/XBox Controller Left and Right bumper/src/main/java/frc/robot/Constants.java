@@ -19,6 +19,6 @@ package frc.robot;
 public final class Constants {
   public static final int kDriverControllerPort = 0;
   public static final int motorCanId = 16;
-  public static final double speed = 1.0;
+  public static final double speed = 0.3;
   public static final double reverseValue = -1.0;
 }

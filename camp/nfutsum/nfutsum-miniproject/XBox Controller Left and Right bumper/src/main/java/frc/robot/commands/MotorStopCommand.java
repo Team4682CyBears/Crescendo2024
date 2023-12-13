@@ -3,7 +3,7 @@
 // Home of the Cybears
 // FRC - Crescendo - 2024
 // File: MotorStopCommand.java
-// Intent: Creates a subsystem for the motor
+// Intent: Creates a command to stop the motor
 // ************************************************************
 
 package frc.robot.commands;

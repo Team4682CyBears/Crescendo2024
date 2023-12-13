@@ -43,7 +43,7 @@ public class MotorSubsystem extends SubsystemBase {
   } 
 
 /**
-   * Method that sets bacxkward speed
+   * Method that sets backward speed
    *
    * @return backward command
    */

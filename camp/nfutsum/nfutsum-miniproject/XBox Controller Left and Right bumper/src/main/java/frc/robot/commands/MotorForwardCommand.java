@@ -1,6 +1,10 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+// ************************************************************
+// Bishop Blanchet Robotics
+// Home of the Cybears
+// FRC - Crescendo - 2024
+// File: MotorForwardCommand.java
+// Intent: Creates a command to move the motor forward
+// ************************************************************
 
 package frc.robot.commands;
 
@@ -26,7 +30,6 @@ public class MotorForwardCommand extends CommandBase {
   @Override
   public void execute() {
     this.theSubsystem.setForward();
-    
   }
 
   // Called once the command ends or is interrupted.

@@ -1,6 +1,10 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+// ************************************************************
+// Bishop Blanchet Robotics
+// Home of the Cybears
+// FRC - Crescendo - 2024
+// File: MotorBackwardCommand.java
+// Intent: Creates a command to move the motor backward
+// ************************************************************
 
 package frc.robot.commands;
 
@@ -15,13 +19,12 @@ public class MotorBackwardCommand extends CommandBase {
   /**
    * Constructer that takes the motor subsystem
    *
-   * @param m_motor The motor subsystem
+   * @param subsystem The motor subsystem
    */
-  public MotorBackwardCommand(MotorSubsystem m_motor) {
-    theSubsystem = m_motor;
+  public MotorBackwardCommand(MotorSubsystem subsystem) {
+    theSubsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_motor);
-  
+    addRequirements(subsystem);
   }
 
   // Runs motor backward whenever command is called
