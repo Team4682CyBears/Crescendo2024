@@ -13,8 +13,8 @@ The table below highlights various challanges that coder members will be assigne
 
 |Input Hardware | Output Hardware | Expected Outcome | Target Owner | Owner |
 |--|--|--|--|--|
-| XBox Controller Left and Right bumper | 775pro | Left bumper press drives the motor backwards or when not pressed use right bumper press to drive motor forwards | 1st year | ??  |
-| XBox Controller Left Stick Y direction | Neo motor  | Use of the input of the Left stick y double/floating point value to control the speed of the motor | 1st year | ??  |
+| XBox Controller Left and Right bumper | 775pro | Left bumper press drives the motor backwards or when not pressed use right bumper press to drive motor forwards | 1st year | Naher  |
+| XBox Controller Left Stick Y direction | Neo motor  | Use of the input of the Left stick y double/floating point value to control the speed of the motor | 1st year | Matthew |
 | Multi-function joystick twist | Talon Motor | Use of the input of the joystick twist axist double/floating point value to control the speed of the motor | 1st year | ??  |
 | Button board two buttons | bag motor on/off in forward and reverse directions | Use one button to drive the motor in forward direction and the other button press to run the motor in the other direction | 1st year | ??  |
 | XBox Controller D-Pad up/down | Pneumatic double soleniod enable/disable | The intent here is to trigger a pneumatic solenoid using the xbox controller D-pad input as boolean values. | 1st year | ??  |
