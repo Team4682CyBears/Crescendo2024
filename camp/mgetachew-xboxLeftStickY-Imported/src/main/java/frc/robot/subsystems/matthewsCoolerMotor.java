@@ -17,10 +17,13 @@ public class matthewsCoolerMotor extends SubsystemBase {
   public matthewsCoolerMotor() {}
 
   public void YStickMovement(double speed) {
+    if (speed != Motor.get()) {
         Motor.set(speed);
         System.out.println(speed);
         System.out.println(Motor.get());
     }
+}
+
     
   @Override
   public void periodic() {
