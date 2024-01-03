@@ -428,8 +428,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // refresh the position of the robot
     this.refreshRobotPosition();
     // update robot position with vision 
-    VisionMeasurement visionMeasurement = cameraSubsystem.getVisionPosition();
-    this.addVisionMeasurement(visionMeasurement.getRobotPosition(), visionMeasurement.getTimestamp());
+    this.addVisionMeasurement(cameraSubsystem.getVisionPosition());
     // store the recalculated position
     this.storeUpdatedPosition();
     // store navx info
@@ -563,12 +562,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   /**
-   * a method that updates the robot position with vision
+   * A method that updates the robot position with a vision measurement
+   * @param visionMeasurement the most recent vision measurement provided by vision subsystem
    */
-  private void addVisionMeasurement(Pose2d RobotPos, double Timestamp){
-    VisionMeasurement visionMeasurement = cameraSubsystem.getVisionPosition();
-    if (visionMeasurement.getRobotPosition() != null){
-      swervePoseEstimator.addVisionMeasurement(RobotPos, Timestamp);
+  private void addVisionMeasurement(VisionMeasurement visionMeasurement){
+    // for now ignore all vision measurements that are null or contained robot position is null
+    if (visionMeasurement != null && visionMeasurement.getRobotPosition() != null){
+      swervePoseEstimator.addVisionMeasurement(visionMeasurement.getRobotPosition(), visionMeasurement.getTimestamp());
     }
   } 
 
