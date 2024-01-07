@@ -15,7 +15,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
  */
 public final class Constants {
   public static final int kDriverControllerPort = 0;
-  public static final int shooterMotorCanId = 1;
+  public static final int shooterMotorCanId = 10;
   public static final double talonMaximumRevolutionsPerMinute = 6380;
   public static final double CtreTalonFx500EncoderTicksPerRevolution = 2048; 
   public static TalonFXInvertType shooterTopMotorDefaultDirection = TalonFXInvertType.Clockwise;  
