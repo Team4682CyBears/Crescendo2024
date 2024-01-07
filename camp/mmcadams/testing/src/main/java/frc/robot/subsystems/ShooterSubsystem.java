@@ -57,7 +57,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public void setShooterVelocityTop(double revolutionsPerMinute)
   {
     System.out.println("Got here!!!");
-    topMotor.set(ControlMode.PercentOutput, 0.2);
+    topMotor.set(ControlMode.PercentOutput, 0.7);
     /* 
     topMotor.set(
       ControlMode.Velocity,
