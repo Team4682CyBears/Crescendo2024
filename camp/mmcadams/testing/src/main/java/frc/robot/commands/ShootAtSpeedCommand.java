@@ -20,12 +20,14 @@ public class ShootAtSpeedCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    this.shooterSubsystem.setShooterVelocityTop(500);
+    this.shooterSubsystem.setShooterVelocityTop(1500);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    System.out.println("end just happened!!");
+  }
 
   // Returns true when the command should end.
   @Override

@@ -48,7 +48,6 @@ public class ShooterSubsystem extends SubsystemBase {
     topMotor.configPeakOutputReverse(-1.0, ShooterSubsystem.kTimeoutMs);
 
     CommandScheduler.getInstance().registerSubsystem(this);
-
   }
 
   /**
@@ -57,9 +56,13 @@ public class ShooterSubsystem extends SubsystemBase {
    */
   public void setShooterVelocityTop(double revolutionsPerMinute)
   {
+    System.out.println("Got here!!!");
+    topMotor.set(ControlMode.PercentOutput, 0.2);
+    /* 
     topMotor.set(
       ControlMode.Velocity,
       this.convertShooterRpmToMotorUnitsPer100Ms(revolutionsPerMinute, ShooterSubsystem.topShooterGearRatio));
+      */
   }
 
 
