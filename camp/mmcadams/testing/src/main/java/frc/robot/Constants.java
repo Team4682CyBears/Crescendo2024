@@ -15,8 +15,21 @@ import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
  */
 public final class Constants {
   public static final int kDriverControllerPort = 0;
-  public static final int shooterMotorCanId = 10;
+
   public static final double talonMaximumRevolutionsPerMinute = 6380;
   public static final double CtreTalonFx500EncoderTicksPerRevolution = 2048; 
-  public static TalonFXInvertType shooterTopMotorDefaultDirection = TalonFXInvertType.Clockwise;  
+  public static final int rightTalonShooterMotorCanId = 10;
+  public static TalonFXInvertType rightTalonShooterMotorDefaultDirection = TalonFXInvertType.Clockwise;  
+
+  public static final double neoMaximumRevolutionsPerMinute = 5676;
+  public static final double neoEncoderTicksPerRevolution = 42;
+  public static final int rightNeoOneShooterMotorCanId = 6;
+  public static boolean rightNeoOneShooterMotorDefaultDirectionClockwise = true;  
+  public static final int rightNeoTwoShooterMotorCanId = 7;
+  public static boolean rightNeoTwoShooterMotorDefaultDirectionClockwise = true;  
+  public static final int leftNeoOneShooterMotorCanId = 8;
+  public static boolean leftNeoOneShooterMotorDefaultDirectionClockwise = false;  
+  public static final int leftNeoTwoShooterMotorCanId = 8;
+  public static boolean leftNeoTwoShooterMotorDefaultDirectionClockwise = false;  
+
 }

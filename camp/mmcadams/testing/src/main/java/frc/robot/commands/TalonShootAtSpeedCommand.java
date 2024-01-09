@@ -1,13 +1,13 @@
 package frc.robot.commands;
 
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.TalonShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class ShootAtSpeedCommand extends CommandBase {
+public class TalonShootAtSpeedCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ShooterSubsystem shooterSubsystem;
+  private final TalonShooterSubsystem shooterSubsystem;
 
-  public ShootAtSpeedCommand(ShooterSubsystem theShooterSubsystem) {
+  public TalonShootAtSpeedCommand(TalonShooterSubsystem theShooterSubsystem) {
     shooterSubsystem = theShooterSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooterSubsystem);
@@ -21,7 +21,7 @@ public class ShootAtSpeedCommand extends CommandBase {
   @Override
   public void execute() {
     System.out.println("setting velocity ... ");
-    this.shooterSubsystem.setShooterVelocityTop(1500);
+    this.shooterSubsystem.setShooterVelocityRight(1500);
   }
 
   // Called once the command ends or is interrupted.

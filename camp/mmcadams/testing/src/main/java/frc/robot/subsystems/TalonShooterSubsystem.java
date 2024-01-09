@@ -15,7 +15,7 @@ import frc.robot.Constants;
 import frc.robot.common.Gains;
 import frc.robot.common.MotorUtils;
 
-public class ShooterSubsystem extends SubsystemBase {
+public class TalonShooterSubsystem extends SubsystemBase {
 
   // Talon info
   private static final double talonMaximumTicksPerSecond = Constants.talonMaximumRevolutionsPerMinute * Constants.CtreTalonFx500EncoderTicksPerRevolution / 60;
@@ -28,24 +28,29 @@ public class ShooterSubsystem extends SubsystemBase {
   private static final int kPIDLoopIdx = 0;
   private static final int kTimeoutMs = 30;
 
-  private WPI_TalonFX topMotor = new WPI_TalonFX(Constants.shooterMotorCanId);
-  private Gains topMotorGains = new Gains(0.1, 0.001, 5, 1023/20660.0, 300, 1.00);
+  private WPI_TalonFX rightMotor = new WPI_TalonFX(Constants.rightTalonShooterMotorCanId);
+  private Gains rightMotorGains = new Gains(0.1, 0.001, 5, 1023/20660.0, 300, 1.00);
 
-  public ShooterSubsystem() {
+  public TalonShooterSubsystem() {
 
-    topMotor.configFactoryDefault();
-    topMotor.setNeutralMode(NeutralMode.Coast);
-    topMotor.setInverted(Constants.shooterTopMotorDefaultDirection);
-    topMotor.configNeutralDeadband(ShooterSubsystem.kMinDeadband);
-    topMotor.configSelectedFeedbackSensor(
+    rightMotor.configFactoryDefault();
+    rightMotor.setNeutralMode(NeutralMode.Coast);
+    rightMotor.setInverted(Constants.rightTalonShooterMotorDefaultDirection);
+    rightMotor.configNeutralDeadband(TalonShooterSubsystem.kMinDeadband);
+    rightMotor.configSelectedFeedbackSensor(
       TalonFXFeedbackDevice.IntegratedSensor,
-      ShooterSubsystem.kPIDLoopIdx,
-      ShooterSubsystem.kTimeoutMs);
+      TalonShooterSubsystem.kPIDLoopIdx,
+      TalonShooterSubsystem.kTimeoutMs);
 
-    topMotor.configNominalOutputForward(0, ShooterSubsystem.kTimeoutMs);
-    topMotor.configNominalOutputReverse(0, ShooterSubsystem.kTimeoutMs);
-    topMotor.configPeakOutputForward(1.0, ShooterSubsystem.kTimeoutMs);
-    topMotor.configPeakOutputReverse(-1.0, ShooterSubsystem.kTimeoutMs);
+    rightMotor.configNominalOutputForward(0, TalonShooterSubsystem.kTimeoutMs);
+    rightMotor.configNominalOutputReverse(0, TalonShooterSubsystem.kTimeoutMs);
+    rightMotor.configPeakOutputForward(1.0, TalonShooterSubsystem.kTimeoutMs);
+    rightMotor.configPeakOutputReverse(-1.0, TalonShooterSubsystem.kTimeoutMs);
+
+    rightMotor.config_kF(TalonShooterSubsystem.kPIDLoopIdx, this.rightMotorGains.kF, TalonShooterSubsystem.kTimeoutMs);
+    rightMotor.config_kP(TalonShooterSubsystem.kPIDLoopIdx, this.rightMotorGains.kP, TalonShooterSubsystem.kTimeoutMs);
+    rightMotor.config_kI(TalonShooterSubsystem.kPIDLoopIdx, this.rightMotorGains.kI, TalonShooterSubsystem.kTimeoutMs);
+    rightMotor.config_kD(TalonShooterSubsystem.kPIDLoopIdx, this.rightMotorGains.kD, TalonShooterSubsystem.kTimeoutMs);    
 
     CommandScheduler.getInstance().registerSubsystem(this);
   }
@@ -54,17 +59,16 @@ public class ShooterSubsystem extends SubsystemBase {
    * Set the top shooter motor to a specific velocity using the in-built PID controller
    * @param revolutionsPerMinute - the RPM that the top motor should spin
    */
-  public void setShooterVelocityTop(double revolutionsPerMinute)
+  public void setShooterVelocityRight(double revolutionsPerMinute)
   {
-    System.out.println("Got here!!!");
-    topMotor.set(ControlMode.PercentOutput, 0.7);
-    /* 
-    topMotor.set(
+    rightMotor.set(
       ControlMode.Velocity,
-      this.convertShooterRpmToMotorUnitsPer100Ms(revolutionsPerMinute, ShooterSubsystem.topShooterGearRatio));
-      */
+      this.convertShooterRpmToMotorUnitsPer100Ms(revolutionsPerMinute, TalonShooterSubsystem.topShooterGearRatio));
   }
 
+  public void setShooterSpeedTop(double speed) {
+    rightMotor.set(ControlMode.PercentOutput, speed);
+  }
 
   @Override
   public void periodic() {
