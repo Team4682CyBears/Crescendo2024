@@ -14,8 +14,8 @@ public class RobotContainer {
 
   // *****************************************************
   // ADJUST THIS IF YOU WANT TALON or NEO SETUP
-  // 1. For single TALON set - currentTargetIsTalon = true;
-  // 1. For quad NEO set - currentTargetIsTalon = false;
+  // 1. For single TALON, set - currentTargetIsTalon = true;
+  // 2. For quad NEO, set - currentTargetIsTalon = false;
   // *****************************************************
   private final boolean currentTargetIsTalon = true;
 
