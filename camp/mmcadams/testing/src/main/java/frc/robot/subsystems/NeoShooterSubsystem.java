@@ -16,6 +16,8 @@ import frc.robot.common.Gains;
 
 public class NeoShooterSubsystem extends SubsystemBase {
 
+  // for example code see: https://github.com/REVrobotics/SPARK-MAX-Examples/blob/master/Java/Smart%20Motion%20Example/vendordeps/REVLib.json
+
   // Shooter gearing - currently 1:1
   private static final double topShooterGearRatio = 1.0;
   private static final double kMinDeadband = 0.001;
@@ -70,6 +72,13 @@ public class NeoShooterSubsystem extends SubsystemBase {
   {
     rightMotorOnePidController.setReference(motorOneRevolutionsPerMinute, CANSparkMax.ControlType.kVelocity);
     rightMotorTwoPidController.setReference(motorTwoRevolutionsPerMinute, CANSparkMax.ControlType.kVelocity);
+  }
+
+  public void setAllStop() {
+    leftMotorOne.set(0.0);
+    leftMotorTwo.set(0.0);
+    rightMotorOne.set(0.0);
+    rightMotorTwo.set(0.0);
   }
 
   @Override

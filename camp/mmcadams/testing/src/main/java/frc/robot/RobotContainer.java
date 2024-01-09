@@ -1,42 +1,68 @@
 package frc.robot;
 
 import frc.robot.commands.Autos;
+import frc.robot.commands.NeoShootAllStopCommand;
+import frc.robot.commands.NeoShootAtSpeedCommand;
+import frc.robot.commands.TalonShootAllStopCommand;
 import frc.robot.commands.TalonShootAtSpeedCommand;
 import frc.robot.subsystems.TalonShooterSubsystem;
 import frc.robot.subsystems.NeoShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
 
+  // *****************************************************
+  // ADJUST THIS IF YOU WANT TALON or NEO SETUP
+  // 1. For single TALON set - currentTargetIsTalon = true;
+  // 1. For quad NEO set - currentTargetIsTalon = false;
+  // *****************************************************
+  private final boolean currentTargetIsTalon = true;
+
   // The robot's subsystems and commands are defined here...
-  private final TalonShooterSubsystem talonShooterSubsystem = new TalonShooterSubsystem();
-  private final NeoShooterSubsystem neoShooterSubsystem = new NeoShooterSubsystem();
+  private TalonShooterSubsystem talonShooterSubsystem;
+  private NeoShooterSubsystem neoShooterSubsystem;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController driverController =
-      new CommandXboxController(Constants.kDriverControllerPort);
+  private final CommandXboxController driverController = new CommandXboxController(Constants.kDriverControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
+    // init shooter and default commands
+    if(currentTargetIsTalon) {
+      talonShooterSubsystem = new TalonShooterSubsystem();
+      talonShooterSubsystem.setDefaultCommand(new TalonShootAllStopCommand(talonShooterSubsystem));
+    }
+    else {
+      neoShooterSubsystem = new NeoShooterSubsystem();
+      neoShooterSubsystem.setDefaultCommand(new NeoShootAllStopCommand(neoShooterSubsystem));
+    }
+  
     // Configure the trigger bindings
     configureBindings();
   }
-
+  
   private void configureBindings() {
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    driverController.b().whileTrue(new TalonShootAtSpeedCommand(talonShooterSubsystem));
+    if(currentTargetIsTalon) {
+      // a button drives the single motor talon setup
+      driverController.a().whileTrue(new TalonShootAtSpeedCommand(talonShooterSubsystem));
+    }
+    else {
+      // a button drives the four motor neo setup
+      driverController.a().whileTrue(new NeoShootAtSpeedCommand(neoShooterSubsystem));
+    }
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return Autos.exampleAuto(talonShooterSubsystem);
+    // auto for talon 
+    if(currentTargetIsTalon) {
+      return Autos.talonAuto(talonShooterSubsystem);
+    }
+    // auto for neo
+    else {
+      return Autos.neoAuto(neoShooterSubsystem);
+    }
   }
+
 }

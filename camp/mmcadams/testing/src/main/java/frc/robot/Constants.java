@@ -29,7 +29,7 @@ public final class Constants {
   public static boolean rightNeoTwoShooterMotorDefaultDirectionClockwise = true;  
   public static final int leftNeoOneShooterMotorCanId = 8;
   public static boolean leftNeoOneShooterMotorDefaultDirectionClockwise = false;  
-  public static final int leftNeoTwoShooterMotorCanId = 8;
+  public static final int leftNeoTwoShooterMotorCanId = 9;
   public static boolean leftNeoTwoShooterMotorDefaultDirectionClockwise = false;  
 
 }

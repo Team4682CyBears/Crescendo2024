@@ -4,14 +4,19 @@
 
 package frc.robot.commands;
 
+import frc.robot.subsystems.NeoShooterSubsystem;
 import frc.robot.subsystems.TalonShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 
 public final class Autos {
-  /** Example static factory for an autonomous command. */
-  public static CommandBase exampleAuto(TalonShooterSubsystem subsystem) {
+
+  public static CommandBase talonAuto(TalonShooterSubsystem subsystem) {
     return Commands.sequence(new TalonShootAtSpeedCommand(subsystem));
+  }
+
+  public static CommandBase neoAuto(NeoShooterSubsystem subsystem) {
+    return Commands.sequence(new NeoShootAtSpeedCommand(subsystem));
   }
 
   private Autos() {

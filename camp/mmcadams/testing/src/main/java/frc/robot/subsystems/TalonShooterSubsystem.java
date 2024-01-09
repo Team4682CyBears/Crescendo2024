@@ -66,8 +66,8 @@ public class TalonShooterSubsystem extends SubsystemBase {
       this.convertShooterRpmToMotorUnitsPer100Ms(revolutionsPerMinute, TalonShooterSubsystem.topShooterGearRatio));
   }
 
-  public void setShooterSpeedTop(double speed) {
-    rightMotor.set(ControlMode.PercentOutput, speed);
+  public void setAllStop() {
+    this.setShooterSpeedRight(0.0);
   }
 
   @Override
@@ -78,6 +78,10 @@ public class TalonShooterSubsystem extends SubsystemBase {
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
+  }
+
+  private void setShooterSpeedRight(double speed) {
+    rightMotor.set(ControlMode.PercentOutput, speed);
   }
 
   private double convertShooterRpmToMotorUnitsPer100Ms(double targetRpm, double targetGearRatio)

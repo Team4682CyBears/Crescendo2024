@@ -4,10 +4,11 @@ import frc.robot.subsystems.NeoShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class NeoShootAtSpeedCommand extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final NeoShooterSubsystem shooterSubsystem;
+
+  private NeoShooterSubsystem shooterSubsystem;
   private double leftRpm = 2000;
   private double rightRpm = 1500;
+  private boolean isDone = false;
 
   public NeoShootAtSpeedCommand(NeoShooterSubsystem theShooterSubsystem) {
     shooterSubsystem = theShooterSubsystem;
@@ -17,12 +18,14 @@ public class NeoShootAtSpeedCommand extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    isDone = false;
+    System.out.println("init of NeoShootAtSpeedCommand ... ");
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("setting velocity ... ");
     this.shooterSubsystem.setShooterVelocityLeft(leftRpm, leftRpm);
     this.shooterSubsystem.setShooterVelocityRight(rightRpm, rightRpm);
   }
@@ -30,12 +33,14 @@ public class NeoShootAtSpeedCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("end just happened!!");
+    isDone = true;
+    this.shooterSubsystem.setAllStop();
+    System.out.println("end of NeoShootAtSpeedCommand ... ");
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return isDone;
   }
 }
