@@ -26,7 +26,7 @@ public class TalonShootAtSpeedCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    this.shooterSubsystem.setShooterVelocityRight(leftRpm);
+    this.shooterSubsystem.setShooterVelocityLeft(leftRpm);
     this.shooterSubsystem.setShooterVelocityRight(rightRpm);
   }
 
