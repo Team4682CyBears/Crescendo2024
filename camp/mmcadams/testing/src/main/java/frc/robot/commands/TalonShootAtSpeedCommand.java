@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class TalonShootAtSpeedCommand extends CommandBase {
 
   private TalonShooterSubsystem shooterSubsystem;
+  private double leftRpm = 2000;
   private double rightRpm = 1500;
   private boolean isDone = false;
 
@@ -25,6 +26,7 @@ public class TalonShootAtSpeedCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    this.shooterSubsystem.setShooterVelocityRight(leftRpm);
     this.shooterSubsystem.setShooterVelocityRight(rightRpm);
   }
 

@@ -21,7 +21,9 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
   private TalonShooterSubsystem talonShooterSubsystem;
+  private TalonShootAtSpeedCommand talonSpeedCommand;
   private NeoShooterSubsystem neoShooterSubsystem;
+  private NeoShootAtSpeedCommand neoSpeedCommand;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driverController = new CommandXboxController(Constants.kDriverControllerPort);
@@ -33,10 +35,12 @@ public class RobotContainer {
     if(currentTargetIsTalon) {
       talonShooterSubsystem = new TalonShooterSubsystem();
       talonShooterSubsystem.setDefaultCommand(new TalonShootAllStopCommand(talonShooterSubsystem));
+      talonSpeedCommand = new TalonShootAtSpeedCommand(talonShooterSubsystem);
     }
     else {
       neoShooterSubsystem = new NeoShooterSubsystem();
       neoShooterSubsystem.setDefaultCommand(new NeoShootAllStopCommand(neoShooterSubsystem));
+      neoSpeedCommand = new NeoShootAtSpeedCommand(neoShooterSubsystem);
     }
   
     // Configure the trigger bindings
@@ -46,11 +50,11 @@ public class RobotContainer {
   private void configureBindings() {
     if(currentTargetIsTalon) {
       // a button drives the single motor talon setup
-      driverController.a().whileTrue(new TalonShootAtSpeedCommand(talonShooterSubsystem));
+      driverController.a().whileTrue(this.talonSpeedCommand);
     }
     else {
       // a button drives the four motor neo setup
-      driverController.a().whileTrue(new NeoShootAtSpeedCommand(neoShooterSubsystem));
+      driverController.a().whileTrue(this.neoSpeedCommand);
     }
   }
 

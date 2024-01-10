@@ -28,10 +28,32 @@ public class TalonShooterSubsystem extends SubsystemBase {
   private static final int kPIDLoopIdx = 0;
   private static final int kTimeoutMs = 30;
 
+  private WPI_TalonFX leftMotor = new WPI_TalonFX(Constants.leftTalonShooterMotorCanId);
   private WPI_TalonFX rightMotor = new WPI_TalonFX(Constants.rightTalonShooterMotorCanId);
+
+  private Gains leftMotorGains = new Gains(0.1, 0.001, 5, 1023/20660.0, 300, 1.00);
   private Gains rightMotorGains = new Gains(0.1, 0.001, 5, 1023/20660.0, 300, 1.00);
 
   public TalonShooterSubsystem() {
+
+    leftMotor.configFactoryDefault();
+    leftMotor.setNeutralMode(NeutralMode.Coast);
+    leftMotor.setInverted(Constants.leftTalonShooterMotorDefaultDirection);
+    leftMotor.configNeutralDeadband(TalonShooterSubsystem.kMinDeadband);
+    leftMotor.configSelectedFeedbackSensor(
+      TalonFXFeedbackDevice.IntegratedSensor,
+      TalonShooterSubsystem.kPIDLoopIdx,
+      TalonShooterSubsystem.kTimeoutMs);
+
+    leftMotor.configNominalOutputForward(0, TalonShooterSubsystem.kTimeoutMs);
+    leftMotor.configNominalOutputReverse(0, TalonShooterSubsystem.kTimeoutMs);
+    leftMotor.configPeakOutputForward(1.0, TalonShooterSubsystem.kTimeoutMs);
+    leftMotor.configPeakOutputReverse(-1.0, TalonShooterSubsystem.kTimeoutMs);
+
+    leftMotor.config_kF(TalonShooterSubsystem.kPIDLoopIdx, this.leftMotorGains.kF, TalonShooterSubsystem.kTimeoutMs);
+    leftMotor.config_kP(TalonShooterSubsystem.kPIDLoopIdx, this.leftMotorGains.kP, TalonShooterSubsystem.kTimeoutMs);
+    leftMotor.config_kI(TalonShooterSubsystem.kPIDLoopIdx, this.leftMotorGains.kI, TalonShooterSubsystem.kTimeoutMs);
+    leftMotor.config_kD(TalonShooterSubsystem.kPIDLoopIdx, this.leftMotorGains.kD, TalonShooterSubsystem.kTimeoutMs);    
 
     rightMotor.configFactoryDefault();
     rightMotor.setNeutralMode(NeutralMode.Coast);
@@ -59,6 +81,17 @@ public class TalonShooterSubsystem extends SubsystemBase {
    * Set the top shooter motor to a specific velocity using the in-built PID controller
    * @param revolutionsPerMinute - the RPM that the top motor should spin
    */
+  public void setShooterVelocityLeft(double revolutionsPerMinute)
+  {
+    leftMotor.set(
+      ControlMode.Velocity,
+      this.convertShooterRpmToMotorUnitsPer100Ms(revolutionsPerMinute, TalonShooterSubsystem.topShooterGearRatio));
+  }
+
+  /**
+   * Set the top shooter motor to a specific velocity using the in-built PID controller
+   * @param revolutionsPerMinute - the RPM that the top motor should spin
+   */
   public void setShooterVelocityRight(double revolutionsPerMinute)
   {
     rightMotor.set(
@@ -67,6 +100,7 @@ public class TalonShooterSubsystem extends SubsystemBase {
   }
 
   public void setAllStop() {
+    this.setShooterSpeedLeft(0.0);
     this.setShooterSpeedRight(0.0);
   }
 
@@ -78,6 +112,10 @@ public class TalonShooterSubsystem extends SubsystemBase {
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
+  }
+
+  private void setShooterSpeedLeft(double speed) {
+    leftMotor.set(ControlMode.PercentOutput, speed);
   }
 
   private void setShooterSpeedRight(double speed) {
