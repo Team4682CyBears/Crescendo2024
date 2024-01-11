@@ -31,7 +31,7 @@ public final class Constants {
      *
      * Should be measured from center to center.
      */
-    public static final double DRIVETRAIN_WHEELBASE_METERS = Units.inchesToMeters(0.0);
+    public static final double DRIVETRAIN_WHEELBASE_METERS = Units.inchesToMeters(17.179);
 
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 1;
     public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 2;
