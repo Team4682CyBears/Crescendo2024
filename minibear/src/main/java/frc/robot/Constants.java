@@ -85,7 +85,7 @@ public final class Constants {
 
     // ***************************************
     // For auto constants
-    public static final double snoutDepth = Units.inchesToMeters(0);
+    public static final double snoutDepth = Units.inchesToMeters(2.75);
 
     // *****************************************
     // Fine placement constants
