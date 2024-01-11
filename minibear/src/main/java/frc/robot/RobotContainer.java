@@ -44,6 +44,9 @@ public class RobotContainer {
     // init the pdp watcher
     this.initializePowerDistributionPanelWatcherSubsystem();
 
+    //init the camera (before the drivetrain)
+    this.initializeCameraSubsystem();
+
     // init the various subsystems
     this.initializeDrivetrainSubsystem();
 
@@ -158,7 +161,7 @@ public class RobotContainer {
    */
   private void initializeDrivetrainSubsystem() {
     // The robot's subsystems and commands are defined here...
-    subsystems.setDriveTrainSubsystem(new DrivetrainSubsystem());
+    subsystems.setDriveTrainSubsystem(new DrivetrainSubsystem(subsystems));
     subsystems.setDriveTrainPowerSubsystem(new DrivetrainPowerSubsystem(subsystems.getDriveTrainSubsystem()));
     SmartDashboard.putData("Debug: DrivetrainSub", subsystems.getDriveTrainSubsystem());
     System.out.println("SUCCESS: initializeDrivetrain");
@@ -176,6 +179,19 @@ public class RobotContainer {
             * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
         () -> -modifyAxisSquare(subsystems.getManualInputInterfaces().getInputSpinDriveX())
             * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND));
+  }
+
+  /**
+   * A mothod to init the Limelight
+   */
+  private void initializeCameraSubsystem(){
+    if(InstalledHardware.limelightInstalled) {
+      subsystems.setCameraSubsystem(new CameraSubsystem());
+      System.out.println("SUCCESS: initializeCamera");
+    }
+    else {
+      System.out.println("FAIL: initializeCamera");
+    }
   }
 
   /**
