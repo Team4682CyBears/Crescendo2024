@@ -2,7 +2,7 @@
 // Bishop Blanchet Robotics
 // Home of the Cybears
 // FRC - Charged Up - 2023
-// File: Subsystem.java
+// File: SubsystemCollection.java
 // Intent: Forms a container that stores references to the current subsystems.
 // ************************************************************
 
@@ -21,6 +21,7 @@ public class SubsystemCollection {
     private DrivetrainPowerSubsystem driveTrainPowerSubsystem = null;
     private IntakeSubsystem intakeSubsystem = null;
     private WristSubsystem wristSubsystem = null;
+    private CameraSubsystem cameraSubsystem = null;
     private PowerDistributionPanelWatcherSubsystem powerDistributionPanelWatcherSubsystem = null;
 
     /**
@@ -37,6 +38,14 @@ public class SubsystemCollection {
         driveTrainSubsystem = value;
     }
 
+    public CameraSubsystem getCameraSubsystem(){
+        return cameraSubsystem;
+    }
+    
+    public void setCameraSubsystem(CameraSubsystem value) {
+        cameraSubsystem = value;
+    }
+
     public DrivetrainPowerSubsystem getDriveTrainPowerSubsystem() {
         return driveTrainPowerSubsystem;
     }
@@ -48,7 +57,6 @@ public class SubsystemCollection {
     public IntakeSubsystem getIntakeSubsystem() {
         return intakeSubsystem;
     }
-
 
     public void setIntakeSubsystem(IntakeSubsystem value) {
         intakeSubsystem = value;
