@@ -136,6 +136,32 @@ public class RobotContainer {
     SmartDashboard.putData("Debug: CommandScheduler", CommandScheduler.getInstance());
   }
 
+    /**
+   * A mothod to init the Limelight
+   */
+  private void initializeCameraSubsystem(){
+    if(InstalledHardware.limelightInstalled) {
+      subsystems.setCameraSubsystem(new CameraSubsystem());
+      System.out.println("SUCCESS: initializeCamera");
+    }
+    else {
+      System.out.println("FAIL: initializeCamera");
+    }
+  }
+
+    /**
+   * A mothod to init the Limelight
+   */
+  private void initializeCameraSubsystem(){
+    if(InstalledHardware.limelightInstalled) {
+      subsystems.setCameraSubsystem(new CameraSubsystem());
+      System.out.println("SUCCESS: initializeCamera");
+    }
+    else {
+      System.out.println("FAIL: initializeCamera");
+    }
+  }
+
   /**
    * A method to init the drive train
    */
