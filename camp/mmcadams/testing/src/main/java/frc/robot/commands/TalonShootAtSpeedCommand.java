@@ -6,8 +6,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class TalonShootAtSpeedCommand extends CommandBase {
 
   private TalonShooterSubsystem shooterSubsystem;
-  private double leftRpm = 2000;
-  private double rightRpm = 1500;
+  private double baseRpm = 6500;
+  private double leftRpm = baseRpm * 1.0;
+  private double rightRpm = baseRpm * 0.5;
   private boolean isDone = false;
 
   public TalonShootAtSpeedCommand(TalonShooterSubsystem theShooterSubsystem) {

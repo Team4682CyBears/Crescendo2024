@@ -114,11 +114,11 @@ public class TalonShooterSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run during simulation
   }
 
-  private void setShooterSpeedLeft(double speed) {
+  public void setShooterSpeedLeft(double speed) {
     leftMotor.set(ControlMode.PercentOutput, speed);
   }
 
-  private void setShooterSpeedRight(double speed) {
+  public void setShooterSpeedRight(double speed) {
     rightMotor.set(ControlMode.PercentOutput, speed);
   }
 
