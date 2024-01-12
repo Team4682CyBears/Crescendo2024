@@ -37,7 +37,7 @@ public class InstalledHardware {
     public static final boolean navx2Installed = true;
     public static final boolean navx1Installed = false;
     public static final boolean navxInstalled = navx1Installed || navx2Installed;
-    public static final boolean limelightInstalled = false;
+    public static final boolean limelightInstalled = true;
 
     // External Input Hardware
     public static final boolean driverXboxControllerInstalled = true;
