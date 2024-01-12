@@ -6,8 +6,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class NeoShootAtSpeedCommand extends CommandBase {
 
   private NeoShooterSubsystem shooterSubsystem;
-  private double leftRpm = 2000;
-  private double rightRpm = 1500;
+  private double baseRpm = 3000;
+  private double leftRpm = baseRpm * 1.0;
+  private double rightRpm = baseRpm * 0.75;
   private boolean isDone = false;
 
   public NeoShootAtSpeedCommand(NeoShooterSubsystem theShooterSubsystem) {
