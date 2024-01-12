@@ -29,8 +29,8 @@ public class NeoShooterSubsystem extends SubsystemBase {
   private CANSparkMax rightMotorOne = new CANSparkMax(Constants.rightNeoOneShooterMotorCanId, MotorType.kBrushless);
   private CANSparkMax rightMotorTwo = new CANSparkMax(Constants.rightNeoTwoShooterMotorCanId, MotorType.kBrushless);
   
-  private Gains rightMotorGains = new Gains(0.1, 0.001, 5, 1023/20660.0, 300, 1.00);
-  private Gains leftMotorGains = new Gains(0.1, 0.001, 5, 1023/20660.0, 300, 1.00);
+  private Gains rightMotorGains = new Gains(0.15, 0.002, 5, 1023/20660.0, 300, 1.00);
+  private Gains leftMotorGains = new Gains(0.15, 0.002, 5, 1023/20660.0, 300, 1.00);
 
   private SparkMaxPIDController leftMotorOnePidController = leftMotorOne.getPIDController();
   private SparkMaxPIDController leftMotorTwoPidController = leftMotorTwo.getPIDController();

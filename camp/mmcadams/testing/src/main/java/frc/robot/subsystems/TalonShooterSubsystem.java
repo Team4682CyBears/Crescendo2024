@@ -31,8 +31,8 @@ public class TalonShooterSubsystem extends SubsystemBase {
   private WPI_TalonFX leftMotor = new WPI_TalonFX(Constants.leftTalonShooterMotorCanId);
   private WPI_TalonFX rightMotor = new WPI_TalonFX(Constants.rightTalonShooterMotorCanId);
 
-  private Gains leftMotorGains = new Gains(0.1, 0.001, 5, 1023/20660.0, 300, 1.00);
-  private Gains rightMotorGains = new Gains(0.1, 0.001, 5, 1023/20660.0, 300, 1.00);
+  private Gains leftMotorGains = new Gains(0.50, 0.001, 5, 1023/20660.0, 300, 1.00);
+  private Gains rightMotorGains = new Gains(0.50, 0.001, 5, 1023/20660.0, 300, 1.00);
 
   public TalonShooterSubsystem() {
 
