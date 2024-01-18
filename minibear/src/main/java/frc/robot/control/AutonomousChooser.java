@@ -54,7 +54,7 @@ public class AutonomousChooser {
     // want to make sure snout is deelply engaged in the node, so overdrive by
     // tolerence amount
     private Translation2d intoNodeTranslation = new Translation2d(
-            -1 * (Constants.snoutDepth + Constants.TrajectoryPoseTol.getX()), 0);
+            -1 * (Constants.nodeDisengagementDepth + Constants.TrajectoryPoseTol.getX()), 0);
 
     /**
      * Constructor for AutonomousChooser

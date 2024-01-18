@@ -41,6 +41,9 @@ public class DriveTrajectoryCommand extends CommandBase{
 
   private Pose2d finalPosition = null;
   private Pose2d overTimeDelta = Constants.TrajectoryPoseTol;
+  // if the starting position of the robot vs. the starting position of the 
+  // trajectory, the trajectory will be aborted
+  private final double startingPositionToleranceInches = 0.5; 
 
   /** 
   * Creates a new driveCommand. 
@@ -83,7 +86,7 @@ public class DriveTrajectoryCommand extends CommandBase{
     Pose2d currentLocation = drivetrain.getRobotPosition();
     Pose2d targetPose = movementPlan.sample(0.0).poseMeters;
     Translation2d deltaLocation = currentLocation.getTranslation().minus(targetPose.getTranslation());
-    if (abs(deltaLocation.getNorm())>0.5){
+    if (abs(deltaLocation.getNorm()) > startingPositionToleranceInches){
       System.out.println("ERROR: ABORTING TRAJECTORY: Current position " + currentLocation + " is too far from trajectory starting position " + targetPose);
       done = true;
     }

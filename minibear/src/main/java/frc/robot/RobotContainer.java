@@ -76,18 +76,16 @@ public class RobotContainer {
 
     // Command to drive the chassis for zeroing the swerve modules.
     SmartDashboard.putData("Drive Forward Robot Centric",
-      new DriveTimeCommand(this.subsystems.getDriveTrainSubsystem(), 
-      new ChassisSpeeds(0.6, 0.0, 0.0), 3.0));  
+        new DriveTimeCommand(this.subsystems.getDriveTrainSubsystem(),
+            new ChassisSpeeds(0.6, 0.0, 0.0), 3.0));
 
     SmartDashboard.putData("Drive Forward with rotation",
-    new DriveTimeCommand(this.subsystems.getDriveTrainSubsystem(), 
-    new ChassisSpeeds(0.6, 0.0, 0.2), 3.0));
+        new DriveTimeCommand(this.subsystems.getDriveTrainSubsystem(),
+            new ChassisSpeeds(0.6, 0.0, 0.2), 3.0));
     SmartDashboard.putData("Print NavX State",
         new InstantCommand(this.subsystems.getDriveTrainSubsystem()::printState));
 
     SmartDashboard.putData("Zero Wrist", new ZeroWristEncoder(this.subsystems.getWristSubsystem()));
-
-
   }
 
   /**
@@ -100,9 +98,9 @@ public class RobotContainer {
     return autonomousChooser.getCommand();
   }
 
-  /**
-   * 
-   */
+  /** 
+   * A method called at the beginning of teleop
+  */
   public void teleopInit() {
     // NOTE this is enabled in teleop, because when enabled in Auto, it usurps the
     // rest of the auto routine.
@@ -135,7 +133,7 @@ public class RobotContainer {
     if (InstalledHardware.driverXboxControllerInstalled) {
       subsystems.setManualInputInterfaces(new ManualInputInterfaces(subsystems));
       System.out.println("SUCCESS: initializeManualInputInterfaces");
-    } 
+    }
   }
 
   /**
@@ -193,25 +191,19 @@ public class RobotContainer {
   }
 
   /**
-   * A method init the wrist 
+   * A method init the wrist
    */
-  private void initializeWristSubsystem(){
+  private void initializeWristSubsystem() {
     if (InstalledHardware.wristInstalled) {
       subsystems.setWristSubsystem(new WristSubsystem());
-      //TODO set default commands
+      // TODO set default commands
     }
   }
-  
-
-  /**
-   * A method to init the stablizer
-   */
 
   /**
    * A method to calculate the initial position of the robot
    */
   private void calculateAndUpdateRobotPosition() {
-    // TODO - do this right!
     Pose2d initialRobotPosition = new Pose2d();
     // TODO - need to implement this when we have vision
     // 1. find the April tag that is closest

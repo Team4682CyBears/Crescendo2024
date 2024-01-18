@@ -74,31 +74,25 @@ public final class Constants {
     // *****************************************************************
     // navx isLevel tolerence in degrees
     public static final double navxTolDegrees = 4;
+
     // ************************************
     // trajectory constants
-    public static final double TrajectoryMaxAcceleration = 1;
-    public static final double TrajectoryMaxVelocity = 1;
     // tolerence on trajectory locations
-
-    // TODO test tightening up these values
     public static final Pose2d TrajectoryPoseTol = new Pose2d(0.1, 0.1, Rotation2d.fromDegrees(5));
 
     // ***************************************
     // For auto constants
-    public static final double snoutDepth = Units.inchesToMeters(2.75);
+    // formerly called snoutDepth on BearMax, this is the amount we disengage from the node before 
+    // running the rest of auto, it is also used to set the center of rotation for fine placement. 
+    public static final double nodeDisengagementDepth = Units.inchesToMeters(2.75);
 
     // *****************************************
     // Fine placement constants
     // Center of rotation for fine placement
     public static final Translation2d RobotFrontRotationalCenter = new Translation2d(
-            DRIVETRAIN_WHEELBASE_METERS / 2 + snoutDepth + Units.inchesToMeters(10), 0.0);
+            DRIVETRAIN_WHEELBASE_METERS / 2 + nodeDisengagementDepth + Units.inchesToMeters(10), 0.0);
     // velocity for fine placement
     public static final double FinePlacementRotationalVelocity = 0.7;
-
-    // *******************************************************************
-    // Stabilizer constants
-    public static final int StabilizerPneumaticsControlModuleForwardChannel = 0;
-    public static final int StabilizerPneumaticsControlModuleReverseChannel = 1;
 
     // *****************************************************************
     // Picker Constants
@@ -122,12 +116,11 @@ public final class Constants {
     //Wrist Constants
     public static int wristMotorCanID = 19;
 
-
     // THESE ARE NOT DEGRESS THEY ARE JUST ARBITRARY UNITS 
-    public static final double WRIST_ANGLE_PICKUP = 160.0; // Example angle for picking up items
-    public static final double WRIST_ANGLE_1 = 80.0; // Example angle for storing position //TODO might need to be negitive if zero is at the top positon?
-    public static final double WRIST_ANGLE_2 = 80.0; // Example angle for deploying items
-    public static final double WRIST_ANGLE_3 = 0.0; // Example angle for deploying items
+    public static final double WRIST_ANGLE_PICKUP = 160.0; // angle for picking up items
+    public static final double WRIST_ANGLE_1 = 80.0; // angle for storing position
+    public static final double WRIST_ANGLE_2 = 80.0; // angle for deploying items
+    public static final double WRIST_ANGLE_3 = 0.0; // angle for deploying items
 
     public static final double INTAKE_SPEED = 0.3; //should be positive
 
@@ -135,10 +128,4 @@ public final class Constants {
     public static final double SHOOT_SPEED_1 = 1.0;
     public static final double SHOOT_SPEED_2 = 0.6;
     public static final double SHOOT_SPEED_3 = 1.0;
-
-
-    
-
-    
-
 }
