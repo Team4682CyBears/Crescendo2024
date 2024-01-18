@@ -10,10 +10,15 @@
 
 package frc.robot.common;
 
+// TODO - create a new data structure that holds both a position and a speed
+// called a shooterConfig
+// then make this enum hold all the relevant shooterConfigs
+// and give them names that are meaningful, 
+// like intake, shoot low, shoot mid, and shoot high
 public enum WristPosition {
     None,
     PickUp,
-    PositionOne, // TODO - what is this? need better name here
-    PositionTwo, // TODO - what is this? need better name here
+    PositionOne,
+    PositionTwo,
     PositionThree
 }

@@ -2,8 +2,8 @@
 // Bishop Blanchet Robotics
 // Home of the Cybears
 // FRC - Charged Up - 2023
-// File: EveryBotPickerAutoUptakeCommand.java
-// Intent: Forms a command to automatically uptake the cargo into the every bot picker.
+// File: IntakeAutoUptakeCommand.java
+// Intent: Forms a command to automatically uptake the cargo.
 // ************************************************************
 
 // ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
@@ -29,8 +29,8 @@ public class IntakeAutoCommand extends CommandBase {
     private final double shootTimeStampSeconds = 1;
 
     /**
-     * Constructor for EveryBotPickerAutoUptakeCommand
-     * @param intakeSubsystem - the subsystem for the everybot picker
+     * Constructor for IntakeAutoUptakeCommand
+     * @param intakeSubsystem - the subsystem for the intake
      * @return 
      */
     public IntakeAutoCommand(IntakeSubsystem intakeSubsystem, WristSubsystem wristSubsystem) {

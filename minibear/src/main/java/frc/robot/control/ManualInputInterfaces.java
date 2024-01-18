@@ -23,7 +23,6 @@ import frc.robot.*;
 import frc.robot.commands.DriveToPointCommand;
 import frc.robot.commands.DriveTrajectoryCommand;
 import frc.robot.commands.IntakeDefaultCommand;
-import frc.robot.commands.IntakePonderCommand;
 import frc.robot.commands.WristPositionCommand;
 import frc.robot.common.ChargedUpGamePiece;
 import frc.robot.common.TestTrajectories;
@@ -95,58 +94,30 @@ public class ManualInputInterfaces {
   }
 
   /**
-   * A method to get the arcade arm Y componet being input from humans
-   * 
-   * @return - a double value associated with the magnitude of the Y componet
-   */
-  public double getInputArcadeArmY() {
-    // use the co drivers right X to represent the horizontal movement
-    // and multiply by -1.0 as xbox reports values flipped
-    return -1.0 * coDriverController.getLeftY();
-  }
-
-  /**
-   * A method to get the arcade arm Z componet being input from humans
-   * 
-   * @return - a double value associated with the magnitude of the Z componet
-   */
-  public double getInputArcadeArmZ() {
-    // use the co drivers right Z to represent the vertical movement
-    // and multiply by -1.0 as xbox reports values flipped
-    return -1.0 * coDriverController.getRightY();
-  }
-
-  /**
-   * A method to get the every bot uptake trigger
+   * A method to get the uptake trigger
    * 
    * @return - a double value associated with the magnitude of the right trigger
    *         pull
    */
-  public double getInputEveryBotUptakeTrigger() {
+  public double getInputUptakeTrigger() {
     // use the co drivers right trigger
     double inputValue = 0.0;
-    if (this.coDriverControllerGamePieceTarget == ChargedUpGamePiece.Cone) {
-      inputValue = coDriverController.getRightTriggerAxis();
-    } else if (this.coDriverControllerGamePieceTarget == ChargedUpGamePiece.Cube) {
-      inputValue = coDriverController.getRightTriggerAxis() * -1.0;
-    }
+    // invert trigger value for cube
+    inputValue = coDriverController.getRightTriggerAxis() * -1.0;
     return inputValue;
   }
 
   /**
-   * A method to get the every bot expell trigger
+   * A method to get the expell trigger
    * 
    * @return - a double value associated with the magnitude of the left trigger
    *         pull
    */
-  public double getInputEveryBotExpellTrigger() {
+  public double getInputExpellTrigger() {
     // use the co drivers left trigger
     double inputValue = 0.0;
-    if (this.coDriverControllerGamePieceTarget == ChargedUpGamePiece.Cone) {
-      inputValue = coDriverController.getLeftTriggerAxis() * -1.0;
-    } else if (this.coDriverControllerGamePieceTarget == ChargedUpGamePiece.Cube) {
-      inputValue = coDriverController.getLeftTriggerAxis();
-    }
+    // invert trigger value for cube
+    inputValue = coDriverController.getLeftTriggerAxis();
     return inputValue;
   }
 
@@ -188,9 +159,6 @@ public class ManualInputInterfaces {
 
         if (InstalledHardware.applyBasicDriveToPointButtonsToDriverXboxController) {
           this.bindBasicDriveToPointButtonsToDriverXboxController();
-        }
-        if (InstalledHardware.applyDriveTrajectoryButtonsToDriverXboxController) {
-          this.bindDriveTrajectoryButtonsToDriverXboxController();
         }
 
         // Back button zeros the gyroscope (as in zero yaw)
@@ -357,90 +325,6 @@ public class ManualInputInterfaces {
   }
 
   /**
-   * A method that will bind buttons to have the robot flow through various
-   * trajectories
-   */
-  private void bindDriveTrajectoryButtonsToDriverXboxController() {
-    // trajectories
-    TestTrajectories testTrajectories = new TestTrajectories(
-        subsystemCollection.getDriveTrainSubsystem().getTrajectoryConfig());
-
-    // traverse forward arc trajectory
-    this.driverController.a().onTrue(
-        new ParallelCommandGroup(
-            new SequentialCommandGroup(
-                new InstantCommand(subsystemCollection.getDriveTrainSubsystem()::zeroRobotPosition),
-                new DriveTrajectoryCommand(
-                    this.subsystemCollection.getDriveTrainSubsystem(),
-                    testTrajectories.traverseForwardArc)),
-            new ButtonPressCommand(
-                "driverController.a()",
-                "testTrajectories.traverseForwardArc"))
-            .withTimeout(10.0));
-    // traverse backward arc trajectory
-    this.driverController.b().onTrue(
-        new ParallelCommandGroup(
-            new SequentialCommandGroup(
-                new InstantCommand(() -> subsystemCollection.getDriveTrainSubsystem()
-                    .setRobotPosition(testTrajectories.traverseBackwardArcStartPosition)),
-                new DriveTrajectoryCommand(
-                    this.subsystemCollection.getDriveTrainSubsystem(),
-                    testTrajectories.traverseBackwardArc)),
-            new ButtonPressCommand(
-                "driverController.b()",
-                "testTrajectories.traverseBackwardArc"))
-            .withTimeout(10.0));
-    // traverse simple forward trajectory
-    this.driverController.x().onTrue(
-        new ParallelCommandGroup(
-            new SequentialCommandGroup(
-                new InstantCommand(subsystemCollection.getDriveTrainSubsystem()::zeroRobotPosition),
-                new DriveTrajectoryCommand(
-                    this.subsystemCollection.getDriveTrainSubsystem(),
-                    testTrajectories.traverseSimpleForward)),
-            new ButtonPressCommand(
-                "driverController.x()",
-                "testTrajectories.traverseSimpleForward"))
-            .withTimeout(10.0));
-    // traverse simple left trajectory
-    this.driverController.y().onTrue(
-        new ParallelCommandGroup(
-            new SequentialCommandGroup(
-                new InstantCommand(subsystemCollection.getDriveTrainSubsystem()::zeroRobotPosition),
-                new DriveTrajectoryCommand(
-                    this.subsystemCollection.getDriveTrainSubsystem(),
-                    testTrajectories.traverseSimpleLeft)),
-            new ButtonPressCommand(
-                "driverController.y()",
-                "testTrajectories.traverseSimpleLeft"))
-            .withTimeout(10.0));
-    // traverse turn 270 trajectory
-    this.driverController.leftBumper().onTrue(
-        new ParallelCommandGroup(
-            new SequentialCommandGroup(
-                new InstantCommand(subsystemCollection.getDriveTrainSubsystem()::zeroRobotPosition),
-                new DriveTrajectoryCommand(
-                    this.subsystemCollection.getDriveTrainSubsystem(),
-                    testTrajectories.traverseTurn270)),
-            new ButtonPressCommand(
-                "driverController.leftBumper()",
-                "testTrajectories.traverseTurn270"))
-            .withTimeout(10.0));
-
-    this.driverController.rightBumper().onTrue(
-        new ParallelCommandGroup(
-            new SequentialCommandGroup(
-                new InstantCommand(subsystemCollection.getDriveTrainSubsystem()::zeroRobotPosition),
-                new DriveTrajectoryCommand(
-                    this.subsystemCollection.getDriveTrainSubsystem(),
-                    testTrajectories.turn90)),
-            new ButtonPressCommand(
-                "driverController.rightBumper()",
-                "testTrajectories.turn90"))
-            .withTimeout(10.0));
-  }
-
-  /**
    * displays target game piece on smartdashboard
    */
   private void displayTargetGamePiece() {
@@ -470,8 +354,8 @@ public class ManualInputInterfaces {
    */
   private void bindCommandsToCoDriverXboxButtons() {
     if (InstalledHardware.coDriverXboxControllerInstalled) {
-      // left trigger variable press will intake on the every bot picker
-      // right trigger variable press will expell on the every bot picker
+      // left trigger variable press will intake
+      // right trigger variable press will expell
 
      
     //Intake Bumpers
@@ -501,10 +385,11 @@ public class ManualInputInterfaces {
     // Ponder
     this.coDriverController.povDown().whileTrue(
         new ParallelCommandGroup(
-            new IntakePonderCommand(subsystemCollection.getWristSubsystem(),
+            new IntakeDefaultCommand(subsystemCollection.getWristSubsystem(),
                                      subsystemCollection.getIntakeSubsystem(), 
                                      () -> 0.0, // No uptake
-                                     () -> 0.9), // Assuming full power expelling
+                                     () -> 0.9, // Assuming ponder-speed expelling
+                                     true), 
             new ButtonPressCommand("coDriverController.rightBumper()", "Ponder"))
     );
 
@@ -534,7 +419,7 @@ public class ManualInputInterfaces {
     this.coDriverController.b().onTrue(
         new ParallelCommandGroup(
             new WristPositionCommand(subsystemCollection.getWristSubsystem(), WristPosition.PositionThree),
-            new ButtonPressCommand("driverController.X()", "Set wrist to 2nd position"))
+            new ButtonPressCommand("driverController.X()", "Set wrist to 3rd position"))
             .withTimeout(5.0)
     );
 

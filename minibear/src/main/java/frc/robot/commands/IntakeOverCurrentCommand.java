@@ -2,8 +2,8 @@
 // Bishop Blanchet Robotics
 // Home of the Cybears
 // FRC - Charged Up - 2023
-// File: EveryBotPickerOverCurrentCommand.java
-// Intent: Forms a command to automatically make the every bot motor go to zero.
+// File: IntakeOverCurrentCommand.java
+// Intent: Forms a command to automatically make the intake motor go to zero.
 // ************************************************************
 
 // ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
@@ -22,8 +22,8 @@ public class IntakeOverCurrentCommand extends CommandBase {
     private double zeroMotorDurationSeconds = 0.1;
 
     /**
-     * Constructor for EveryBotPickerAutoUptakeCommand
-     * @param everyBotPickerSubsystem - the subsystem for the everybot picker
+     * Constructor for IntakeOverCurrentCommand
+     * @param intakeSubsystem - the subsystem for the intake
      * @param zeroDurationSeconds - the duration of the motor to stop it
      */
     public IntakeOverCurrentCommand(

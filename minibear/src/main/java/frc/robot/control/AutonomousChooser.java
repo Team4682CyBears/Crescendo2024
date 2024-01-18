@@ -23,7 +23,6 @@ import frc.robot.commands.AutoBalanceStepCommand;
 import frc.robot.commands.DriveTrajectoryCommand;
 import frc.robot.commands.IntakeAutoCommand;
 import frc.robot.commands.WristPositionCommand;
-//import frc.robot.commands.EveryBotPickerAutoCommand;
 import frc.robot.common.SwerveTrajectoryConfig;
 import frc.robot.common.SwerveTrajectoryGenerator;
 import frc.robot.common.VectorUtils;

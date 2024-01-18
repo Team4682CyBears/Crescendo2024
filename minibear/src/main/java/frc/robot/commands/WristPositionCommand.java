@@ -25,18 +25,23 @@ public class WristPositionCommand extends CommandBase {
      * @param wristSubsystem The subsystem used by this command.
      * @param targetAngle The target angle in degrees for the wrist.
      */
-
     public WristPositionCommand(WristSubsystem wristSubsystem, WristPosition targetPosition) {
         this.wristSubsystem = wristSubsystem;
         this.targetPosition = targetPosition;
         addRequirements(wristSubsystem);
     }
     
+    /**
+     * this method is called once per tick until the command is finished. 
+     */
     @Override
     public void execute() {
         wristSubsystem.setTargetWristPosition(this.targetPosition);
     }
 
+    /**
+     * This method is called once the command has finished. 
+     */
     @Override
     public void end(boolean interrupted) {
         if(interrupted || !this.isFinished()){
@@ -45,6 +50,9 @@ public class WristPositionCommand extends CommandBase {
         System.out.println("Wrist Position Target has been reached");
     }
 
+    /**
+     * This method returns true if the command is finished
+     */
     @Override
     public boolean isFinished() {
         return wristSubsystem.isPositionMovementComplete();

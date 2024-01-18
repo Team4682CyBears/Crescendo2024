@@ -51,10 +51,9 @@ public class InstalledHardware {
 
     // Controller button install control
     public static final boolean applyBasicDriveToPointButtonsToDriverXboxController = false;
-    public static final boolean applyDriveTrajectoryButtonsToDriverXboxController = false;
 
-    // EveryBot Picker Related Hardware
-    public static final boolean everyBotPickerInstalled = true;
+    // Intake Related Hardware
+    public static final boolean intakeInstalled = true;
 
     // Wrist Related
     public static final boolean wristInstalled = true;

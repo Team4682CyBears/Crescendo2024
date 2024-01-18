@@ -3,7 +3,7 @@
 // Home of the Cybears
 // FRC - Charged Up - 2023
 // File: Intake.java
-// Intent: Subsystem to model the every bot picker motor and associated subsystem.
+// Intent: Subsystem to model the intake motor and associated subsystem.
 // ************************************************************
 
 // ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
@@ -32,18 +32,17 @@ public class IntakeSubsystem extends SubsystemBase {
   private TalonSRX srxMotor2 = new TalonSRX(Constants.SrxMotor2CanId);
 
   /**
-   * constructor for EveryBotPickerSubsystem subsystem
+   * constructor for IntakeSubsystem subsystem
    */
   public IntakeSubsystem() {
     CommandScheduler.getInstance().registerSubsystem(this);
   }
 
   /**
-   * A method to set the every bot motor to a certain RPM based on a relative
+   * A method to set the intake motor to a certain RPM based on a relative
    * speed input
    * 
-   * @param everyBotPickerSpeed the relative speed -1.0 to 1.0 to run the everyBot
-   *                            arm motors at
+   * @param srxMotorSpeed the relative speed -1.0 to 1.0 to run the intake
    */
   public void setIntakeRelativeSpeed(double srxMotorSpeed) {
     requestedSrxMotor1Speed = MotorUtils.truncateValue(srxMotorSpeed, -1.0, 1.0);

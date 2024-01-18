@@ -58,8 +58,7 @@ public class WristSubsystem extends SubsystemBase {
    * A method to set the wrist motor to a certain RPM based on a relative speed
    * input
    * 
-   * @param wristSpeed the relative speed -1.0 to 1.0 to run the everyBot arm
-   *                   motor at
+   * @param wristSpeed the relative speed -1.0 to 1.0 to run the wrist
    */
   public void setWristSpeed(double wristSpeed) {
     this.targetWristPosition = this.getApproximateWristPostionForCurrentAngle();
@@ -186,6 +185,9 @@ public class WristSubsystem extends SubsystemBase {
       wristPidController.setReference(targetPositionTicks, ControlType.kPosition);
     } else {
       // If within tolerance, stop the wrist motor
+      // TODO not sure if it is sufficent to stop the motor, or whether there
+      // will be droop. This worked in competition, but to use again, would 
+      // confirm there is no droop with more testing. 
       wristMotor.set(0);
     }
   }

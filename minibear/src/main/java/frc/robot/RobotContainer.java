@@ -63,7 +63,9 @@ public class RobotContainer {
     System.out.println(">>>> Initializing button bindings.");
     this.subsystems.getManualInputInterfaces().initializeButtonCommandBindings();
     System.out.println(">>>> Finished initializing button bindings.");
-    new ZeroWristEncoder(this.subsystems.getWristSubsystem());
+
+    // zero the wrist
+    new ZeroWristEncoderCommand(this.subsystems.getWristSubsystem());
     System.out.println(">>>> Finished Initing Wrist");
 
     this.initializeDebugDashboard();
@@ -85,7 +87,7 @@ public class RobotContainer {
     SmartDashboard.putData("Print NavX State",
         new InstantCommand(this.subsystems.getDriveTrainSubsystem()::printState));
 
-    SmartDashboard.putData("Zero Wrist", new ZeroWristEncoder(this.subsystems.getWristSubsystem()));
+    SmartDashboard.putData("Zero Wrist", new ZeroWristEncoderCommand(this.subsystems.getWristSubsystem()));
   }
 
   /**
@@ -102,24 +104,6 @@ public class RobotContainer {
    * A method called at the beginning of teleop
   */
   public void teleopInit() {
-    // NOTE this is enabled in teleop, because when enabled in Auto, it usurps the
-    // rest of the auto routine.
-    if (this.subsystems.getIntakeSubsystem() != null) {
-      // add a watcher for overcurrent on the
-      IntakeOverCurrentCommand ebCmd = new IntakeOverCurrentCommand(
-          subsystems.getIntakeSubsystem(), Constants.overcurrentRumbleTimeSeconds);
-      RumbleCommand rc = new RumbleCommand(
-          this.subsystems.getManualInputInterfaces().getCoDriverController(),
-          Constants.overcurrentRumbleTimeSeconds);
-
-      // TODO - PDP watcher code needs testing and fine tuning
-      subsystems.getPowerDistributionPanelWatcherSubsystem().add(
-          new PortSpy(
-              Constants.EveryBotMotorPdpPortId,
-              Constants.EveryBotMotorMaximuCurrentAmps,
-              new SequentialCommandGroup(ebCmd, rc),
-              "EveryBotMotorOvercurrentProtection"));
-    }
   }
 
   /**
@@ -177,17 +161,17 @@ public class RobotContainer {
   }
 
   /**
-   * A method to init the every bot picker
+   * A method to init the intake
    */
   private void initializeIntakeSubsystem() {
     subsystems.setIntakeSubsystem(new IntakeSubsystem());
     subsystems.getIntakeSubsystem().setDefaultCommand(new IntakeDefaultCommand(
         subsystems.getWristSubsystem(),
         subsystems.getIntakeSubsystem(),
-        () -> modifyAxisSquare(subsystems.getManualInputInterfaces().getInputEveryBotUptakeTrigger()),
-        () -> modifyAxisSquare(subsystems.getManualInputInterfaces().getInputEveryBotExpellTrigger())));
-    SmartDashboard.putData("Debug: EveryBotSub", subsystems.getIntakeSubsystem());
-    System.out.println("SUCCESS: initializeEveryBotPicker");
+        () -> modifyAxisSquare(subsystems.getManualInputInterfaces().getInputUptakeTrigger()),
+        () -> modifyAxisSquare(subsystems.getManualInputInterfaces().getInputExpellTrigger())));
+    SmartDashboard.putData("Debug: IntakeSub", subsystems.getIntakeSubsystem());
+    System.out.println("SUCCESS: initializeIntake");
   }
 
   /**

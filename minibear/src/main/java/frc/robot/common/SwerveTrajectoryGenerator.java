@@ -2,7 +2,7 @@
 // Bishop Blanchet Robotics
 // Home of the Cybears
 // FRC - Charged Up - 2023
-// File: ManualInputInterfaces.java
+// File: SwerveTrajectoryGenerator.java
 // Intent: Forms a class that generates trajectories for swerve drives.
 // ************************************************************
 

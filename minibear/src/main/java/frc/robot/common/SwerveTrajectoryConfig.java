@@ -36,18 +36,34 @@ public class SwerveTrajectoryConfig extends TrajectoryConfig {
             this.maxRotationalAcceleration = maxRotationalAccelerationRadiansPerSecondSq;
         }
 
+    /**
+     * a method to return the max rotational velocity
+     * @return
+     */
     public double getMaxRotationalVelocity() {
         return maxRotationalVelocity;
     }
 
+    /**
+     * A method to return the rotational acceleration
+     * @return
+     */
     public double getMaxRotationalAcceleration() {
         return maxRotationalAcceleration;
     }
 
+    /**
+     * A method to set the max rotational velocity.
+     * @param maxRotationalVelocity
+     */
     public void setMaxRotationalVelocity(double maxRotationalVelocity) {
         this.maxRotationalVelocity = maxRotationalVelocity;
     }
 
+    /**
+     * A method to set the max rotational acceleration
+     * @param maxRotationalAcceleration
+     */
     public void setMaxRotationalAcceleration(double maxRotationalAcceleration) {
         this.maxRotationalAcceleration = maxRotationalAcceleration;
     }

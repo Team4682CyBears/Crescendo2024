@@ -109,12 +109,16 @@ public final class Constants {
     public static final int currentPowerDistributionPanelCanId = 22;
     public static final ModuleType currentPowerDistributionPanelType = ModuleType.kRev;
     public static final double overcurrentRumbleTimeSeconds = 0.25;
-    public static final int EveryBotMotorPdpPortId = 8;
-    public static final double EveryBotMotorMaximuCurrentAmps = 45.5;
 
     // ********************************************************************
     //Wrist Constants
     public static int wristMotorCanID = 19;
+
+    // TODO - create a new data structure that holds both a position and a speed
+    // called a shooterConfig
+    // then create an enum that holds all the relevant shooterConfigs
+    // and give them names that are meaningful, 
+    // like intake, shoot low, shoot mid, and shoot high
 
     // THESE ARE NOT DEGRESS THEY ARE JUST ARBITRARY UNITS 
     public static final double WRIST_ANGLE_PICKUP = 160.0; // angle for picking up items

@@ -2,8 +2,8 @@
 // Bishop Blanchet Robotics
 // Home of the Cybears
 // FRC - Charged Up - 2023
-// File: DefaultEveryBotPickerCommand.java
-// Intent: Forms a command to uptake/expel the cargo from the every bot picker.
+// File: IntakeDefaultCommand.java
+// Intent: Forms a command to uptake/expel the cargo.
 // ************************************************************
 
 // ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
@@ -25,10 +25,38 @@ public class IntakeDefaultCommand extends CommandBase {
     private DoubleSupplier uptakeSupplier;
     private DoubleSupplier expelSupplier;
     private final double inputThreshold = 0.1;
+    // when true, rotates the cube in the intake. 
+    // when false, normal operation 
+    private boolean ponderMode = false; 
+
+    // TODO restructure this to take in both a speed 
+    // and an enum that controls the direction of intake or expel
+    /**
+     * Constructor for IntakeDefaultCommand wit ponder option
+     * @param wristSubsystem - the subsystem for the wrist
+     * @param intakeSubsystem - the subsystem for the intake
+     * @param uptakeSupplier - trigger uptake value
+     * @param expelSupplier - trigger expel value
+     */
+    public IntakeDefaultCommand(WristSubsystem wristSubsystem,
+                                IntakeSubsystem intakeSubsystem,
+                                DoubleSupplier uptakeInputSupplier,
+                                DoubleSupplier expelInputSupplier,
+                                boolean ponderMode) {
+        this.intakeSub = intakeSubsystem;
+        this.wristSub = wristSubsystem;
+        this.uptakeSupplier = uptakeInputSupplier;
+        this.expelSupplier = expelInputSupplier;
+        this.ponderMode = ponderMode;
+
+        addRequirements(this.intakeSub);
+        addRequirements(this.wristSub);
+    }
 
     /**
-     * Constructor for DefaultEveryBotPickerCommand
-     * @param everyBotPickerSubsystem - the subsystem for the everybot picker
+     * Constructor for IntakeDefaultCommand without ponder option
+     * @param wristSubsystem - the subsystem for the wrist
+     * @param intakeSubsystem - the subsystem for the intake
      * @param uptakeSupplier - trigger uptake value
      * @param expelSupplier - trigger expel value
      */
@@ -36,14 +64,12 @@ public class IntakeDefaultCommand extends CommandBase {
                                 IntakeSubsystem intakeSubsystem,
                                 DoubleSupplier uptakeInputSupplier,
                                 DoubleSupplier expelInputSupplier) {
-        this.intakeSub = intakeSubsystem;
-        this.wristSub = wristSubsystem;
-        this.uptakeSupplier = uptakeInputSupplier;
-        this.expelSupplier = expelInputSupplier;
-
-        addRequirements(this.intakeSub);
+        this(wristSubsystem, intakeSubsystem, uptakeInputSupplier, expelInputSupplier, false);
     }
 
+    /**
+     * this function runs once per tick until the command is finished
+     */
     @Override
     public void execute() {
         double uptakeValue = this.uptakeSupplier.getAsDouble();
@@ -81,9 +107,18 @@ public class IntakeDefaultCommand extends CommandBase {
             inputValue = expelValue * -1;
         }
 
-        this.intakeSub.setIntakeRelativeSpeed(inputValue);
+        if (this.ponderMode) {
+            this.intakeSub.setIntakePonder(inputValue);
+        }
+        else {
+            this.intakeSub.setIntakeRelativeSpeed(inputValue);
+        }
+ 
     }
 
+    /**
+     * this method is called when the command is finished or interruped
+     */
     @Override
     public void end(boolean interrupted) {
         this.intakeSub.stopMotors();
