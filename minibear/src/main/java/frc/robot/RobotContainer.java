@@ -16,11 +16,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.*;
 import frc.robot.control.*;
 import frc.robot.subsystems.*;
-import frc.robot.common.PortSpy;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -180,7 +178,6 @@ public class RobotContainer {
   private void initializeWristSubsystem() {
     if (InstalledHardware.wristInstalled) {
       subsystems.setWristSubsystem(new WristSubsystem());
-      // TODO set default commands
     }
   }
 
