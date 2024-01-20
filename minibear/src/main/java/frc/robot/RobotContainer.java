@@ -16,6 +16,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.common.TestTrajectories;
+import frc.robot.common.SwerveTrajectoryConfig;
 import frc.robot.commands.*;
 import frc.robot.control.*;
 import frc.robot.subsystems.*;
@@ -33,6 +36,7 @@ public class RobotContainer {
 
   private SubsystemCollection subsystems = new SubsystemCollection();
   private final AutonomousChooser autonomousChooser;
+  private TestTrajectories testTrajectories = new TestTrajectories();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -81,6 +85,9 @@ public class RobotContainer {
     SmartDashboard.putData("Drive Forward Robot Centric",
         new DriveTimeCommand(this.subsystems.getDriveTrainSubsystem(),
             new ChassisSpeeds(0.6, 0.0, 0.0), 3.0));
+
+    SmartDashboard.putData("Drive Forward Trajectory",
+      new DriveTrajectoryCommand(subsystems.getDriveTrainSubsystem(), testTrajectories.traverseSimpleForward));
 
     SmartDashboard.putData("Drive Forward with rotation",
         new DriveTimeCommand(this.subsystems.getDriveTrainSubsystem(),
@@ -134,32 +141,6 @@ public class RobotContainer {
    */
   private void initializeDebugDashboard() {
     SmartDashboard.putData("Debug: CommandScheduler", CommandScheduler.getInstance());
-  }
-
-    /**
-   * A mothod to init the Limelight
-   */
-  private void initializeCameraSubsystem(){
-    if(InstalledHardware.limelightInstalled) {
-      subsystems.setCameraSubsystem(new CameraSubsystem());
-      System.out.println("SUCCESS: initializeCamera");
-    }
-    else {
-      System.out.println("FAIL: initializeCamera");
-    }
-  }
-
-    /**
-   * A mothod to init the Limelight
-   */
-  private void initializeCameraSubsystem(){
-    if(InstalledHardware.limelightInstalled) {
-      subsystems.setCameraSubsystem(new CameraSubsystem());
-      System.out.println("SUCCESS: initializeCamera");
-    }
-    else {
-      System.out.println("FAIL: initializeCamera");
-    }
   }
 
   /**
