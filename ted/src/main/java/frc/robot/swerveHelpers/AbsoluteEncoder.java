@@ -10,7 +10,7 @@
 
 package frc.robot.swerveHelpers;
 
-import com.ctre.phoenix.ErrorCode;
+import com.ctre.phoenix6.ErrorCode;
 
 public interface AbsoluteEncoder {
     /**

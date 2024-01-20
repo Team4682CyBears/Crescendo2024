@@ -1,16 +1,4 @@
-// ************************************************************
-// Bishop Blanchet Robotics
-// Home of the Cybears
-// FRC - Crescendo - 2024
-// File: DriveControllerFactory.java
-// Intent: DriveControllerFactory class ... a modified copy of SWS content.
-// ************************************************************
-
-// ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
-
-package frc.robot.swerveHelpers;
-
-import frc.robot.swerveLib.ModuleConfiguration;
+package frc.robot.swerveLib;
 
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
 

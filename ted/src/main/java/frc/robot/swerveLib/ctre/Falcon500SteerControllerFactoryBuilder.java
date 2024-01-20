@@ -1,25 +1,9 @@
-// ************************************************************
-// Bishop Blanchet Robotics
-// Home of the Cybears
-// FRC - Crescendo - 2024
-// File: Falcon500SteerControllerFactoryBuilder.java
-// Intent: Factory class for steering using falcons ... a modified copy of SWS content.
-// ************************************************************
+package frc.robot.swerveLib.ctre;
 
-// ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
-
-package frc.robot.swerveHelpers;
-
-import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import frc.robot.swerveLib.*;
-import frc.robot.swerveLib.ctre.CtreUtils;
-import frc.robot.swerveLib.ctre.Falcon500SteerConfiguration;
-
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
 
 import static frc.robot.swerveLib.ctre.CtreUtils.checkCtreError;
@@ -42,8 +26,6 @@ public final class Falcon500SteerControllerFactoryBuilder {
 
     private double nominalVoltage = Double.NaN;
     private double currentLimit = Double.NaN;
-
-    private static double absAngleTolRadians = Units.degreesToRadians(5);
 
     public Falcon500SteerControllerFactoryBuilder withPidConstants(double proportional, double integral, double derivative) {
         this.proportionalConstant = proportional;
@@ -99,8 +81,7 @@ public final class Falcon500SteerControllerFactoryBuilder {
         @Override
         public void addDashboardEntries(ShuffleboardContainer container, ControllerImplementation controller) {
             SteerControllerFactory.super.addDashboardEntries(container, controller);
-            container.addNumber("Absolute Encoder Angle", () -> Math.toDegrees(controller.absoluteEncoder.getAbsoluteAngle())); 
-            container.addBoolean("Absolute Encoder Sync Status OK", () -> controller.absoluteEncoder.getLastError() == ErrorCode.OK);
+            container.addNumber("Absolute Encoder Angle", () -> Math.toDegrees(controller.absoluteEncoder.getAbsoluteAngle()));
         }
 
         @Override
@@ -145,15 +126,7 @@ public final class Falcon500SteerControllerFactoryBuilder {
             motor.setInverted(moduleConfiguration.isSteerInverted() ? TalonFXInvertType.CounterClockwise : TalonFXInvertType.Clockwise);
             motor.setNeutralMode(NeutralMode.Brake);
 
-            Double absAngle = absoluteEncoder.getAbsoluteAngle();
-            if (absoluteEncoder.getLastError() == ErrorCode.OK) {
-                // if we were able to read the absolute encoder, then try to set the sensor position
-                checkCtreError(motor.setSelectedSensorPosition(absAngle / sensorPositionCoefficient, 0, CAN_TIMEOUT_MS), 
-                "WARNING: Failed to set Falcon 500 encoder position.");
-            } else {
-                // abs encoder is synced periodically, every 10s.  If reading the sensor fails, wait 10s before enabling the robot. 
-                System.out.println("WARNING: Reading absolute encoder position failed. Wait 10s before enabling robot.");
-            } 
+            checkCtreError(motor.setSelectedSensorPosition(absoluteEncoder.getAbsoluteAngle() / sensorPositionCoefficient, 0, CAN_TIMEOUT_MS), "Failed to set Falcon 500 encoder position");
 
             // Reduce CAN status frame rates
             CtreUtils.checkCtreError(
@@ -200,11 +173,6 @@ public final class Falcon500SteerControllerFactoryBuilder {
         }
 
         @Override
-        public double getAbsoluteEncoderOffset(){
-            return absoluteEncoder.getOffset();
-        }
-
-        @Override
         public double getReferenceAngle() {
             return referenceAngleRadians;
         }
@@ -220,17 +188,8 @@ public final class Falcon500SteerControllerFactoryBuilder {
                 if (++resetIteration >= ENCODER_RESET_ITERATIONS) {
                     resetIteration = 0;
                     double absoluteAngle = absoluteEncoder.getAbsoluteAngle();
-                    if (absoluteEncoder.getLastError() == ErrorCode.OK){
-                        if (Math.abs(MathUtil.angleModulus(absoluteAngle - currentAngleRadians)) 
-                        > absAngleTolRadians){
-                            System.out.println("WARNING: Large error encountered when syncing absolute encoder from " + 
-                            currentAngleRadians + " to " + absoluteAngle + ".");
-                        }
-                        motor.setSelectedSensorPosition(absoluteAngle / motorEncoderPositionCoefficient);
-                        currentAngleRadians = absoluteAngle;    
-                    } else {
-                        System.out.println("WARNING: Syncing absolute encoder position failed.");
-                    }
+                    motor.setSelectedSensorPosition(absoluteAngle / motorEncoderPositionCoefficient);
+                    currentAngleRadians = absoluteAngle;
                 }
             } else {
                 resetIteration = 0;
@@ -264,11 +223,6 @@ public final class Falcon500SteerControllerFactoryBuilder {
             }
 
             return motorAngleRadians;
-        }
-
-        @Override
-        public void setAbsoluteEncoderOffset(){
-            absoluteEncoder.setOffset();
         }
     }
 }

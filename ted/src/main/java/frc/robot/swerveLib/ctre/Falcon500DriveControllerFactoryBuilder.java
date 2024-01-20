@@ -1,23 +1,15 @@
-// ************************************************************
-// Bishop Blanchet Robotics
-// Home of the Cybears
-// FRC - Crescendo - 2024
-// File: Falcon500DriveControllerFactoryBuilder.java
-// Intent: Falcon500DriveControllerFactoryBuilder class ... a modified copy of SWS content.
-// ************************************************************
+package frc.robot.swerveLib.ctre;
 
-// ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.VoltageConfigs;
+import com.ctre.phoenix6.controls.VoltageOut;
 
-package frc.robot.swerveHelpers;
-
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
-import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
-import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+import frc.robot.swerveLib.DriveController;
+import frc.robot.swerveLib.DriveControllerFactory;
 import frc.robot.swerveLib.ModuleConfiguration;
-import frc.robot.swerveLib.ctre.CtreUtils;
 
 public final class Falcon500DriveControllerFactoryBuilder {
     private static final double TICKS_PER_ROTATION = 2048.0;
@@ -54,12 +46,14 @@ public final class Falcon500DriveControllerFactoryBuilder {
         @Override
         public ControllerImplementation create(Integer driveConfiguration, ModuleConfiguration moduleConfiguration) {
             TalonFXConfiguration motorConfiguration = new TalonFXConfiguration();
+            VoltageConfigs voltageConfigs = new VoltageConfigs();
 
             double sensorPositionCoefficient = Math.PI * moduleConfiguration.getWheelDiameter() * moduleConfiguration.getDriveReduction() / TICKS_PER_ROTATION;
             double sensorVelocityCoefficient = sensorPositionCoefficient * 10.0;
 
             if (hasVoltageCompensation()) {
-                motorConfiguration.voltageCompSaturation = nominalVoltage;
+// WAS:                motorConfiguration.voltageCompSaturation = nominalVoltage;
+                voltageConfigs.
             }
 
             if (hasCurrentLimit()) {
@@ -72,6 +66,7 @@ public final class Falcon500DriveControllerFactoryBuilder {
 
             if (hasVoltageCompensation()) {
                 // Enable voltage compensation
+                // for port see: https://v6.docs.ctr-electronics.com/en/2023-v6/docs/migration/migration-guide/closed-loop-guide.html
                 motor.enableVoltageCompensation(true);
             }
 
@@ -90,40 +85,30 @@ public final class Falcon500DriveControllerFactoryBuilder {
                     "Failed to configure Falcon status frame period"
             );
 
-            return new ControllerImplementation(motor, sensorVelocityCoefficient, sensorPositionCoefficient);
+            return new ControllerImplementation(motor, sensorVelocityCoefficient);
         }
     }
 
     private class ControllerImplementation implements DriveController {
         private final TalonFX motor;
         private final double sensorVelocityCoefficient;
-        private final double sensorPositionCoefficient;
         private final double nominalVoltage = hasVoltageCompensation() ? Falcon500DriveControllerFactoryBuilder.this.nominalVoltage : 12.0;
 
-        private ControllerImplementation(TalonFX motor, double sensorVelocityCoefficient, double sensorPositionCoefficient) {
+        private ControllerImplementation(TalonFX motor, double sensorVelocityCoefficient) {
             this.motor = motor;
             this.sensorVelocityCoefficient = sensorVelocityCoefficient;
-            this.sensorPositionCoefficient = sensorPositionCoefficient;
         }
 
         @Override
         public void setReferenceVoltage(double voltage) {
-            motor.set(TalonFXControlMode.PercentOutput, voltage / nominalVoltage);
+// WAS:            motor.set(TalonFXControlMode.PercentOutput, voltage / nominalVoltage);
+            motor.setControl(new VoltageOut(voltage));
         }
 
         @Override
         public double getStateVelocity() {
-            return motor.getSelectedSensorVelocity() * sensorVelocityCoefficient;
-        }
-
-        @Override
-        public void setDistance(double value) {
-            motor.setSelectedSensorPosition(value / sensorPositionCoefficient);
-        }
-
-        @Override
-        public double getDistance() {
-            return motor.getSelectedSensorPosition() * sensorPositionCoefficient;
+// WAS:            return motor.getSelectedSensorVelocity() * sensorVelocityCoefficient;
+            return motor.getVelocity().getValueAsDouble() * sensorVelocityCoefficient;
         }
     }
 }

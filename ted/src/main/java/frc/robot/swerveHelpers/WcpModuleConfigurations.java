@@ -10,7 +10,7 @@
 
 package frc.robot.swerveHelpers;
 
-import com.swervedrivespecialties.swervelib.ModuleConfiguration;
+import frc.robot.swerveLib.ModuleConfiguration;
 
 public class WcpModuleConfigurations {
     public static final ModuleConfiguration SWERVEX = new ModuleConfiguration(

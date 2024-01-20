@@ -10,9 +10,9 @@
 
 package frc.robot.swerveHelpers;
 
-import com.swervedrivespecialties.swervelib.ModuleConfiguration;
-import com.swervedrivespecialties.swervelib.ctre.CanCoderAbsoluteConfiguration;
-import com.swervedrivespecialties.swervelib.ctre.Falcon500SteerConfiguration;
+import frc.robot.swerveLib.ModuleConfiguration;
+import frc.robot.swerveLib.ctre.CanCoderAbsoluteConfiguration;
+import frc.robot.swerveLib.ctre.Falcon500SteerConfiguration;
 
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 

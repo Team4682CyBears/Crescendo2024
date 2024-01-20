@@ -16,8 +16,8 @@ import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.CANCoderStatusFrame;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
-import com.swervedrivespecialties.swervelib.ctre.CanCoderAbsoluteConfiguration;
-import com.swervedrivespecialties.swervelib.ctre.CtreUtils;
+import frc.robot.swerveLib.ctre.CanCoderAbsoluteConfiguration;
+import frc.robot.swerveLib.ctre.CtreUtils;
 
 public class CanCoderFactoryBuilder {
     private Direction direction = Direction.COUNTER_CLOCKWISE;

@@ -1,17 +1,4 @@
-// ************************************************************
-// Bishop Blanchet Robotics
-// Home of the Cybears
-// FRC - Crescendo - 2024
-// File: SwerveModuleFactory.java
-// Intent: SwerveModuleFactory class ... a modified copy of SWS content.
-// ************************************************************
-
-// ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
-
-package frc.robot.swerveHelpers;
-
-import frc.robot.swerveLib.ModuleConfiguration;
-import frc.robot.swerveHelpers.SteerController;
+package frc.robot.swerveLib;
 
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
@@ -61,28 +48,8 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration> {
         }
 
         @Override
-        public double getAbsoluteEncoderOffset(){
-            return steerController.getAbsoluteEncoderOffset();
-        }
-
-        @Override
         public double getDriveVelocity() {
             return driveController.getStateVelocity();
-        }
-
-        @Override
-        public double getDriveDistance() {
-            return driveController.getDistance();
-        }
-
-        @Override
-        public void setAbsoluteEncoderOffset(){
-            steerController.setAbsoluteEncoderOffset();
-        }
-
-        @Override
-        public void setDriveDistance(double distance) {
-            driveController.setDistance(distance);;
         }
 
         @Override

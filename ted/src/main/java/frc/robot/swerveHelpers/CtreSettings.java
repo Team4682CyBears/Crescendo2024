@@ -14,7 +14,7 @@ import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
-import com.swervedrivespecialties.swervelib.ctre.CanCoderAbsoluteConfiguration;
+import frc.robot.swerveLib.ctre.CanCoderAbsoluteConfiguration;
 
 import frc.robot.Constants;
 
