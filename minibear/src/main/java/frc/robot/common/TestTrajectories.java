@@ -59,6 +59,9 @@ public class TestTrajectories {
         waypoints.add(new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0)));
         waypoints.add(new Pose2d(1.0, 0.5, Rotation2d.fromDegrees(0)));
         waypoints.add(new Pose2d(2.0, -0.5, Rotation2d.fromDegrees(0)));
+
+        Trajectory t = SwerveTrajectoryGenerator.generateTrajectory(waypoints, config); 
+        return t;
     }
     
       private Trajectory buildTraverseSimpleLeft(){

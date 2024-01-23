@@ -2,16 +2,16 @@
     "fiducials": [
         {
         "family": "apriltag3_16h5_classic",
-        "id": 1,
+        "id": 7,
         "size": 152.4,
         "transform": [
-            -1,
+            1,
             0,
             0,
             1.0,
 
             0,
-            -1,
+            1,
             0,
             1.0,
 
