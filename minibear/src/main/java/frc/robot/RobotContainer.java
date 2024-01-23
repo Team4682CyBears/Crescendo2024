@@ -17,10 +17,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.common.TestTrajectories;
+import frc.robot.common.SwerveTrajectoryConfig;
 import frc.robot.commands.*;
 import frc.robot.control.*;
 import frc.robot.subsystems.*;
-import frc.robot.common.PortSpy;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -35,6 +36,7 @@ public class RobotContainer {
 
   private SubsystemCollection subsystems = new SubsystemCollection();
   private final AutonomousChooser autonomousChooser;
+
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -66,7 +68,9 @@ public class RobotContainer {
     System.out.println(">>>> Initializing button bindings.");
     this.subsystems.getManualInputInterfaces().initializeButtonCommandBindings();
     System.out.println(">>>> Finished initializing button bindings.");
-    new ZeroWristEncoder(this.subsystems.getWristSubsystem());
+
+    // zero the wrist
+    new ZeroWristEncoderCommand(this.subsystems.getWristSubsystem());
     System.out.println(">>>> Finished Initing Wrist");
 
     this.initializeDebugDashboard();
@@ -77,20 +81,29 @@ public class RobotContainer {
     // to instead be commands on the shuffleboard like this:
     // SmartDashboard.putData("Example Command", exampleCommand);
 
+    private final TestTrajectories testTrajectories = new TestTrajectories(subsystems.getDriveTrainSubsystem().getTrajectoryConfig());
+
     // Command to drive the chassis for zeroing the swerve modules.
     SmartDashboard.putData("Drive Forward Robot Centric",
-      new DriveTimeCommand(this.subsystems.getDriveTrainSubsystem(), 
-      new ChassisSpeeds(0.6, 0.0, 0.0), 3.0));  
+        new DriveTimeCommand(this.subsystems.getDriveTrainSubsystem(),
+            new ChassisSpeeds(0.6, 0.0, 0.0), 3.0));
+
+    SmartDashboard.putData("Drive Forward Trajectory",
+      new DriveTrajectoryCommand(subsystems.getDriveTrainSubsystem(), testTrajectories.traverseSimpleForward));
+    
+    SmartDashboard.putData("Drive ZigZag Trajectory",
+      new DriveTrajectoryCommand(subsystems.getDriveTrainSubsystem(), testTrajectories.traverseZigZag));
+
+    SmartDashboard.putData("Drive Turn90 Trajectory",
+      new DriveTrajectoryCommand(subsystems.getDriveTrainSubsystem(), testTrajectories.turn90));
 
     SmartDashboard.putData("Drive Forward with rotation",
-    new DriveTimeCommand(this.subsystems.getDriveTrainSubsystem(), 
-    new ChassisSpeeds(0.6, 0.0, 0.2), 3.0));
+        new DriveTimeCommand(this.subsystems.getDriveTrainSubsystem(),
+            new ChassisSpeeds(0.6, 0.0, 0.2), 3.0));
     SmartDashboard.putData("Print NavX State",
         new InstantCommand(this.subsystems.getDriveTrainSubsystem()::printState));
 
-    SmartDashboard.putData("Zero Wrist", new ZeroWristEncoder(this.subsystems.getWristSubsystem()));
-
-
+    SmartDashboard.putData("Zero Wrist", new ZeroWristEncoderCommand(this.subsystems.getWristSubsystem()));
   }
 
   /**
@@ -103,28 +116,10 @@ public class RobotContainer {
     return autonomousChooser.getCommand();
   }
 
-  /**
-   * 
-   */
+  /** 
+   * A method called at the beginning of teleop
+  */
   public void teleopInit() {
-    // NOTE this is enabled in teleop, because when enabled in Auto, it usurps the
-    // rest of the auto routine.
-    if (this.subsystems.getIntakeSubsystem() != null) {
-      // add a watcher for overcurrent on the
-      IntakeOverCurrentCommand ebCmd = new IntakeOverCurrentCommand(
-          subsystems.getIntakeSubsystem(), Constants.overcurrentRumbleTimeSeconds);
-      RumbleCommand rc = new RumbleCommand(
-          this.subsystems.getManualInputInterfaces().getCoDriverController(),
-          Constants.overcurrentRumbleTimeSeconds);
-
-      // TODO - PDP watcher code needs testing and fine tuning
-      subsystems.getPowerDistributionPanelWatcherSubsystem().add(
-          new PortSpy(
-              Constants.EveryBotMotorPdpPortId,
-              Constants.EveryBotMotorMaximuCurrentAmps,
-              new SequentialCommandGroup(ebCmd, rc),
-              "EveryBotMotorOvercurrentProtection"));
-    }
   }
 
   /**
@@ -138,7 +133,7 @@ public class RobotContainer {
     if (InstalledHardware.driverXboxControllerInstalled) {
       subsystems.setManualInputInterfaces(new ManualInputInterfaces(subsystems));
       System.out.println("SUCCESS: initializeManualInputInterfaces");
-    } 
+    }
   }
 
   /**
@@ -154,19 +149,6 @@ public class RobotContainer {
    */
   private void initializeDebugDashboard() {
     SmartDashboard.putData("Debug: CommandScheduler", CommandScheduler.getInstance());
-  }
-
-    /**
-   * A mothod to init the Limelight
-   */
-  private void initializeCameraSubsystem(){
-    if(InstalledHardware.limelightInstalled) {
-      subsystems.setCameraSubsystem(new CameraSubsystem());
-      System.out.println("SUCCESS: initializeCamera");
-    }
-    else {
-      System.out.println("FAIL: initializeCamera");
-    }
   }
 
   /**
@@ -195,39 +177,45 @@ public class RobotContainer {
   }
 
   /**
-   * A method to init the every bot picker
+   * A method to init the Limelight
+   */
+  private void initializeCameraSubsystem(){
+    if(InstalledHardware.limelightInstalled) {
+      subsystems.setCameraSubsystem(new CameraSubsystem());
+      System.out.println("SUCCESS: initializeCamera");
+    }
+    else {
+      System.out.println("FAIL: initializeCamera");
+    }
+  }
+
+  /**
+   * A method to init the intake
    */
   private void initializeIntakeSubsystem() {
     subsystems.setIntakeSubsystem(new IntakeSubsystem());
     subsystems.getIntakeSubsystem().setDefaultCommand(new IntakeDefaultCommand(
         subsystems.getWristSubsystem(),
         subsystems.getIntakeSubsystem(),
-        () -> modifyAxisSquare(subsystems.getManualInputInterfaces().getInputEveryBotUptakeTrigger()),
-        () -> modifyAxisSquare(subsystems.getManualInputInterfaces().getInputEveryBotExpellTrigger())));
-    SmartDashboard.putData("Debug: EveryBotSub", subsystems.getIntakeSubsystem());
-    System.out.println("SUCCESS: initializeEveryBotPicker");
+        () -> modifyAxisSquare(subsystems.getManualInputInterfaces().getInputUptakeTrigger()),
+        () -> modifyAxisSquare(subsystems.getManualInputInterfaces().getInputExpellTrigger())));
+    SmartDashboard.putData("Debug: IntakeSub", subsystems.getIntakeSubsystem());
+    System.out.println("SUCCESS: initializeIntake");
   }
 
   /**
-   * A method init the wrist 
+   * A method init the wrist
    */
-  private void initializeWristSubsystem(){
+  private void initializeWristSubsystem() {
     if (InstalledHardware.wristInstalled) {
       subsystems.setWristSubsystem(new WristSubsystem());
-      //TODO set default commands
     }
   }
-  
-
-  /**
-   * A method to init the stablizer
-   */
 
   /**
    * A method to calculate the initial position of the robot
    */
   private void calculateAndUpdateRobotPosition() {
-    // TODO - do this right!
     Pose2d initialRobotPosition = new Pose2d();
     // TODO - need to implement this when we have vision
     // 1. find the April tag that is closest
