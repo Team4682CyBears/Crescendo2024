@@ -36,7 +36,7 @@ public class RobotContainer {
 
   private SubsystemCollection subsystems = new SubsystemCollection();
   private final AutonomousChooser autonomousChooser;
-  private TestTrajectories testTrajectories = new TestTrajectories();
+
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -81,6 +81,8 @@ public class RobotContainer {
     // to instead be commands on the shuffleboard like this:
     // SmartDashboard.putData("Example Command", exampleCommand);
 
+    private final TestTrajectories testTrajectories = new TestTrajectories(subsystems.getDriveTrainSubsystem().getTrajectoryConfig());
+
     // Command to drive the chassis for zeroing the swerve modules.
     SmartDashboard.putData("Drive Forward Robot Centric",
         new DriveTimeCommand(this.subsystems.getDriveTrainSubsystem(),
@@ -88,6 +90,12 @@ public class RobotContainer {
 
     SmartDashboard.putData("Drive Forward Trajectory",
       new DriveTrajectoryCommand(subsystems.getDriveTrainSubsystem(), testTrajectories.traverseSimpleForward));
+    
+    SmartDashboard.putData("Drive ZigZag Trajectory",
+      new DriveTrajectoryCommand(subsystems.getDriveTrainSubsystem(), testTrajectories.traverseZigZag));
+
+    SmartDashboard.putData("Drive Turn90 Trajectory",
+      new DriveTrajectoryCommand(subsystems.getDriveTrainSubsystem(), testTrajectories.turn90));
 
     SmartDashboard.putData("Drive Forward with rotation",
         new DriveTimeCommand(this.subsystems.getDriveTrainSubsystem(),
