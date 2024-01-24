@@ -162,14 +162,16 @@ public class RobotContainer {
    * A method to init the intake
    */
   private void initializeIntakeSubsystem() {
-    subsystems.setIntakeSubsystem(new IntakeSubsystem());
-    subsystems.getIntakeSubsystem().setDefaultCommand(new IntakeDefaultCommand(
-        subsystems.getWristSubsystem(),
-        subsystems.getIntakeSubsystem(),
-        () -> modifyAxisSquare(subsystems.getManualInputInterfaces().getInputUptakeTrigger()),
-        () -> modifyAxisSquare(subsystems.getManualInputInterfaces().getInputExpellTrigger())));
-    SmartDashboard.putData("Debug: IntakeSub", subsystems.getIntakeSubsystem());
-    System.out.println("SUCCESS: initializeIntake");
+    if (InstalledHardware.intakeInstalled) {
+      subsystems.setIntakeSubsystem(new IntakeSubsystem());
+      subsystems.getIntakeSubsystem().setDefaultCommand(new IntakeDefaultCommand(
+          subsystems.getWristSubsystem(),
+          subsystems.getIntakeSubsystem(),
+          () -> modifyAxisSquare(subsystems.getManualInputInterfaces().getInputUptakeTrigger()),
+          () -> modifyAxisSquare(subsystems.getManualInputInterfaces().getInputExpellTrigger())));
+      SmartDashboard.putData("Debug: IntakeSub", subsystems.getIntakeSubsystem());
+      System.out.println("SUCCESS: initializeIntake");
+    }
   }
 
   /**
