@@ -275,7 +275,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // System.out.println("getGyroscopeRotation() using: swerveNavx.getYaw()");
 
     // We have to invert the angle of the NavX so that rotating the robot counter-clockwise makes the angle increase.
-    return Rotation2d.fromDegrees(360.0 - swerveNavx.getYaw() + yawOffsetDegrees);
+    // Restore angle modulus (this had been removed before in NavX2 testing, but it was a red herring)
+    return Rotation2d.fromRadians(
+      MathUtil.angleModulus(
+        (360.0 - swerveNavx.getYaw() + yawOffsetDegrees)*(2*Math.PI)/360));
+    // return Rotation2d.fromDegrees(360.0 - swerveNavx.getYaw() + yawOffsetDegrees);
   }
   
   /**
