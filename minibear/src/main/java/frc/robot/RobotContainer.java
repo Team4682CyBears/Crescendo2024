@@ -89,13 +89,13 @@ public class RobotContainer {
             new ChassisSpeeds(0.6, 0.0, 0.0), 3.0));
 
     SmartDashboard.putData("Drive Forward Trajectory",
-      new DriveTrajectoryCommand(subsystems.getDriveTrainSubsystem(), testTrajectories.traverseSimpleForward));
+      new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testTrajectories.traverseSimpleForward));
     
     SmartDashboard.putData("Drive ZigZag Trajectory",
-      new DriveTrajectoryCommand(subsystems.getDriveTrainSubsystem(), testTrajectories.traverseZigZag));
+      new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testTrajectories.traverseZigZag));
 
     SmartDashboard.putData("Drive Turn90 Trajectory",
-      new DriveTrajectoryCommand(subsystems.getDriveTrainSubsystem(), testTrajectories.turn90));
+      new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testTrajectories.turn90));
 
     SmartDashboard.putData("Drive Forward with rotation",
         new DriveTimeCommand(this.subsystems.getDriveTrainSubsystem(),
