@@ -125,7 +125,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private final SwerveModule backRightModule;
 
   private SwerveDrivePoseEstimator swervePoseEstimator = null;
+  private SwerveDrivePoseEstimator shadoPoseEstimator = null;
   private Pose2d currentPosition = new Pose2d();
+  private Pose2d shadowPosition = new Pose2d();
   private ArrayDeque<Pose2d> historicPositions = new ArrayDeque<Pose2d>(PositionHistoryStorageSize + 1);
 
   private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
@@ -570,7 +572,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private void addVisionMeasurement(VisionMeasurement visionMeasurement){
     // for now ignore all vision measurements that are null or contained robot position is null
     if (visionMeasurement != null && visionMeasurement.getRobotPosition() != null){
-      swervePoseEstimator.addVisionMeasurement(visionMeasurement.getRobotPosition(), visionMeasurement.getTimestamp());
+      Pose2d newVision = new Pose2d(visionMeasurement.getRobotPosition().getTranslation(), new Rotation2d(visionMeasurement.getRobotPosition().getRotation().getDegrees()));
+
+      shadoPoseEstimator.addVisionMeasurement(newVision, visionMeasurement.getTimestamp());
     }
   } 
 
@@ -730,6 +734,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
         this.getGyroscopeRotation(),
         this.getSwerveModulePositions(),
         currentRobotPosition); 
+    shadoPoseEstimator = new SwerveDrivePoseEstimator(
+      swerveKinematics,
+      this.getGyroscopeRotation(),
+      this.getSwerveModulePositions(),
+      currentRobotPosition); 
   }
 
   /**
@@ -769,15 +778,22 @@ public class DrivetrainSubsystem extends SubsystemBase {
       currentPosition = swervePoseEstimator.update(
         angle,
         positions);
+      shadowPosition = shadoPoseEstimator.update(
+       angle,
+       positions);
     }
     finally {
       theLock.unlock();
     }
 
+
     SmartDashboard.putNumber("RobotFieldHeadingDegrees", this.getGyroscopeRotation().getDegrees() );
     // getGyroscopeRotation() should be the same as currentPosition.getRotation after one call to swerveOdometry.update in periodic
     SmartDashboard.putNumber("RobotFieldXCoordinateMeters", currentPosition.getX());
     SmartDashboard.putNumber("RobotFieldYCoordinateMeters", currentPosition.getY());
+    SmartDashboard.putNumber("Shadow X", shadowPosition.getX());
+    SmartDashboard.putNumber("Shadow Y", shadowPosition.getY());
+    SmartDashboard.putNumber("Shadow Rotation", shadowPosition.getRotation().getRadians());
     SmartDashboard.putNumber("RobotPitchDegrees", this.getEulerAngle().getPitch());
     SmartDashboard.putNumber("RobotRollDegrees", this.getEulerAngle().getRoll());
     SmartDashboard.putBoolean("NavX is Connected", swerveNavx.isConnected());
