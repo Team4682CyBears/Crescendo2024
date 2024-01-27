@@ -1,7 +1,12 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+// ************************************************************
+// Bishop Blanchet Robotics
+// Home of the Cybears
+// FRC - Charged Up - 2024
+// File: Robot.java
+// Intent: Used to display whether note is detected on shuffleboard
+// ************************************************************
 
+// ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -31,11 +36,7 @@ public class Robot extends TimedRobot {
   }
 
   /**
-   * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
-   * that you want ran during disabled, autonomous, teleoperated and test.
-   *
-   * <p>This runs after the mode specific periodic functions, but before LiveWindow and
-   * SmartDashboard integrated updating.
+   * Displays if note is detected on shuffleboard
    */
   @Override
   public void robotPeriodic() {
