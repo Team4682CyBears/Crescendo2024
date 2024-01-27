@@ -572,9 +572,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private void addVisionMeasurement(VisionMeasurement visionMeasurement){
     // for now ignore all vision measurements that are null or contained robot position is null
     if (visionMeasurement != null && visionMeasurement.getRobotPosition() != null){
-      Pose2d newVision = new Pose2d(visionMeasurement.getRobotPosition().getTranslation(), new Rotation2d(visionMeasurement.getRobotPosition().getRotation().getDegrees()));
-
-      shadoPoseEstimator.addVisionMeasurement(newVision, visionMeasurement.getTimestamp());
+      shadoPoseEstimator.addVisionMeasurement(visionMeasurement.getRobotPosition(), visionMeasurement.getTimestamp());
     }
   } 
 
@@ -793,7 +791,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("RobotFieldYCoordinateMeters", currentPosition.getY());
     SmartDashboard.putNumber("Shadow X", shadowPosition.getX());
     SmartDashboard.putNumber("Shadow Y", shadowPosition.getY());
-    SmartDashboard.putNumber("Shadow Rotation", shadowPosition.getRotation().getRadians());
+    SmartDashboard.putNumber("Shadow Rotation", shadowPosition.getRotation().getDegrees());
     SmartDashboard.putNumber("RobotPitchDegrees", this.getEulerAngle().getPitch());
     SmartDashboard.putNumber("RobotRollDegrees", this.getEulerAngle().getRoll());
     SmartDashboard.putBoolean("NavX is Connected", swerveNavx.isConnected());

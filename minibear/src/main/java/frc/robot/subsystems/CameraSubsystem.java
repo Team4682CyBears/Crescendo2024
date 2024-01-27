@@ -48,7 +48,7 @@ public class CameraSubsystem extends SubsystemBase {
     double[] botpose = table.getEntry("botpose").getDoubleArray(new double[defaultDoubleArraySize]);
     Double timestamp = Timer.getFPGATimestamp() - (botpose[TimestampIndex]/milisecondsInSeconds);
     Translation2d botTranslation = new Translation2d(botpose[botPositionXIndex], botpose[botPositionYIndex]);
-    Rotation2d botYaw = new Rotation2d(botpose[botRotationIndex]);
+    Rotation2d botYaw = Rotation2d.fromDegrees(botpose[botRotationIndex]);
     Pose2d realRobotPosition = new Pose2d(botTranslation, botYaw);
 
     if (tagId == noTagInSightId){
