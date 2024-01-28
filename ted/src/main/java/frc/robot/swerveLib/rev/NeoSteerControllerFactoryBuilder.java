@@ -1,6 +1,7 @@
 package frc.robot.swerveLib.rev;
 
 import com.revrobotics.*;
+import frc.robot.swerveLib.AbsoluteEncoder;
 import frc.robot.swerveLib.*;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
 

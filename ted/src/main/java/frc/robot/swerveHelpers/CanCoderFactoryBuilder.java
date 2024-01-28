@@ -1,7 +1,7 @@
 // ************************************************************
 // Bishop Blanchet Robotics
 // Home of the Cybears
-// FRC - Crescendo - 2024
+// FRC - Charged Up - 2023
 // File: CanCoderFactoryBuilder.java
 // Intent: Factory for can coder ... a modified copy of SWS content.
 // ************************************************************
@@ -16,8 +16,8 @@ import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.CANCoderStatusFrame;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
-import frc.robot.swerveLib.ctre.CanCoderAbsoluteConfiguration;
-import frc.robot.swerveLib.ctre.CtreUtils;
+import com.swervedrivespecialties.swervelib.ctre.CanCoderAbsoluteConfiguration;
+import com.swervedrivespecialties.swervelib.ctre.CtreUtils;
 
 public class CanCoderFactoryBuilder {
     private Direction direction = Direction.COUNTER_CLOCKWISE;

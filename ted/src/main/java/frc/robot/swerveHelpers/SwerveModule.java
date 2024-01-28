@@ -1,7 +1,7 @@
 // ************************************************************
 // Bishop Blanchet Robotics
 // Home of the Cybears
-// FRC - Crescendo - 2024
+// FRC - Charged Up - 2023
 // File: SwerveModule.java
 // Intent: SwerveModule class ... a modified copy of SWS content.
 // ************************************************************

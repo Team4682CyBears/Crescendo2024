@@ -1,7 +1,7 @@
 // ************************************************************
 // Bishop Blanchet Robotics
 // Home of the Cybears
-// FRC - Crescendo - 2024
+// FRC - Charged Up - 2023
 // File: SwerveModuleHelper.java
 // Intent: Swerve module helper ... a modified copy of SWS content.
 // ************************************************************
@@ -10,9 +10,9 @@
 
 package frc.robot.swerveHelpers;
 
-import frc.robot.swerveLib.ModuleConfiguration;
-import frc.robot.swerveLib.ctre.CanCoderAbsoluteConfiguration;
-import frc.robot.swerveLib.ctre.Falcon500SteerConfiguration;
+import com.swervedrivespecialties.swervelib.ModuleConfiguration;
+import com.swervedrivespecialties.swervelib.ctre.CanCoderAbsoluteConfiguration;
+import com.swervedrivespecialties.swervelib.ctre.Falcon500SteerConfiguration;
 
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 

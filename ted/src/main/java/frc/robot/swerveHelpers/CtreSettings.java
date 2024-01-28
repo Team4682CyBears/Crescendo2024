@@ -1,7 +1,7 @@
 // ************************************************************
 // Bishop Blanchet Robotics
 // Home of the Cybears
-// FRC - Crescendo - 2024
+// FRC - Charged Up - 2023
 // File: CtreSettings.java
 // Intent: CtreSettings class ... a modified copy of SWS content.
 // ************************************************************
@@ -14,7 +14,7 @@ import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
-import frc.robot.swerveLib.ctre.CanCoderAbsoluteConfiguration;
+import com.swervedrivespecialties.swervelib.ctre.CanCoderAbsoluteConfiguration;
 
 import frc.robot.Constants;
 

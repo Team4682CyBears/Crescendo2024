@@ -1,7 +1,7 @@
 // ************************************************************
 // Bishop Blanchet Robotics
 // Home of the Cybears
-// FRC - Crescendo - 2024
+// FRC - Charged Up - 2023
 // File: WcpModuleConfigurations.java
 // Intent: WC configs ... a modified copy of SWS content.
 // ************************************************************
@@ -10,7 +10,7 @@
 
 package frc.robot.swerveHelpers;
 
-import frc.robot.swerveLib.ModuleConfiguration;
+import com.swervedrivespecialties.swervelib.ModuleConfiguration;
 
 public class WcpModuleConfigurations {
     public static final ModuleConfiguration SWERVEX = new ModuleConfiguration(

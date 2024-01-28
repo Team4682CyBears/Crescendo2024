@@ -1,16 +1,6 @@
-// ************************************************************
-// Bishop Blanchet Robotics
-// Home of the Cybears
-// FRC - Crescendo - 2024
-// File: AbsoluteEncoder.java
-// Intent: Absolute Encoder interface ... a modified copy of SWS content.
-// ************************************************************
-
-// ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
-
 package frc.robot.swerveHelpers;
 
-import com.ctre.phoenix6.ErrorCode;
+import com.ctre.phoenix.ErrorCode;
 
 public interface AbsoluteEncoder {
     /**
