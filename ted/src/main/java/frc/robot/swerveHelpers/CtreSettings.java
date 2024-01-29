@@ -1,29 +1,30 @@
 // ************************************************************
 // Bishop Blanchet Robotics
 // Home of the Cybears
-// FRC - Charged Up - 2023
-// File: CtreSettings.java
-// Intent: CtreSettings class ... a modified copy of SWS content.
+// FRC - Crescendo - 2024
+// File: .java
+// Intent: Same name extension files based on Swerve Drive Specalties codebase but also ported from phoenix5 to phoenix6
+// SDS codebase found at: https://github.com/SwerveDriveSpecialties/Do-not-use-swerve-lib-2022-unmaintained/tree/develop/src/main/java/com/swervedrivespecialties/swervelib
 // ************************************************************
 
 // ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
 
 package frc.robot.swerveHelpers;
 
-import com.ctre.phoenix.ErrorCode;
-import com.ctre.phoenix.sensors.CANCoder;
-import com.ctre.phoenix.sensors.CANCoderConfiguration;
-import com.ctre.phoenix.sensors.SensorInitializationStrategy;
-import com.swervedrivespecialties.swervelib.ctre.CanCoderAbsoluteConfiguration;
+import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.hardware.CANcoder;
 
-import frc.robot.Constants;
+import frc.robot.swerveLib.ctre.CanCoderAbsoluteConfiguration;
+
+import frc.robot.control.Constants;
 
 public class CtreSettings {
 
-    private static CANCoder backLeftCoder = new CANCoder(Constants.BACK_LEFT_MODULE_STEER_ENCODER);
-    private static CANCoder backRightCoder = new CANCoder(Constants.BACK_RIGHT_MODULE_STEER_ENCODER);
-    private static CANCoder frontLeftCoder = new CANCoder(Constants.FRONT_LEFT_MODULE_STEER_ENCODER);
-    private static CANCoder frontRightCoder = new CANCoder(Constants.FRONT_RIGHT_MODULE_STEER_ENCODER);
+    private static CANcoder backLeftCoder = new CANcoder(Constants.BACK_LEFT_MODULE_STEER_ENCODER);
+    private static CANcoder backRightCoder = new CANcoder(Constants.BACK_RIGHT_MODULE_STEER_ENCODER);
+    private static CANcoder frontLeftCoder = new CANcoder(Constants.FRONT_LEFT_MODULE_STEER_ENCODER);
+    private static CANcoder frontRightCoder = new CANcoder(Constants.FRONT_RIGHT_MODULE_STEER_ENCODER);
 
     public static void PrintAllCanEncoderCurrentSettings()
     {
@@ -43,20 +44,18 @@ public class CtreSettings {
         PrintAllCanEncoderCurrentSettings();
     }
 
-    private static void PrintCanEncoderCurrentSettings(CANCoder cancoder)
+    private static void PrintCanEncoderCurrentSettings(CANcoder canCoder)
     {
-        System.out.println("Get side, has angle: " + cancoder.getAbsolutePosition() + " and "
-        + "initializationStrategy == " + cancoder.configGetSensorInitializationStrategy(0).toString());
+        // NOTE: see: https://v6.docs.ctr-electronics.com/en/2023-v6/docs/migration/migration-guide/feature-replacements-guide.html#sensor-initialization-strategy
+        // "The Talon FX and CANcoder sensors are always initialized to their absolute position in Phoenix 6."
+        System.out.println("Get side, has angle: " + canCoder.getAbsolutePosition());
     }
     
-    private static void UpdateSingleCanEncoderDefaultSettings(CANCoder cancoder)
+    private static void UpdateSingleCanEncoderDefaultSettings(CANcoder canCoder)
     {
-        CANCoderConfiguration config = new CANCoderConfiguration();
-        SensorInitializationStrategy strat = SensorInitializationStrategy.BootToAbsolutePosition;
-        config.initializationStrategy = strat;
-        ErrorCode returnVal = cancoder.configAllSettings(config);
-        System.out.println("attemtpted set value == " + strat.toString());
-        System.out.println("Set side, getDeviceID == " + cancoder.getDeviceID() + " Error Code: " + returnVal);
-        CtreSettings.PrintCanEncoderCurrentSettings(cancoder);
+        CANcoderConfiguration config = new CANcoderConfiguration();
+        StatusCode returnVal = canCoder.getConfigurator().apply(config);
+        System.out.println("Set side, getDeviceID == " + canCoder.getDeviceID() + " Error Code: " + returnVal);
+        CtreSettings.PrintCanEncoderCurrentSettings(canCoder);
     }
 }

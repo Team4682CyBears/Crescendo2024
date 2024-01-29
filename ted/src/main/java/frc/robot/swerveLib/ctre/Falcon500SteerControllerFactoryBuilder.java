@@ -1,22 +1,28 @@
-package frc.robot.swerveLib.ctre;
+// ************************************************************
+// Bishop Blanchet Robotics
+// Home of the Cybears
+// FRC - Crescendo - 2024
+// File: Falcon500SteerControllerFactoryBuilder.java
+// Intent: Same name file port of Swerve Drive Specalties codebase from phoenix5 
+// to phoenix6
+// SDS codebase found at: https://github.com/SwerveDriveSpecialties/Do-not-use-swerve-lib-2022-unmaintained/tree/develop/src/main/java/com/swervedrivespecialties/swervelib
+// ************************************************************
 
+// ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
+
+package frc.robot.swerveLib.ctre;
 
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
-import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VoltageOut;
 
 import frc.robot.swerveLib.*;
-import frc.robot.swerveLib.rev.NeoSteerControllerFactoryBuilder.ControllerImplementation;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
 
-import static frc.robot.swerveLib.ctre.CtreUtils.checkCtreError;
 
 public final class Falcon500SteerControllerFactoryBuilder {
     private static final int CAN_TIMEOUT_MS = 250;
@@ -119,24 +125,24 @@ public final class Falcon500SteerControllerFactoryBuilder {
                 // TODO: What should be done if no nominal voltage is configured? Use a default voltage?
 
                 // TODO: Make motion magic max voltages configurable or dynamically determine optimal values
-//WAS:                motorConfiguration.motionCruiseVelocity = 2.0 / velocityConstant / sensorVelocityCoefficient;
+// WAS:                motorConfiguration.motionCruiseVelocity = 2.0 / velocityConstant / sensorVelocityCoefficient;
                 motorConfiguration.MotionMagic.MotionMagicCruiseVelocity = 2.0 / velocityConstant / sensorVelocityCoefficient;
-//WAS:                motorConfiguration.motionAcceleration = (8.0 - 2.0) / accelerationConstant / sensorVelocityCoefficient;
+// WAS:                motorConfiguration.motionAcceleration = (8.0 - 2.0) / accelerationConstant / sensorVelocityCoefficient;
                 motorConfiguration.MotionMagic.MotionMagicAcceleration = (8.0 - 2.0) / accelerationConstant / sensorVelocityCoefficient;
             }
             if (hasVoltageCompensation()) {
-//WAS:                motorConfiguration.voltageCompSaturation = nominalVoltage;
+// WAS:                motorConfiguration.voltageCompSaturation = nominalVoltage;
                 voltageRequest.withOutput(nominalVoltage);
             }
             if (hasCurrentLimit()) {
-//WAS:                motorConfiguration.supplyCurrLimit.currentLimit = currentLimit;
-//WAS:                motorConfiguration.supplyCurrLimit.enable = true;
+// WAS:                motorConfiguration.supplyCurrLimit.currentLimit = currentLimit;
+// WAS:                motorConfiguration.supplyCurrLimit.enable = true;
                 motorConfiguration.CurrentLimits.SupplyCurrentLimit = currentLimit;
                 motorConfiguration.CurrentLimits.SupplyCurrentLimitEnable = true;
             }
 
             TalonFX motor = new TalonFX(steerConfiguration.getMotorPort());
-//WAS:            checkCtreError(motor.configAllSettings(motorConfiguration, CAN_TIMEOUT_MS), "Failed to configure Falcon 500 settings");
+// WAS:            checkCtreError(motor.configAllSettings(motorConfiguration, CAN_TIMEOUT_MS), "Failed to configure Falcon 500 settings");
             CtreUtils.checkCtreError(motor.getConfigurator().apply(motorConfiguration), "Failed to configure Falcon 500 settings");
 
             /*
@@ -146,27 +152,28 @@ WAS:
                 motor.enableVoltageCompensation(true);
             }
             */
-            checkCtreError(motor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, CAN_TIMEOUT_MS), "Failed to set Falcon 500 feedback sensor");
+
+            // after an hour of searching for the equivalent of motor.configSelectedFeedbackSensor(), I'm of the opinion that the following line has no equivalent in V6
+            // https://v6.docs.ctr-electronics.com/en/2023-v6/docs/migration/migration-guide/feature-replacements-guide.html#sensor-initialization-strategy
+            // the link above seems to hint at no longer needing this?
+            // "The Talon FX and CANcoder sensors are always initialized to their absolute position in Phoenix 6."
+// WAS:            checkCtreError(motor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, CAN_TIMEOUT_MS), "Failed to set Falcon 500 feedback sensor");
             
             // seems like according to https://v6.docs.ctr-electronics.com/en/2023-v6/docs/migration/migration-guide/feature-replacements-guide.html that this call is no longer needed in phenoix 6
 // WAS:            motor.setSensorPhase(true);
 
-//WAS:            motor.setInverted(moduleConfiguration.isSteerInverted() ? TalonFXInvertType.CounterClockwise : TalonFXInvertType.Clockwise);
+// WAS:            motor.setInverted(moduleConfiguration.isSteerInverted() ? TalonFXInvertType.CounterClockwise : TalonFXInvertType.Clockwise);
             motorConfiguration.MotorOutput.Inverted = (moduleConfiguration.isSteerInverted() ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive);
 
-//WAS:            motor.setNeutralMode(NeutralMode.Brake);
+// WAS:            motor.setNeutralMode(NeutralMode.Brake);
             motorConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-            checkCtreError(motor.setSelectedSensorPosition(absoluteEncoder.getAbsoluteAngle() / sensorPositionCoefficient, 0, CAN_TIMEOUT_MS), "Failed to set Falcon 500 encoder position");
+            CtreUtils.checkCtreError(motor.setPosition(absoluteEncoder.getAbsoluteAngle() / sensorPositionCoefficient, CAN_TIMEOUT_MS), "Failed to set Falcon 500 encoder position");
 
             // Reduce CAN status frame rates
             CtreUtils.checkCtreError(
-                    motor.setStatusFramePeriod(
-                            StatusFrameEnhanced.Status_1_General,
-                            STATUS_FRAME_GENERAL_PERIOD_MS,
-                            CAN_TIMEOUT_MS
-                    ),
-                    "Failed to configure Falcon status frame period"
+                motor.getPosition().setUpdateFrequency(STATUS_FRAME_GENERAL_PERIOD_MS, CAN_TIMEOUT_MS),
+                "Failed to configure Falcon status frame period"
             );
 
             return new ControllerImplementation(motor,

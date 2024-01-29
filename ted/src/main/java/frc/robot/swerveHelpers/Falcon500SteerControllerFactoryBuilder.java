@@ -1,28 +1,31 @@
 // ************************************************************
 // Bishop Blanchet Robotics
 // Home of the Cybears
-// FRC - Charged Up - 2023
-// File: Falcon500SteerControllerFactoryBuilder.java
-// Intent: Factory class for steering using falcons ... a modified copy of SWS content.
+// FRC - Crescendo - 2024
+// File: .java
+// Intent: Same name extension files based on Swerve Drive Specalties codebase but also ported from phoenix5 to phoenix6
+// SDS codebase found at: https://github.com/SwerveDriveSpecialties/Do-not-use-swerve-lib-2022-unmaintained/tree/develop/src/main/java/com/swervedrivespecialties/swervelib
 // ************************************************************
 
 // ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
 
 package frc.robot.swerveHelpers;
 
-import com.ctre.phoenix.ErrorCode;
-import com.ctre.phoenix.motorcontrol.*;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
-import com.swervedrivespecialties.swervelib.*;
-import com.swervedrivespecialties.swervelib.ctre.CtreUtils;
-import com.swervedrivespecialties.swervelib.ctre.Falcon500SteerConfiguration;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.StatusCode;
+
+import frc.robot.swerveLib.*;
+import frc.robot.swerveLib.ctre.CtreUtils;
+import frc.robot.swerveLib.ctre.Falcon500SteerConfiguration;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
-
-import static com.swervedrivespecialties.swervelib.ctre.CtreUtils.checkCtreError;
 
 public final class Falcon500SteerControllerFactoryBuilder {
     private static final int CAN_TIMEOUT_MS = 250;
@@ -100,7 +103,7 @@ public final class Falcon500SteerControllerFactoryBuilder {
         public void addDashboardEntries(ShuffleboardContainer container, ControllerImplementation controller) {
             SteerControllerFactory.super.addDashboardEntries(container, controller);
             container.addNumber("Absolute Encoder Angle", () -> Math.toDegrees(controller.absoluteEncoder.getAbsoluteAngle())); 
-            container.addBoolean("Absolute Encoder Sync Status OK", () -> controller.absoluteEncoder.getLastError() == ErrorCode.OK);
+            container.addBoolean("Absolute Encoder Sync Status OK", () -> controller.absoluteEncoder.getLastError() == StatusCode.OK);
         }
 
         @Override

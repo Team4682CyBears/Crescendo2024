@@ -1,3 +1,15 @@
+// ************************************************************
+// Bishop Blanchet Robotics
+// Home of the Cybears
+// FRC - Crescendo - 2024
+// File: .java
+// Intent: Same name file port of Swerve Drive Specalties codebase from phoenix5 
+// to phoenix6
+// SDS codebase found at: https://github.com/SwerveDriveSpecialties/Do-not-use-swerve-lib-2022-unmaintained/tree/develop/src/main/java/com/swervedrivespecialties/swervelib
+// ************************************************************
+
+// ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
+
 package frc.robot.swerveLib;
 
 import frc.robot.swerveLib.ctre.*;
@@ -23,7 +35,6 @@ public final class Mk4iSwerveModuleHelper {
                 .withPidConstants(0.2, 0.0, 0.1)
                 .withCurrentLimit(configuration.getSteerCurrentLimit())
                 .build(new CanCoderFactoryBuilder()
-                        .withReadingUpdatePeriod(100)
                         .build());
     }
 
@@ -40,7 +51,6 @@ public final class Mk4iSwerveModuleHelper {
                 .withPidConstants(1.0, 0.0, 0.1)
                 .withCurrentLimit(configuration.getSteerCurrentLimit())
                 .build(new CanCoderFactoryBuilder()
-                        .withReadingUpdatePeriod(100)
                         .build());
     }
 

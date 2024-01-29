@@ -1,18 +1,19 @@
 // ************************************************************
 // Bishop Blanchet Robotics
 // Home of the Cybears
-// FRC - Charged Up - 2023
-// File: SwerveModuleHelper.java
-// Intent: Swerve module helper ... a modified copy of SWS content.
+// FRC - Crescendo - 2024
+// File: .java
+// Intent: Same name extension files based on Swerve Drive Specalties codebase but also ported from phoenix5 to phoenix6
+// SDS codebase found at: https://github.com/SwerveDriveSpecialties/Do-not-use-swerve-lib-2022-unmaintained/tree/develop/src/main/java/com/swervedrivespecialties/swervelib
 // ************************************************************
 
 // ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
 
 package frc.robot.swerveHelpers;
 
-import com.swervedrivespecialties.swervelib.ModuleConfiguration;
-import com.swervedrivespecialties.swervelib.ctre.CanCoderAbsoluteConfiguration;
-import com.swervedrivespecialties.swervelib.ctre.Falcon500SteerConfiguration;
+import frc.robot.swerveLib.ModuleConfiguration;
+import frc.robot.swerveLib.ctre.CanCoderAbsoluteConfiguration;
+import frc.robot.swerveLib.ctre.Falcon500SteerConfiguration;
 
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 
@@ -33,7 +34,6 @@ public final class SwerveModuleHelper {
                 .withPidConstants(0.2, 0.0, 0.1)
                 .withCurrentLimit(configuration.getSteerCurrentLimit())
                 .build(new CanCoderFactoryBuilder()
-                        .withReadingUpdatePeriod(100)
                         .build());
     }
 
