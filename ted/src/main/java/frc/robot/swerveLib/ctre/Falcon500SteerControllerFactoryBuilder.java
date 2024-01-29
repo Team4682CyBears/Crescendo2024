@@ -23,7 +23,6 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import frc.robot.swerveLib.*;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
 
-
 public final class Falcon500SteerControllerFactoryBuilder {
     private static final int CAN_TIMEOUT_MS = 250;
     private static final int STATUS_FRAME_GENERAL_PERIOD_MS = 250;
