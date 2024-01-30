@@ -46,6 +46,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -53,6 +54,8 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.Nat;
 
 public class DrivetrainSubsystem extends SubsystemBase {
 
@@ -570,11 +573,23 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @param visionMeasurement the most recent vision measurement provided by vision subsystem
    */
   private void addVisionMeasurement(VisionMeasurement visionMeasurement){
+    Matrix visionStdDev = new Matrix(Nat.N3(), Nat.N1());
+    visionStdDev.fill(0.9);
     // for now ignore all vision measurements that are null or contained robot position is null
     if (visionMeasurement != null && visionMeasurement.getRobotPosition() != null){
-      shadoPoseEstimator.addVisionMeasurement(visionMeasurement.getRobotPosition(), visionMeasurement.getTimestamp());
+      //if the robot is moving, trust vision measurments less
+      if(isMoving()){
+        visionStdDev.fill(2.0);
+      }
+      swervePoseEstimator.addVisionMeasurement(visionMeasurement.getRobotPosition(), visionMeasurement.getTimestamp(), visionStdDev);
     }
-  } 
+  }
+
+  private boolean isMoving(){
+    return this.chassisSpeeds.vxMetersPerSecond > 0 || 
+           this.chassisSpeeds.vyMetersPerSecond > 0 ||
+           this.chassisSpeeds.omegaRadiansPerSecond > 0;
+  }
 
   /**
    * Determine if recent navx is all level
