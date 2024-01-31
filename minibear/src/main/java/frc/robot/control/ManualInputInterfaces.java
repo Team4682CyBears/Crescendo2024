@@ -29,6 +29,7 @@ import frc.robot.commands.AllStopCommand;
 import frc.robot.commands.AutoBalanceStepCommand;
 import frc.robot.commands.ButtonPressCommand;
 import frc.robot.commands.DriveFinePlacementCommand;
+import frc.robot.commands.UseVisionForPositionCommand;
 import frc.robot.common.WristPosition;
 
 
@@ -170,10 +171,10 @@ public class ManualInputInterfaces {
         // bind the b button to auto balance
         this.driverController.b().onTrue(
             new ParallelCommandGroup(
-                new AutoBalanceStepCommand(localDrive),
+                new UseVisionForPositionCommand(subsystemCollection.getDriveTrainSubsystem()),
                 new ButtonPressCommand(
                     "driverController.b()",
-                    "auto balance")));
+                    "use vision for position")));
 
         this.driverController.povRight().whileTrue(
             new DriveFinePlacementCommand(

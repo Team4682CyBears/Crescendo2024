@@ -62,6 +62,8 @@ import edu.wpi.first.math.MatBuilder;
 public class DrivetrainSubsystem extends SubsystemBase {
 
   CameraSubsystem cameraSubsystem;
+
+  private boolean useVision = false;
   /**
    * The maximum voltage that will be delivered to the drive motors.
    * <p>
@@ -91,8 +93,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public static final double MIN_ANGULAR_VELOCITY_BOUNDARY_RADIANS_PER_SECOND = MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * 0.06; // 0.06 a magic number based on testing
   private double MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED = 5.0;
   private double MAX_ANGULAR_DECELERATION_RADIANS_PER_SECOND_SQUARED = 100.0;
-
-  private boolean hasMoved = false;
 
   private static final int PositionHistoryWindowTimeMilliseconds = 5000;
   private static final int CommandSchedulerPeriodMilliseconds = 20;
@@ -240,6 +240,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
    */
   public SwerveDriveKinematics getSwerveKinematics() {
     return swerveKinematics;
+  }
+
+  public void setUseVision(boolean b){
+    this.useVision = b;
   }
 
   /**
@@ -580,21 +584,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // The wpilib matrix constructor requires sizes specified as Nat types. 
     Matrix<N3,N1> visionStdDev = (new MatBuilder<N3,N1>(Nat.N3(), Nat.N1())).fill(new double[]{0.9, 0.9, 0.9});
     // for now ignore all vision measurements that are null or contained robot position is null
-    if (visionMeasurement != null && visionMeasurement.getRobotPosition() != null){
-      //if the robot is moving, trust vision measurments less
-      if(isMoving() || hasMoved){
-        // The wpilib matrix constructor requires sizes specified as Nat types. 
-      visionStdDev = (new MatBuilder<N3,N1>(Nat.N3(), Nat.N1())).fill(new double[]{10.0, 10.0, 10.0});
-      hasMoved = true;
-      }
+    if (visionMeasurement != null && visionMeasurement.getRobotPosition() != null && useVision){
       swervePoseEstimator.addVisionMeasurement(visionMeasurement.getRobotPosition(), visionMeasurement.getTimestamp(), visionStdDev);
     }
-  }
-
-  private boolean isMoving(){
-    return this.chassisSpeeds.vxMetersPerSecond > 0 || 
-           this.chassisSpeeds.vyMetersPerSecond > 0 ||
-           this.chassisSpeeds.omegaRadiansPerSecond > 0;
   }
 
   /**
