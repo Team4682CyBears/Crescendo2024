@@ -47,6 +47,7 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -56,6 +57,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
+import edu.wpi.first.math.MatBuilder;
 
 public class DrivetrainSubsystem extends SubsystemBase {
 
@@ -89,6 +91,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public static final double MIN_ANGULAR_VELOCITY_BOUNDARY_RADIANS_PER_SECOND = MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * 0.06; // 0.06 a magic number based on testing
   private double MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED = 5.0;
   private double MAX_ANGULAR_DECELERATION_RADIANS_PER_SECOND_SQUARED = 100.0;
+
+  private boolean hasMoved = false;
 
   private static final int PositionHistoryWindowTimeMilliseconds = 5000;
   private static final int CommandSchedulerPeriodMilliseconds = 20;
@@ -573,13 +577,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @param visionMeasurement the most recent vision measurement provided by vision subsystem
    */
   private void addVisionMeasurement(VisionMeasurement visionMeasurement){
-    Matrix visionStdDev = new Matrix(Nat.N3(), Nat.N1());
-    visionStdDev.fill(0.9);
+    // The wpilib matrix constructor requires sizes specified as Nat types. 
+    Matrix<N3,N1> visionStdDev = (new MatBuilder<N3,N1>(Nat.N3(), Nat.N1())).fill(new double[]{0.9, 0.9, 0.9});
     // for now ignore all vision measurements that are null or contained robot position is null
     if (visionMeasurement != null && visionMeasurement.getRobotPosition() != null){
       //if the robot is moving, trust vision measurments less
-      if(isMoving()){
-        visionStdDev.fill(2.0);
+      if(isMoving() || hasMoved){
+        // The wpilib matrix constructor requires sizes specified as Nat types. 
+      visionStdDev = (new MatBuilder<N3,N1>(Nat.N3(), Nat.N1())).fill(new double[]{10.0, 10.0, 10.0});
+      hasMoved = true;
       }
       swervePoseEstimator.addVisionMeasurement(visionMeasurement.getRobotPosition(), visionMeasurement.getTimestamp(), visionStdDev);
     }
