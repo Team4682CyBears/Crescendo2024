@@ -18,6 +18,8 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 
+import com.ctre.phoenix6.signals.InvertedValue;
+
 public final class Constants {
 
     public final static double DriveVoltageScalar = 1.0;
@@ -72,6 +74,9 @@ public final class Constants {
     // this uses the halls effect sensor when plugged into the spark max
     // see: https://www.revrobotics.com/rev-21-1650/ where it says "42 counts per rev."
     public static final double RevNeoEncoderTicksPerRevolution = 42;
+    // CTRE motor constants
+    public static final double talonMaximumRevolutionsPerMinute = 6380;
+    public static final double CtreTalonFx500EncoderTicksPerRevolution = 2048; 
 
     // *****************************************************************
     // input device constants
@@ -101,27 +106,7 @@ public final class Constants {
     public static final double FinePlacementRotationalVelocity = 0.7;
 
     // *******************************************************************
-    // arm constants - preset positions
-    public static final double armPresetPositionStowMetersHorizontalExtension = 0.0;
-    public static final double armPresetPositionStowMetersVerticalExtension = 0.1952;
-
-    public static final double armPresetPositionCubeGrabMetersHorizontalExtension = 0.3041 + Units.inchesToMeters(0.5);
-    public static final double armPresetPositionCubeGrabMetersVerticalExtension = 0.0691 - Units.inchesToMeters(1.5);
-    public static final double armPresetPositionCubeScoreHighMetersHorizontalExtension = 0.7262;
-    public static final double armPresetPositionCubeScoreHighMetersVerticalExtension = 0.0058;
-    public static final double armPresetPositionCubeScoreMediumMetersHorizontalExtension = 0.1880;
-    public static final double armPresetPositionCubeScoreMediumMetersVerticalExtension = 0.0158;
-    public static final double armPresetPositionCubeScoreLowMetersHorizontalExtension = 0.0979;
-    public static final double armPresetPositionCubeScoreLowMetersVerticalExtension = 0.0224;
-
-    public static final double armPresetPositionConeGrabMetersHorizontalExtension = 0.4192 - Units.inchesToMeters(0.5);
-    public static final double armPresetPositionConeGrabMetersVerticalExtension = 0.0589 - Units.inchesToMeters(1.0);
-    public static final double armPresetPositionConeScoreHighMetersHorizontalExtension = 0.6694;
-    public static final double armPresetPositionConeScoreHighMetersVerticalExtension = 0.0;
-    public static final double armPresetPositionConeScoreMediumMetersHorizontalExtension = 0.2 - Units.inchesToMeters(1);
-    public static final double armPresetPositionConeScoreMediumMetersVerticalExtension = 0.01;
-    public static final double armPresetPositionConeScoreLowMetersHorizontalExtension = 0.0979;
-    public static final double armPresetPositionConeScoreLowMetersVerticalExtension = 0.0224;
+    // XXX constants 
 
     // *******************************************************************
     // pneumatics constants
@@ -134,16 +119,12 @@ public final class Constants {
     public static final int StabilizerPneumaticsControlModuleReverseChannel = 1;
 
     // *******************************************************************
-    // picker constants
-    public static final int PickerHorizontalPneumaticsControlModuleForwardChannel = 2;
-    public static final int PickerHorizontalPneumaticsControlModuleReverseChannel = 3;
-    public static final int PickerVerticalPneumaticsControlModuleForwardChannel = 4;
-    public static final int PickerVerticalPneumaticsControlModuleReverseChannel = 5; 
-    
-    // *****************************************************************
-    // Every Bot picker constants
-    public static final int EveryBotPickerMotorCanId = 15;
-
+    // shooter constants  
+    public static final int leftTalonShooterMotorCanId = 7;
+    public static InvertedValue leftTalonShooterMotorDefaultDirection = InvertedValue.Clockwise_Positive;  
+    public static final int rightTalonShooterMotorCanId = 8;
+    public static InvertedValue rightTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;  
+  
     // ********************************************************************
     // Controller Constants
     public static final double rumbleTimeSeconds = 0.15;

@@ -28,6 +28,7 @@ import frc.robot.commands.AllStopCommand;
 import frc.robot.commands.ButtonPressCommand;
 import frc.robot.commands.DriveToPointCommand;
 import frc.robot.commands.DriveTrajectoryCommand;
+import frc.robot.commands.ShootAtSpeedCommand;
 
 public class ManualInputInterfaces {
 
@@ -123,6 +124,15 @@ public class ManualInputInterfaces {
             )
           );
     }
+
+    this.driverController.a().whileTrue(
+        new ParallelCommandGroup(
+          new ShootAtSpeedCommand(subsystemCollection.getShooterSubsystem()),
+          new ButtonPressCommand(
+            "driverController.a()",
+            "Shoot at speed!!")
+          )
+      );
 
       // x button press will stop all      
       this.driverController.x().onTrue(

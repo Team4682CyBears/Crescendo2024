@@ -36,14 +36,17 @@ public class InstalledHardware
     public static final boolean limelightInstalled = false;
 
     // External Input Hardware
-    public static final boolean driverXboxControllerInstalled = false;
+    public static final boolean driverXboxControllerInstalled = true;
     public static final boolean coDriverXboxControllerInstalled = false;
 
     // DriveTrain Related Hardware
-    public static final boolean leftFrontDriveInstalled = true;
-    public static final boolean leftRearDriveInstalled = true;
-    public static final boolean rightFrontDriveInstalled = true;
-    public static final boolean rightRearDriveInstalled = true;
+    public static final boolean leftFrontDriveInstalled = false;
+    public static final boolean leftRearDriveInstalled = false;
+    public static final boolean rightFrontDriveInstalled = false;
+    public static final boolean rightRearDriveInstalled = false;
+
+    // Shooter Related Hardware
+    public static final boolean shooterInstalled = true;
 
     // Controller button install control
     public static final boolean applyBasicDriveToPointButtonsToDriverXboxController = false;

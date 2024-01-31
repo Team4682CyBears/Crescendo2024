@@ -12,6 +12,7 @@ package frc.robot.control;
 import frc.robot.subsystems.DrivetrainPowerSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.PowerDistributionPanelWatcherSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 public class SubsystemCollection
 {
@@ -21,6 +22,7 @@ public class SubsystemCollection
     // declaring and init subsystems  
     private DrivetrainSubsystem driveTrainSubsystem = null;
     private DrivetrainPowerSubsystem driveTrainPowerSubsystem = null;
+    private ShooterSubsystem shooterSubsystem = null;
     private PowerDistributionPanelWatcherSubsystem powerDistributionPanelWatcherSubsystem = null; 
 
     /**
@@ -33,6 +35,9 @@ public class SubsystemCollection
 
     public DrivetrainPowerSubsystem getDriveTrainPowerSubsystem() { return driveTrainPowerSubsystem; }
     public void setDriveTrainPowerSubsystem(DrivetrainPowerSubsystem value) { driveTrainPowerSubsystem = value; }
+
+    public ShooterSubsystem getShooterSubsystem() { return shooterSubsystem; }
+    public void setShooterSubsystem(ShooterSubsystem value) { shooterSubsystem = value; }
 
     public PowerDistributionPanelWatcherSubsystem getPowerDistributionPanelWatcherSubsystem() { return powerDistributionPanelWatcherSubsystem; }
     public void setPowerDistributionPanelWatcherSubsystem(PowerDistributionPanelWatcherSubsystem value) { powerDistributionPanelWatcherSubsystem = value; }
