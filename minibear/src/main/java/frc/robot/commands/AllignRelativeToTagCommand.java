@@ -54,6 +54,7 @@ public class AllignRelativeToTagCommand extends CommandBase{
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    System.out.println("Made allign command");
     done = false;
     drivetrainsubsystem.drive(new ChassisSpeeds(0, 0, 0));
   }
@@ -67,12 +68,12 @@ public class AllignRelativeToTagCommand extends CommandBase{
       double yVelocity = 0.0;
       double rotVelocity = 0.0;
 
-      if(Math.abs(relativeMeasurement.getRobotPosition().getX()) >= tolerance){
+      if(Math.abs(targetX - relativeMeasurement.getRobotPosition().getX()) >= tolerance){
         xVelocity = transformPID.calculate(relativeMeasurement.getRobotPosition().getX(), 0.0);
         xVelocity = -1 * MotorUtils.clamp(xVelocity, -velocityFactor, velocityFactor);
       }
 
-      if(Math.abs(relativeMeasurement.getRobotPosition().getY()) >= tolerance){
+      if(Math.abs(targetY - relativeMeasurement.getRobotPosition().getY()) >= tolerance){
         yVelocity = transformPID.calculate(relativeMeasurement.getRobotPosition().getY(), 0.0);
         yVelocity = -1 * MotorUtils.clamp(yVelocity, -velocityFactor, velocityFactor);
       }
@@ -95,9 +96,7 @@ public class AllignRelativeToTagCommand extends CommandBase{
   @Override
   public boolean isFinished(){
     VisionMeasurement relativeMeasurement = camerasubsystem.getVisionBotPoseInTargetSpace();
-    if(Math.abs(relativeMeasurement.getRobotPosition().getX()) < tolerance && Math.abs(relativeMeasurement.getRobotPosition().getY()) < tolerance){
-      done = true;
-    }
+    done = Math.abs(targetX - relativeMeasurement.getRobotPosition().getX()) < tolerance && Math.abs(targetY - relativeMeasurement.getRobotPosition().getY()) < tolerance;
     return done;
   }
 }
