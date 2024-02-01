@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.io.Console;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
@@ -83,9 +85,13 @@ public class TalonShooterSubsystem extends SubsystemBase {
    */
   public void setShooterVelocityLeft(double revolutionsPerMinute)
   {
+    System.out.println("attempting left motor percent output");
+    leftMotor.set(0.2);//ControlMode.PercentOutput, 0.1);
+    /*
     leftMotor.set(
       ControlMode.Velocity,
       this.convertShooterRpmToMotorUnitsPer100Ms(revolutionsPerMinute, TalonShooterSubsystem.topShooterGearRatio));
+    */
   }
 
   /**
