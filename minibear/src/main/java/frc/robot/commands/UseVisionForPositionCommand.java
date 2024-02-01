@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
 /**
- * Implements a command to perform a auto balancing routine. 
+ * Implements a command
  */
 public class UseVisionForPositionCommand extends CommandBase{
 
@@ -26,7 +26,7 @@ public class UseVisionForPositionCommand extends CommandBase{
   private double commandDurationSeconds = 0.5;
 
   /**
-   * Constructor for auto balance command.
+   * Constructor for command.
    */
   public UseVisionForPositionCommand (DrivetrainSubsystem drivetrainSubsystem) {
     this.drivetrainsubsystem = drivetrainSubsystem;

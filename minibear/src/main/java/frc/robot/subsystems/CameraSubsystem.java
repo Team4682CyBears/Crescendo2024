@@ -30,7 +30,7 @@ public class CameraSubsystem extends SubsystemBase {
   private final int botPositionYIndex = 2;
   private final int botRotationIndex = 5;
   private final int noTagInSightId = -1;
-
+  NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
   /**
    * a constructor for the camera subsystem class
    * @param subsystems - the subsystem collection
@@ -42,10 +42,29 @@ public class CameraSubsystem extends SubsystemBase {
    * a method that returns a vision measurement. 
    * pose portion of the vision measurement is null if there is no valid measurement. 
    */
-  public VisionMeasurement getVisionPosition(){
-    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+  public VisionMeasurement getVisionBotPose(){
     double tagId = table.getEntry("tid").getDouble(0);
     double[] botpose = table.getEntry("botpose").getDoubleArray(new double[defaultDoubleArraySize]);
+    Double timestamp = Timer.getFPGATimestamp() - (botpose[TimestampIndex]/milisecondsInSeconds);
+    Translation2d botTranslation = new Translation2d(botpose[botPositionXIndex], botpose[botPositionYIndex]);
+    Rotation2d botYaw = Rotation2d.fromDegrees(botpose[botRotationIndex]);
+    Pose2d realRobotPosition = new Pose2d(botTranslation, botYaw);
+
+    if (tagId == noTagInSightId){
+      return new VisionMeasurement(null, 0.0);
+    }
+    else{
+      return new VisionMeasurement(realRobotPosition, timestamp);
+    }
+  }
+
+  /**
+   * a method that returns a vision measurement. 
+   * pose portion of the vision measurement is null if there is no valid measurement. 
+   */
+  public VisionMeasurement getVisionBotPoseInTargetSpace(){
+    double tagId = table.getEntry("tid").getDouble(0);
+    double[] botpose = table.getEntry("botpose_targetspace").getDoubleArray(new double[defaultDoubleArraySize]);
     Double timestamp = Timer.getFPGATimestamp() - (botpose[TimestampIndex]/milisecondsInSeconds);
     Translation2d botTranslation = new Translation2d(botpose[botPositionXIndex], botpose[botPositionYIndex]);
     Rotation2d botYaw = Rotation2d.fromDegrees(botpose[botRotationIndex]);

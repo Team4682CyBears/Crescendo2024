@@ -443,7 +443,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // refresh the position of the robot
     this.refreshRobotPosition();
     // update robot position with vision 
-    this.addVisionMeasurement(cameraSubsystem.getVisionPosition());
+    this.addVisionMeasurement(cameraSubsystem.getVisionBotPose());
     // store the recalculated position
     this.storeUpdatedPosition();
     // store navx info

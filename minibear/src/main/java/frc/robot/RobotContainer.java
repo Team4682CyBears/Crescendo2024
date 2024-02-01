@@ -83,6 +83,9 @@ public class RobotContainer {
 
     final TestTrajectories testTrajectories = new TestTrajectories(subsystems.getDriveTrainSubsystem().getTrajectoryConfig());
 
+    SmartDashboard.putData("Allign relative to tag", 
+      new AllignRelativeToTagCommand(this.subsystems.getDriveTrainSubsystem(), this.subsystems.getCameraSubsystem(), 3.0, 1.0, 0.0, 7.0));
+
     // Command to drive the chassis for zeroing the swerve modules.
     SmartDashboard.putData("Drive Forward Robot Centric",
         new DriveTimeCommand(this.subsystems.getDriveTrainSubsystem(),
