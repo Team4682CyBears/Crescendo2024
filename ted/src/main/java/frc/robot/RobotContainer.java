@@ -72,6 +72,7 @@ public class RobotContainer {
       InstalledHardware.navxInstalled) {
       // The robot's subsystems and commands are defined here...
       subsystems.setDriveTrainSubsystem(new DrivetrainSubsystem());
+      subsystems.getDriveTrainSubsystem().zeroRobotPosition(); // can I add this?
       subsystems.setDriveTrainPowerSubsystem(new DrivetrainPowerSubsystem(subsystems.getDriveTrainSubsystem()));
       SmartDashboard.putData("Debug: DrivetrainSub", subsystems.getDriveTrainSubsystem());
       System.out.println("SUCCESS: initializeDrivetrain");

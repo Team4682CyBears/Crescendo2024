@@ -117,7 +117,7 @@ public class ShooterSubsystem extends SubsystemBase {
       System.out.println("Could not apply configs to right motor, error code: " + status.toString());
     }
 */
-    CommandScheduler.getInstance().registerSubsystem(this);
+//    CommandScheduler.getInstance().registerSubsystem(this);
   }
 
   /**

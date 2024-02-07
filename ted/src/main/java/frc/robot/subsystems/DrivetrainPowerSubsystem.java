@@ -31,7 +31,7 @@ public class DrivetrainPowerSubsystem extends SubsystemBase {
     public DrivetrainPowerSubsystem(DrivetrainSubsystem currentDrivetrain) {
         currentDrivetrainSubsystem = currentDrivetrain;
         this.speedReductionFactor = currentDrivetrainSubsystem.getSpeedReductionFactor();
-        CommandScheduler.getInstance().registerSubsystem(this);
+//        CommandScheduler.getInstance().registerSubsystem(this);
     }
     
     /**
