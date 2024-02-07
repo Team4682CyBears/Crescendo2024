@@ -35,6 +35,11 @@ public class RobotContainer {
 
     // shooter subsystem init - later
     this.initializeShooterSubsystem();
+
+    // Configure the button bindings
+    System.out.println(">>>> Initializing button bindings.");
+    this.subsystems.getManualInputInterfaces().initializeButtonCommandBindings();
+    System.out.println(">>>> Finished initializing button bindings.");
   }
 
   public Command getAutonomousCommand() {

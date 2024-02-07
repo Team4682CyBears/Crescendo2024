@@ -125,15 +125,6 @@ public class ManualInputInterfaces {
           );
     }
 
-    this.driverController.a().whileTrue(
-        new ParallelCommandGroup(
-          new ShootAtSpeedCommand(subsystemCollection.getShooterSubsystem()),
-          new ButtonPressCommand(
-            "driverController.a()",
-            "Shoot at speed!!")
-          )
-      );
-
       // x button press will stop all      
       this.driverController.x().onTrue(
         new ParallelCommandGroup(
@@ -144,6 +135,19 @@ public class ManualInputInterfaces {
             "!!!!!!!!!!!!!!!!!!!! ALL STOP !!!!!!!!!!!!!!!!!!!!!")
           )
       );
+
+      if(subsystemCollection.getShooterSubsystem() != null) {
+        System.out.println("STARTING Registering this.driverController.a().whileTrue() ... ");
+        this.driverController.a().whileTrue(
+            new ParallelCommandGroup(
+              new ShootAtSpeedCommand(subsystemCollection.getShooterSubsystem()),
+              new ButtonPressCommand(
+                "driverController.a()",
+                "Shoot at speed!!")
+              )
+          );
+        System.out.println("FINISHED registering this.driverController.a().whileTrue() ... ");
+      }
 
       if(subsystemCollection.getDriveTrainSubsystem() != null){
         // left bumper press will decrement power factor  
