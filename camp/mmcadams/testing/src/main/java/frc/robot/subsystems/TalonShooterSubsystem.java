@@ -31,10 +31,10 @@ public class TalonShooterSubsystem extends SubsystemBase {
   private static final int kTimeoutMs = 30;
 
   private WPI_TalonFX leftMotor = new WPI_TalonFX(Constants.leftTalonShooterMotorCanId);
-//  private WPI_TalonFX rightMotor = new WPI_TalonFX(Constants.rightTalonShooterMotorCanId);
+  private WPI_TalonFX rightMotor = new WPI_TalonFX(Constants.rightTalonShooterMotorCanId);
 
   private Gains leftMotorGains = new Gains(0.50, 0.001, 5, 1023/20660.0, 300, 1.00);
-//  private Gains rightMotorGains = new Gains(0.50, 0.001, 5, 1023/20660.0, 300, 1.00);
+  private Gains rightMotorGains = new Gains(0.50, 0.001, 5, 1023/20660.0, 300, 1.00);
 
   public TalonShooterSubsystem() {
 
@@ -56,7 +56,7 @@ public class TalonShooterSubsystem extends SubsystemBase {
     leftMotor.config_kP(TalonShooterSubsystem.kPIDLoopIdx, this.leftMotorGains.kP, TalonShooterSubsystem.kTimeoutMs);
     leftMotor.config_kI(TalonShooterSubsystem.kPIDLoopIdx, this.leftMotorGains.kI, TalonShooterSubsystem.kTimeoutMs);
     leftMotor.config_kD(TalonShooterSubsystem.kPIDLoopIdx, this.leftMotorGains.kD, TalonShooterSubsystem.kTimeoutMs);    
-/*
+
     rightMotor.configFactoryDefault();
     rightMotor.setNeutralMode(NeutralMode.Coast);
     rightMotor.setInverted(Constants.rightTalonShooterMotorDefaultDirection);
@@ -75,7 +75,7 @@ public class TalonShooterSubsystem extends SubsystemBase {
     rightMotor.config_kP(TalonShooterSubsystem.kPIDLoopIdx, this.rightMotorGains.kP, TalonShooterSubsystem.kTimeoutMs);
     rightMotor.config_kI(TalonShooterSubsystem.kPIDLoopIdx, this.rightMotorGains.kI, TalonShooterSubsystem.kTimeoutMs);
     rightMotor.config_kD(TalonShooterSubsystem.kPIDLoopIdx, this.rightMotorGains.kD, TalonShooterSubsystem.kTimeoutMs);    
-*/
+
     CommandScheduler.getInstance().registerSubsystem(this);
   }
 
@@ -86,12 +86,10 @@ public class TalonShooterSubsystem extends SubsystemBase {
   public void setShooterVelocityLeft(double revolutionsPerMinute)
   {
     System.out.println("attempting left motor percent output");
-    leftMotor.set(0.2);//ControlMode.PercentOutput, 0.1);
-    /*
+//    leftMotor.set(0.2);//ControlMode.PercentOutput, 0.1);
     leftMotor.set(
       ControlMode.Velocity,
       this.convertShooterRpmToMotorUnitsPer100Ms(revolutionsPerMinute, TalonShooterSubsystem.topShooterGearRatio));
-    */
   }
 
   /**
@@ -100,11 +98,9 @@ public class TalonShooterSubsystem extends SubsystemBase {
    */
   public void setShooterVelocityRight(double revolutionsPerMinute)
   {
-    /* 
     rightMotor.set(
       ControlMode.Velocity,
       this.convertShooterRpmToMotorUnitsPer100Ms(revolutionsPerMinute, TalonShooterSubsystem.topShooterGearRatio));
-      */
   }
 
   public void setAllStop() {
