@@ -123,7 +123,7 @@ public class TalonShooterSubsystem extends SubsystemBase {
   }
 
   public void setShooterSpeedRight(double speed) {
-//    rightMotor.set(ControlMode.PercentOutput, speed);
+    rightMotor.set(ControlMode.PercentOutput, speed);
   }
 
   private double convertShooterRpmToMotorUnitsPer100Ms(double targetRpm, double targetGearRatio)
