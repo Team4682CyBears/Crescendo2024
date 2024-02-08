@@ -17,7 +17,9 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import static frc.robot.control.Constants.*;
 
-import com.kauailabs.navx.frc.AHRS;
+// Use navx2 workaround from https://github.com/Thunderstamps/navx2workaround, 
+// rather than com.kauailabs.navx.frc.AHRS.  To fix MXP/SPI discconnect issues. 
+import frc.robot.NavX.AHRS;
 
 import frc.robot.control.Constants;
 import frc.robot.common.EulerAngle;
@@ -97,9 +99,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
           new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0)
   );
 
-  // The important thing about how you configure your gyroscope is that rotating the robot counter-clockwise should
-  // cause the angle reading to increase until it wraps back over to zero.
-  private final AHRS swerveNavx = new AHRS(SPI.Port.kMXP, (byte) 200); // NavX connected over MXP
+  // private byte navxSampleRate = InstalledHardware.navx2Installed? (byte) 50 : (byte) 200;
+  private byte navxSampleRate = (byte) 50;
+  private final AHRS swerveNavx = new AHRS(SPI.Port.kMXP, navxSampleRate); // NavX connected over MXP
   private double yawOffsetDegrees = 0.0;
   private double pitchOffsetDegrees = 0.0;
   private double rollOffsetDegrees = 0.0;
