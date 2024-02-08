@@ -13,6 +13,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.subsystems.CameraSubsystem;
@@ -54,7 +55,6 @@ public class AllignRelativeToTagCommand extends CommandBase{
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("Made allign command");
     done = false;
     drivetrainsubsystem.drive(new ChassisSpeeds(0, 0, 0));
   }
@@ -62,25 +62,27 @@ public class AllignRelativeToTagCommand extends CommandBase{
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute(){
-    VisionMeasurement relativeMeasurement = camerasubsystem.getVisionBotPoseInTargetSpace();
-    if (relativeMeasurement.getRobotPosition() != null){
+    Pose2d relativeMeasurement = camerasubsystem.getVisionBotPoseInTargetSpace();
+    if (relativeMeasurement != null){
       double xVelocity = 0.0;
       double yVelocity = 0.0;
       double rotVelocity = 0.0;
 
-      if(Math.abs(targetX - relativeMeasurement.getRobotPosition().getX()) >= tolerance){
-        xVelocity = transformPID.calculate(relativeMeasurement.getRobotPosition().getX(), 0.0);
+      if(Math.abs(targetX - relativeMeasurement.getX()) >= tolerance){
+        xVelocity = transformPID.calculate(relativeMeasurement.getX(), 0.0);
         xVelocity = -1 * MotorUtils.clamp(xVelocity, -velocityFactor, velocityFactor);
       }
 
-      if(Math.abs(targetY - relativeMeasurement.getRobotPosition().getY()) >= tolerance){
-        yVelocity = transformPID.calculate(relativeMeasurement.getRobotPosition().getY(), 0.0);
+      if(Math.abs(targetY - relativeMeasurement.getY()) >= tolerance){
+        yVelocity = transformPID.calculate(relativeMeasurement.getY(), 0.0);
         yVelocity = -1 * MotorUtils.clamp(yVelocity, -velocityFactor, velocityFactor);
       }
-
+      System.out.println("xVelocity: " + xVelocity);
+      System.out.println("yVelocity: " + yVelocity);
       drivetrainsubsystem.drive(new ChassisSpeeds(xVelocity, yVelocity, rotVelocity));
     }
     else{
+      System.out.println("no tag in sight");
       done = true;
     }
   }
@@ -95,8 +97,13 @@ public class AllignRelativeToTagCommand extends CommandBase{
   // Returns true when the command should end.
   @Override
   public boolean isFinished(){
-    VisionMeasurement relativeMeasurement = camerasubsystem.getVisionBotPoseInTargetSpace();
-    done = Math.abs(targetX - relativeMeasurement.getRobotPosition().getX()) < tolerance && Math.abs(targetY - relativeMeasurement.getRobotPosition().getY()) < tolerance;
+    Pose2d relativeMeasurement = camerasubsystem.getVisionBotPoseInTargetSpace();
+    if (relativeMeasurement != null){
+      done = Math.abs(targetX - relativeMeasurement.getX()) < tolerance && Math.abs(targetY - relativeMeasurement.getY()) < tolerance;
+    }
+    else{
+      done = true;
+    }
     return done;
   }
 }

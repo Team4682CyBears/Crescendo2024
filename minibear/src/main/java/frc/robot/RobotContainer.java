@@ -70,8 +70,10 @@ public class RobotContainer {
     System.out.println(">>>> Finished initializing button bindings.");
 
     // zero the wrist
-    new ZeroWristEncoderCommand(this.subsystems.getWristSubsystem());
-    System.out.println(">>>> Finished Initing Wrist");
+    if (InstalledHardware.wristInstalled){
+      new ZeroWristEncoderCommand(this.subsystems.getWristSubsystem());
+      System.out.println(">>>> Finished Initing Wrist");
+    }
 
     this.initializeDebugDashboard();
     this.autonomousChooser = new AutonomousChooser(subsystems);
@@ -84,7 +86,7 @@ public class RobotContainer {
     final TestTrajectories testTrajectories = new TestTrajectories(subsystems.getDriveTrainSubsystem().getTrajectoryConfig());
 
     SmartDashboard.putData("Allign relative to tag", 
-      new AllignRelativeToTagCommand(this.subsystems.getDriveTrainSubsystem(), this.subsystems.getCameraSubsystem(), 3.0, 1.0, 0.0, 7.0));
+      new AllignRelativeToTagCommand(this.subsystems.getDriveTrainSubsystem(), this.subsystems.getCameraSubsystem(), 1.0, 0.0, 0.0, 7.0));
 
     // Command to drive the chassis for zeroing the swerve modules.
     SmartDashboard.putData("Drive Forward Robot Centric",
@@ -106,7 +108,9 @@ public class RobotContainer {
     SmartDashboard.putData("Print NavX State",
         new InstantCommand(this.subsystems.getDriveTrainSubsystem()::printState));
 
-    SmartDashboard.putData("Zero Wrist", new ZeroWristEncoderCommand(this.subsystems.getWristSubsystem()));
+    if (InstalledHardware.wristInstalled){
+      SmartDashboard.putData("Zero Wrist", new ZeroWristEncoderCommand(this.subsystems.getWristSubsystem()));
+    }
   }
 
   /**

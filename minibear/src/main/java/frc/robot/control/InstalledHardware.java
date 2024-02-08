@@ -53,8 +53,8 @@ public class InstalledHardware {
     public static final boolean applyBasicDriveToPointButtonsToDriverXboxController = false;
 
     // Intake Related Hardware
-    public static final boolean intakeInstalled = true;
+    public static final boolean intakeInstalled = false;
 
     // Wrist Related
-    public static final boolean wristInstalled = true;
+    public static final boolean wristInstalled = false;
 }

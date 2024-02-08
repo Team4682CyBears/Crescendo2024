@@ -800,6 +800,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
 
     SmartDashboard.putNumber("RobotFieldHeadingDegrees", this.getGyroscopeRotation().getDegrees() );
+
     // getGyroscopeRotation() should be the same as currentPosition.getRotation after one call to swerveOdometry.update in periodic
     SmartDashboard.putNumber("RobotFieldXCoordinateMeters", currentPosition.getX());
     SmartDashboard.putNumber("RobotFieldYCoordinateMeters", currentPosition.getY());
