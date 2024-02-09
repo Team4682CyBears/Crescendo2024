@@ -16,6 +16,9 @@ public class TalonShootAtSpeedCommand extends CommandBase {
 
   public TalonShootAtSpeedCommand(TalonShooterSubsystem theShooterSubsystem) {
     shooterSubsystem = theShooterSubsystem;
+    SmartDashboard.putNumber("ShooterLeftSpeed", leftSpeedDefault);
+    SmartDashboard.putNumber("ShooterRightSpeed", rightSpeedDefault);
+
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooterSubsystem);
   }
@@ -27,7 +30,7 @@ public class TalonShootAtSpeedCommand extends CommandBase {
     System.out.println("init of TalonShootAtSpeedCommand ... ");
     // get speeds from SmartDashboard. Valid values from [0.0, 1.0]
     double leftSpeed = SmartDashboard.getNumber("ShooterLeftSpeed", leftSpeedDefault);
-    double rightSpeed = SmartDashboard.getNumber("ShooterRightSpeedDefault", rightSpeedDefault);
+    double rightSpeed = SmartDashboard.getNumber("ShooterRightSpeed", rightSpeedDefault);
     leftRpm = leftSpeed * baseRpm;
     rightRpm = rightSpeed * baseRpm; 
     System.out.println("Setting left motor speed to " + leftSpeed);
