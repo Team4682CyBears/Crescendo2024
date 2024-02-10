@@ -20,7 +20,6 @@ import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.common.VisionMeasurement;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.common.MotorUtils;
-
 /**
  * Implements a command.
  */
@@ -34,6 +33,7 @@ public class AllignRelativeToTagCommand extends CommandBase{
   private PIDController transformPID = new PIDController(1.0, 0.0, 0.0);
   private PIDController rotationPID = new PIDController(1.0, 0.0, 0.0);
   private final double tolerance = 0.05;
+  private Pose2d startingPosition;
 
   private DrivetrainSubsystem drivetrainsubsystem = null;
   private CameraSubsystem camerasubsystem = null;;
@@ -56,6 +56,7 @@ public class AllignRelativeToTagCommand extends CommandBase{
   @Override
   public void initialize() {
     done = false;
+    startingPosition = drivetrainsubsystem.getRobotPosition;
     drivetrainsubsystem.drive(new ChassisSpeeds(0, 0, 0));
   }
 
