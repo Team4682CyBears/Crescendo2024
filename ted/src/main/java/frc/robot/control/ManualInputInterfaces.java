@@ -29,6 +29,7 @@ import frc.robot.commands.ButtonPressCommand;
 import frc.robot.commands.DriveToPointCommand;
 import frc.robot.commands.DriveTrajectoryCommand;
 import frc.robot.commands.ShootAtSpeedCommand;
+import frc.robot.commands.SteerMotorToAngleCommand;
 
 public class ManualInputInterfaces {
 
@@ -148,6 +149,31 @@ public class ManualInputInterfaces {
           );
         System.out.println("FINISHED registering this.driverController.a().whileTrue() ... ");
       }
+
+      if(subsystemCollection.getSteerMotorSubsystem() != null) {
+        System.out.println("STARTING Registering this.driverController.y().whileTrue() ... ");
+        this.driverController.y().whileTrue(
+            new ParallelCommandGroup(
+              new SteerMotorToAngleCommand(subsystemCollection.getSteerMotorSubsystem(), 0.0),
+              new ButtonPressCommand(
+                "driverController.y()",
+                "SteerMotorToAngleCommand - 0.0 degrees")
+              )
+          );
+        System.out.println("FINISHED registering this.driverController.y().whileTrue() ... ");
+
+        System.out.println("STARTING Registering this.driverController.b().whileTrue() ... ");
+        this.driverController.b().whileTrue(
+            new ParallelCommandGroup(
+              new SteerMotorToAngleCommand(subsystemCollection.getSteerMotorSubsystem(), 180.0),
+              new ButtonPressCommand(
+                "driverController.y()",
+                "SteerMotorToAngleCommand - 180.0 degrees")
+              )
+          );
+        System.out.println("FINISHED registering this.driverController.b().whileTrue() ... ");
+      }
+
 
       if(subsystemCollection.getDriveTrainSubsystem() != null){
         // left bumper press will decrement power factor  

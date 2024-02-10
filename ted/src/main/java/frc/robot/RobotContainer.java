@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -18,12 +19,15 @@ import frc.robot.subsystems.DrivetrainPowerSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.PowerDistributionPanelWatcherSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.SteerMotorSubsystem;
+import frc.robot.commands.DriveTimeCommand;
 
 public class RobotContainer {
 
   private SubsystemCollection subsystems = new SubsystemCollection();
 
   public RobotContainer() {
+
     // init the pdp watcher
     this.initializePowerDistributionPanelWatcherSubsystem();
 
@@ -33,13 +37,22 @@ public class RobotContainer {
     // init the input system 
     this.initializeManualInputInterfaces();
 
-    // shooter subsystem init - later
+    // shooter subsystem init
     this.initializeShooterSubsystem();
+
+    // steer motor subsystem init
+    this.initializeSteerMotorSubsystem();
 
     // Configure the button bindings
     System.out.println(">>>> Initializing button bindings.");
     this.subsystems.getManualInputInterfaces().initializeButtonCommandBindings();
     System.out.println(">>>> Finished initializing button bindings.");
+
+      SmartDashboard.putData(
+        "DriveForwardRobotCentric",
+        new DriveTimeCommand(this.subsystems.getDriveTrainSubsystem(),
+        new ChassisSpeeds(0.6, 0.0, 0.0),
+        3.0));
   }
 
   public Command getAutonomousCommand() {
@@ -113,7 +126,7 @@ public class RobotContainer {
   }
 
   /**
-   * A method to init the arm
+   * A method to init the shooter
    */
   private void initializeShooterSubsystem() {
     if(InstalledHardware.shooterInstalled) {
@@ -132,6 +145,22 @@ public class RobotContainer {
       System.out.println("FAIL: ShooterSubsystem");
     }
   }
+
+    /**
+   * A method to init the steer motor subsystem
+   */
+  private void initializeSteerMotorSubsystem() {
+    if(InstalledHardware.leftFrontDriveInstalledForTesting) {
+      // The robot's subsystems and commands are defined here...
+      subsystems.setSteerMotorSubsystem(new SteerMotorSubsystem());
+      SmartDashboard.putData("Debug: SteerMotorSubsystem", subsystems.getSteerMotorSubsystem());
+      System.out.println("SUCCESS: SteerMotorSubsystem");
+    }
+    else {
+      System.out.println("FAIL: SteerMotorSubsystem");
+    }
+  }
+
 
   private static double deadband(double value, double deadband) {
     if (Math.abs(value) > deadband) {

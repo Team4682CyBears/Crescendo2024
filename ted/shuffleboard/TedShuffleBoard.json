@@ -94,6 +94,19 @@
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
+          },
+          "5,1": {
+            "size": [
+              4,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/DriveForwardRobotCentric",
+              "_title": "SmartDashboard/DriveForwardRobotCentric",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
           }
         }
       }
@@ -221,8 +234,7 @@
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 1.0,
               "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul",
-              "Visible data/SmartDashboard/EveryBotMotorOvercurrentProtection": true
+              "Y-axis/Unit": "ul"
             }
           },
           "0,2": {
@@ -358,7 +370,7 @@
   "windowGeometry": {
     "x": -2.0,
     "y": 0.0,
-    "width": 1936.0,
+    "width": 1521.3333740234375,
     "height": 842.0
   }
 }

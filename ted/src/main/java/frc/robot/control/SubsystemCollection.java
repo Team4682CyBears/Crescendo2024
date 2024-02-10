@@ -13,6 +13,7 @@ import frc.robot.subsystems.DrivetrainPowerSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.PowerDistributionPanelWatcherSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.SteerMotorSubsystem;
 
 public class SubsystemCollection
 {
@@ -22,8 +23,9 @@ public class SubsystemCollection
     // declaring and init subsystems  
     private DrivetrainSubsystem driveTrainSubsystem = null;
     private DrivetrainPowerSubsystem driveTrainPowerSubsystem = null;
-    private ShooterSubsystem shooterSubsystem = null;
     private PowerDistributionPanelWatcherSubsystem powerDistributionPanelWatcherSubsystem = null; 
+    private ShooterSubsystem shooterSubsystem = null;
+    private SteerMotorSubsystem steerMotorSubsystem = null;
 
     /**
      * Default constructor
@@ -36,13 +38,15 @@ public class SubsystemCollection
     public DrivetrainPowerSubsystem getDriveTrainPowerSubsystem() { return driveTrainPowerSubsystem; }
     public void setDriveTrainPowerSubsystem(DrivetrainPowerSubsystem value) { driveTrainPowerSubsystem = value; }
 
-    public ShooterSubsystem getShooterSubsystem() { return shooterSubsystem; }
-    public void setShooterSubsystem(ShooterSubsystem value) { shooterSubsystem = value; }
-
     public PowerDistributionPanelWatcherSubsystem getPowerDistributionPanelWatcherSubsystem() { return powerDistributionPanelWatcherSubsystem; }
     public void setPowerDistributionPanelWatcherSubsystem(PowerDistributionPanelWatcherSubsystem value) { powerDistributionPanelWatcherSubsystem = value; }
     
     public ManualInputInterfaces getManualInputInterfaces() { return manualInput; }
     public void setManualInputInterfaces(ManualInputInterfaces value) { manualInput = value; }
 
+    public ShooterSubsystem getShooterSubsystem() { return shooterSubsystem; }
+    public void setShooterSubsystem(ShooterSubsystem value) { shooterSubsystem = value; }
+
+    public SteerMotorSubsystem getSteerMotorSubsystem() { return steerMotorSubsystem; }
+    public void setSteerMotorSubsystem(SteerMotorSubsystem value) { steerMotorSubsystem = value; }
 }

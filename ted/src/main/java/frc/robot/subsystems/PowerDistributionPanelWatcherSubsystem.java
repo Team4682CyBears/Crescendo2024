@@ -25,11 +25,12 @@ public class PowerDistributionPanelWatcherSubsystem extends SubsystemBase {
     private ArrayList<PortSpy> myList = new ArrayList<PortSpy>();
 
     public PowerDistributionPanelWatcherSubsystem() {
+        /* 
         System.out.println("CTOR PowerDistributionPanelWatcherSubsystem");
         for(var next: Thread.currentThread().getStackTrace()) {
             System.out.println(next.toString());
         }
-
+        */
 //        CommandScheduler.getInstance().registerSubsystem(this);
     }
 

@@ -1,3 +1,13 @@
+// ************************************************************
+// Bishop Blanchet Robotics
+// Home of the Cybears
+// FRC - Crescendo - 2024
+// File: ShooterSubsystem.java
+// Intent: Forms a command to make the XBox controller rumble/vibrate.
+// ************************************************************
+
+// ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
+
 package frc.robot.commands;
 
 import frc.robot.subsystems.ShooterSubsystem;

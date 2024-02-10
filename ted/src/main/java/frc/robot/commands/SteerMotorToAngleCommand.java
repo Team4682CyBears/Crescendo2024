@@ -2,50 +2,51 @@
 // Bishop Blanchet Robotics
 // Home of the Cybears
 // FRC - Crescendo - 2024
-// File: ShootAtSpeedCommand.java
-// Intent: Forms a command to make the XBox controller rumble/vibrate.
+// File: SteerMotorToAngleCommand.java
+// Intent: Forms a command to set a steer motor to a test spot / angle.
 // ************************************************************
 
 // ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.SteerMotorSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class ShootAtSpeedCommand extends Command {
+public class SteerMotorToAngleCommand extends Command {
 
-  private ShooterSubsystem shooterSubsystem;
-  private double baseRpm = 2500;
-  private double leftRpm = baseRpm * 1.0;
-  private double rightRpm = baseRpm * 0.5;
+  private SteerMotorSubsystem steerMotorSubsystem;
   private boolean isDone = false;
+  private double targetDegrees = 0.0;
 
-  public ShootAtSpeedCommand(ShooterSubsystem theShooterSubsystem) {
-    shooterSubsystem = theShooterSubsystem;
+  public SteerMotorToAngleCommand(SteerMotorSubsystem steerSubsystem, double degrees) {
+    steerMotorSubsystem = steerSubsystem;
+    targetDegrees = degrees;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooterSubsystem);
+    addRequirements(steerMotorSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     isDone = false;
-    System.out.println("init of ShootAtSpeedCommand ... ");
+    steerMotorSubsystem.setSteerMotorAngle(targetDegrees);
+    System.out.println("init of SteerMotorToAngleCommand ... ");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    this.shooterSubsystem.setShooterVelocityLeft(leftRpm);
-//    this.shooterSubsystem.setShooterVelocityRight(rightRpm);
+    if(!isDone) {
+        isDone = steerMotorSubsystem.isAtTargetPosition();
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     isDone = true;
-    System.out.println("end of ShootAtSpeedCommand ... ");
+    System.out.println("end of SteerMotorToAngleCommand ... ");
   }
 
   // Returns true when the command should end.
