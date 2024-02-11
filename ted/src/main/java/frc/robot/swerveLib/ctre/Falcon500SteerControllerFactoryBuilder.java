@@ -228,7 +228,7 @@ WAS:
                 if (++resetIteration >= ENCODER_RESET_ITERATIONS) {
                     resetIteration = 0;
                     double absoluteAngle = absoluteEncoder.getAbsoluteAngle();
-                    motor.setPosition(absoluteAngle / motorEncoderPositionCoefficient);
+                    motor.setPosition((absoluteAngle / (2.0 * Math.PI)) / motorEncoderPositionCoefficient);
                     currentAngleRadians = absoluteAngle;
                 }
             } else {

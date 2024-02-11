@@ -18,9 +18,6 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
-import frc.robot.swerveHelpers.AbsoluteEncoder;
-import frc.robot.swerveHelpers.AbsoluteEncoderFactory;
-
 import frc.robot.swerveLib.ctre.CanCoderAbsoluteConfiguration;
 import frc.robot.swerveLib.ctre.CtreUtils;
 
@@ -45,8 +42,8 @@ public class CanCoderFactoryBuilder {
 
             CANcoder encoder = new CANcoder(configuration.getId());
             CtreUtils.checkCtreError(encoder.getConfigurator().apply(canCoderConfig, 250), "Failed to configure CANCoder");
-            
-            return new EncoderImplementation(encoder, Math.toDegrees(configuration.getOffset()));
+
+            return new EncoderImplementation(encoder, CtreUtils.convertFromRadiansToNormalizedDegrees(configuration.getOffset()));
         };
     }
 
@@ -63,7 +60,7 @@ public class CanCoderFactoryBuilder {
 
         @Override
         public double getAbsoluteAngle() {
-            double angle = Math.toRadians(encoder.getAbsolutePosition().getValueAsDouble());
+            double angle = 2.0 * Math.PI * encoder.getAbsolutePosition().getValueAsDouble();
             // check error condition in case getAbsolutePosition failed
             // This will be non-zero (zero is ErrorCode.OK) if the frame was not received.
             // https://www.chiefdelphi.com/t/official-sds-mk3-mk4-code/397109/99
@@ -86,12 +83,12 @@ public class CanCoderFactoryBuilder {
 
         @Override
         public double getOffset(){
-            return encoder.getPosition().getValueAsDouble();
+            return 2.0 * Math.PI * encoder.getPosition().getValueAsDouble();
         }
 
         @Override
         public void setOffset(){
-            CtreUtils.checkCtreError(encoder.setPosition(offsetDegrees, 250), "Failed to configure CANCoder Offset!");
+            CtreUtils.checkCtreError(encoder.setPosition(offsetDegrees/360.0, 250), "Failed to configure CANCoder Offset!");
         }
     }
 

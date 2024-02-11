@@ -19,7 +19,6 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import frc.robot.swerveLib.AbsoluteEncoder;
 import frc.robot.swerveLib.AbsoluteEncoderFactory;
-import edu.wpi.first.math.MathUtil;
 
 public class CanCoderFactoryBuilder {
     private Direction direction = Direction.COUNTER_CLOCKWISE;
@@ -36,13 +35,14 @@ public class CanCoderFactoryBuilder {
     }
 */
     public CanCoderFactoryBuilder withDirection(Direction direction) {
+        System.out.println("shouldn't be here #0!");
         this.direction = direction;
         return this;
     }
 
-    public AbsoluteEncoderFactory<CanCoderAbsoluteConfiguration> build() {
+    public AbsoluteEncoderFactory<CanCoderAbsoluteConfiguration> build()  {
         return configuration -> {
-            
+            System.out.println("shouldn't be here #1!");
 // WAS:            CANCoderConfiguration config = new CANCoderConfiguration();
             CANcoderConfiguration canCoderConfig = new CANcoderConfiguration();
 // WAS:            config.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360;
@@ -71,11 +71,13 @@ public class CanCoderFactoryBuilder {
 
         private EncoderImplementation(CANcoder encoder) {
             this.encoder = encoder;
+            System.out.println("shouldn't be here #2!");
         }
 
         @Override
         public double getAbsoluteAngle() {
-            double angle = Math.toRadians(encoder.getAbsolutePosition().getValueAsDouble());
+            System.out.println("shouldn't be here #3!");
+            double angle = 2.0 * Math.PI * encoder.getAbsolutePosition().getValueAsDouble();
             angle %= 2.0 * Math.PI;
             if (angle < 0.0) {
                 angle += 2.0 * Math.PI;

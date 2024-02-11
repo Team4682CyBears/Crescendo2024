@@ -48,11 +48,13 @@ public class RobotContainer {
     this.subsystems.getManualInputInterfaces().initializeButtonCommandBindings();
     System.out.println(">>>> Finished initializing button bindings.");
 
+    if(this.subsystems.getDriveTrainPowerSubsystem() != null) {
       SmartDashboard.putData(
         "DriveForwardRobotCentric",
         new DriveTimeCommand(this.subsystems.getDriveTrainSubsystem(),
         new ChassisSpeeds(0.6, 0.0, 0.0),
         3.0));
+    }
   }
 
   public Command getAutonomousCommand() {
