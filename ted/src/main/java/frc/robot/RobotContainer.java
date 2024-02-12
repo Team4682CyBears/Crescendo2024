@@ -19,6 +19,7 @@ import frc.robot.subsystems.DrivetrainPowerSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.PowerDistributionPanelWatcherSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.SteerMotorCanCoderSubsystem;
 import frc.robot.subsystems.SteerMotorSubsystem;
 import frc.robot.commands.DriveTimeCommand;
 
@@ -42,6 +43,9 @@ public class RobotContainer {
 
     // steer motor subsystem init
     this.initializeSteerMotorSubsystem();
+
+    // steer motor can coder subsystem init
+    this.initializeSteerMotorCanCoderSubsystem();
 
     // Configure the button bindings
     System.out.println(">>>> Initializing button bindings.");
@@ -148,7 +152,7 @@ public class RobotContainer {
     }
   }
 
-    /**
+  /**
    * A method to init the steer motor subsystem
    */
   private void initializeSteerMotorSubsystem() {
@@ -163,6 +167,20 @@ public class RobotContainer {
     }
   }
 
+  /**
+   * A method to init the steer motor subsystem
+   */
+  private void initializeSteerMotorCanCoderSubsystem() {
+    if(InstalledHardware.leftFrontDriveCanCoderInstalledForTesting) {
+      // The robot's subsystems and commands are defined here...
+      subsystems.setSteerMotorCanCoderSubsystem(new SteerMotorCanCoderSubsystem());
+      SmartDashboard.putData("Debug: SteerMotorCanCoderSubsystem", subsystems.getSteerMotorCanCoderSubsystem());
+      System.out.println("SUCCESS: SteerMotorCanCoderSubsystem");
+    }
+    else {
+      System.out.println("FAIL: SteerMotorCanCoderSubsystem");
+    }
+  }
 
   private static double deadband(double value, double deadband) {
     if (Math.abs(value) > deadband) {

@@ -48,5 +48,4 @@ public final class CtreUtils {
         double normalized = CtreUtils.convertFromRadiansToNormalizedDecmil(radians) * 360.0;
         return normalized;
     }
-
 }
