@@ -81,6 +81,24 @@ public class ManualInputInterfaces {
   }
 
   /**
+   * A method to get the arcade arm Z componet being input from humans
+   * @return - a double value associated with the magnitude of the Z componet
+   */
+  public double getInputClimberArmsZ()
+  {
+    // use the co drivers right Z to represent the vertical movement
+    // and multiply by -1.0 as xbox reports values flipped
+    return -1.0 * coDriverController.getLeftY();
+  }
+
+  public double getInputShooterAngle() 
+  {
+    // use the co drivers right Z to represent the vertical movement
+    // and multiply by -1.0 as xbox reports values flipped
+    return coDriverController.getRightY();
+  }
+
+  /**
    * A method to initialize various commands to the numerous buttons.
    * Need delayed bindings as some subsystems during testing won't always be there.
    */
@@ -106,14 +124,6 @@ public class ManualInputInterfaces {
       DrivetrainSubsystem localDrive = subsystemCollection.getDriveTrainSubsystem();
 
       if(localDrive != null){
-
-        if(InstalledHardware.applyBasicDriveToPointButtonsToDriverXboxController){
-          this.bindBasicDriveToPointButtonsToDriverXboxController();
-        }
-        if(InstalledHardware.applyDriveTrajectoryButtonsToDriverXboxController){
-          this.bindDriveTrajectoryButtonsToDriverXboxController();
-        }
-
         // Back button zeros the gyroscope (as in zero yaw)
         this.driverController.back().onTrue(
           new ParallelCommandGroup(
@@ -125,6 +135,15 @@ public class ManualInputInterfaces {
             )
           );
     }
+
+      this.driverController.b().onTrue(
+          new ParallelCommandGroup(
+            new IntakeCommand(this.subsystemCollection),
+            new ButtonPressCommand(
+              "driverController.b()",
+              "intake")
+            )
+          );
 
       // x button press will stop all      
       this.driverController.x().onTrue(
@@ -176,6 +195,7 @@ public class ManualInputInterfaces {
 
 
       if(subsystemCollection.getDriveTrainSubsystem() != null){
+      if(localDrive != null){
         // left bumper press will decrement power factor  
         this.driverController.leftBumper().onTrue(
           new ParallelCommandGroup(
@@ -200,212 +220,63 @@ public class ManualInputInterfaces {
           );
         // right trigger press will put drivetrain in immoveable stance
         // DO NOT require drivetrainSubsystem here.  We need the default command to continue to decel the robot.    
-        this.driverController.rightTrigger().onTrue(
+        this.driverController.leftTrigger().onTrue(
           new ParallelCommandGroup(
             new InstantCommand(
               () -> subsystemCollection.getDriveTrainSubsystem().setSwerveDriveMode(SwerveDriveMode.IMMOVABLE_STANCE)
             ),
             new ButtonPressCommand(
-            "driverController.rightTrigger()",
+            "driverController.leftTrigger()",
             "immoveable stance")
           )
         );
         // right trigger de-press will put drivetrain in normal drive mode  
-        this.driverController.rightTrigger().onFalse(
+        this.driverController.leftTrigger().onFalse(
           new ParallelCommandGroup(
             new InstantCommand(
               () -> subsystemCollection.getDriveTrainSubsystem().setSwerveDriveMode(SwerveDriveMode.NORMAL_DRIVING)
             ),
             new ButtonPressCommand(
-            "driverController.rightTrigger()",
+            "driverController.Trigger()",
             "normal driving")
           )
         );
-        // left trigger press will ramp down drivetrain to reduced speed mode 
-        this.driverController.leftTrigger().onTrue(
+        // right trigger press will ramp down drivetrain to reduced speed mode 
+        this.driverController.rightTrigger().onTrue(
           new ParallelCommandGroup(
             new InstantCommand(subsystemCollection.getDriveTrainPowerSubsystem()::setReducedPowerReductionFactor,
             subsystemCollection.getDriveTrainPowerSubsystem()),
             new ButtonPressCommand(
-            "driverController.leftTrigger()",
+            "driverController.rightTrigger()",
             "ramp down to reduced speed")
           )
         );
-        // left trigger de-press will ramp up drivetrain to max speed
-        this.driverController.leftTrigger().onFalse(
+        // right trigger de-press will ramp up drivetrain to max speed
+        this.driverController.rightTrigger().onFalse(
           new ParallelCommandGroup(
             new InstantCommand(subsystemCollection.getDriveTrainPowerSubsystem()::resetPowerReductionFactor,
             subsystemCollection.getDriveTrainPowerSubsystem()),
             new ButtonPressCommand(
-            "driverController.leftTrigger()",
+            "driverController.rightTrigger()",
             "ramp up to default speed")
           )
         );
+        // Dpad will control fine placement mode
+        this.driverController.povRight().whileTrue(
+          new DriveFinePlacementCommand(
+            localDrive, 
+            -1 * Constants.FinePlacementRotationalVelocity
+            )
+          ); 
+        
+        this.driverController.povLeft().whileTrue(
+          new DriveFinePlacementCommand(
+            localDrive, 
+            Constants.FinePlacementRotationalVelocity
+            )
+          ); 
       }      
     }
-  }
-
-  /**
-   * A method that will bind buttons for basic drive to point commands to driver controller
-   */
-  private void bindBasicDriveToPointButtonsToDriverXboxController() {
-    // basic x translation negative one meter
-    this.driverController.a().onTrue(
-      new ParallelCommandGroup(
-        new DriveToPointCommand(
-          this.subsystemCollection.getDriveTrainSubsystem(),
-          this.getTargetPosition(-1.0, 0.0, 0.0)),
-        new ButtonPressCommand(
-          "driverController.a()",
-          "-1.0m X translation DriveToPointCommand")).withTimeout(10.0)
-    );
-    // basic x translation positive one meter
-    this.driverController.y().onTrue(
-      new ParallelCommandGroup(
-        new DriveToPointCommand(
-          this.subsystemCollection.getDriveTrainSubsystem(),
-          this.getTargetPosition(1.0, 0.0, 0.0)),
-        new ButtonPressCommand(
-          "driverController.y()",
-          "1.0m X translation DriveToPointCommand")).withTimeout(10.0)
-    );      
-    // basic y translation negative one meter
-    this.driverController.b().onTrue(
-      new ParallelCommandGroup(
-        new DriveToPointCommand(
-          this.subsystemCollection.getDriveTrainSubsystem(),
-          this.getTargetPosition(0.0, -1.0, 0.0)),
-        new ButtonPressCommand(
-          "driverController.b()",
-          "-1.0m y translation DriveToPointCommand")).withTimeout(10.0)
-    );
-    // basic y translation positive one meter
-    this.driverController.x().onTrue(
-      new ParallelCommandGroup(
-        new DriveToPointCommand(
-          this.subsystemCollection.getDriveTrainSubsystem(),
-          this.getTargetPosition(0.0, 1.0, 0.0)),
-        new ButtonPressCommand(
-          "driverController.x()",
-          "1.0m y translation DriveToPointCommand")).withTimeout(10.0)
-    );
-    // basic rotation of 90 degrees
-    this.driverController.leftBumper().onTrue(
-      new ParallelCommandGroup(
-        new DriveToPointCommand(
-          this.subsystemCollection.getDriveTrainSubsystem(),
-          this.getTargetPosition(0.0, 0.0, 90.0)),
-        new ButtonPressCommand(
-          "driverController.leftBumper()",
-          "90 degree rotation DriveToPointCommand")).withTimeout(10.0)
-    );
-    // basic rotation of -90 degrees
-    this.driverController.rightBumper().onTrue(
-      new ParallelCommandGroup(
-        new DriveToPointCommand(
-          this.subsystemCollection.getDriveTrainSubsystem(),
-          this.getTargetPosition(0.0, 0.0, -90.0)),
-        new ButtonPressCommand(
-          "driverController.rightBumper()",
-          "-90 degree rotation DriveToPointCommand")).withTimeout(10.0)
-    );
-  }
-
-  /**
-   * A method that will bind buttons to have the robot flow through various trajectories
-   */
-  private void bindDriveTrajectoryButtonsToDriverXboxController() {
-    // trajectories
-    TestTrajectories testTrajectories = new TestTrajectories(subsystemCollection.getDriveTrainSubsystem().getTrajectoryConfig());
-
-    // traverse forward arc trajectory
-    this.driverController.a().onTrue(
-      new ParallelCommandGroup(
-        new SequentialCommandGroup(
-          new InstantCommand(subsystemCollection.getDriveTrainSubsystem()::zeroRobotPosition),
-          new DriveTrajectoryCommand(
-            this.subsystemCollection.getDriveTrainSubsystem(),
-            testTrajectories.traverseForwardArc)),
-        new ButtonPressCommand(
-          "driverController.a()",
-          "testTrajectories.traverseForwardArc")).withTimeout(10.0)
-    );
-    // traverse backward arc trajectory
-    this.driverController.b().onTrue(
-      new ParallelCommandGroup(
-        new SequentialCommandGroup(
-          new InstantCommand(() -> subsystemCollection.getDriveTrainSubsystem()
-          .setRobotPosition(testTrajectories.traverseBackwardArcStartPosition)),
-          new DriveTrajectoryCommand(
-            this.subsystemCollection.getDriveTrainSubsystem(),
-            testTrajectories.traverseBackwardArc)),
-        new ButtonPressCommand(
-          "driverController.b()",
-          "testTrajectories.traverseBackwardArc")).withTimeout(10.0)
-    );
-    // traverse simple forward trajectory
-    this.driverController.x().onTrue(
-      new ParallelCommandGroup(
-        new SequentialCommandGroup(
-          new InstantCommand(subsystemCollection.getDriveTrainSubsystem()::zeroRobotPosition),
-          new DriveTrajectoryCommand(
-            this.subsystemCollection.getDriveTrainSubsystem(),
-            testTrajectories.traverseSimpleForward)),
-        new ButtonPressCommand(
-          "driverController.x()",
-          "testTrajectories.traverseSimpleForward")).withTimeout(10.0)
-    );
-    // traverse simple left trajectory
-    this.driverController.y().onTrue(
-      new ParallelCommandGroup(
-        new SequentialCommandGroup(
-          new InstantCommand(subsystemCollection.getDriveTrainSubsystem()::zeroRobotPosition),
-          new DriveTrajectoryCommand(
-            this.subsystemCollection.getDriveTrainSubsystem(),
-            testTrajectories.traverseSimpleLeft)),
-        new ButtonPressCommand(
-          "driverController.y()",
-          "testTrajectories.traverseSimpleLeft")).withTimeout(10.0)
-    );
-    // traverse turn 270 trajectory
-    this.driverController.leftBumper().onTrue(
-      new ParallelCommandGroup(
-        new SequentialCommandGroup(
-          new InstantCommand(subsystemCollection.getDriveTrainSubsystem()::zeroRobotPosition),
-          new DriveTrajectoryCommand(
-            this.subsystemCollection.getDriveTrainSubsystem(),
-            testTrajectories.traverseTurn270)),
-        new ButtonPressCommand(
-          "driverController.leftBumper()",
-          "testTrajectories.traverseTurn270")).withTimeout(10.0)
-    );
-
-    this.driverController.rightBumper().onTrue(
-      new ParallelCommandGroup(
-        new SequentialCommandGroup(
-          new InstantCommand(subsystemCollection.getDriveTrainSubsystem()::zeroRobotPosition),
-          new DriveTrajectoryCommand(
-            this.subsystemCollection.getDriveTrainSubsystem(),
-            testTrajectories.turn90)),
-        new ButtonPressCommand(
-          "driverController.rightBumper()",
-          "testTrajectories.turn90")).withTimeout(10.0)
-    );
-  }
-  
-  /**
-   * A method to do the transformation of current robot position to another position
-   * @param xTranslation
-   * @param yTranslation
-   * @param rotationDegrees
-   * @return
-   */
-  private Pose2d getTargetPosition(double xTranslation, double yTranslation, double rotationDegrees) {
-    Pose2d startPos = this.subsystemCollection.getDriveTrainSubsystem().getRobotPosition();
-    Translation2d theTranslation = new Translation2d(xTranslation, yTranslation);
-    Rotation2d theRotation = Rotation2d.fromDegrees(rotationDegrees);
-    Transform2d theTransform = new Transform2d(theTranslation, theRotation);
-    return startPos.transformBy(theTransform);
   }
   
   /**
@@ -426,7 +297,64 @@ public class ManualInputInterfaces {
           )
         );
 
-      // TODO - what control do we need??
+      this.coDriverController.y().onTrue(
+        new ParallelCommandGroup(
+          new ShooterScoreCommand(
+            this.subsystemCollection),
+          new ButtonPressCommand(
+            "coDriverController.y()",
+              "shooter outtake")
+          )
+      );
+
+      this.coDriverController.b().onTrue(
+        new ParallelCommandGroup(
+          new AmpAndDunkerScoreCommand(
+            this.subsystemCollection),
+          new ButtonPressCommand(
+            "coDriverController.b()",
+              "score to amp or dunker")
+          )
+      );
+
+      this.coDriverController.a().onTrue(
+        new ParallelCommandGroup(
+          new ClimbCommand(
+            this.subsystemCollection),
+          new ButtonPressCommand(
+            "coDriverController.a()",
+              "climb")
+          )
+      );
+
+      this.coDriverController.rightBumper().onTrue(
+          new ParallelCommandGroup(
+            new ShooterToLocationCommand(
+              this.subsystemCollection),
+            new ButtonPressCommand(
+              "coDriverController.rightBumper()",
+              "stow")
+            )
+          );
+
+          this.coDriverController.back().onTrue(
+            new ParallelCommandGroup(
+              new InstantCommand(subsystemCollection.getFeederSubsystem(), FeederMode.FeedToShooter),
+              new ButtonPressCommand(
+                "coDriverController.back()",
+                "send note to shooter")
+              )
+            );
+
+          this.coDriverController.start().onTrue(
+          new ParallelCommandGroup(
+            new InstantCommand(subsystemCollection.getFeederSubsystem(), FeederMode.FeedToDunker),
+            new ButtonPressCommand(
+              "coDriverController.start()",
+              "send note to dunker")
+            )
+          );            
+
     }
   }
 }
