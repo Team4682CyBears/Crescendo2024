@@ -146,6 +146,12 @@ public class RobotContainer {
       // Left stick Y axis -> vertical arm in / out movement
       subsystems.getShooterSubsystem().setDefaultCommand(new ShootAllStopCommand(
         subsystems.getShooterSubsystem()));
+
+      //TODO create ShooterAngleCommand
+      /*subsystems.getShooterSubsystem().setDefaultCommand(new ShooterAngleCommand(
+      subsystems.getShooterSubsystem(),
+      () -> subsystems.getManualInputInterfaces().getInputShooterAngle()));*/
+
     }
     else {
       System.out.println("FAIL: ShooterSubsystem");
@@ -205,8 +211,11 @@ public class RobotContainer {
 
     return value;
   }
-  private void initializeClimberArmsSubsystem() {
-    if(InstalledHardware.verticalArmMotorInstalled) {
+  //TODO create climber arms in InstalledHardware
+  //TODO create climber arms subsystem
+  
+  /*private void initializeClimberArmsSubsystem() {
+    if(InstalledHardware.climberArmMotorInstalled) {
       // The robot's subsystems and commands are defined here...
       subsystems.setClimberArmsSubsystem(new ClimberArmsSubsystem());
       SmartDashboard.putData("Debug: ClimerArmSub", subsystems.getClimberArmsSubsystem());
@@ -222,22 +231,6 @@ public class RobotContainer {
     else {
       System.out.println("FAIL: initializeArms");
     }
-  }
+  }*/
 
-  private void initializeShooterSubsystem() {
-    if(InstalledHardware.ShooterInstalled) {
-      // The robot's subsystems and commands are defined here...
-      subsystems.setShooterSubsystem(new ShooterSubsystem());
-      SmartDashboard.putData("Debug: ShooterSub", subsystems.getShooterSubsystem());
-      System.out.println("SUCCESS: initializeShooter");
-
-      subsystems.getShooterSubsystem().setDefaultCommand(new ShooterAngleCommand(
-      subsystems.getShooterSubsystem(),
-      () -> subsystems.getManualInputInterfaces().getInputShooterAngle()
-      ));
-    }
-    else {
-      System.out.println("FAIL: initializeShooter");
-    }
-  }
 }

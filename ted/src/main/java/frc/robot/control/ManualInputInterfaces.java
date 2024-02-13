@@ -138,7 +138,7 @@ public class ManualInputInterfaces {
 
       this.driverController.b().onTrue(
           new ParallelCommandGroup(
-            new IntakeCommand(this.subsystemCollection),
+            //TODO include actual IntakeCommand here once it's created. 
             new ButtonPressCommand(
               "driverController.b()",
               "intake")
@@ -194,7 +194,6 @@ public class ManualInputInterfaces {
       }
 
 
-      if(subsystemCollection.getDriveTrainSubsystem() != null){
       if(localDrive != null){
         // left bumper press will decrement power factor  
         this.driverController.leftBumper().onTrue(
@@ -218,26 +217,27 @@ public class ManualInputInterfaces {
               "increment power factor")
             )
           );
-        // right trigger press will put drivetrain in immoveable stance
-        // DO NOT require drivetrainSubsystem here.  We need the default command to continue to decel the robot.    
+        // left trigger press will align robot on a target   
         this.driverController.leftTrigger().onTrue(
           new ParallelCommandGroup(
+            //TODO create and add target driving mode here
             new InstantCommand(
-              () -> subsystemCollection.getDriveTrainSubsystem().setSwerveDriveMode(SwerveDriveMode.IMMOVABLE_STANCE)
+              /*() -> subsystemCollection.getDriveTrainSubsystem().setSwerveDriveMode(SwerveDriveMode.TARGET_DRIVING)*/
             ),
             new ButtonPressCommand(
             "driverController.leftTrigger()",
-            "immoveable stance")
+            "align on target")
           )
         );
-        // right trigger de-press will put drivetrain in normal drive mode  
+        // left trigger de-press will put drivetrain in normal drive mode  
         this.driverController.leftTrigger().onFalse(
           new ParallelCommandGroup(
+            //
             new InstantCommand(
-              () -> subsystemCollection.getDriveTrainSubsystem().setSwerveDriveMode(SwerveDriveMode.NORMAL_DRIVING)
+              /*() -> subsystemCollection.getDriveTrainSubsystem().setSwerveDriveMode(SwerveDriveMode.NORMAL_DRIVING)*/
             ),
             new ButtonPressCommand(
-            "driverController.Trigger()",
+            "driverController.leftTrigger()",
             "normal driving")
           )
         );
@@ -263,17 +263,25 @@ public class ManualInputInterfaces {
         );
         // Dpad will control fine placement mode
         this.driverController.povRight().whileTrue(
+          //TODO replace InstantCommand with actual driveFinePlacement command once it exist. 
+            new InstantCommand()
+          /**
           new DriveFinePlacementCommand(
             localDrive, 
             -1 * Constants.FinePlacementRotationalVelocity
-            )
+            )*/
           ); 
         
         this.driverController.povLeft().whileTrue(
+        //TODO replace InstantCommand with actual driveFinePlacement command once it exist. 
+            new InstantCommand()
+          /**  
+
           new DriveFinePlacementCommand(
             localDrive, 
             Constants.FinePlacementRotationalVelocity
             )
+             */
           ); 
       }      
     }
@@ -299,8 +307,7 @@ public class ManualInputInterfaces {
 
       this.coDriverController.y().onTrue(
         new ParallelCommandGroup(
-          new ShooterScoreCommand(
-            this.subsystemCollection),
+          //TODO include an actual ShooterOuttake command here
           new ButtonPressCommand(
             "coDriverController.y()",
               "shooter outtake")
@@ -309,8 +316,7 @@ public class ManualInputInterfaces {
 
       this.coDriverController.b().onTrue(
         new ParallelCommandGroup(
-          new AmpAndDunkerScoreCommand(
-            this.subsystemCollection),
+          //TODO include an actual DunkerOuttake command here
           new ButtonPressCommand(
             "coDriverController.b()",
               "score to amp or dunker")
@@ -319,8 +325,7 @@ public class ManualInputInterfaces {
 
       this.coDriverController.a().onTrue(
         new ParallelCommandGroup(
-          new ClimbCommand(
-            this.subsystemCollection),
+          //TODO include an actual Climb command here
           new ButtonPressCommand(
             "coDriverController.a()",
               "climb")
@@ -329,8 +334,7 @@ public class ManualInputInterfaces {
 
       this.coDriverController.rightBumper().onTrue(
           new ParallelCommandGroup(
-            new ShooterToLocationCommand(
-              this.subsystemCollection),
+            //TODO include an actual ShooterToLocation command here
             new ButtonPressCommand(
               "coDriverController.rightBumper()",
               "stow")
@@ -339,7 +343,10 @@ public class ManualInputInterfaces {
 
           this.coDriverController.back().onTrue(
             new ParallelCommandGroup(
-              new InstantCommand(subsystemCollection.getFeederSubsystem(), FeederMode.FeedToShooter),
+              new InstantCommand(
+                //TODO add FeederSubsystem here
+                //subsystemCollection.getFeederSubsystem(), FeederMode.FeedToShooter
+                ),
               new ButtonPressCommand(
                 "coDriverController.back()",
                 "send note to shooter")
@@ -348,7 +355,10 @@ public class ManualInputInterfaces {
 
           this.coDriverController.start().onTrue(
           new ParallelCommandGroup(
-            new InstantCommand(subsystemCollection.getFeederSubsystem(), FeederMode.FeedToDunker),
+            new InstantCommand(
+              //TODO add FeederSubsystem here
+              //subsystemCollection.getFeederSubsystem(), FeederMode.FeedToDunker
+              ),
             new ButtonPressCommand(
               "coDriverController.start()",
               "send note to dunker")
