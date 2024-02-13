@@ -19,10 +19,14 @@ public final class Constants {
   public static final double talonMaximumRevolutionsPerMinute = 6380;
   public static final double CtreTalonFx500EncoderTicksPerRevolution = 2048; 
 
-  public static final int leftTalonShooterMotorCanId = 1;
-  public static TalonFXInvertType leftTalonShooterMotorDefaultDirection = TalonFXInvertType.Clockwise;  
-  public static final int rightTalonShooterMotorCanId = 10;
-  public static TalonFXInvertType rightTalonShooterMotorDefaultDirection = TalonFXInvertType.CounterClockwise;  
+  public static final int leftTalonShooterMotorCanId = 18;
+  public static TalonFXInvertType leftTalonShooterMotorDefaultDirection = TalonFXInvertType.Clockwise;
+  public static final int leftSecondTalonShooterMotorCanId = 19;
+  public static TalonFXInvertType leftSecondTalonShooterMotorDefaultDirection = TalonFXInvertType.Clockwise;
+  public static final int rightTalonShooterMotorCanId = 20;
+  public static TalonFXInvertType rightTalonShooterMotorDefaultDirection = TalonFXInvertType.CounterClockwise;
+  public static final int rightSecondTalonShooterMotorCanId = 21;
+  public static TalonFXInvertType rightSecondTalonShooterMotorDefaultDirection = TalonFXInvertType.CounterClockwise;   
 
   public static final double neoMaximumRevolutionsPerMinute = 5676;
   public static final double neoEncoderTicksPerRevolution = 42;

@@ -9,7 +9,7 @@ public class TalonShootAtSpeedCommand extends CommandBase {
   private TalonShooterSubsystem shooterSubsystem;
   private double baseRpm = 6500;
   private double leftSpeedDefault = 1.0;
-  private double rightSpeedDefault = 0.5;
+  private double rightSpeedDefault = 0.75;
   private double leftRpm = leftSpeedDefault * baseRpm;
   private double rightRpm = rightSpeedDefault * baseRpm;
   private boolean isDone = false;

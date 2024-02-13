@@ -32,6 +32,9 @@ public class TalonShooterSubsystem extends SubsystemBase {
 
   private WPI_TalonFX leftMotor = new WPI_TalonFX(Constants.leftTalonShooterMotorCanId);
   private WPI_TalonFX rightMotor = new WPI_TalonFX(Constants.rightTalonShooterMotorCanId);
+  private WPI_TalonFX leftSecondMotor = new WPI_TalonFX(Constants.leftSecondTalonShooterMotorCanId);
+  private WPI_TalonFX rightSecondMotor = new WPI_TalonFX(Constants.rightSecondTalonShooterMotorCanId);
+
 
   private Gains leftMotorGains = new Gains(0.50, 0.001, 5, 1023/20660.0, 300, 1.00);
   private Gains rightMotorGains = new Gains(0.50, 0.001, 5, 1023/20660.0, 300, 1.00);
@@ -74,7 +77,45 @@ public class TalonShooterSubsystem extends SubsystemBase {
     rightMotor.config_kF(TalonShooterSubsystem.kPIDLoopIdx, this.rightMotorGains.kF, TalonShooterSubsystem.kTimeoutMs);
     rightMotor.config_kP(TalonShooterSubsystem.kPIDLoopIdx, this.rightMotorGains.kP, TalonShooterSubsystem.kTimeoutMs);
     rightMotor.config_kI(TalonShooterSubsystem.kPIDLoopIdx, this.rightMotorGains.kI, TalonShooterSubsystem.kTimeoutMs);
-    rightMotor.config_kD(TalonShooterSubsystem.kPIDLoopIdx, this.rightMotorGains.kD, TalonShooterSubsystem.kTimeoutMs);    
+    rightMotor.config_kD(TalonShooterSubsystem.kPIDLoopIdx, this.rightMotorGains.kD, TalonShooterSubsystem.kTimeoutMs);
+    
+    leftSecondMotor.configFactoryDefault();
+    leftSecondMotor.setNeutralMode(NeutralMode.Coast);
+    leftSecondMotor.setInverted(Constants.leftTalonShooterMotorDefaultDirection);
+    leftSecondMotor.configNeutralDeadband(TalonShooterSubsystem.kMinDeadband);
+    leftSecondMotor.configSelectedFeedbackSensor(
+      TalonFXFeedbackDevice.IntegratedSensor,
+      TalonShooterSubsystem.kPIDLoopIdx,
+      TalonShooterSubsystem.kTimeoutMs);
+
+    leftSecondMotor.configNominalOutputForward(0, TalonShooterSubsystem.kTimeoutMs);
+    leftSecondMotor.configNominalOutputReverse(0, TalonShooterSubsystem.kTimeoutMs);
+    leftSecondMotor.configPeakOutputForward(1.0, TalonShooterSubsystem.kTimeoutMs);
+    leftSecondMotor.configPeakOutputReverse(-1.0, TalonShooterSubsystem.kTimeoutMs);
+
+    leftSecondMotor.config_kF(TalonShooterSubsystem.kPIDLoopIdx, this.leftMotorGains.kF, TalonShooterSubsystem.kTimeoutMs);
+    leftSecondMotor.config_kP(TalonShooterSubsystem.kPIDLoopIdx, this.leftMotorGains.kP, TalonShooterSubsystem.kTimeoutMs);
+    leftSecondMotor.config_kI(TalonShooterSubsystem.kPIDLoopIdx, this.leftMotorGains.kI, TalonShooterSubsystem.kTimeoutMs);
+    leftSecondMotor.config_kD(TalonShooterSubsystem.kPIDLoopIdx, this.leftMotorGains.kD, TalonShooterSubsystem.kTimeoutMs);
+
+    rightSecondMotor.configFactoryDefault();
+    rightSecondMotor.setNeutralMode(NeutralMode.Coast);
+    rightSecondMotor.setInverted(Constants.rightTalonShooterMotorDefaultDirection);
+    rightSecondMotor.configNeutralDeadband(TalonShooterSubsystem.kMinDeadband);
+    rightSecondMotor.configSelectedFeedbackSensor(
+      TalonFXFeedbackDevice.IntegratedSensor,
+      TalonShooterSubsystem.kPIDLoopIdx,
+      TalonShooterSubsystem.kTimeoutMs);
+
+    rightSecondMotor.configNominalOutputForward(0, TalonShooterSubsystem.kTimeoutMs);
+    rightSecondMotor.configNominalOutputReverse(0, TalonShooterSubsystem.kTimeoutMs);
+    rightSecondMotor.configPeakOutputForward(1.0, TalonShooterSubsystem.kTimeoutMs);
+    rightSecondMotor.configPeakOutputReverse(-1.0, TalonShooterSubsystem.kTimeoutMs);
+
+    rightSecondMotor.config_kF(TalonShooterSubsystem.kPIDLoopIdx, this.rightMotorGains.kF, TalonShooterSubsystem.kTimeoutMs);
+    rightSecondMotor.config_kP(TalonShooterSubsystem.kPIDLoopIdx, this.rightMotorGains.kP, TalonShooterSubsystem.kTimeoutMs);
+    rightSecondMotor.config_kI(TalonShooterSubsystem.kPIDLoopIdx, this.rightMotorGains.kI, TalonShooterSubsystem.kTimeoutMs);
+    rightSecondMotor.config_kD(TalonShooterSubsystem.kPIDLoopIdx, this.rightMotorGains.kD, TalonShooterSubsystem.kTimeoutMs);
 
     CommandScheduler.getInstance().registerSubsystem(this);
   }
@@ -90,6 +131,9 @@ public class TalonShooterSubsystem extends SubsystemBase {
     leftMotor.set(
       ControlMode.Velocity,
       this.convertShooterRpmToMotorUnitsPer100Ms(revolutionsPerMinute, TalonShooterSubsystem.topShooterGearRatio));
+    leftSecondMotor.set(
+      ControlMode.Velocity,
+      this.convertShooterRpmToMotorUnitsPer100Ms(revolutionsPerMinute, TalonShooterSubsystem.topShooterGearRatio));
   }
 
   /**
@@ -99,6 +143,9 @@ public class TalonShooterSubsystem extends SubsystemBase {
   public void setShooterVelocityRight(double revolutionsPerMinute)
   {
     rightMotor.set(
+      ControlMode.Velocity,
+      this.convertShooterRpmToMotorUnitsPer100Ms(revolutionsPerMinute, TalonShooterSubsystem.topShooterGearRatio));
+    rightSecondMotor.set(
       ControlMode.Velocity,
       this.convertShooterRpmToMotorUnitsPer100Ms(revolutionsPerMinute, TalonShooterSubsystem.topShooterGearRatio));
   }
@@ -120,10 +167,12 @@ public class TalonShooterSubsystem extends SubsystemBase {
 
   public void setShooterSpeedLeft(double speed) {
     leftMotor.set(ControlMode.PercentOutput, speed);
+    leftSecondMotor.set(ControlMode.PercentOutput, speed);
   }
 
   public void setShooterSpeedRight(double speed) {
     rightMotor.set(ControlMode.PercentOutput, speed);
+    rightSecondMotor.set(ControlMode.PercentOutput, speed);
   }
 
   private double convertShooterRpmToMotorUnitsPer100Ms(double targetRpm, double targetGearRatio)
