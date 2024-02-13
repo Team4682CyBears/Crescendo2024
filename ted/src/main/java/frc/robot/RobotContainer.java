@@ -18,6 +18,7 @@ import frc.robot.control.SubsystemCollection;
 import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.subsystems.DrivetrainPowerSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PowerDistributionPanelWatcherSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -41,6 +42,9 @@ public class RobotContainer {
 
     // intake subsystem init
     this.initializeIntakeSubsystem();
+
+    // feeder subsystem init
+    this.initializeFeederSubsystem();
 
     // shooter subsystem init
     this.initializeShooterSubsystem();
@@ -115,6 +119,24 @@ public class RobotContainer {
   }
   
   /**
+   * A method to init the feeder subsystem
+   */
+  private void initializeFeederSubsystem(){
+    if(InstalledHardware.feederInstalled){
+      subsystems.setFeederSubsystem(new FeederSubsystem());
+
+      // default command for feeder is to stop
+      subsystems.getFeederSubsystem().setDefaultCommand(
+        new InstantCommand(
+          subsystems.getFeederSubsystem()::setAllStop, 
+          subsystems.getFeederSubsystem()));
+      System.out.println("SUCCESS: FeederSubsystem");
+    } else {
+      System.out.println("FAIL: FeederSubsystem");
+    }
+  }
+
+  /**
    * A method to init the intake subsystem
    */
   private void initializeIntakeSubsystem(){
@@ -130,7 +152,6 @@ public class RobotContainer {
     } else {
       System.out.println("FAIL: IntakeSubsystem");
     }
-
   }
 
   /**

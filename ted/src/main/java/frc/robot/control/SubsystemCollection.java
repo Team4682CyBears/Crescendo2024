@@ -11,6 +11,7 @@
 package frc.robot.control;
 import frc.robot.subsystems.DrivetrainPowerSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PowerDistributionPanelWatcherSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -28,6 +29,7 @@ public class SubsystemCollection
     private ShooterSubsystem shooterSubsystem = null;
     private SteerMotorSubsystem steerMotorSubsystem = null;
     private IntakeSubsystem intakeSubsystem = null;
+    private FeederSubsystem feederSubsystem = null;
 
     /**
      * Default constructor
@@ -48,6 +50,9 @@ public class SubsystemCollection
 
     public IntakeSubsystem getIntakeSubsystem() { return intakeSubsystem; }
     public void setIntakeSubsystem(IntakeSubsystem value) { intakeSubsystem = value; }
+
+    public FeederSubsystem getFeederSubsystem() { return feederSubsystem; }
+    public void setFeederSubsystem(FeederSubsystem value) { feederSubsystem = value; }
 
     public ShooterSubsystem getShooterSubsystem() { return shooterSubsystem; }
     public void setShooterSubsystem(ShooterSubsystem value) { shooterSubsystem = value; }

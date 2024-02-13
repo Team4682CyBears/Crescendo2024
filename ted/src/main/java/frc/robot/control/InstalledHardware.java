@@ -50,6 +50,9 @@ public class InstalledHardware
     // Intake Related Hardware
     public static final boolean intakeInstalled = true;
 
+    // Feeder Related Hardware
+    public static final boolean feederInstalled = true;
+
     // Shooter Related Hardware
     public static final boolean shooterInstalled = false;
 

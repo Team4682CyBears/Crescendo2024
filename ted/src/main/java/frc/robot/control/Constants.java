@@ -111,6 +111,10 @@ public final class Constants {
     public static final int feederMotorCanId = 15;
     public static final int feederToShooterTofCanId = 16;
     public static final int feederToDunkerTofCanId = 17;
+    // feederSpeed is [0.0 .. 1.0]
+    // it runs in one direction for the shooter 
+    // and the opposite direction for the dunker/amp
+    public static final double feederSpeed = 1.0;
 
     // *******************************************************************
     // shooter constants  
