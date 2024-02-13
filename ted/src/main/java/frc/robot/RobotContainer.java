@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.ShootAllStopCommand;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.control.InstalledHardware;
@@ -17,6 +18,7 @@ import frc.robot.control.SubsystemCollection;
 import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.subsystems.DrivetrainPowerSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PowerDistributionPanelWatcherSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SteerMotorSubsystem;
@@ -36,6 +38,9 @@ public class RobotContainer {
 
     // init the input system 
     this.initializeManualInputInterfaces();
+
+    // intake subsystem init
+    this.initializeIntakeSubsystem();
 
     // shooter subsystem init
     this.initializeShooterSubsystem();
@@ -109,6 +114,25 @@ public class RobotContainer {
     }
   }
   
+  /**
+   * A method to init the intake subsystem
+   */
+  private void initializeIntakeSubsystem(){
+    if(InstalledHardware.intakeInstalled){
+      subsystems.setIntakeSubsystem(new IntakeSubsystem());
+
+      // default command for intake is to stop
+      subsystems.getIntakeSubsystem().setDefaultCommand(
+        new InstantCommand(
+          subsystems.getIntakeSubsystem()::setAllStop, 
+          subsystems.getIntakeSubsystem()));
+      System.out.println("SUCCESS: IntakeSubsystem");
+    } else {
+      System.out.println("FAIL: IntakeSubsystem");
+    }
+
+  }
+
   /**
    * A method to init the input interfaces
    */

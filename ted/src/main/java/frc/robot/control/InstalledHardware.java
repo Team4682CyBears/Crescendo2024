@@ -47,6 +47,9 @@ public class InstalledHardware
 
     public static final boolean leftFrontDriveInstalledForTesting = true && !leftFrontDriveInstalled;
 
+    // Intake Related Hardware
+    public static final boolean intakeInstalled = true;
+
     // Shooter Related Hardware
     public static final boolean shooterInstalled = false;
 
