@@ -59,6 +59,10 @@ public class CameraSubsystem extends SubsystemBase {
     }
   }
 
+  public double getTagId(){
+    return table.getEntry("tid").getDouble(0);
+  }
+
   /**
    * a method that returns a vision measurement. 
    * pose portion of the vision measurement is null if there is no valid measurement. 

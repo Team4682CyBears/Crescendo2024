@@ -20,20 +20,24 @@ import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.common.VisionMeasurement;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.common.MotorUtils;
+import edu.wpi.first.math.geometry.Twist2d;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.util.Units;
 /**
  * Implements a command.
  */
 public class AllignRelativeToTagCommand extends CommandBase{
   private boolean done = false;
-  private double tagID;
-  private double targetX;
-  private double targetY;
-  private double targetRot;
+  private double wantedTagId;
+  private Pose2d targetPoseInVisionSpace;
+  private Pose2d targetPositionInRobotSpace;
+  private Pose2d startingPositionInRobotSpace;
   private final double velocityFactor = 0.3;
-  private PIDController transformPID = new PIDController(1.0, 0.0, 0.0);
+  private PIDController xPID = new PIDController(1.0, 0.0, 0.0);
+  private PIDController yPID = new PIDController(1.0, 0.0, 0.0);
   private PIDController rotationPID = new PIDController(1.0, 0.0, 0.0);
-  private final double tolerance = 0.05;
-  private Pose2d startingPosition;
+  private final double transformTolerance = 0.01;
+  private final double rotationTolerance = 5;
 
   private DrivetrainSubsystem drivetrainsubsystem = null;
   private CameraSubsystem camerasubsystem = null;;
@@ -41,13 +45,17 @@ public class AllignRelativeToTagCommand extends CommandBase{
   /**
    * Constructor for command.
    */
-  public AllignRelativeToTagCommand(DrivetrainSubsystem drivetrainSubsystem, CameraSubsystem camerasubsystem, double targetX, double targetY, double targetRot, double tagID) {
+  public AllignRelativeToTagCommand(DrivetrainSubsystem drivetrainSubsystem, CameraSubsystem camerasubsystem, Pose2d targetPoseInVisionSpace, double tagId) {
     this.drivetrainsubsystem = drivetrainSubsystem;
     this.camerasubsystem = camerasubsystem;
-    this.tagID = tagID;
-    this.targetX = targetX;
-    this.targetY = targetY;
-    this.targetRot = targetRot;
+    this.wantedTagId = tagId;
+    this.targetPoseInVisionSpace = targetPoseInVisionSpace;
+
+    rotationPID.enableContinuousInput(-180, 180);
+
+    //TODO for the rotationPID, you need to enable continuous input so that it wraps at -180/180 (if using degrees)
+    // or -pi,+pi if using radians. Like below.. 
+    // rotationPID.enableContinuousInput(min, max);
 
     addRequirements(drivetrainSubsystem);
   }
@@ -56,37 +64,51 @@ public class AllignRelativeToTagCommand extends CommandBase{
   @Override
   public void initialize() {
     done = false;
-    startingPosition = drivetrainsubsystem.getRobotPosition;
+    Pose2d robotPoseInVisionSpace = camerasubsystem.getVisionBotPoseInTargetSpace();
+    if (robotPoseInVisionSpace != null && camerasubsystem.getTagId() == wantedTagId){
+      // find the difference between current pose in vision space and target pose in vision space
+      Twist2d desiredTwist = robotPoseInVisionSpace.log(targetPoseInVisionSpace);
+      startingPositionInRobotSpace = drivetrainsubsystem.getRobotPosition();
+      // apply the twist to the robot's current position
+      targetPositionInRobotSpace = startingPositionInRobotSpace.exp(desiredTwist);
+    }
+    else {
+      System.out.println("no tag in sight");
+      done = true;
+    }
+
     drivetrainsubsystem.drive(new ChassisSpeeds(0, 0, 0));
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute(){
-    Pose2d relativeMeasurement = camerasubsystem.getVisionBotPoseInTargetSpace();
-    if (relativeMeasurement != null){
+      startingPositionInRobotSpace = drivetrainsubsystem.getRobotPosition();
       double xVelocity = 0.0;
       double yVelocity = 0.0;
       double rotVelocity = 0.0;
 
-      if(Math.abs(targetX - relativeMeasurement.getX()) >= tolerance){
-        xVelocity = transformPID.calculate(relativeMeasurement.getX(), 0.0);
+      if(Math.abs(targetPositionInRobotSpace.getX() - startingPositionInRobotSpace.getX()) >= transformTolerance){
+        xVelocity = xPID.calculate(startingPositionInRobotSpace.getX(), targetPositionInRobotSpace.getX());
         xVelocity = -1 * MotorUtils.clamp(xVelocity, -velocityFactor, velocityFactor);
       }
 
-      if(Math.abs(targetY - relativeMeasurement.getY()) >= tolerance){
-        yVelocity = transformPID.calculate(relativeMeasurement.getY(), 0.0);
+      if(Math.abs(targetPositionInRobotSpace.getY() - startingPositionInRobotSpace.getY()) >= transformTolerance){
+        yVelocity = yPID.calculate(startingPositionInRobotSpace.getY(), targetPositionInRobotSpace.getY());
         yVelocity = -1 * MotorUtils.clamp(yVelocity, -velocityFactor, velocityFactor);
       }
+
+      if(Math.abs(targetPositionInRobotSpace.getRotation().getDegrees() - startingPositionInRobotSpace.getRotation().getDegrees()) >= rotationTolerance){
+        rotVelocity = rotationPID.calculate(startingPositionInRobotSpace.getRotation().getDegrees(), targetPositionInRobotSpace.getRotation().getDegrees());
+        rotVelocity = -1 * MotorUtils.clamp(rotVelocity, -velocityFactor, velocityFactor);
+      }
+
       System.out.println("xVelocity: " + xVelocity);
       System.out.println("yVelocity: " + yVelocity);
+      System.out.println("rotVelocity: " + rotVelocity);
       drivetrainsubsystem.drive(new ChassisSpeeds(xVelocity, yVelocity, rotVelocity));
     }
-    else{
-      System.out.println("no tag in sight");
-      done = true;
-    }
-  }
+
 
   // Called once the command ends or is interrupted.
   @Override
@@ -98,13 +120,13 @@ public class AllignRelativeToTagCommand extends CommandBase{
   // Returns true when the command should end.
   @Override
   public boolean isFinished(){
-    Pose2d relativeMeasurement = camerasubsystem.getVisionBotPoseInTargetSpace();
-    if (relativeMeasurement != null){
-      done = Math.abs(targetX - relativeMeasurement.getX()) < tolerance && Math.abs(targetY - relativeMeasurement.getY()) < tolerance;
-    }
-    else{
-      done = true;
-    }
+    startingPositionInRobotSpace = drivetrainsubsystem.getRobotPosition();
+    //todo
+    // for the rotation, you need to wrap the angle around using angleModulus. angleModulus operates in radians, 
+    // so you will need to wrap the angle in radians and then convert to degrees.
+    done = Units.radiansToDegrees(Math.abs(MathUtil.angleModulus((targetPositionInRobotSpace.getRotation().getRadians() - startingPositionInRobotSpace.getRotation().getDegrees())))) <= rotationTolerance
+      && Math.abs(targetPositionInRobotSpace.getX() - startingPositionInRobotSpace.getX()) <= transformTolerance
+      && Math.abs(targetPositionInRobotSpace.getY() - startingPositionInRobotSpace.getY()) <= transformTolerance;
     return done;
   }
 }

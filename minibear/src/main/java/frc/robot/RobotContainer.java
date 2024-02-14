@@ -11,6 +11,8 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -86,7 +88,7 @@ public class RobotContainer {
     final TestTrajectories testTrajectories = new TestTrajectories(subsystems.getDriveTrainSubsystem().getTrajectoryConfig());
 
     SmartDashboard.putData("Allign relative to tag", 
-      new AllignRelativeToTagCommand(this.subsystems.getDriveTrainSubsystem(), this.subsystems.getCameraSubsystem(), 1.0, 0.0, 0.0, 7.0));
+      new AllignRelativeToTagCommand(this.subsystems.getDriveTrainSubsystem(), this.subsystems.getCameraSubsystem(), new Pose2d(new Translation2d(1.0, 0.0), new Rotation2d(0.0)), 7.0));
 
     // Command to drive the chassis for zeroing the swerve modules.
     SmartDashboard.putData("Drive Forward Robot Centric",
