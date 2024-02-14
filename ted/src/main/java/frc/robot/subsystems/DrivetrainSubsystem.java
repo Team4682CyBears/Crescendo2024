@@ -240,7 +240,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * sets the Can Coder offsets
    * @return
    */
-  public void setAbsoluteEncoderOffsets(){
+  public void setAbsoluteEncoderOffsets() throws Exception{
     frontLeftModule.setAbsoluteEncoderOffset();
     frontRightModule.setAbsoluteEncoderOffset();
     backLeftModule.setAbsoluteEncoderOffset();

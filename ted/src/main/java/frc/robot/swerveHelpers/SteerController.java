@@ -16,7 +16,7 @@ public interface SteerController {
 
    double getReferenceAngle();
 
-   void setAbsoluteEncoderOffset();
+   void setAbsoluteEncoderOffset() throws Exception;
    
    void setReferenceAngle(double var1);
 

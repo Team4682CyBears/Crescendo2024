@@ -23,5 +23,5 @@ public interface SwerveModule {
 
     void set(double driveVoltage, double steerAngle);
 
-    void setAbsoluteEncoderOffset();
+    void setAbsoluteEncoderOffset() throws Exception;
 }

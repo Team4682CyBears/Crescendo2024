@@ -77,7 +77,7 @@ public class SwerveModuleFactory<DriveConfiguration, SteerConfiguration> {
         }
 
         @Override
-        public void setAbsoluteEncoderOffset(){
+        public void setAbsoluteEncoderOffset() throws Exception{
             steerController.setAbsoluteEncoderOffset();
         }
 

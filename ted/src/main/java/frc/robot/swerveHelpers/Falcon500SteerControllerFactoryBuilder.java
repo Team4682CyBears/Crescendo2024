@@ -238,7 +238,6 @@ public final class Falcon500SteerControllerFactoryBuilder {
             // Sometimes (~5% of the time) when we initialize, the absolute encoder isn't fully set up, and we don't
             // end up getting a good reading. If we reset periodically this won't matter anymore.
             if (motor.getVelocity().getValueAsDouble() * motorEncoderVelocityCoefficient < ENCODER_RESET_MAX_ANGULAR_VELOCITY) {                
-            /*
                 if (++resetIteration >= ENCODER_RESET_ITERATIONS) {
                     resetIteration = 0;
                     double absoluteAngle = absoluteEncoder.getAbsoluteAngle();
@@ -261,7 +260,6 @@ public final class Falcon500SteerControllerFactoryBuilder {
                         System.out.println("WARNING: Syncing absolute encoder position failed.");
                     }
                 }
-*/
             } else {
                 resetIteration = 0;
             }
@@ -306,7 +304,7 @@ public final class Falcon500SteerControllerFactoryBuilder {
         }
 
         @Override
-        public void setAbsoluteEncoderOffset(){
+        public void setAbsoluteEncoderOffset() throws Exception{
             absoluteEncoder.setOffset();
         }
     }

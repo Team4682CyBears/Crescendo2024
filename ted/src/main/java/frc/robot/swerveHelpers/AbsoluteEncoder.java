@@ -29,5 +29,5 @@ public interface AbsoluteEncoder {
 
     double getOffset();
 
-    void setOffset();
+    void setOffset() throws Exception;
 }

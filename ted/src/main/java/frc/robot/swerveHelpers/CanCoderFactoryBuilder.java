@@ -43,7 +43,7 @@ public class CanCoderFactoryBuilder {
             CANcoder encoder = new CANcoder(configuration.getId());
             CtreUtils.checkCtreError(encoder.getConfigurator().apply(canCoderConfig, 250), "Failed to configure CANCoder");
 
-            return new EncoderImplementation(encoder, CtreUtils.convertFromRadiansToNormalizedDegrees(configuration.getOffset()));
+            return new EncoderImplementation(encoder, Math.toDegrees(configuration.getOffset()));
         };
     }
 
@@ -87,7 +87,10 @@ public class CanCoderFactoryBuilder {
         }
 
         @Override
-        public void setOffset(){
+        public void setOffset() throws Exception{
+            if(true){
+                throw new Exception("Based on code review, seems like this method never gets called!!! ... so why have it?");
+            }
             CtreUtils.checkCtreError(encoder.setPosition(offsetDegrees/360.0, 250), "Failed to configure CANCoder Offset!");
         }
     }

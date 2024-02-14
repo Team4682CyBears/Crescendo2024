@@ -29,7 +29,7 @@ public class SteerMotorCanCoderSubsystem extends SubsystemBase {
     public SteerMotorCanCoderSubsystem() {
         canCoderConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
         canCoderConfig.MagnetSensor.MagnetOffset = CtreUtils.convertFromRadiansToNormalizedDecmil(encoderOffsetDegreesSeed);
-        canCoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+        canCoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
         CtreUtils.checkCtreError(encoder.getConfigurator().apply(canCoderConfig, 250), "Failed to configure CANCoder");
 //        encoder.clearStickyFaults();
     }
@@ -39,8 +39,8 @@ public class SteerMotorCanCoderSubsystem extends SubsystemBase {
         ++counter;
         if(counter % 10 == 0) {
             this.publishStaticistics();
+            this.updateSeedValueFromDashboard();
         }
-        this.updateSeedValueFromDashboard();
     }
 
     @Override
