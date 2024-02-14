@@ -21,7 +21,7 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PowerDistributionPanelWatcherSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.TalonShooterSubsystem;
 import frc.robot.subsystems.SteerMotorSubsystem;
 import frc.robot.commands.DriveTimeCommand;
 
@@ -176,7 +176,7 @@ public class RobotContainer {
   private void initializeShooterSubsystem() {
     if(InstalledHardware.shooterInstalled) {
       // The robot's subsystems and commands are defined here...
-      subsystems.setShooterSubsystem(new ShooterSubsystem());
+      subsystems.setShooterSubsystem(new TalonShooterSubsystem());
       SmartDashboard.putData("Debug: ShooterSubsystem", subsystems.getShooterSubsystem());
       System.out.println("SUCCESS: ShooterSubsystem");
 

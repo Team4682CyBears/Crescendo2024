@@ -28,7 +28,7 @@ import frc.robot.commands.AllStopCommand;
 import frc.robot.commands.ButtonPressCommand;
 import frc.robot.commands.DriveToPointCommand;
 import frc.robot.commands.DriveTrajectoryCommand;
-import frc.robot.commands.ShootAtSpeedCommand;
+import frc.robot.commands.ShooterShootCommand;
 import frc.robot.commands.SteerMotorToAngleCommand;
 
 public class ManualInputInterfaces {
@@ -141,7 +141,7 @@ public class ManualInputInterfaces {
         System.out.println("STARTING Registering this.driverController.a().whileTrue() ... ");
         this.driverController.a().whileTrue(
             new ParallelCommandGroup(
-              new ShootAtSpeedCommand(subsystemCollection.getShooterSubsystem()),
+              new ShooterShootCommand(subsystemCollection.getShooterSubsystem(), subsystemCollection.getFeederSubsystem()),
               new ButtonPressCommand(
                 "driverController.a()",
                 "Shoot at speed!!")

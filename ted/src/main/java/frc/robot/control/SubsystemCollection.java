@@ -14,7 +14,7 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PowerDistributionPanelWatcherSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.TalonShooterSubsystem;
 import frc.robot.subsystems.SteerMotorSubsystem;
 
 public class SubsystemCollection
@@ -26,7 +26,7 @@ public class SubsystemCollection
     private DrivetrainSubsystem driveTrainSubsystem = null;
     private DrivetrainPowerSubsystem driveTrainPowerSubsystem = null;
     private PowerDistributionPanelWatcherSubsystem powerDistributionPanelWatcherSubsystem = null; 
-    private ShooterSubsystem shooterSubsystem = null;
+    private TalonShooterSubsystem shooterSubsystem = null;
     private SteerMotorSubsystem steerMotorSubsystem = null;
     private IntakeSubsystem intakeSubsystem = null;
     private FeederSubsystem feederSubsystem = null;
@@ -54,8 +54,8 @@ public class SubsystemCollection
     public FeederSubsystem getFeederSubsystem() { return feederSubsystem; }
     public void setFeederSubsystem(FeederSubsystem value) { feederSubsystem = value; }
 
-    public ShooterSubsystem getShooterSubsystem() { return shooterSubsystem; }
-    public void setShooterSubsystem(ShooterSubsystem value) { shooterSubsystem = value; }
+    public TalonShooterSubsystem getShooterSubsystem() { return shooterSubsystem; }
+    public void setShooterSubsystem(TalonShooterSubsystem value) { shooterSubsystem = value; }
 
     public SteerMotorSubsystem getSteerMotorSubsystem() { return steerMotorSubsystem; }
     public void setSteerMotorSubsystem(SteerMotorSubsystem value) { steerMotorSubsystem = value; }

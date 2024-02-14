@@ -2,8 +2,8 @@
 // Bishop Blanchet Robotics
 // Home of the Cybears
 // FRC - Crescendo - 2024
-// File: FeedNoteCommand.java
-// Intent: Forms a command to feed the note to the shooter or dunker. 
+// File: ShooterSpinUpCommand.java
+// Intent: Forms a command to spin up the shooter outake motors 
 // ************************************************************
 
 // ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
@@ -11,44 +11,38 @@
 package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.common.FeederMode;
 import frc.robot.control.Constants;
-import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.TalonShooterSubsystem;
 
 /**
- * Forms a command to feed the note to the shooter or dunker
- * Feeder is run until note is detected or timer has expired
+ * Forms a command to intake the note
+ * Intake is run until note is detected or timer has expired
  */
-public class FeedNoteCommand extends Command
+public class ShooterSpinUpCommand extends Command
 {
-  private FeederSubsystem feeder;
+  private TalonShooterSubsystem shooter;
   private Timer timer = new Timer();
   private boolean done = false;
-  private FeederMode direction; 
   
   /** 
-  * Creates a new feeder command 
+  * Creates a new intake command 
   * 
-  * @param feederSubsystem - the feeder subsystem
-  * @param feederMode - the direction for the feeder
+  * @param shooterSubsystem - the intake subsystem
   */
-  public FeedNoteCommand(FeederSubsystem feederSubsystem, FeederMode feederMode)
+  public ShooterSpinUpCommand(TalonShooterSubsystem shooterSubsystem)
   {
-    this.feeder = feederSubsystem;
-    this.direction = feederMode;
+    this.shooter = shooterSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(feeder);
+    addRequirements(shooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize()
   {
-    // set the feeder in the right direction 
-    feeder.setFeederMode(direction);
-    // intentionally *not* setting feeder speed to 0 here. 
-    // If the feeder is currently running, don't stop it. 
+    // intentionally *not* setting shooter speed to 0 here. 
+    // If the shooter is currently running, don't stop it. 
     timer.reset();
     timer.start();
     done = false;
@@ -58,28 +52,24 @@ public class FeedNoteCommand extends Command
   @Override
   public void execute()
   {
-    if (feeder.isShooterNoteDetected() || feeder.isDunkerNoteDetected()){
-      feeder.setAllStop();
-      done = true;
-    } else { // run feeder
-      feeder.setFeederSpeed(Constants.feederSpeed);
-    }
-    if (timer.hasElapsed(Constants.feederTimeoutSeconds))
-    {
-      feeder.setAllStop();
-      done = true;
-    }
+    shooter.setShooterVelocityLeft(Constants.shooterLeftDefaultSpeedRpm);
+    shooter.setShooterVelocityRight(Constants.shooterRightDefaultSpeedRpm);
+  if (timer.hasElapsed(Constants.shooterSpinUpTimeoutSeconds))
+  {
+    shooter.setAllStop();
+    done = true;
+  }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted)
   {
-    // Intentionally *not* setting feeder speed to 0 here. 
-    // the two conditions above (note detected and timer elasped)
+    // Intentionally *not* setting shooter speed to 0 here. 
+    // the timer elapsed conditions above 
     // already stop the motor. 
     // If this command is interrupted, e.g. by the codriver hitting the button multiple times
-    // we don't want to stop and restart the intake. 
+    // we don't want to stop and restart the shooter. 
     // There is a default command registered on this sybsystem that stops the motor if no 
     // other command is running. 
     if(interrupted)

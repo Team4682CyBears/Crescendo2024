@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 public final class Constants {
 
@@ -115,28 +116,45 @@ public final class Constants {
     // it runs in one direction for the shooter 
     // and the opposite direction for the dunker/amp
     public static final double feederSpeed = 1.0;
+    // feeder will run until note is detected or this timeout has expired
+    public static final double feederTimeoutSeconds = 2.0;
 
     // *******************************************************************
     // shooter constants  
-    // TODO change these because they conflict with the drivetrain
-    public static final int leftTalonShooterMotorCanId = 7; // move to 18
+    public static final int leftTopTalonShooterMotorCanId = 18; 
+    public static final int leftBottomTalonShooterMotorCanId = 19;
     public static InvertedValue leftTalonShooterMotorDefaultDirection = InvertedValue.Clockwise_Positive;  
-    public static final int rightTalonShooterMotorCanId = 8; // move to 19
+    public static final int rightTopTalonShooterMotorCanId = 20; 
+    public static final int rightBottomTalonShooterMotorCanId = 21; 
     public static InvertedValue rightTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;  
-    public static final int shooterAngleMotorCanId = 20;
-    public static final int shooterAngleEncoderCanId = 21;
+    public static final int shooterAngleMotorCanId = 22;
+    public static final int shooterAngleEncoderCanId = 23;
+    // TODO depending on which side the motor is mounted, may need to invert this.
+    public static InvertedValue angleTalonShooterMotorDefaultDirection = InvertedValue.Clockwise_Positive;
+    public static final double shooterAngleOffsetDegrees = -0.0;
+    public static SensorDirectionValue shooterAngleSensorDirection = SensorDirectionValue.Clockwise_Positive;
+    public static final double shooterAngleMaxDegrees = 90;
+    public static final double shooterAngleMinDegrees = 0;  
+    // stow angle should be low enough to drive under the stage
+    public static final double shooterAngleStowDegrees = 45; 
+    private static double shooterBaseRpm = 2500;
+    public static final double shooterLeftDefaultSpeedRpm = shooterBaseRpm * 1.0;
+    public static final double shooterRightDefaultSpeedRpm = shooterBaseRpm * 0.75;
+    public static final double shooterSpinUpTimeoutSeconds = 2.0;
+    public static final double shooterAngleToleranceDegrees = 3;
+    public static final double shooterShootDuration = 0.5;
 
     // ******************************************************************
     // climber constants
-    public static final int leftClimberMotorCanId = 22;
-    public static final int rightClimberMotorCanId = 23;
+    public static final int leftClimberMotorCanId = 24;
+    public static final int rightClimberMotorCanId = 25;
     public static final int leftClimberSensorDioId = 1;
     public static final int rightClimberSensorDioId= 2;
 
     // ******************************************************************
     // amp/dunker constants
-    public static final int ampShoulderMotorCanId = 24;
-    public static final int ampOuttakeMotorCanId = 25;
+    public static final int ampShoulderMotorCanId = 26;
+    public static final int ampOuttakeMotorCanId = 27;
   
     // ********************************************************************
     // Controller Constants
