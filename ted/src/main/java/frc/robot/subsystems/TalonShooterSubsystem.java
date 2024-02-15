@@ -15,6 +15,7 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.StrictFollower;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -55,9 +56,12 @@ public class TalonShooterSubsystem extends SubsystemBase {
   final VoltageOut rightTopVoltageController = new VoltageOut(0);
   private TalonFX rightBottomMotor = new TalonFX(Constants.rightBottomTalonShooterMotorCanId);
   final VoltageOut rightBottomVoltageController = new VoltageOut(0);
-  private TalonFX angleMotor = new TalonFX(Constants.shooterAngleMotorCanId);
-  private CANcoder angleEncoder = new CANcoder(Constants.shooterAngleEncoderCanId);
-  private final MotionMagicVoltage angleVoltageController = new MotionMagicVoltage(0);
+  private TalonFX angleLeftMotor = new TalonFX(Constants.shooterLeftAngleMotorCanId);
+  private TalonFX angleRightMotor = new TalonFX(Constants.shooterRightAngleMotorCanId);
+  private CANcoder angleEncoder = new CANcoder(Constants.shooterLeftAngleEncoderCanId);
+  private final MotionMagicVoltage angleLeftVoltageController = new MotionMagicVoltage(0);
+  // angleRightMotor follows angleLeftMotor, so it doesn't need its own VoltageController
+
 
   // Converted old settings to new settings using calculator at:
   // https://v6.docs.ctr-electronics.com/en/stable/docs/migration/migration-guide/closed-loop-guide.html
@@ -75,13 +79,16 @@ public class TalonShooterSubsystem extends SubsystemBase {
   public TalonShooterSubsystem() {
     configureOutfeedMotors();
     configureAngleEncoder();
-    configureAngleMotor();    
+    configureAngleMotors();    
     /* Make control requests synchronous */
     leftTopVoltageController.UpdateFreqHz = 0;
     leftBottomVoltageController.UpdateFreqHz = 0;
     rightTopVoltageController.UpdateFreqHz = 0; 
     rightBottomVoltageController.UpdateFreqHz = 0; 
-    angleVoltageController.UpdateFreqHz = 0;
+    angleLeftVoltageController.UpdateFreqHz = 0;
+    // set angleRightMotor to strict-follow angleLeftMotor
+    // strict followers ignore the leader's invert and use their own
+    angleRightMotor.setControl(new StrictFollower(angleLeftMotor.getDeviceID()));
 
     CommandScheduler.getInstance().registerSubsystem(this);
   }
@@ -91,7 +98,7 @@ public class TalonShooterSubsystem extends SubsystemBase {
    * @return angle in degrees
    */
   public double getAngleDegrees(){
-    return rotationsToDegrees(angleMotor.getPosition().getValue());
+    return rotationsToDegrees(angleLeftMotor.getPosition().getValue());
   }
 
   /**
@@ -174,7 +181,8 @@ public class TalonShooterSubsystem extends SubsystemBase {
       "]. Clamped to " + clampedDegrees + ".");
     }
     // use motionMagic voltage control
-    angleMotor.setControl(angleVoltageController.withPosition(degreesToRotations(clampedDegrees)));
+    angleLeftMotor.setControl(angleLeftVoltageController.withPosition(degreesToRotations(clampedDegrees)));
+    // angleRightMotor acts as a follower
   }
 
   /**
@@ -258,15 +266,15 @@ public class TalonShooterSubsystem extends SubsystemBase {
     }
   }
 
-  private void configureAngleMotor() {
+  private void configureAngleMotors() {
     // Config angle motor
     TalonFXConfiguration angleConfigs = new TalonFXConfiguration();
     angleConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     angleConfigs.ClosedLoopGeneral.ContinuousWrap = true;
-    angleConfigs.MotorOutput.Inverted = Constants.angleTalonShooterMotorDefaultDirection;
+    angleConfigs.MotorOutput.Inverted = Constants.angleLeftTalonShooterMotorDefaultDirection;
     // FeedbackConfigs
     angleConfigs.Slot0 = angleMotorGains;
-    angleConfigs.Feedback.FeedbackRemoteSensorID = Constants.shooterAngleEncoderCanId;
+    angleConfigs.Feedback.FeedbackRemoteSensorID = Constants.shooterLeftAngleEncoderCanId;
     angleConfigs.Feedback.FeedbackRotorOffset = degreesToRotations(Constants.shooterAngleOffsetDegrees);
     angleConfigs.Feedback.SensorToMechanismRatio = angleMotorGearRatio;
     // TODO not sure how/if this works
@@ -278,10 +286,18 @@ public class TalonShooterSubsystem extends SubsystemBase {
     angleConfigs.MotionMagic.MotionMagicExpo_kV = 0.12 * angleMotorGearRatio;
     angleConfigs.MotionMagic.MotionMagicExpo_kA = 0.1;
     // apply configs
-    StatusCode response = angleMotor.getConfigurator().apply(angleConfigs);
+    StatusCode response = angleLeftMotor.getConfigurator().apply(angleConfigs);
     if (!response.isOK()) {
       System.out.println(
-          "TalonFX ID " + angleMotor.getDeviceID() + " failed config with error " + response.toString());
+          "TalonFX ID " + angleLeftMotor.getDeviceID() + " failed config with error " + response.toString());
+    }
+    // change invert for angleRightMotor
+    angleConfigs.MotorOutput.Inverted = Constants.angleRightTalonShooterMotorDefaultDirection;
+    // apply configs
+    response = angleRightMotor.getConfigurator().apply(angleConfigs);
+    if (!response.isOK()) {
+      System.out.println(
+          "TalonFX ID " + angleRightMotor.getDeviceID() + " failed config with error " + response.toString());
     }
   }
 

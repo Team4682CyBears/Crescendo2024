@@ -127,10 +127,12 @@ public final class Constants {
     public static final int rightTopTalonShooterMotorCanId = 20; 
     public static final int rightBottomTalonShooterMotorCanId = 21; 
     public static InvertedValue rightTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;  
-    public static final int shooterAngleMotorCanId = 22;
-    public static final int shooterAngleEncoderCanId = 23;
-    // TODO depending on which side the motor is mounted, may need to invert this.
-    public static InvertedValue angleTalonShooterMotorDefaultDirection = InvertedValue.Clockwise_Positive;
+    public static final int shooterLeftAngleMotorCanId = 22;
+    public static final int shooterRightAngleMotorCanId = 23;
+    public static final int shooterLeftAngleEncoderCanId = 24;
+    // TODO depending on which side the motor is mounted, may need to invert these.
+    public static InvertedValue angleLeftTalonShooterMotorDefaultDirection = InvertedValue.Clockwise_Positive;
+    public static InvertedValue angleRightTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;
     public static final double shooterAngleOffsetDegrees = -0.0;
     public static SensorDirectionValue shooterAngleSensorDirection = SensorDirectionValue.Clockwise_Positive;
     public static final double shooterAngleMaxDegrees = 90;
@@ -146,15 +148,15 @@ public final class Constants {
 
     // ******************************************************************
     // climber constants
-    public static final int leftClimberMotorCanId = 24;
-    public static final int rightClimberMotorCanId = 25;
+    public static final int leftClimberMotorCanId = 25;
+    public static final int rightClimberMotorCanId = 26;
     public static final int leftClimberSensorDioId = 1;
     public static final int rightClimberSensorDioId= 2;
 
     // ******************************************************************
     // amp/dunker constants
-    public static final int ampShoulderMotorCanId = 26;
-    public static final int ampOuttakeMotorCanId = 27;
+    public static final int ampShoulderMotorCanId = 27;
+    public static final int ampOuttakeMotorCanId = 28;
   
     // ********************************************************************
     // Controller Constants
@@ -162,7 +164,7 @@ public final class Constants {
 
     // ********************************************************************
     // PowerDistributionPanel Constants
-    public static final int currentPowerDistributionPanelCanId = 19;
+    public static final int currentPowerDistributionPanelCanId = 29;
     public static final ModuleType currentPowerDistributionPanelType = ModuleType.kRev;
     public static final double overcurrentRumbleTimeSeconds = 0.25;
     // TODO remove these if not needed
