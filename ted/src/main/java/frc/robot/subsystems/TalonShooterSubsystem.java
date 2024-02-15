@@ -275,7 +275,7 @@ public class TalonShooterSubsystem extends SubsystemBase {
     // FeedbackConfigs
     angleConfigs.Slot0 = angleMotorGains;
     angleConfigs.Feedback.FeedbackRemoteSensorID = Constants.shooterLeftAngleEncoderCanId;
-    angleConfigs.Feedback.FeedbackRotorOffset = degreesToRotations(Constants.shooterAngleOffsetDegrees);
+    // angleConfigs.Feedback.FeedbackRotorOffset = degreesToRotations(Constants.shooterAngleOffsetDegrees);
     angleConfigs.Feedback.SensorToMechanismRatio = angleMotorGearRatio;
     // TODO not sure how/if this works
     angleConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
