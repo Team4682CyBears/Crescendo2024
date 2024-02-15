@@ -137,10 +137,10 @@ public final class Constants {
     public static final double shooterAngleMinDegrees = 0;  
     // stow angle should be low enough to drive under the stage
     public static final double shooterAngleStowDegrees = 45; 
-    private static double shooterBaseRpm = 2500;
+    private static double shooterBaseRpm = 6500;
     public static final double shooterLeftDefaultSpeedRpm = shooterBaseRpm * 1.0;
     public static final double shooterRightDefaultSpeedRpm = shooterBaseRpm * 0.75;
-    public static final double shooterSpinUpTimeoutSeconds = 2.0;
+    public static final double shooterSpinUpTimeoutSeconds = 5.0;
     public static final double shooterAngleToleranceDegrees = 3;
     public static final double shooterShootDuration = 0.5;
 

@@ -137,7 +137,7 @@ public class ManualInputInterfaces {
           )
       );
 
-      if(subsystemCollection.getShooterSubsystem() != null) {
+      if((subsystemCollection.getShooterSubsystem() != null) && (subsystemCollection.getFeederSubsystem() != null)) {
         System.out.println("STARTING Registering this.driverController.a().whileTrue() ... ");
         this.driverController.a().whileTrue(
             new ParallelCommandGroup(

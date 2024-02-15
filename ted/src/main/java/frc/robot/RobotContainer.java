@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.ShootAllStopCommand;
+import frc.robot.commands.ShooterSpinUpCommand;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.control.InstalledHardware;
 import frc.robot.control.ManualInputInterfaces;
@@ -57,11 +58,16 @@ public class RobotContainer {
     this.subsystems.getManualInputInterfaces().initializeButtonCommandBindings();
     System.out.println(">>>> Finished initializing button bindings.");
 
-      SmartDashboard.putData(
-        "DriveForwardRobotCentric",
-        new DriveTimeCommand(this.subsystems.getDriveTrainSubsystem(),
-        new ChassisSpeeds(0.6, 0.0, 0.0),
-        3.0));
+    SmartDashboard.putData(
+      "DriveForwardRobotCentric",
+      new DriveTimeCommand(this.subsystems.getDriveTrainSubsystem(),
+      new ChassisSpeeds(0.6, 0.0, 0.0),
+      3.0));
+
+    SmartDashboard.putData(
+      "Spin Up Shooter",
+      new ShooterSpinUpCommand(this.subsystems.getShooterSubsystem())
+    );
   }
 
   public Command getAutonomousCommand() {
