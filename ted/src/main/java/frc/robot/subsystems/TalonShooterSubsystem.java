@@ -209,7 +209,6 @@ public class TalonShooterSubsystem extends SubsystemBase {
    * @param revolutionsPerMinute - the RPM that the top motor should spin
    */
   public void setShooterVelocityLeft(double revolutionsPerMinute) {
-    System.out.println("attempting left motor percent output");
     final VelocityVoltage velocityTopController = new VelocityVoltage(0);
     final VelocityVoltage velocityBottomController = new VelocityVoltage(0);
     velocityTopController.Slot = kPIDLoopIdx;
@@ -217,6 +216,7 @@ public class TalonShooterSubsystem extends SubsystemBase {
     double revsPerS = this.convertShooterRpmToMotorUnitsPerS(revolutionsPerMinute,
     TalonShooterSubsystem.outfeedShooterGearRatio);
 
+    System.out.println("attempting left shooter velocity at " + revsPerS + " revs/s.");
     leftTopMotor.setControl(velocityTopController.withVelocity(revsPerS));
     leftBottomMotor.setControl(velocityBottomController.withVelocity(revsPerS));
   }
@@ -292,8 +292,8 @@ public class TalonShooterSubsystem extends SubsystemBase {
     talonConfigs.MotorOutput.withDutyCycleNeutralDeadband(kMinDeadband);
     talonConfigs.Slot0 = leftMotorGains;
     // do not config feedbacksource, since the default is the internal one.
-    talonConfigs.Voltage.PeakForwardVoltage = 1;
-    talonConfigs.Voltage.PeakReverseVoltage = -1;
+    talonConfigs.Voltage.PeakForwardVoltage = 12;
+    talonConfigs.Voltage.PeakReverseVoltage = -12;
     // left motor direction
     talonConfigs.MotorOutput.Inverted = Constants.leftTalonShooterMotorDefaultDirection;
     // TODO could not figure out how to set these on new API
