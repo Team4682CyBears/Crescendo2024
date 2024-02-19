@@ -29,5 +29,7 @@ public interface AbsoluteEncoder {
 
     double getOffset();
 
+    int getDeviceId();
+
     void setOffset() throws Exception;
 }

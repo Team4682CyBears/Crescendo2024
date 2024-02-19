@@ -63,6 +63,7 @@ public class SteerMotorSubsystem extends SubsystemBase {
     steerMotorConfigs.Voltage.PeakForwardVoltage = 12;
     steerMotorConfigs.Voltage.PeakReverseVoltage = -12;
     steerMotorConfigs.MotorOutput.Inverted = Constants.leftTalonShooterMotorDefaultDirection;
+//    steerMotorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
     // Retry config apply up to 5 times, report if failure
     StatusCode status = StatusCode.StatusCodeNotInitialized;
@@ -73,6 +74,9 @@ public class SteerMotorSubsystem extends SubsystemBase {
     if(!status.isOK()) {
       System.out.println("Could not apply configs to left motor, error code: " + status.toString());
     }
+    steerMotor.setNeutralMode(NeutralModeValue.Brake);
+    steerMotor.setPosition(steerMotorPositionUnits);
+
   }
 
   /**
@@ -129,9 +133,11 @@ public class SteerMotorSubsystem extends SubsystemBase {
     if(this.isAtTargetPosition()) { //} || steerMovementCounter > 100) {
         steerMotor.setControl(brake);
         if(steerMovementCounter % steerMovementStopCount == 0) {
+          /* 
             System.out.println("Stopping steer motor!," +
                 " current position = " + this.getSteerMotorPosition() + 
                 " round trip? = " + this.isAtTargetPosition());
+                */
         }
         /*
         if(steerMovementCounter == steerMovementStopCount)

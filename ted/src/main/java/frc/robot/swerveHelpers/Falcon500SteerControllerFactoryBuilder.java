@@ -11,6 +11,7 @@
 
 package frc.robot.swerveHelpers;
 
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -153,16 +154,18 @@ public final class Falcon500SteerControllerFactoryBuilder {
             }
 
             TalonFX motor = new TalonFX(steerConfiguration.getMotorPort());
-            CtreUtils.checkCtreError(motor.getConfigurator().apply(motorConfiguration), "Failed to configure Falcon 500 settings");
 
-            motorConfiguration.MotorOutput.Inverted = (moduleConfiguration.isSteerInverted() ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive);
+//            motorConfiguration.MotorOutput.Inverted = (moduleConfiguration.isSteerInverted() ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive);
+            motorConfiguration.MotorOutput.Inverted = (moduleConfiguration.isSteerInverted() ? InvertedValue.CounterClockwise_Positive : InvertedValue.Clockwise_Positive);
+            System.out.println("Using motor inversion of: " + motorConfiguration.MotorOutput.Inverted.toString());
             motorConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
             Double absFractionalRotation = absoluteEncoder.getAbsoluteAngle() / (2 * Math.PI);
             if (absoluteEncoder.getLastError() == StatusCode.OK) {
                 // if we were able to read the absolute encoder, then try to set the sensor position
+                System.out.println("Setting position of motor " + motor.getDeviceID() + " to : " + absFractionalRotation / sensorPositionCoefficient);
                 CtreUtils.checkCtreError(
-                    motor.setPosition(absFractionalRotation * sensorPositionCoefficient, CAN_TIMEOUT_MS),
+                    motor.setPosition(absFractionalRotation / sensorPositionCoefficient, CAN_TIMEOUT_MS),
                     "WARNING: Failed to set Falcon 500 encoder position.");
             } else {
                 // abs encoder is synced periodically, every 10s.  If reading the sensor fails, wait 10s before enabling the robot. 
@@ -174,6 +177,11 @@ public final class Falcon500SteerControllerFactoryBuilder {
                 motor.getPosition().setUpdateFrequency(STATUS_FRAME_GENERAL_PERIOD_MS, CAN_TIMEOUT_MS),
                 "Failed to configure Falcon status frame period"
             );
+
+            // various steer motor configs that help to keep the motor encoder aligned with what the CANCoder is reporting
+            motorConfiguration.Feedback.FeedbackRemoteSensorID = absoluteEncoder.getDeviceId();
+            motorConfiguration.Feedback.SensorToMechanismRatio = sensorPositionCoefficient; // not sure if this should be 1/sensorPositionCoefficient or sensorPositionCoefficient
+            motorConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
             
             // apply all motor configs
             motor.getConfigurator().apply(motorConfiguration);
@@ -225,18 +233,23 @@ public final class Falcon500SteerControllerFactoryBuilder {
 
         @Override
         public void setReferenceAngle(double referenceAngleRadians) {
-            int targetMotor = 2;
+            /*           
+            int targetMotor = Constants.FRONT_RIGHT_MODULE_STEER_MOTOR;
             ++modCounter;
+            */
             double currentAngleRadians = 2.0 * Math.PI * motor.getPosition().getValue() * motorEncoderPositionCoefficient;
+            /*
             if(modCounter % 200 == this.motor.getDeviceID() && targetMotor == this.motor.getDeviceID()) {
                 System.out.println("*************** --> " + this.motor.getDeviceID());
                 System.out.println("0. referenceAngleRadians == " + referenceAngleRadians);
                 System.out.println("1. currentAngleRadians  == " + currentAngleRadians);
             }
+            */
 
             // Reset the NEO's encoder periodically when the module is not rotating.
             // Sometimes (~5% of the time) when we initialize, the absolute encoder isn't fully set up, and we don't
             // end up getting a good reading. If we reset periodically this won't matter anymore.
+            /*
             if (motor.getVelocity().getValueAsDouble() * motorEncoderVelocityCoefficient < ENCODER_RESET_MAX_ANGULAR_VELOCITY) {                
                 if (++resetIteration >= ENCODER_RESET_ITERATIONS) {
                     resetIteration = 0;
@@ -244,15 +257,13 @@ public final class Falcon500SteerControllerFactoryBuilder {
                     if (absoluteEncoder.getLastError() == StatusCode.OK){
                         if (Math.abs(MathUtil.angleModulus(absoluteAngle - currentAngleRadians)) 
                         > absAngleTolRadians){
-                            if(targetMotor == this.motor.getDeviceID()) {
-                                System.out.println("WARNING: Large error encountered when syncing absolute encoder from " + 
-                                    currentAngleRadians + " to " + absoluteAngle + ".");
-                            }
+                            System.out.println("WARNING: Large error encountered when syncing absolute encoder from " + 
+                                currentAngleRadians + " to " + absoluteAngle + ".");
                         }
                         double updatedPosition = (absoluteAngle / (2.0 * Math.PI)) / motorEncoderPositionCoefficient;
-                        if(targetMotor == this.motor.getDeviceID()) {
-                            System.out.println("2. updatedPosition  == " + updatedPosition);
-                        }
+//                        if(targetMotor == this.motor.getDeviceID()) {
+//                            System.out.println("2. updatedPosition  == " + updatedPosition);
+//                        }
                         motor.setPosition(updatedPosition);
 //                        motor.setPosition(absoluteAngle / motorEncoderPositionCoefficient);
                         currentAngleRadians = absoluteAngle;    
@@ -263,14 +274,18 @@ public final class Falcon500SteerControllerFactoryBuilder {
             } else {
                 resetIteration = 0;
             }
+            */
+
             double currentAngleRadiansMod = currentAngleRadians % (2.0 * Math.PI);
             if (currentAngleRadiansMod < 0.0) {
                 currentAngleRadiansMod += 2.0 * Math.PI;
             }
 
+            /*
             if(modCounter % 200 == this.motor.getDeviceID() && targetMotor == this.motor.getDeviceID()) {
                 System.out.println("3. currentAngleRadiansMod  == " + currentAngleRadiansMod);
             }
+             */
 
             // The reference angle has the range [0, 2pi) but the Falcon's encoder can go above that
             double adjustedReferenceAngleRadians = referenceAngleRadians + currentAngleRadians - currentAngleRadiansMod;
@@ -279,15 +294,19 @@ public final class Falcon500SteerControllerFactoryBuilder {
             } else if (referenceAngleRadians - currentAngleRadiansMod < -Math.PI) {
                 adjustedReferenceAngleRadians += 2.0 * Math.PI;
             }
+            /*
             if(modCounter % 200 == this.motor.getDeviceID() && targetMotor == this.motor.getDeviceID()) {
                 System.out.println("4. adjustedReferenceAngleRadians  == " + adjustedReferenceAngleRadians);
             }
+             */
 
             // does little without next line
             double nextPosition = (adjustedReferenceAngleRadians / (2.0 * Math.PI)) / motorEncoderPositionCoefficient;
+            /*
             if(modCounter % 200 == this.motor.getDeviceID() && targetMotor == this.motor.getDeviceID()) {
                 System.out.println("5. nextPosition  == " + nextPosition);
             }
+            */
             this.motor.setControl(positionVoltage.withPosition(nextPosition));
 
             this.referenceAngleRadians = referenceAngleRadians;

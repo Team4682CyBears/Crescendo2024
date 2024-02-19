@@ -22,7 +22,7 @@ import frc.robot.swerveLib.ctre.CanCoderAbsoluteConfiguration;
 import frc.robot.swerveLib.ctre.CtreUtils;
 
 public class CanCoderFactoryBuilder {
-    private Direction direction = Direction.COUNTER_CLOCKWISE;
+    private Direction direction = Direction.CLOCKWISE; // seems like less jump using CLOCKWISE!
 
     public CanCoderFactoryBuilder withDirection(Direction direction) {
         this.direction = direction;
@@ -39,6 +39,7 @@ public class CanCoderFactoryBuilder {
             // fix wheel jump issues caused by CANcoder turning opposite direction of motor
 // WAS:            config.sensorDirection = false;
             canCoderConfig.MagnetSensor.SensorDirection = (direction == Direction.CLOCKWISE ? SensorDirectionValue.Clockwise_Positive : SensorDirectionValue.CounterClockwise_Positive);
+            System.out.println("Using sensor direction of: " + canCoderConfig.MagnetSensor.SensorDirection.toString());
 
             CANcoder encoder = new CANcoder(configuration.getId());
             CtreUtils.checkCtreError(encoder.getConfigurator().apply(canCoderConfig, 250), "Failed to configure CANCoder");
@@ -84,6 +85,11 @@ public class CanCoderFactoryBuilder {
         @Override
         public double getOffset(){
             return 2.0 * Math.PI * encoder.getPosition().getValueAsDouble();
+        }
+
+        @Override
+        public int getDeviceId(){
+            return this.encoder.getDeviceID();
         }
 
         @Override

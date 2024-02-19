@@ -24,7 +24,7 @@ public class SteerMotorCanCoderSubsystem extends SubsystemBase {
     private CANcoder encoder = new CANcoder(Constants.FRONT_LEFT_MODULE_STEER_ENCODER);
     private CANcoderConfiguration canCoderConfig = new CANcoderConfiguration();
     private int counter = 0;
-    private double encoderOffsetDegreesSeed = Constants.FRONT_LEFT_MODULE_STEER_OFFSET;
+    private double encoderOffsetDegreesSeed = Math.toDegrees(Constants.FRONT_LEFT_MODULE_STEER_OFFSET);
 
     public SteerMotorCanCoderSubsystem() {
         canCoderConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
@@ -32,6 +32,7 @@ public class SteerMotorCanCoderSubsystem extends SubsystemBase {
         canCoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
         CtreUtils.checkCtreError(encoder.getConfigurator().apply(canCoderConfig, 250), "Failed to configure CANCoder");
 //        encoder.clearStickyFaults();
+        SmartDashboard.putNumber("SteerEncoder_ModuleOffsetUpdate", this.encoderOffsetDegreesSeed);
     }
  
     @Override
@@ -39,6 +40,8 @@ public class SteerMotorCanCoderSubsystem extends SubsystemBase {
         ++counter;
         if(counter % 10 == 0) {
             this.publishStaticistics();
+        }
+        if(counter % 100 == 0) {
             this.updateSeedValueFromDashboard();
         }
     }
@@ -63,11 +66,18 @@ public class SteerMotorCanCoderSubsystem extends SubsystemBase {
  
     private void updateSeedValueFromDashboard()
     {
-        double dashboardValue = SmartDashboard.getNumber("SteerEncoder_ModuleOffset", this.encoderOffsetDegreesSeed);
+        double dashboardValue = SmartDashboard.getNumber("SteerEncoder_ModuleOffsetUpdate", this.encoderOffsetDegreesSeed);
         if(dashboardValue != this.encoderOffsetDegreesSeed) {
-            this.encoderOffsetDegreesSeed = dashboardValue;            
-            canCoderConfig.MagnetSensor.MagnetOffset = CtreUtils.convertFromRadiansToNormalizedDecmil(encoderOffsetDegreesSeed);
-            CtreUtils.checkCtreError(encoder.getConfigurator().apply(canCoderConfig, 250), "Failed to configure CANCoder");
-        }
+            System.out.println("updated offset degrees from " + this.encoderOffsetDegreesSeed + " to " + dashboardValue);
+            this.encoderOffsetDegreesSeed = dashboardValue;
+            double updateValue = CtreUtils.convertFromRadiansToNormalizedDecmil(Math.toRadians(this.encoderOffsetDegreesSeed));
+            System.out.println("new MagnetSensor.MagnetOffset == " + updateValue);
+            this.canCoderConfig.MagnetSensor.MagnetOffset = updateValue;
+            SmartDashboard.putNumber("SteerEncoder_LastUpdateValue", updateValue);
+            CtreUtils.checkCtreError(this.encoder.getConfigurator().apply(canCoderConfig, 250), "Failed to configure CANCoder");
+
+            this.encoderOffsetDegreesSeed = 0.0;
+            SmartDashboard.putNumber("SteerEncoder_ModuleOffsetUpdate", this.encoderOffsetDegreesSeed);
+       }
     }
 }
