@@ -26,6 +26,7 @@ import frc.robot.swerveLib.ctre.Falcon500SteerConfiguration;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public final class Falcon500SteerControllerFactoryBuilder {
     private static final int CAN_TIMEOUT_MS = 250;
@@ -160,12 +161,25 @@ public final class Falcon500SteerControllerFactoryBuilder {
             System.out.println("Using motor inversion of: " + motorConfiguration.MotorOutput.Inverted.toString());
             motorConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-            Double absFractionalRotation = absoluteEncoder.getAbsoluteAngle() / (2 * Math.PI);
+            // various steer motor configs that help to keep the motor encoder aligned with what the CANCoder is reporting
+            /* produces a wild oscillation in steer motors ... 
+            System.out.println("Steer motor # " + motor.getDeviceID() + " using encoder # " + absoluteEncoder.getDeviceId());
+            motorConfiguration.Feedback.FeedbackRemoteSensorID = absoluteEncoder.getDeviceId();
+            motorConfiguration.Feedback.FeedbackRotorOffset = 0.0;
+            motorConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
+            motorConfiguration.Feedback.RotorToSensorRatio = 1/sensorPositionCoefficient; // ??
+            motorConfiguration.Feedback.SensorToMechanismRatio = 1.0; // 
+            */
+
+            // apply all motor configs
+            motor.getConfigurator().apply(motorConfiguration);
+
+            Double absFractionalRotation = absoluteEncoder.getAbsoluteAngle() / (2.0 * Math.PI);
             if (absoluteEncoder.getLastError() == StatusCode.OK) {
                 // if we were able to read the absolute encoder, then try to set the sensor position
                 System.out.println("Setting position of motor " + motor.getDeviceID() + " to : " + absFractionalRotation / sensorPositionCoefficient);
                 CtreUtils.checkCtreError(
-                    motor.setPosition(absFractionalRotation / sensorPositionCoefficient, CAN_TIMEOUT_MS),
+                    motor.setPosition(absFractionalRotation / sensorPositionCoefficient),
                     "WARNING: Failed to set Falcon 500 encoder position.");
             } else {
                 // abs encoder is synced periodically, every 10s.  If reading the sensor fails, wait 10s before enabling the robot. 
@@ -177,14 +191,6 @@ public final class Falcon500SteerControllerFactoryBuilder {
                 motor.getPosition().setUpdateFrequency(STATUS_FRAME_GENERAL_PERIOD_MS, CAN_TIMEOUT_MS),
                 "Failed to configure Falcon status frame period"
             );
-
-            // various steer motor configs that help to keep the motor encoder aligned with what the CANCoder is reporting
-            motorConfiguration.Feedback.FeedbackRemoteSensorID = absoluteEncoder.getDeviceId();
-            motorConfiguration.Feedback.SensorToMechanismRatio = sensorPositionCoefficient; // not sure if this should be 1/sensorPositionCoefficient or sensorPositionCoefficient
-            motorConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
-            
-            // apply all motor configs
-            motor.getConfigurator().apply(motorConfiguration);
 
             return new ControllerImplementation(motor,
                     sensorPositionCoefficient,
@@ -206,8 +212,6 @@ public final class Falcon500SteerControllerFactoryBuilder {
 
         private double referenceAngleRadians = 0.0;
         private double resetIteration = 0;
-
-        private int modCounter = 0;
 
         private ControllerImplementation(TalonFX motor,
                                          double motorEncoderPositionCoefficient,
@@ -233,59 +237,48 @@ public final class Falcon500SteerControllerFactoryBuilder {
 
         @Override
         public void setReferenceAngle(double referenceAngleRadians) {
-            /*           
-            int targetMotor = Constants.FRONT_RIGHT_MODULE_STEER_MOTOR;
-            ++modCounter;
-            */
-            double currentAngleRadians = 2.0 * Math.PI * motor.getPosition().getValue() * motorEncoderPositionCoefficient;
-            /*
-            if(modCounter % 200 == this.motor.getDeviceID() && targetMotor == this.motor.getDeviceID()) {
-                System.out.println("*************** --> " + this.motor.getDeviceID());
-                System.out.println("0. referenceAngleRadians == " + referenceAngleRadians);
-                System.out.println("1. currentAngleRadians  == " + currentAngleRadians);
-            }
-            */
+            // determine the motors current position
+            double currentAngleRadians = motor.getPosition().getValue() * (2.0 * Math.PI) * motorEncoderPositionCoefficient;
+            String specificMotorInfo = "(motor: " + motor.getDeviceID() + " absolute encoder: " + absoluteEncoder.getDeviceId() + ")";
 
             // Reset the NEO's encoder periodically when the module is not rotating.
             // Sometimes (~5% of the time) when we initialize, the absolute encoder isn't fully set up, and we don't
             // end up getting a good reading. If we reset periodically this won't matter anymore.
-            /*
             if (motor.getVelocity().getValueAsDouble() * motorEncoderVelocityCoefficient < ENCODER_RESET_MAX_ANGULAR_VELOCITY) {                
                 if (++resetIteration >= ENCODER_RESET_ITERATIONS) {
+
                     resetIteration = 0;
+
+                    // get the ABSOLUTE encoders current angle - radians
                     double absoluteAngle = absoluteEncoder.getAbsoluteAngle();
                     if (absoluteEncoder.getLastError() == StatusCode.OK){
-                        if (Math.abs(MathUtil.angleModulus(absoluteAngle - currentAngleRadians)) 
-                        > absAngleTolRadians){
+
+                        double deltaAngle = Math.abs(MathUtil.angleModulus(absoluteAngle - currentAngleRadians));
+                        if (deltaAngle > absAngleTolRadians){
                             System.out.println("WARNING: Large error encountered when syncing absolute encoder from " + 
-                                currentAngleRadians + " to " + absoluteAngle + ".");
+                                currentAngleRadians + " to " + absoluteAngle + ". " + specificMotorInfo);
                         }
+
+                        // update the MOTOR encoder to align with the absolute encoders current position - scaled according to gearing ratio between the motor encoder and absolute encoder
                         double updatedPosition = (absoluteAngle / (2.0 * Math.PI)) / motorEncoderPositionCoefficient;
-//                        if(targetMotor == this.motor.getDeviceID()) {
-//                            System.out.println("2. updatedPosition  == " + updatedPosition);
-//                        }
-                        motor.setPosition(updatedPosition);
-//                        motor.setPosition(absoluteAngle / motorEncoderPositionCoefficient);
-                        currentAngleRadians = absoluteAngle;    
+                        this.publishUpdateStaticistics(motor.getDeviceID(), absoluteEncoder.getDeviceId(), updatedPosition, deltaAngle, absAngleTolRadians);
+                        CtreUtils.checkCtreError(
+                            this.motor.setPosition(updatedPosition),
+                            "WARNING: Failed to update motor ENCODER position to " + updatedPosition + "! " + specificMotorInfo);
+                        currentAngleRadians = absoluteAngle;
+
                     } else {
-                        System.out.println("WARNING: Syncing absolute encoder position failed.");
+                        System.out.println("WARNING: Syncing absolute encoder position failed. " + specificMotorInfo);
                     }
                 }
             } else {
                 resetIteration = 0;
             }
-            */
 
             double currentAngleRadiansMod = currentAngleRadians % (2.0 * Math.PI);
             if (currentAngleRadiansMod < 0.0) {
                 currentAngleRadiansMod += 2.0 * Math.PI;
             }
-
-            /*
-            if(modCounter % 200 == this.motor.getDeviceID() && targetMotor == this.motor.getDeviceID()) {
-                System.out.println("3. currentAngleRadiansMod  == " + currentAngleRadiansMod);
-            }
-             */
 
             // The reference angle has the range [0, 2pi) but the Falcon's encoder can go above that
             double adjustedReferenceAngleRadians = referenceAngleRadians + currentAngleRadians - currentAngleRadiansMod;
@@ -294,27 +287,27 @@ public final class Falcon500SteerControllerFactoryBuilder {
             } else if (referenceAngleRadians - currentAngleRadiansMod < -Math.PI) {
                 adjustedReferenceAngleRadians += 2.0 * Math.PI;
             }
-            /*
-            if(modCounter % 200 == this.motor.getDeviceID() && targetMotor == this.motor.getDeviceID()) {
-                System.out.println("4. adjustedReferenceAngleRadians  == " + adjustedReferenceAngleRadians);
-            }
-             */
 
-            // does little without next line
+            // ask the motor to update its position
             double nextPosition = (adjustedReferenceAngleRadians / (2.0 * Math.PI)) / motorEncoderPositionCoefficient;
-            /*
-            if(modCounter % 200 == this.motor.getDeviceID() && targetMotor == this.motor.getDeviceID()) {
-                System.out.println("5. nextPosition  == " + nextPosition);
-            }
-            */
-            this.motor.setControl(positionVoltage.withPosition(nextPosition));
+            CtreUtils.checkCtreError(
+                this.motor.setControl(positionVoltage.withPosition(nextPosition)),
+                "WARNING: Failed on request to change motor position to " + nextPosition + "! " + specificMotorInfo);
+;
+            this.publishStaticistics(
+                this.motor.getDeviceID(),
+                this.absoluteEncoder.getDeviceId(),
+                referenceAngleRadians,
+                currentAngleRadians,
+                adjustedReferenceAngleRadians,
+                nextPosition);
 
             this.referenceAngleRadians = referenceAngleRadians;
         }
 
         @Override
         public double getStateAngle() {
-            double motorAngleRadians = 2.0 * Math.PI * motor.getPosition().getValueAsDouble() * motorEncoderPositionCoefficient;
+            double motorAngleRadians = motor.getPosition().getValueAsDouble() * (2.0 * Math.PI) * motorEncoderPositionCoefficient;
             motorAngleRadians %= 2.0 * Math.PI;
             if (motorAngleRadians < 0.0) {
                 motorAngleRadians += 2.0 * Math.PI;
@@ -326,5 +319,32 @@ public final class Falcon500SteerControllerFactoryBuilder {
         public void setAbsoluteEncoderOffset() throws Exception{
             absoluteEncoder.setOffset();
         }
+
+        private void publishStaticistics(
+            int steerMotorId,
+            int steerEncoderId, 
+            double referenceAngleRadians,
+            double currentAngleRadians,
+            double adjustedReferenceAngleRadians,
+            double nextPosition) {
+            String qualifier = "SteerMotor_" + steerMotorId + "_" + steerEncoderId;
+            SmartDashboard.putNumber(qualifier + "/referenceAngleRadians", referenceAngleRadians);
+            SmartDashboard.putNumber(qualifier + "/currentAngleRadians", currentAngleRadians);
+            SmartDashboard.putNumber(qualifier + "/adjustedReferenceAngleRadians", adjustedReferenceAngleRadians);
+            SmartDashboard.putNumber(qualifier + "/nextPosition", nextPosition);
+        }
+
+        private void publishUpdateStaticistics(
+            int steerMotorId,
+            int steerEncoderId, 
+            double updatedPosition,
+            double deltaAngle,
+            double absAngleTolRadians) {
+            String qualifier = "SteerMotor_" + steerMotorId + "_" + steerEncoderId;
+            SmartDashboard.putNumber(qualifier + "/zErrorUpdatedPosition", updatedPosition);
+            SmartDashboard.putNumber(qualifier + "/zErrorDeltaAngle", deltaAngle);
+            SmartDashboard.putNumber(qualifier + "/zErrorAbsAngleTolRadians", absAngleTolRadians);
+        }
+
     }
 }
