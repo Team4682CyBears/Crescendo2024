@@ -261,11 +261,18 @@ public final class Falcon500SteerControllerFactoryBuilder {
 
                         // update the MOTOR encoder to align with the absolute encoders current position - scaled according to gearing ratio between the motor encoder and absolute encoder
                         double updatedPosition = (absoluteAngle / (2.0 * Math.PI)) / motorEncoderPositionCoefficient;
-                        this.publishUpdateStaticistics(motor.getDeviceID(), absoluteEncoder.getDeviceId(), updatedPosition, deltaAngle, absAngleTolRadians);
                         CtreUtils.checkCtreError(
                             this.motor.setPosition(updatedPosition),
                             "WARNING: Failed to update motor ENCODER position to " + updatedPosition + "! " + specificMotorInfo);
                         currentAngleRadians = absoluteAngle;
+
+                        // publish the update stats
+                        this.publishUpdateStaticistics(
+                            motor.getDeviceID(),
+                            absoluteEncoder.getDeviceId(),
+                            updatedPosition,
+                            deltaAngle,
+                            absAngleTolRadians);
 
                     } else {
                         System.out.println("WARNING: Syncing absolute encoder position failed. " + specificMotorInfo);
@@ -293,7 +300,10 @@ public final class Falcon500SteerControllerFactoryBuilder {
             CtreUtils.checkCtreError(
                 this.motor.setControl(positionVoltage.withPosition(nextPosition)),
                 "WARNING: Failed on request to change motor position to " + nextPosition + "! " + specificMotorInfo);
-;
+
+            this.referenceAngleRadians = referenceAngleRadians;
+
+            // publish the position change request stats
             this.publishStaticistics(
                 this.motor.getDeviceID(),
                 this.absoluteEncoder.getDeviceId(),
@@ -301,8 +311,6 @@ public final class Falcon500SteerControllerFactoryBuilder {
                 currentAngleRadians,
                 adjustedReferenceAngleRadians,
                 nextPosition);
-
-            this.referenceAngleRadians = referenceAngleRadians;
         }
 
         @Override
