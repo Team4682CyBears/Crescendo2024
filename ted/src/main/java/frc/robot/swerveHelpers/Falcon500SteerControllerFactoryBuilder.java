@@ -160,6 +160,7 @@ public final class Falcon500SteerControllerFactoryBuilder {
             motorConfiguration.MotorOutput.Inverted = (moduleConfiguration.isSteerInverted() ? InvertedValue.CounterClockwise_Positive : InvertedValue.Clockwise_Positive);
             System.out.println("Using motor inversion of: " + motorConfiguration.MotorOutput.Inverted.toString());
             motorConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+//            motorConfiguration.ClosedLoopGeneral.ContinuousWrap = true;
 
             // various steer motor configs that help to keep the motor encoder aligned with what the CANCoder is reporting
             /* produces a wild oscillation in steer motors ... 
@@ -260,18 +261,21 @@ public final class Falcon500SteerControllerFactoryBuilder {
                         }
 
                         // update the MOTOR encoder to align with the absolute encoders current position - scaled according to gearing ratio between the motor encoder and absolute encoder
-                        double updatedPosition = (absoluteAngle / (2.0 * Math.PI)) / motorEncoderPositionCoefficient;
+                        double absoluteEncoderTargetRotations = (absoluteAngle / (2.0 * Math.PI));
+                        double motorEncoderTargetRotations = absoluteEncoderTargetRotations / motorEncoderPositionCoefficient;
                         CtreUtils.checkCtreError(
-                            this.motor.setPosition(updatedPosition),
-                            "WARNING: Failed to update motor ENCODER position to " + updatedPosition + "! " + specificMotorInfo);
+                            this.motor.setPosition(motorEncoderTargetRotations),
+                            "WARNING: Failed to update motor ENCODER position to " + motorEncoderTargetRotations + "! " + specificMotorInfo);
                         currentAngleRadians = absoluteAngle;
 
                         // publish the update stats
                         this.publishUpdateStaticistics(
                             motor.getDeviceID(),
                             absoluteEncoder.getDeviceId(),
-                            updatedPosition,
+                            absoluteAngle,
                             deltaAngle,
+                            absoluteEncoderTargetRotations,
+                            motorEncoderTargetRotations,
                             absAngleTolRadians);
 
                     } else {
@@ -345,13 +349,17 @@ public final class Falcon500SteerControllerFactoryBuilder {
         private void publishUpdateStaticistics(
             int steerMotorId,
             int steerEncoderId, 
-            double updatedPosition,
+            double absoluteAngle,
             double deltaAngle,
+            double absoluteEncoderTargetRotations,
+            double motorEncoderTargetRotations,
             double absAngleTolRadians) {
             String qualifier = "SteerMotor_" + steerMotorId + "_" + steerEncoderId;
-            SmartDashboard.putNumber(qualifier + "/zErrorUpdatedPosition", updatedPosition);
-            SmartDashboard.putNumber(qualifier + "/zErrorDeltaAngle", deltaAngle);
-            SmartDashboard.putNumber(qualifier + "/zErrorAbsAngleTolRadians", absAngleTolRadians);
+            SmartDashboard.putNumber(qualifier + "/zAbsoluteAngle", absoluteAngle);
+            SmartDashboard.putNumber(qualifier + "/zDeltaAngle", deltaAngle);
+            SmartDashboard.putNumber(qualifier + "/zAbsoluteEncoderTargetRotations", absoluteEncoderTargetRotations);
+            SmartDashboard.putNumber(qualifier + "/zMotorEncoderTargetRotations", motorEncoderTargetRotations);
+            SmartDashboard.putNumber(qualifier + "/zAbsAngleTolRadians", absAngleTolRadians);
         }
 
     }

@@ -76,8 +76,8 @@ public final class Falcon500DriveControllerFactoryBuilder {
             TalonFX motor = new TalonFX(driveConfiguration);
 
             motorConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-            motorConfiguration.MotorOutput.Inverted = (moduleConfiguration.isDriveInverted() ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive);
-//            motorConfiguration.MotorOutput.Inverted = (moduleConfiguration.isDriveInverted() ? InvertedValue.CounterClockwise_Positive : InvertedValue.Clockwise_Positive);
+//            motorConfiguration.MotorOutput.Inverted = (moduleConfiguration.isDriveInverted() ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive);
+            motorConfiguration.MotorOutput.Inverted = (moduleConfiguration.isDriveInverted() ? InvertedValue.CounterClockwise_Positive : InvertedValue.Clockwise_Positive);
 
             CtreUtils.checkCtreError(motor.getConfigurator().apply(motorConfiguration), "Failed to apply motor configuration!");
             CtreUtils.checkCtreError(motor.setControl(voltageRequest), "Failed to apply motor configuration!");

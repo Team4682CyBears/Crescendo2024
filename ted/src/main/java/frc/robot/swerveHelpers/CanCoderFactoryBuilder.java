@@ -22,7 +22,7 @@ import frc.robot.swerveLib.ctre.CanCoderAbsoluteConfiguration;
 import frc.robot.swerveLib.ctre.CtreUtils;
 
 public class CanCoderFactoryBuilder {
-    private Direction direction = Direction.CLOCKWISE; // seems like less jump using CLOCKWISE!
+    private Direction direction = Direction.COUNTER_CLOCKWISE; // seems like less jump using CLOCKWISE!
 
     public CanCoderFactoryBuilder withDirection(Direction direction) {
         this.direction = direction;
