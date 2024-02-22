@@ -103,9 +103,9 @@ public final class Constants {
     public static final int intakeMotorCanId = 13;
     public static final int intakeTofCanId = 14;
     // intakeSpeed is [-1.0 .. 1.0]
-    public static final double intakeSpeed = 1.0;
+    public static final double intakeSpeed = -1.0;
     // intake will run until note is detected or this timeout has expired
-    public static final double intakeTimeoutSeconds = 2.0;
+    public static final double intakeTimeoutSeconds = 10.0;
 
     // ******************************************************************
     // feeder constants
@@ -115,18 +115,18 @@ public final class Constants {
     // feederSpeed is [0.0 .. 1.0]
     // it runs in one direction for the shooter 
     // and the opposite direction for the dunker/amp
-    public static final double feederSpeed = 1.0;
+    public static final double feederSpeed = 0.5;
     // feeder will run until note is detected or this timeout has expired
-    public static final double feederTimeoutSeconds = 2.0;
+    public static final double feederTimeoutSeconds = 10.0;
 
     // *******************************************************************
     // shooter constants  
     public static final int leftTopTalonShooterMotorCanId = 18; 
     public static final int leftBottomTalonShooterMotorCanId = 19;
-    public static InvertedValue leftTalonShooterMotorDefaultDirection = InvertedValue.Clockwise_Positive;  
+    public static InvertedValue leftTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;  
     public static final int rightTopTalonShooterMotorCanId = 20; 
     public static final int rightBottomTalonShooterMotorCanId = 21; 
-    public static InvertedValue rightTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;  
+    public static InvertedValue rightTalonShooterMotorDefaultDirection = InvertedValue.Clockwise_Positive;  
     public static final int shooterLeftAngleMotorCanId = 22;
     public static final int shooterRightAngleMotorCanId = 23;
     public static final int shooterLeftAngleEncoderCanId = 24;

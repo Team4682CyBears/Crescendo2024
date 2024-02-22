@@ -25,6 +25,7 @@ public class TofSubsystem extends SubsystemBase {
   private static TimeOfFlight tofSensor;
   private int canID;
   private double currentRangeInches;
+  private boolean currentRangeIsValid;
 
   public TofSubsystem(int canID){
     tofSensor = new TimeOfFlight(canID);
@@ -48,7 +49,7 @@ public class TofSubsystem extends SubsystemBase {
    */
   public boolean isNoteDetected(){
     double noteDetectedThreshold = 8.0;
-    if(currentRangeInches < noteDetectedThreshold){
+    if(currentRangeIsValid && (currentRangeInches < noteDetectedThreshold)){
       return true;
     }
     return false;
@@ -83,6 +84,7 @@ public class TofSubsystem extends SubsystemBase {
    */
   private void readSensor(){
     currentRangeInches = Units.metersToInches(tofSensor.getRange()/1000);
+    currentRangeIsValid = isRangeValid();
   }
 
   /**
@@ -90,8 +92,6 @@ public class TofSubsystem extends SubsystemBase {
    */
   @Override
   public void periodic(){
-    //TODO remove debug statement
-    System.out.println("running TOF periodic");
     readSensor();
     SmartDashboard.putNumber("TOF ID " + canID + " Range Inches" , currentRangeInches);
     SmartDashboard.putBoolean("TOF ID " + canID + " Note Detected", isNoteDetected());

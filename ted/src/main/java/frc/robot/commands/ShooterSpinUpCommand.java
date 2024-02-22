@@ -46,6 +46,7 @@ public class ShooterSpinUpCommand extends Command
     timer.reset();
     timer.start();
     done = false;
+    System.out.println("Starting SpinUpShooterCommand");
   }
 
   // Called every time the scheduler runs while the command is scheduled.

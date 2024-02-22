@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.ShootAllStopCommand;
 import frc.robot.commands.ShooterSpinUpCommand;
+import frc.robot.common.FeederMode;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.control.InstalledHardware;
 import frc.robot.control.ManualInputInterfaces;
@@ -25,6 +26,8 @@ import frc.robot.subsystems.PowerDistributionPanelWatcherSubsystem;
 import frc.robot.subsystems.TalonShooterSubsystem;
 import frc.robot.subsystems.SteerMotorSubsystem;
 import frc.robot.commands.DriveTimeCommand;
+import frc.robot.commands.FeedNoteCommand;
+import frc.robot.commands.IntakeNoteCommand;
 
 public class RobotContainer {
 
@@ -64,10 +67,23 @@ public class RobotContainer {
       new ChassisSpeeds(0.6, 0.0, 0.0),
       3.0));
 
-    SmartDashboard.putData(
-      "Spin Up Shooter",
-      new ShooterSpinUpCommand(this.subsystems.getShooterSubsystem())
-    );
+    if (InstalledHardware.shooterInstalled) {
+      SmartDashboard.putData(
+          "Spin Up Shooter",
+          new ShooterSpinUpCommand(this.subsystems.getShooterSubsystem()));
+    }
+
+    if (InstalledHardware.intakeInstalled) {
+      SmartDashboard.putData(
+          "Run Intake",
+          new IntakeNoteCommand(this.subsystems.getIntakeSubsystem()));
+    }
+
+    if (InstalledHardware.feederInstalled) {
+      SmartDashboard.putData(
+          "Run Feeder to Shooter",
+          new FeedNoteCommand(this.subsystems.getFeederSubsystem(), FeederMode.FeedToShooter));
+    }
   }
 
   public Command getAutonomousCommand() {

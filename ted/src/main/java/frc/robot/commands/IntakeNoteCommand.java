@@ -45,6 +45,7 @@ public class IntakeNoteCommand extends Command
     timer.reset();
     timer.start();
     done = false;
+    System.out.println("Starting IntakeNoteCommand");
   }
 
   // Called every time the scheduler runs while the command is scheduled.

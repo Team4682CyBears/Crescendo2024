@@ -52,6 +52,7 @@ public class FeedNoteCommand extends Command
     timer.reset();
     timer.start();
     done = false;
+    System.out.println("Starting FeedNoteCommand");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
