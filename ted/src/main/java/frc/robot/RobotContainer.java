@@ -9,7 +9,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.ShootAllStopCommand;
+import frc.robot.commands.ShooterSpinUpCommand;
+import frc.robot.common.FeederMode;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.control.InstalledHardware;
 import frc.robot.control.ManualInputInterfaces;
@@ -17,11 +20,15 @@ import frc.robot.control.SubsystemCollection;
 import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.subsystems.DrivetrainPowerSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.FeederSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PowerDistributionPanelWatcherSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.TalonShooterSubsystem;
 import frc.robot.subsystems.SteerMotorCanCoderSubsystem;
 import frc.robot.subsystems.SteerMotorSubsystem;
 import frc.robot.commands.DriveTimeCommand;
+import frc.robot.commands.FeedNoteCommand;
+import frc.robot.commands.IntakeNoteCommand;
 
 public class RobotContainer {
 
@@ -38,6 +45,12 @@ public class RobotContainer {
     // init the input system 
     this.initializeManualInputInterfaces();
 
+    // intake subsystem init
+    this.initializeIntakeSubsystem();
+
+    // feeder subsystem init
+    this.initializeFeederSubsystem();
+
     // shooter subsystem init
     this.initializeShooterSubsystem();
 
@@ -51,6 +64,30 @@ public class RobotContainer {
     System.out.println(">>>> Initializing button bindings.");
     this.subsystems.getManualInputInterfaces().initializeButtonCommandBindings();
     System.out.println(">>>> Finished initializing button bindings.");
+
+    SmartDashboard.putData(
+      "DriveForwardRobotCentric",
+      new DriveTimeCommand(this.subsystems.getDriveTrainSubsystem(),
+      new ChassisSpeeds(0.6, 0.0, 0.0),
+      3.0));
+
+    if (InstalledHardware.shooterInstalled) {
+      SmartDashboard.putData(
+          "Spin Up Shooter",
+          new ShooterSpinUpCommand(this.subsystems.getShooterSubsystem()));
+    }
+
+    if (InstalledHardware.intakeInstalled) {
+      SmartDashboard.putData(
+          "Run Intake",
+          new IntakeNoteCommand(this.subsystems.getIntakeSubsystem()));
+    }
+
+    if (InstalledHardware.feederInstalled) {
+      SmartDashboard.putData(
+          "Run Feeder to Shooter",
+          new FeedNoteCommand(this.subsystems.getFeederSubsystem(), FeederMode.FeedToShooter));
+    }
 
     if(this.subsystems.getDriveTrainPowerSubsystem() != null) {
       SmartDashboard.putData(
@@ -116,6 +153,42 @@ public class RobotContainer {
   }
   
   /**
+   * A method to init the feeder subsystem
+   */
+  private void initializeFeederSubsystem(){
+    if(InstalledHardware.feederInstalled){
+      subsystems.setFeederSubsystem(new FeederSubsystem());
+
+      // default command for feeder is to stop
+      subsystems.getFeederSubsystem().setDefaultCommand(
+        new InstantCommand(
+          subsystems.getFeederSubsystem()::setAllStop, 
+          subsystems.getFeederSubsystem()));
+      System.out.println("SUCCESS: FeederSubsystem");
+    } else {
+      System.out.println("FAIL: FeederSubsystem");
+    }
+  }
+
+  /**
+   * A method to init the intake subsystem
+   */
+  private void initializeIntakeSubsystem(){
+    if(InstalledHardware.intakeInstalled){
+      subsystems.setIntakeSubsystem(new IntakeSubsystem());
+
+      // default command for intake is to stop
+      subsystems.getIntakeSubsystem().setDefaultCommand(
+        new InstantCommand(
+          subsystems.getIntakeSubsystem()::setAllStop, 
+          subsystems.getIntakeSubsystem()));
+      System.out.println("SUCCESS: IntakeSubsystem");
+    } else {
+      System.out.println("FAIL: IntakeSubsystem");
+    }
+  }
+
+  /**
    * A method to init the input interfaces
    */
   private void initializeManualInputInterfaces() {
@@ -137,7 +210,7 @@ public class RobotContainer {
   private void initializeShooterSubsystem() {
     if(InstalledHardware.shooterInstalled) {
       // The robot's subsystems and commands are defined here...
-      subsystems.setShooterSubsystem(new ShooterSubsystem());
+      subsystems.setShooterSubsystem(new TalonShooterSubsystem());
       SmartDashboard.putData("Debug: ShooterSubsystem", subsystems.getShooterSubsystem());
       System.out.println("SUCCESS: ShooterSubsystem");
 

@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 public final class Constants {
 
@@ -28,13 +29,13 @@ public final class Constants {
      *
      * Should be measured from center to center.
      */
-    public static final double DRIVETRAIN_TRACKWIDTH_METERS = Units.inchesToMeters(17.179); 
+    public static final double DRIVETRAIN_TRACKWIDTH_METERS = Units.inchesToMeters(23.25); 
     /**
      * The front-to-back distance between the drivetrain wheels.
      *
      * Should be measured from center to center.
      */
-    public static final double DRIVETRAIN_WHEELBASE_METERS = Units.inchesToMeters(17.179); 
+    public static final double DRIVETRAIN_WHEELBASE_METERS = Units.inchesToMeters(22.75); 
 
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 1; 
     public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 2; 
@@ -55,14 +56,6 @@ public final class Constants {
     public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 11; 
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 12; 
     public static final double BACK_RIGHT_MODULE_STEER_OFFSET = Math.toRadians(49.0 + 356.6 + 0.5);
-    // *****************************************************************
-    // arm constants
-    public static final int HorizontalArmDriveMotorCanId = 13;
-    public static final int VerticalArmDriveMotorCanId = 14;
-    public static final int VirticalArmBottomMagneticSensor = 0;
-    public static final int HorizontalArmMagneticSensor = 1;
-    public static final int VirticalArmMiddleMagneticSensor = 2;
-
     // *****************************************************************
     // standard stuff constants - motors rotation, etc.
     public static final double DegreesPerRevolution = 360.0;
@@ -104,25 +97,65 @@ public final class Constants {
     // velocity for fine placement
     public static final double FinePlacementRotationalVelocity = 0.7;
 
-    // *******************************************************************
-    // XXX constants 
+    // ******************************************************************
+    // intake constants
+    public static final int intakeMotorCanId = 13;
+    public static final int intakeTofCanId = 14;
+    // intakeSpeed is [-1.0 .. 1.0]
+    public static final double intakeSpeed = -1.0;
+    // intake will run until note is detected or this timeout has expired
+    public static final double intakeTimeoutSeconds = 10.0;
 
-    // *******************************************************************
-    // pneumatics constants
-    public static final int PneumaticsControlModuleNumber = 0;
-    public static final PneumaticsModuleType PneumaticsControlModuleType = PneumaticsModuleType.REVPH;
-
-    // *******************************************************************
-    // Stabilizer constants
-    public static final int StabilizerPneumaticsControlModuleForwardChannel = 0;
-    public static final int StabilizerPneumaticsControlModuleReverseChannel = 1;
+    // ******************************************************************
+    // feeder constants
+    public static final int feederMotorCanId = 15;
+    public static final int feederToShooterTofCanId = 16;
+    public static final int feederToDunkerTofCanId = 17;
+    // feederSpeed is [0.0 .. 1.0]
+    // it runs in one direction for the shooter 
+    // and the opposite direction for the dunker/amp
+    public static final double feederSpeed = 0.5;
+    // feeder will run until note is detected or this timeout has expired
+    public static final double feederTimeoutSeconds = 10.0;
 
     // *******************************************************************
     // shooter constants  
-    public static final int leftTalonShooterMotorCanId = 7;
-    public static InvertedValue leftTalonShooterMotorDefaultDirection = InvertedValue.Clockwise_Positive;  
-    public static final int rightTalonShooterMotorCanId = 8;
-    public static InvertedValue rightTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;  
+    public static final int leftTopTalonShooterMotorCanId = 18; 
+    public static final int leftBottomTalonShooterMotorCanId = 19;
+    public static InvertedValue leftTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;  
+    public static final int rightTopTalonShooterMotorCanId = 20; 
+    public static final int rightBottomTalonShooterMotorCanId = 21; 
+    public static InvertedValue rightTalonShooterMotorDefaultDirection = InvertedValue.Clockwise_Positive;  
+    public static final int shooterLeftAngleMotorCanId = 22;
+    public static final int shooterRightAngleMotorCanId = 23;
+    public static final int shooterLeftAngleEncoderCanId = 24;
+    // TODO depending on which side the motor is mounted, may need to invert these.
+    public static InvertedValue angleLeftTalonShooterMotorDefaultDirection = InvertedValue.Clockwise_Positive;
+    public static InvertedValue angleRightTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;
+    public static final double shooterAngleOffsetDegrees = -0.0;
+    public static SensorDirectionValue shooterAngleSensorDirection = SensorDirectionValue.Clockwise_Positive;
+    public static final double shooterAngleMaxDegrees = 90;
+    public static final double shooterAngleMinDegrees = 0;  
+    // stow angle should be low enough to drive under the stage
+    public static final double shooterAngleStowDegrees = 45; 
+    private static double shooterBaseRpm = 6500;
+    public static final double shooterLeftDefaultSpeedRpm = shooterBaseRpm * 1.0;
+    public static final double shooterRightDefaultSpeedRpm = shooterBaseRpm * 0.75;
+    public static final double shooterSpinUpTimeoutSeconds = 5.0;
+    public static final double shooterAngleToleranceDegrees = 3;
+    public static final double shooterShootDuration = 0.5;
+
+    // ******************************************************************
+    // climber constants
+    public static final int leftClimberMotorCanId = 25;
+    public static final int rightClimberMotorCanId = 26;
+    public static final int leftClimberSensorDioId = 1;
+    public static final int rightClimberSensorDioId= 2;
+
+    // ******************************************************************
+    // amp/dunker constants
+    public static final int ampShoulderMotorCanId = 27;
+    public static final int ampOuttakeMotorCanId = 28;
   
     // ********************************************************************
     // Controller Constants
@@ -130,9 +163,10 @@ public final class Constants {
 
     // ********************************************************************
     // PowerDistributionPanel Constants
-    public static final int currentPowerDistributionPanelCanId = 19;
+    public static final int currentPowerDistributionPanelCanId = 29;
     public static final ModuleType currentPowerDistributionPanelType = ModuleType.kRev;
     public static final double overcurrentRumbleTimeSeconds = 0.25;
+    // TODO remove these if not needed
     public static final int EveryBotMotorPdpPortId = 8;
     public static final double EveryBotMotorMaximuCurrentAmps = 45.5;
 
