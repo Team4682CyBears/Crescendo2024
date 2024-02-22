@@ -24,7 +24,6 @@ import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PowerDistributionPanelWatcherSubsystem;
 import frc.robot.subsystems.TalonShooterSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SteerMotorCanCoderSubsystem;
 import frc.robot.subsystems.SteerMotorSubsystem;
 import frc.robot.commands.DriveTimeCommand;
@@ -88,6 +87,8 @@ public class RobotContainer {
       SmartDashboard.putData(
           "Run Feeder to Shooter",
           new FeedNoteCommand(this.subsystems.getFeederSubsystem(), FeederMode.FeedToShooter));
+    }
+
     if(this.subsystems.getDriveTrainPowerSubsystem() != null) {
       SmartDashboard.putData(
         "DriveForwardRobotCentric",
