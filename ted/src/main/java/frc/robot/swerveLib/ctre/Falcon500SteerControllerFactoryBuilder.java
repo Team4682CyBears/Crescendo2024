@@ -119,51 +119,23 @@ public final class Falcon500SteerControllerFactoryBuilder {
                     // based on this will use kV
                     motorConfiguration.Slot0.kV = (1023.0 * sensorVelocityCoefficient / nominalVoltage) * velocityConstant;
                 }
-                // TODO: What should be done if no nominal voltage is configured? Use a default voltage?
-
-                // TODO: Make motion magic max voltages configurable or dynamically determine optimal values
-// WAS:                motorConfiguration.motionCruiseVelocity = 2.0 / velocityConstant / sensorVelocityCoefficient;
                 motorConfiguration.MotionMagic.MotionMagicCruiseVelocity = 2.0 / velocityConstant / sensorVelocityCoefficient;
-// WAS:                motorConfiguration.motionAcceleration = (8.0 - 2.0) / accelerationConstant / sensorVelocityCoefficient;
                 motorConfiguration.MotionMagic.MotionMagicAcceleration = (8.0 - 2.0) / accelerationConstant / sensorVelocityCoefficient;
             }
             if (hasVoltageCompensation()) {
-// WAS:                motorConfiguration.voltageCompSaturation = nominalVoltage;
                 motorConfiguration.Voltage.PeakForwardVoltage = nominalVoltage;
                 motorConfiguration.Voltage.PeakReverseVoltage = -1.0 * nominalVoltage;
             }
             if (hasCurrentLimit()) {
-// WAS:                motorConfiguration.supplyCurrLimit.currentLimit = currentLimit;
-// WAS:                motorConfiguration.supplyCurrLimit.enable = true;
                 motorConfiguration.CurrentLimits.SupplyCurrentLimit = currentLimit;
                 motorConfiguration.CurrentLimits.SupplyCurrentLimitEnable = true;
             }
 
             TalonFX motor = new TalonFX(steerConfiguration.getMotorPort());
-// WAS:            checkCtreError(motor.configAllSettings(motorConfiguration, CAN_TIMEOUT_MS), "Failed to configure Falcon 500 settings");
             CtreUtils.checkCtreError(motor.getConfigurator().apply(motorConfiguration), "Failed to configure Falcon 500 settings");
 
-            /*
-            // according to https://pro.docs.ctr-electronics.com/en/latest/docs/migration/migration-guide/control-requests-guide.html#using-control-requests it seems this call is no longer necessary
-WAS:
-            if (hasVoltageCompensation()) {
-                motor.enableVoltageCompensation(true);
-            }
-            */
-
-            // after an hour of searching for the equivalent of motor.configSelectedFeedbackSensor(), I'm of the opinion that the following line has no equivalent in V6
-            // https://v6.docs.ctr-electronics.com/en/2023-v6/docs/migration/migration-guide/feature-replacements-guide.html#sensor-initialization-strategy
-            // the link above seems to hint at no longer needing this?
-            // "The Talon FX and CANcoder sensors are always initialized to their absolute position in Phoenix 6."
-// WAS:            checkCtreError(motor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, CAN_TIMEOUT_MS), "Failed to set Falcon 500 feedback sensor");
-            
-            // seems like according to https://v6.docs.ctr-electronics.com/en/2023-v6/docs/migration/migration-guide/feature-replacements-guide.html that this call is no longer needed in phenoix 6
-// WAS:            motor.setSensorPhase(true);
-
-// WAS:            motor.setInverted(moduleConfiguration.isSteerInverted() ? TalonFXInvertType.CounterClockwise : TalonFXInvertType.Clockwise);
             motorConfiguration.MotorOutput.Inverted = (moduleConfiguration.isSteerInverted() ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive);
 
-// WAS:            motor.setNeutralMode(NeutralMode.Brake);
             motorConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
             CtreUtils.checkCtreError(motor.setPosition(absoluteEncoder.getAbsoluteAngle() / sensorPositionCoefficient, CAN_TIMEOUT_MS), "Failed to set Falcon 500 encoder position");
@@ -228,7 +200,7 @@ WAS:
                 if (++resetIteration >= ENCODER_RESET_ITERATIONS) {
                     resetIteration = 0;
                     double absoluteAngle = absoluteEncoder.getAbsoluteAngle();
-                    motor.setPosition(absoluteAngle / motorEncoderPositionCoefficient);
+                    motor.setPosition((absoluteAngle / (2.0 * Math.PI)) / motorEncoderPositionCoefficient);
                     currentAngleRadians = absoluteAngle;
                 }
             } else {
@@ -248,7 +220,6 @@ WAS:
                 adjustedReferenceAngleRadians += 2.0 * Math.PI;
             }
 
-//was:            motor.set(motorControlMode, adjustedReferenceAngleRadians / motorEncoderPositionCoefficient);
             positionControl.withPosition(adjustedReferenceAngleRadians / motorEncoderPositionCoefficient);
 
             this.referenceAngleRadians = referenceAngleRadians;

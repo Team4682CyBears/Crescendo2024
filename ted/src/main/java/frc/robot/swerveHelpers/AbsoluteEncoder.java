@@ -2,7 +2,7 @@
 // Bishop Blanchet Robotics
 // Home of the Cybears
 // FRC - Crescendo - 2024
-// File: .java
+// File: AbsoluteEncoder.java
 // Intent: Same name extension files based on Swerve Drive Specalties codebase but also ported from phoenix5 to phoenix6
 // SDS codebase found at: https://github.com/SwerveDriveSpecialties/Do-not-use-swerve-lib-2022-unmaintained/tree/develop/src/main/java/com/swervedrivespecialties/swervelib
 // ************************************************************
@@ -28,6 +28,8 @@ public interface AbsoluteEncoder {
     StatusCode getLastError();
 
     double getOffset();
+
+    int getDeviceId();
 
     void setOffset();
 }

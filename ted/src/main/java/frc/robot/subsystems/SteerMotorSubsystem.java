@@ -17,6 +17,7 @@ import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.control.Constants;
 import frc.robot.common.Gains;
@@ -36,16 +37,22 @@ public class SteerMotorSubsystem extends SubsystemBase {
     false);
   private final NeutralOut brake = new NeutralOut();
   private TalonFXConfiguration steerMotorConfigs = new TalonFXConfiguration();
-  private final double steerMotorGearRatio = 396 / 35;
+  private final double steerMotorGearRatio = 15.43; // 396 / 35.0; // 468 / 35; // 396 / 25.0; // 396 / 35.0
   // the steer motor units per degree of rotation of the steer wheel
-  private final double steerMotorDegreesToMotorUnitsFactor = (2048 * this.steerMotorGearRatio) / 360.0;
+  private final double steerMotorUnitsPerWheelDegree = this.steerMotorGearRatio / 360.0;
+  private final double toleranceDelta = 1.0/360;
+  private int steerMovementCounter = 0;
+  private final int steerMovementStopCount = 100;
   private double steerMotorPositionUnits = 0;
-  private final double toleranceDelta = 10.0;
 
   public SteerMotorSubsystem() {
 
     steerMotor.setNeutralMode(NeutralModeValue.Brake);
     steerMotor.setPosition(steerMotorPositionUnits);
+    System.out.println(
+        "Just set position to 0," + 
+        " current position = " + this.getSteerMotorPosition() + 
+        " round trip? = " + this.isAtTargetPosition());
 
     /* Voltage-based velocity requires a feed forward to account for the back-emf of the motor */
     steerMotorConfigs.Slot0.kP = 2.4; // An error of 0.5 rotations results in 1.2 volts output
@@ -54,9 +61,9 @@ public class SteerMotorSubsystem extends SubsystemBase {
     steerMotorConfigs.Slot0.kV = 0.12; // Falcon 500 is a 500kV motor, 500rpm per V = 8.333 rps per V, 1/8.33 = 0.12 volts / Rotation per second
     // Peak output of 8 volts
     steerMotorConfigs.Voltage.PeakForwardVoltage = 12;
-    steerMotorConfigs.Voltage.PeakReverseVoltage = -12;    
-
+    steerMotorConfigs.Voltage.PeakReverseVoltage = -12;
     steerMotorConfigs.MotorOutput.Inverted = Constants.leftTalonShooterMotorDefaultDirection;
+//    steerMotorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
     // Retry config apply up to 5 times, report if failure
     StatusCode status = StatusCode.StatusCodeNotInitialized;
@@ -67,6 +74,9 @@ public class SteerMotorSubsystem extends SubsystemBase {
     if(!status.isOK()) {
       System.out.println("Could not apply configs to left motor, error code: " + status.toString());
     }
+    steerMotor.setNeutralMode(NeutralModeValue.Brake);
+    steerMotor.setPosition(steerMotorPositionUnits);
+
   }
 
   /**
@@ -76,7 +86,7 @@ public class SteerMotorSubsystem extends SubsystemBase {
   public void setSteerMotorAngle(double angle)
   {
     System.out.println("trying to set motor angle to == " + angle);
-    this.setSteerMotorPosition(angle * this.steerMotorDegreesToMotorUnitsFactor);
+    this.setSteerMotorPosition(angle * this.steerMotorUnitsPerWheelDegree);
   }
 
   /**
@@ -86,6 +96,7 @@ public class SteerMotorSubsystem extends SubsystemBase {
   public void setSteerMotorPosition(double motorPositionUnits)
   {
     System.out.println("trying to set motor position to == " + motorPositionUnits);
+    steerMovementCounter = 0;
     this.steerMotorPositionUnits = motorPositionUnits;
   }
 
@@ -94,7 +105,7 @@ public class SteerMotorSubsystem extends SubsystemBase {
    * @return double for the steer motor position in motor units
    */
   public double getSteerMotorDegrees() {
-    return this.getSteerMotorPosition() / this.steerMotorDegreesToMotorUnitsFactor;
+    return this.getSteerMotorPosition() / this.steerMotorUnitsPerWheelDegree;
   }
 
   /**
@@ -118,16 +129,42 @@ public class SteerMotorSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if(this.isAtTargetPosition()) {
+    steerMovementCounter++;
+    if(this.isAtTargetPosition()) { //} || steerMovementCounter > 100) {
         steerMotor.setControl(brake);
+        if(steerMovementCounter % steerMovementStopCount == 0) {
+          /* 
+            System.out.println("Stopping steer motor!," +
+                " current position = " + this.getSteerMotorPosition() + 
+                " round trip? = " + this.isAtTargetPosition());
+                */
+        }
+        /*
+        if(steerMovementCounter == steerMovementStopCount)
+        {
+            System.out.println(
+                "**** steerMovementCounter **** = " + steerMovementCounter + 
+                " current position = " + this.getSteerMotorPosition() + 
+                " round trip? = " + this.isAtTargetPosition());
+        }
+        */
     }
     else {
         steerMotor.setControl(steerMotorPositionVoltage.withPosition(steerMotorPositionUnits));
     }
+    this.publishStaticistics();
   }
 
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
   }
+
+  private void publishStaticistics() {
+      SmartDashboard.putNumber("SteerMotor_Position", this.steerMotor.getPosition().getValueAsDouble());
+      SmartDashboard.putNumber("SteerMotor_RotorPosition", this.steerMotor.getRotorPosition().getValueAsDouble());
+      SmartDashboard.putNumber("SteerMotor_SteerMotorDegrees", this.getSteerMotorDegrees());
+      SmartDashboard.putNumber("SteerMotor_SteerMotorPosition", this.getSteerMotorPosition());
+  }
+
 }

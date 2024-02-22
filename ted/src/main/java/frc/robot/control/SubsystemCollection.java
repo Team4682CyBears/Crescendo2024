@@ -16,6 +16,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PowerDistributionPanelWatcherSubsystem;
 import frc.robot.subsystems.TalonShooterSubsystem;
 import frc.robot.subsystems.SteerMotorSubsystem;
+import frc.robot.subsystems.SteerMotorCanCoderSubsystem;
 
 public class SubsystemCollection
 {
@@ -30,6 +31,7 @@ public class SubsystemCollection
     private SteerMotorSubsystem steerMotorSubsystem = null;
     private IntakeSubsystem intakeSubsystem = null;
     private FeederSubsystem feederSubsystem = null;
+    private SteerMotorCanCoderSubsystem steerMotorCanCoderSubsystem = null;
 
     /**
      * Default constructor
@@ -59,4 +61,7 @@ public class SubsystemCollection
 
     public SteerMotorSubsystem getSteerMotorSubsystem() { return steerMotorSubsystem; }
     public void setSteerMotorSubsystem(SteerMotorSubsystem value) { steerMotorSubsystem = value; }
+
+    public SteerMotorCanCoderSubsystem getSteerMotorCanCoderSubsystem() { return steerMotorCanCoderSubsystem; }
+    public void setSteerMotorCanCoderSubsystem(SteerMotorCanCoderSubsystem value) { steerMotorCanCoderSubsystem = value; }
 }

@@ -29,13 +29,23 @@ public final class CtreUtils {
         }
     }
 
-    /**
-     * Seems like we need a function to convert degrees into a unitary type scale of 0.0 to 1.0
+   /**
+     * Seems like we need a function to convert radians into a unitary type scale of 0.0 to 1.0
      * @param radians
      * @return Value of 0 to 1 linear normalized radians
      */
     public static double convertFromRadiansToNormalizedDecmil(double radians) {
-        double normalized = (MathUtil.angleModulus(radians) + Math.PI) / 2*Math.PI;
+        double normalized = (MathUtil.angleModulus(radians) + Math.PI) / (2.0 * Math.PI);
+        return normalized;
+    }
+
+    /**
+     * Seems like we need a function to convert radians into a degress from 0 to 360
+     * @param radians
+     * @return Value of 0 to 1 linear normalized radians
+     */
+    public static double convertFromRadiansToNormalizedDegrees(double radians) {
+        double normalized = CtreUtils.convertFromRadiansToNormalizedDecmil(radians) * 360.0;
         return normalized;
     }
 }
