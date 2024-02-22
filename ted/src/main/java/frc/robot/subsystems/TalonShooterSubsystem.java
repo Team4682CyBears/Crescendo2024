@@ -23,6 +23,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.control.Constants;
@@ -41,7 +43,8 @@ public class TalonShooterSubsystem extends SubsystemBase {
 
   // Shooter gearing - currently 1:1
   private static final double outfeedShooterGearRatio = 1.0;
-  private static final double angleMotorGearRatio = 1.0;
+  private static final double angleMotorGearRatio = 1.0/600.0; // 600:1 (100:1 -> 72:12) //TODO check this!!
+  private static final double angleEncoderGearRatio = 1.0; // angle encoder is mounted directly onto shaft
   
   private static final double kMinDeadband = 0.001;
   private static final int kPIDLoopIdx = 0;
@@ -132,6 +135,8 @@ public class TalonShooterSubsystem extends SubsystemBase {
    */
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("Shooter Absolute Angle Degrees", angleEncoder.getPosition().getValue());
+    SmartDashboard.putNumber("Shooter Motor Encoder Degrees", getAngleDegrees());
   }
 
   /**
@@ -270,15 +275,18 @@ public class TalonShooterSubsystem extends SubsystemBase {
     // Config angle motor
     TalonFXConfiguration angleConfigs = new TalonFXConfiguration();
     angleConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    angleConfigs.ClosedLoopGeneral.ContinuousWrap = true;
     angleConfigs.MotorOutput.Inverted = Constants.angleLeftTalonShooterMotorDefaultDirection;
     // FeedbackConfigs
     angleConfigs.Slot0 = angleMotorGains;
-    angleConfigs.Feedback.FeedbackRemoteSensorID = Constants.shooterLeftAngleEncoderCanId;
+    angleConfigs.Feedback.SensorToMechanismRatio = angleEncoderGearRatio;
+    // TODO test whether this does the right thing along with gear ratio above. 
+    // not sure we need continuous wrap, since we can't physicall spin the shooter around 360 degrees
+    // angleConfigs.ClosedLoopGeneral.ContinuousWrap = true;
+    // TODO put this back. removing sync during debugging. 
+    // angleConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
+    // angleConfigs.Feedback.FeedbackRemoteSensorID = Constants.shooterLeftAngleEncoderCanId;
+    // don't think need to set motor offset if it is sync'd to can coder
     // angleConfigs.Feedback.FeedbackRotorOffset = degreesToRotations(Constants.shooterAngleOffsetDegrees);
-    angleConfigs.Feedback.SensorToMechanismRatio = angleMotorGearRatio;
-    // TODO not sure how/if this works
-    angleConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
     // copying Motion Magic values from Phoenix Swerve steer motor example
     // https://api.ctr-electronics.com/phoenix6/release/java/src-html/com/ctre/phoenix6/mechanisms/swerve/SwerveModule.html#line.169
     angleConfigs.MotionMagic.MotionMagicCruiseVelocity = 100.0 / angleMotorGearRatio;
