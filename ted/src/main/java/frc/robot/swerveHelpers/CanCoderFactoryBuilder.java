@@ -2,7 +2,7 @@
 // Bishop Blanchet Robotics
 // Home of the Cybears
 // FRC - Crescendo - 2024
-// File: .java
+// File: CanCoderFactoryBuilder.java
 // Intent: Same name extension files based on Swerve Drive Specalties codebase but also ported from phoenix5 to phoenix6
 // SDS codebase found at: https://github.com/SwerveDriveSpecialties/Do-not-use-swerve-lib-2022-unmaintained/tree/develop/src/main/java/com/swervedrivespecialties/swervelib
 // ************************************************************
@@ -22,7 +22,7 @@ import frc.robot.swerveLib.ctre.CanCoderAbsoluteConfiguration;
 import frc.robot.swerveLib.ctre.CtreUtils;
 
 public class CanCoderFactoryBuilder {
-    private Direction direction = Direction.COUNTER_CLOCKWISE;
+    private Direction direction = Direction.COUNTER_CLOCKWISE; // based on testing done on minibear
 
     public CanCoderFactoryBuilder withDirection(Direction direction) {
         this.direction = direction;
@@ -34,16 +34,13 @@ public class CanCoderFactoryBuilder {
              CANcoderConfiguration canCoderConfig = new CANcoderConfiguration();
             canCoderConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
             canCoderConfig.MagnetSensor.MagnetOffset = CtreUtils.convertFromRadiansToNormalizedDecmil(configuration.getOffset());
-            // seems there is no equivalent for can coder config in v6
-// WAS           config.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
-            // fix wheel jump issues caused by CANcoder turning opposite direction of motor
-// WAS:            config.sensorDirection = false;
             canCoderConfig.MagnetSensor.SensorDirection = (direction == Direction.CLOCKWISE ? SensorDirectionValue.Clockwise_Positive : SensorDirectionValue.CounterClockwise_Positive);
+            System.out.println("Using sensor direction of: " + canCoderConfig.MagnetSensor.SensorDirection.toString());
 
             CANcoder encoder = new CANcoder(configuration.getId());
             CtreUtils.checkCtreError(encoder.getConfigurator().apply(canCoderConfig, 250), "Failed to configure CANCoder");
 
-            return new EncoderImplementation(encoder, CtreUtils.convertFromRadiansToNormalizedDegrees(configuration.getOffset()));
+            return new EncoderImplementation(encoder, Math.toDegrees(configuration.getOffset()));
         };
     }
 
@@ -84,6 +81,11 @@ public class CanCoderFactoryBuilder {
         @Override
         public double getOffset(){
             return 2.0 * Math.PI * encoder.getPosition().getValueAsDouble();
+        }
+
+        @Override
+        public int getDeviceId(){
+            return this.encoder.getDeviceID();
         }
 
         @Override

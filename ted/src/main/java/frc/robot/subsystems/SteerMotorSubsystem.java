@@ -17,6 +17,7 @@ import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.control.Constants;
 import frc.robot.common.Gains;
@@ -62,6 +63,7 @@ public class SteerMotorSubsystem extends SubsystemBase {
     steerMotorConfigs.Voltage.PeakForwardVoltage = 12;
     steerMotorConfigs.Voltage.PeakReverseVoltage = -12;
     steerMotorConfigs.MotorOutput.Inverted = Constants.leftTalonShooterMotorDefaultDirection;
+//    steerMotorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
     // Retry config apply up to 5 times, report if failure
     StatusCode status = StatusCode.StatusCodeNotInitialized;
@@ -72,6 +74,9 @@ public class SteerMotorSubsystem extends SubsystemBase {
     if(!status.isOK()) {
       System.out.println("Could not apply configs to left motor, error code: " + status.toString());
     }
+    steerMotor.setNeutralMode(NeutralModeValue.Brake);
+    steerMotor.setPosition(steerMotorPositionUnits);
+
   }
 
   /**
@@ -128,9 +133,11 @@ public class SteerMotorSubsystem extends SubsystemBase {
     if(this.isAtTargetPosition()) { //} || steerMovementCounter > 100) {
         steerMotor.setControl(brake);
         if(steerMovementCounter % steerMovementStopCount == 0) {
+          /* 
             System.out.println("Stopping steer motor!," +
                 " current position = " + this.getSteerMotorPosition() + 
                 " round trip? = " + this.isAtTargetPosition());
+                */
         }
         /*
         if(steerMovementCounter == steerMovementStopCount)
@@ -145,10 +152,19 @@ public class SteerMotorSubsystem extends SubsystemBase {
     else {
         steerMotor.setControl(steerMotorPositionVoltage.withPosition(steerMotorPositionUnits));
     }
+    this.publishStaticistics();
   }
 
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
   }
+
+  private void publishStaticistics() {
+      SmartDashboard.putNumber("SteerMotor_Position", this.steerMotor.getPosition().getValueAsDouble());
+      SmartDashboard.putNumber("SteerMotor_RotorPosition", this.steerMotor.getRotorPosition().getValueAsDouble());
+      SmartDashboard.putNumber("SteerMotor_SteerMotorDegrees", this.getSteerMotorDegrees());
+      SmartDashboard.putNumber("SteerMotor_SteerMotorPosition", this.getSteerMotorPosition());
+  }
+
 }

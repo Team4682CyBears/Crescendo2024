@@ -2,7 +2,7 @@
 // Bishop Blanchet Robotics
 // Home of the Cybears
 // FRC - Crescendo - 2024
-// File: .java
+// File: Falcon500DriveControllerFactoryBuilder.java
 // Intent: Same name extension files based on Swerve Drive Specalties codebase but also ported from phoenix5 to phoenix6
 // SDS codebase found at: https://github.com/SwerveDriveSpecialties/Do-not-use-swerve-lib-2022-unmaintained/tree/develop/src/main/java/com/swervedrivespecialties/swervelib
 // ************************************************************
@@ -74,12 +74,12 @@ public final class Falcon500DriveControllerFactoryBuilder {
             }
 
             TalonFX motor = new TalonFX(driveConfiguration);
-            CtreUtils.checkCtreError(motor.getConfigurator().apply(motorConfiguration), "Failed to apply motor configuration!");
-            CtreUtils.checkCtreError(motor.setControl(voltageRequest), "Failed to apply motor configuration!");
 
             motorConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+            motorConfiguration.MotorOutput.Inverted = (moduleConfiguration.isDriveInverted() ? InvertedValue.CounterClockwise_Positive : InvertedValue.Clockwise_Positive);
 
-            motorConfiguration.MotorOutput.Inverted = (moduleConfiguration.isDriveInverted() ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive);
+            CtreUtils.checkCtreError(motor.getConfigurator().apply(motorConfiguration), "Failed to apply motor configuration!");
+            CtreUtils.checkCtreError(motor.setControl(voltageRequest), "Failed to apply motor control!");
 
             CtreUtils.checkCtreError(
                 motor.getPosition().setUpdateFrequency(STATUS_FRAME_GENERAL_PERIOD_MS, CAN_TIMEOUT_MS),
@@ -112,16 +112,14 @@ public final class Falcon500DriveControllerFactoryBuilder {
             return motor.getVelocity().getValueAsDouble() * sensorVelocityCoefficient;
         }
 
+        // TODO - P0 - mike to confirm that position values are correct with basic move 1 meter test
         @Override
         public void setDistance(double value) {
-            // change here was based on: https://www.chiefdelphi.com/t/phoenix-6-naming-confusion/444021
-// WAS:            motor.setSelectedSensorPosition(value / sensorPositionCoefficient);
            motor.setPosition(value / sensorPositionCoefficient);
         }
 
         @Override
         public double getDistance() {
-// WAS:            return motor.getSelectedSensorPosition() * sensorPositionCoefficient;
             return motor.getPosition().getValue() * sensorPositionCoefficient;
         }
 

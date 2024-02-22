@@ -40,16 +40,22 @@ public class InstalledHardware
     public static final boolean coDriverXboxControllerInstalled = false;
 
     // DriveTrain Related Hardware
-    public static final boolean leftFrontDriveInstalled = false;
-    public static final boolean leftRearDriveInstalled = false;
-    public static final boolean rightFrontDriveInstalled = false;
-    public static final boolean rightRearDriveInstalled = false;
+    public static final boolean leftFrontDriveInstalled = true;
+    public static final boolean leftRearDriveInstalled = true;
+    public static final boolean rightFrontDriveInstalled = true;
+    public static final boolean rightRearDriveInstalled = true;
 
     public static final boolean leftFrontDriveInstalledForTesting = true && !leftFrontDriveInstalled;
     public static final boolean leftFrontDriveCanCoderInstalledForTesting = true && !leftFrontDriveInstalled;
 
+    // Intake Related Hardware
+    public static final boolean intakeInstalled = true;
+
+    // Feeder Related Hardware
+    public static final boolean feederInstalled = true;
+
     // Shooter Related Hardware
-    public static final boolean shooterInstalled = false;
+    public static final boolean shooterInstalled = true;
 
     // Controller button install control
     public static final boolean applyBasicDriveToPointButtonsToDriverXboxController = false;

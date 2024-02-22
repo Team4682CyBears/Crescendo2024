@@ -35,7 +35,7 @@ public final class CtreUtils {
      * @return Value of 0 to 1 linear normalized radians
      */
     public static double convertFromRadiansToNormalizedDecmil(double radians) {
-        double normalized = (MathUtil.angleModulus(radians) + Math.PI) / 2.0 * Math.PI;
+        double normalized = (MathUtil.angleModulus(radians) + Math.PI) / (2.0 * Math.PI);
         return normalized;
     }
 
