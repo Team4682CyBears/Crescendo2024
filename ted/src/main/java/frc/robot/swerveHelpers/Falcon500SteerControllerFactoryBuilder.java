@@ -2,7 +2,7 @@
 // Bishop Blanchet Robotics
 // Home of the Cybears
 // FRC - Crescendo - 2024
-// File: .java
+// File: Falcon500SteerControllerFactoryBuilder.java
 // Intent: Same name extension files based on Swerve Drive Specalties codebase but also ported from phoenix5 to phoenix6
 // SDS codebase found at: https://github.com/SwerveDriveSpecialties/Do-not-use-swerve-lib-2022-unmaintained/tree/develop/src/main/java/com/swervedrivespecialties/swervelib
 // ************************************************************
@@ -11,7 +11,6 @@
 
 package frc.robot.swerveHelpers;
 
-import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -124,11 +123,13 @@ public final class Falcon500SteerControllerFactoryBuilder {
             TalonFXConfiguration motorConfiguration = new TalonFXConfiguration();
 
             if (hasPidConstants()) {
+                // TODO - P1 - mike to investigate why existing PIDS are not realistic and determine where they emanate from
                 /* 
                 motorConfiguration.Slot0.kP = proportionalConstant;
                 motorConfiguration.Slot0.kI = integralConstant;
                 motorConfiguration.Slot0.kD = derivativeConstant;
                 motorConfiguration.Slot0.kV = 0.12; // Falcon 500 is a 500kV motor, 500rpm per V = 8.333 rps per V, 1/8.33 = 0.12 volts / Rotation per second
+                testing on minibear was using:
                 */
                 motorConfiguration.Slot0.kP = 2.4; // An error of 0.5 rotations results in 1.2 volts output
                 motorConfiguration.Slot0.kI = 0.5; // An error of 1 rotation per second increases output by 0.5V every second
@@ -139,9 +140,6 @@ public final class Falcon500SteerControllerFactoryBuilder {
                 if (hasVoltageCompensation()) {
                     motorConfiguration.Slot0.kV = (1023.0 * sensorVelocityCoefficient / nominalVoltage) * velocityConstant;
                 }
-                // TODO: What should be done if no nominal voltage is configured? Use a default voltage?
-
-                // TODO: Make motion magic max voltages configurable or dynamically determine optimal values
                 motorConfiguration.MotionMagic.MotionMagicCruiseVelocity = 2.0 / velocityConstant / sensorVelocityCoefficient;
                 motorConfiguration.MotionMagic.MotionMagicAcceleration = (8.0 - 2.0) / accelerationConstant / sensorVelocityCoefficient;
             }
@@ -156,21 +154,8 @@ public final class Falcon500SteerControllerFactoryBuilder {
 
             TalonFX motor = new TalonFX(steerConfiguration.getMotorPort());
 
-//            motorConfiguration.MotorOutput.Inverted = (moduleConfiguration.isSteerInverted() ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive);
             motorConfiguration.MotorOutput.Inverted = (moduleConfiguration.isSteerInverted() ? InvertedValue.CounterClockwise_Positive : InvertedValue.Clockwise_Positive);
-            System.out.println("Using motor inversion of: " + motorConfiguration.MotorOutput.Inverted.toString());
             motorConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-//            motorConfiguration.ClosedLoopGeneral.ContinuousWrap = true;
-
-            // various steer motor configs that help to keep the motor encoder aligned with what the CANCoder is reporting
-            /* produces a wild oscillation in steer motors ... 
-            System.out.println("Steer motor # " + motor.getDeviceID() + " using encoder # " + absoluteEncoder.getDeviceId());
-            motorConfiguration.Feedback.FeedbackRemoteSensorID = absoluteEncoder.getDeviceId();
-            motorConfiguration.Feedback.FeedbackRotorOffset = 0.0;
-            motorConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
-            motorConfiguration.Feedback.RotorToSensorRatio = 1/sensorPositionCoefficient; // ??
-            motorConfiguration.Feedback.SensorToMechanismRatio = 1.0; // 
-            */
 
             // apply all motor configs
             motor.getConfigurator().apply(motorConfiguration);
@@ -178,7 +163,6 @@ public final class Falcon500SteerControllerFactoryBuilder {
             Double absFractionalRotation = absoluteEncoder.getAbsoluteAngle() / (2.0 * Math.PI);
             if (absoluteEncoder.getLastError() == StatusCode.OK) {
                 // if we were able to read the absolute encoder, then try to set the sensor position
-                System.out.println("Setting position of motor " + motor.getDeviceID() + " to : " + absFractionalRotation / sensorPositionCoefficient);
                 CtreUtils.checkCtreError(
                     motor.setPosition(absFractionalRotation / sensorPositionCoefficient),
                     "WARNING: Failed to set Falcon 500 encoder position.");
@@ -268,7 +252,8 @@ public final class Falcon500SteerControllerFactoryBuilder {
                             "WARNING: Failed to update motor ENCODER position to " + motorEncoderTargetRotations + "! " + specificMotorInfo);
                         currentAngleRadians = absoluteAngle;
 
-                        // publish the update stats
+                        // publish the update stats - only needed when debugging via shuffleboard
+                        /*
                         this.publishUpdateStaticistics(
                             motor.getDeviceID(),
                             absoluteEncoder.getDeviceId(),
@@ -277,6 +262,7 @@ public final class Falcon500SteerControllerFactoryBuilder {
                             absoluteEncoderTargetRotations,
                             motorEncoderTargetRotations,
                             absAngleTolRadians);
+                        */
 
                     } else {
                         System.out.println("WARNING: Syncing absolute encoder position failed. " + specificMotorInfo);
@@ -307,7 +293,8 @@ public final class Falcon500SteerControllerFactoryBuilder {
 
             this.referenceAngleRadians = referenceAngleRadians;
 
-            // publish the position change request stats
+            // publish the position change request stats - only needed when debugging via shuffleboard
+            /*
             this.publishStaticistics(
                 this.motor.getDeviceID(),
                 this.absoluteEncoder.getDeviceId(),
@@ -315,6 +302,7 @@ public final class Falcon500SteerControllerFactoryBuilder {
                 currentAngleRadians,
                 adjustedReferenceAngleRadians,
                 nextPosition);
+            */
         }
 
         @Override
@@ -328,10 +316,20 @@ public final class Falcon500SteerControllerFactoryBuilder {
         }
 
         @Override
-        public void setAbsoluteEncoderOffset() throws Exception{
+        public void setAbsoluteEncoderOffset(){
             absoluteEncoder.setOffset();
         }
 
+        /**
+         * This method used to help debugging by shoving key logic calculations out to shuffleboard
+         * calculations here are focused on new commanded position logic
+         * @param steerMotorId
+         * @param steerEncoderId
+         * @param referenceAngleRadians
+         * @param currentAngleRadians
+         * @param adjustedReferenceAngleRadians
+         * @param nextPosition
+         */
         private void publishStaticistics(
             int steerMotorId,
             int steerEncoderId, 
@@ -346,6 +344,17 @@ public final class Falcon500SteerControllerFactoryBuilder {
             SmartDashboard.putNumber(qualifier + "/nextPosition", nextPosition);
         }
 
+        /**
+         * This method used to help debugging by shoving key logic calculations out to shuffleboard
+         * calculations here are focused on updates being caluclated for steer motor drift from absolute encoder
+         * @param steerMotorId
+         * @param steerEncoderId
+         * @param absoluteAngle
+         * @param deltaAngle
+         * @param absoluteEncoderTargetRotations
+         * @param motorEncoderTargetRotations
+         * @param absAngleTolRadians
+         */
         private void publishUpdateStaticistics(
             int steerMotorId,
             int steerEncoderId, 
