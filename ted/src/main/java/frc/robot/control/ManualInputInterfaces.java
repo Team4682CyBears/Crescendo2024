@@ -21,14 +21,19 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.*;
 import frc.robot.commands.RumbleCommand;
+import frc.robot.common.FeederMode;
 import frc.robot.common.TestTrajectories;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.FeederSubsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AllStopCommand;
 import frc.robot.commands.ButtonPressCommand;
 import frc.robot.commands.DriveToPointCommand;
 import frc.robot.commands.DriveTrajectoryCommand;
+import frc.robot.commands.FeedNoteCommand;
+import frc.robot.commands.IntakeNoteCommand;
 import frc.robot.commands.ShooterShootCommand;
+import frc.robot.commands.ShooterSpinUpCommand;
 import frc.robot.commands.SteerMotorToAngleCommand;
 
 public class ManualInputInterfaces {
@@ -138,7 +143,8 @@ public class ManualInputInterfaces {
 
       this.driverController.b().onTrue(
           new ParallelCommandGroup(
-            //TODO include actual IntakeCommand here once it's created. 
+            //TODO include actual IntakeCommand here once it's created.
+            new IntakeNoteCommand(this.subsystemCollection.getIntakeSubsystem()), 
             new ButtonPressCommand(
               "driverController.b()",
               "intake")
@@ -292,6 +298,8 @@ public class ManualInputInterfaces {
    */
   private void bindCommandsToCoDriverXboxButtons()
   {
+   //FeedNoteCommand feederToShooter = new FeedNoteCommand(subsystemCollection.getFeederSubsystem(), FeederMode.FeedToShooter);
+   //FeedNoteCommand feederToDunker = new FeedNoteCommand(subsystemCollection.getFeederSubsystem(), FeederMode.FeedToDunker);
     if(InstalledHardware.coDriverXboxControllerInstalled)
     {
       // x button press will stop all
@@ -308,9 +316,11 @@ public class ManualInputInterfaces {
       this.coDriverController.y().onTrue(
         new ParallelCommandGroup(
           //TODO include an actual ShooterOuttake command here
+          new ShooterSpinUpCommand(this.subsystemCollection.getShooterSubsystem()),
+          new ShooterShootCommand(45, this.subsystemCollection.getShooterSubsystem(), this.subsystemCollection.getFeederSubsystem()),
           new ButtonPressCommand(
             "coDriverController.y()",
-              "shooter outtake")
+              "shoots the shooter")
           )
       );
 
@@ -342,28 +352,28 @@ public class ManualInputInterfaces {
           );
 
           this.coDriverController.back().onTrue(
-            new ParallelCommandGroup(
-              new InstantCommand(
                 //TODO add FeederSubsystem here
-                //subsystemCollection.getFeederSubsystem(), FeederMode.FeedToShooter
-                ),
+                new ParallelCommandGroup(
+                  
+                new FeedNoteCommand(this.subsystemCollection.getFeederSubsystem(), FeederMode.FeedToShooter),
+
               new ButtonPressCommand(
                 "coDriverController.back()",
                 "send note to shooter")
-              )
+                )
+              
             );
 
           this.coDriverController.start().onTrue(
           new ParallelCommandGroup(
-            new InstantCommand(
               //TODO add FeederSubsystem here
-              //subsystemCollection.getFeederSubsystem(), FeederMode.FeedToDunker
-              ),
-            new ButtonPressCommand(
+              new FeedNoteCommand(this.subsystemCollection.getFeederSubsystem(), FeederMode.FeedToShooter),
+           
+              new ButtonPressCommand(
               "coDriverController.start()",
               "send note to dunker")
-            )
-          );            
+          )
+            );            
 
     }
   }
