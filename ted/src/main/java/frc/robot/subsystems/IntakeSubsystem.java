@@ -11,6 +11,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.REVLibError;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -24,14 +25,19 @@ import frc.robot.control.Constants;
  */
 public class IntakeSubsystem extends SubsystemBase {
   //Neo motor
-  private CANSparkMax intakeMotor = new CANSparkMax(Constants.intakeMotorCanId, MotorType.kBrushless);
+  private CANSparkMax intakeMotor;
   //BeamBreak sensor
   private TofSubsystem beambreakSensor = new TofSubsystem(Constants.intakeTofCanId);
+  private int maxRetries = 4;
 
   /**
    * Constructor for the IntakeSubsystem
    */
   public IntakeSubsystem() {
+    // move the motor creation to the constructor, since it was erroring when done as a class variable. 
+    System.out.println("Initializing Intake Motor...");
+    intakeMotor = new CANSparkMax(Constants.intakeMotorCanId, MotorType.kBrushless);
+    System.out.println(intakeMotor.getLastError());
     intakeMotor.setIdleMode(IdleMode.kBrake);
   }
 

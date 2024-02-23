@@ -43,7 +43,7 @@ public class TalonShooterSubsystem extends SubsystemBase {
 
   // Shooter gearing - currently 1:1
   private static final double outfeedShooterGearRatio = 1.0;
-  private static final double angleMotorGearRatio = 1.0/600.0; // 600:1 (100:1 -> 72:12) //TODO check this!!
+  private static final double angleMotorGearRatio = 450.0; // 450:1 (100:1 -> 72:16) 
   private static final double angleEncoderGearRatio = 1.0; // angle encoder is mounted directly onto shaft
   
   private static final double kMinDeadband = 0.001;
@@ -74,7 +74,7 @@ public class TalonShooterSubsystem extends SubsystemBase {
   // new settings
   private Slot0Configs leftMotorGains = new Slot0Configs().withKP(1.2012).withKI(2.4023).withKD(0.0120).withKV(0.1189);
   private Slot0Configs rightMotorGains = new Slot0Configs().withKP(1.2012).withKI(2.4023).withKD(0.0120).withKV(0.1189);
-  private Slot0Configs angleMotorGains = new Slot0Configs().withKP(1.2012).withKI(2.4023).withKD(0.0120).withKV(0.1189);
+  private Slot0Configs angleMotorGains = new Slot0Configs().withKP(4.8).withKI(0.0).withKD(0.1).withKV(0.12).withKS(10.0);
 
   /**
    * Constructor for shooter subsystem
@@ -101,7 +101,7 @@ public class TalonShooterSubsystem extends SubsystemBase {
    * @return angle in degrees
    */
   public double getAngleDegrees(){
-    return rotationsToDegrees(angleLeftMotor.getPosition().getValue());
+    return rotationsToDegrees(angleLeftMotor.getPosition().getValue()/angleMotorGearRatio);
   }
 
   /**
@@ -137,6 +137,7 @@ public class TalonShooterSubsystem extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Shooter Absolute Angle Degrees", angleEncoder.getPosition().getValue());
     SmartDashboard.putNumber("Shooter Motor Encoder Degrees", getAngleDegrees());
+    SmartDashboard.putNumber("Shooter Angle Motor Rotations ", angleLeftMotor.getPosition().getValue());
   }
 
   /**
@@ -179,6 +180,7 @@ public class TalonShooterSubsystem extends SubsystemBase {
    * @param degrees
    */
   public void setAngleDegrees(double degrees){
+    System.out.println("Setting Shooter Angle to " + degrees + " degrees.");
     double clampedDegrees = MotorUtils.clamp(degrees, Constants.shooterAngleMinDegrees, Constants.shooterAngleMaxDegrees);
     if (clampedDegrees != degrees){
       System.out.println("Warning: Shooter Angle requested degrees of " + degrees + 
@@ -186,7 +188,7 @@ public class TalonShooterSubsystem extends SubsystemBase {
       "]. Clamped to " + clampedDegrees + ".");
     }
     // use motionMagic voltage control
-    angleLeftMotor.setControl(angleLeftVoltageController.withPosition(degreesToRotations(clampedDegrees)));
+    angleLeftMotor.setControl(angleLeftVoltageController.withPosition(degreesToRotations(clampedDegrees)*angleMotorGearRatio));
     // angleRightMotor acts as a follower
   }
 
@@ -278,7 +280,7 @@ public class TalonShooterSubsystem extends SubsystemBase {
     angleConfigs.MotorOutput.Inverted = Constants.angleLeftTalonShooterMotorDefaultDirection;
     // FeedbackConfigs
     angleConfigs.Slot0 = angleMotorGains;
-    angleConfigs.Feedback.SensorToMechanismRatio = angleEncoderGearRatio;
+    // angleConfigs.Feedback.SensorToMechanismRatio = angleMotorGearRatio;
     // TODO test whether this does the right thing along with gear ratio above. 
     // not sure we need continuous wrap, since we can't physicall spin the shooter around 360 degrees
     // angleConfigs.ClosedLoopGeneral.ContinuousWrap = true;
@@ -287,12 +289,9 @@ public class TalonShooterSubsystem extends SubsystemBase {
     // angleConfigs.Feedback.FeedbackRemoteSensorID = Constants.shooterLeftAngleEncoderCanId;
     // don't think need to set motor offset if it is sync'd to can coder
     // angleConfigs.Feedback.FeedbackRotorOffset = degreesToRotations(Constants.shooterAngleOffsetDegrees);
-    // copying Motion Magic values from Phoenix Swerve steer motor example
-    // https://api.ctr-electronics.com/phoenix6/release/java/src-html/com/ctre/phoenix6/mechanisms/swerve/SwerveModule.html#line.169
-    angleConfigs.MotionMagic.MotionMagicCruiseVelocity = 100.0 / angleMotorGearRatio;
-    angleConfigs.MotionMagic.MotionMagicAcceleration = angleConfigs.MotionMagic.MotionMagicCruiseVelocity / 0.100;
-    angleConfigs.MotionMagic.MotionMagicExpo_kV = 0.12 * angleMotorGearRatio;
-    angleConfigs.MotionMagic.MotionMagicExpo_kA = 0.1;
+    angleConfigs.MotionMagic.MotionMagicCruiseVelocity = 80.0;
+    angleConfigs.MotionMagic.MotionMagicAcceleration = 80;
+    angleConfigs.MotionMagic.MotionMagicJerk = 800; 
     // apply configs
     StatusCode response = angleLeftMotor.getConfigurator().apply(angleConfigs);
     if (!response.isOK()) {
