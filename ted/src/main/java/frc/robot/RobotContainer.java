@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.ShootAllStopCommand;
 import frc.robot.commands.ShooterSetAngleCommand;
+import frc.robot.commands.ShooterShootCommand;
 import frc.robot.commands.ShooterSpinUpCommand;
 import frc.robot.common.FeederMode;
 import frc.robot.commands.DefaultDriveCommand;
@@ -82,6 +83,12 @@ public class RobotContainer {
       SmartDashboard.putData(
           "Set Shooter Angle to 0",
           new ShooterSetAngleCommand(0, this.subsystems.getShooterSubsystem()));
+    }
+
+    if (InstalledHardware.shooterInstalled && InstalledHardware.feederInstalled){
+      SmartDashboard.putData(
+          "Shoot Shooter (at current angle)",
+          new ShooterShootCommand(this.subsystems.getShooterSubsystem(), this.subsystems.getFeederSubsystem()));
     }
 
     if (InstalledHardware.intakeInstalled) {

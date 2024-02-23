@@ -56,6 +56,7 @@ public class InstalledHardware
 
     // Shooter Related Hardware
     public static final boolean shooterInstalled = true;
+    public static final boolean shooterAngleCanCoderInstalled = false; 
 
     // Controller button install control
     public static final boolean applyBasicDriveToPointButtonsToDriverXboxController = false;

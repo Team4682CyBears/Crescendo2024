@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.control.Constants;
+import frc.robot.control.InstalledHardware;
 import frc.robot.common.MotorUtils;
 import frc.robot.common.ShooterPosition;
 
@@ -64,7 +65,8 @@ public class TalonShooterSubsystem extends SubsystemBase {
   private CANcoder angleEncoder = new CANcoder(Constants.shooterLeftAngleEncoderCanId);
   private final MotionMagicVoltage angleLeftVoltageController = new MotionMagicVoltage(0);
   // angleRightMotor follows angleLeftMotor, so it doesn't need its own VoltageController
-
+  private boolean shooterIsAtDesiredAngle = true; // don't start moving until angle is set. 
+  private double desiredAngleDegrees; 
 
   // Converted old settings to new settings using calculator at:
   // https://v6.docs.ctr-electronics.com/en/stable/docs/migration/migration-guide/closed-loop-guide.html
@@ -135,6 +137,13 @@ public class TalonShooterSubsystem extends SubsystemBase {
    */
   @Override
   public void periodic() {
+    if (!shooterIsAtDesiredAngle) {
+        // use motionMagic voltage control
+        angleLeftMotor.setControl(angleLeftVoltageController.withPosition(degreesToRotations(desiredAngleDegrees)));
+        // angleRightMotor acts as a follower
+        // keep moving until it reaches target angle
+        shooterIsAtDesiredAngle = isAngleWithinTolerance(desiredAngleDegrees);
+    }
     SmartDashboard.putNumber("Shooter Absolute Angle Degrees", rotationsToDegrees(angleEncoder.getPosition().getValue()));
     SmartDashboard.putNumber("Shooter Motor Encoder Degrees", getAngleDegrees());
     SmartDashboard.putNumber("Shooter Angle Motor Rotations ", angleLeftMotor.getPosition().getValue());
@@ -187,9 +196,8 @@ public class TalonShooterSubsystem extends SubsystemBase {
       "exceeded bounds of [" + Constants.shooterAngleMinDegrees + " .. " + Constants.shooterAngleMaxDegrees +
       "]. Clamped to " + clampedDegrees + ".");
     }
-    // use motionMagic voltage control
-    angleLeftMotor.setControl(angleLeftVoltageController.withPosition(degreesToRotations(clampedDegrees)));
-    // angleRightMotor acts as a follower
+    desiredAngleDegrees = clampedDegrees;
+    shooterIsAtDesiredAngle = false; 
   }
 
   /**
@@ -263,7 +271,7 @@ public class TalonShooterSubsystem extends SubsystemBase {
     // Config CanCoder
     CANcoderConfiguration encoderConfigs = new CANcoderConfiguration();
     encoderConfigs.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
-    encoderConfigs.MagnetSensor.MagnetOffset = degreesToRotations(Constants.shooterAngleOffsetDegrees);
+    encoderConfigs.MagnetSensor.MagnetOffset = degreesToRotations(Constants.shooterAbsoluteAngleOffsetDegrees);
     encoderConfigs.MagnetSensor.SensorDirection = Constants.shooterAngleSensorDirection;
     // apply configs
     StatusCode response = angleEncoder.getConfigurator().apply(encoderConfigs);
@@ -278,15 +286,19 @@ public class TalonShooterSubsystem extends SubsystemBase {
     TalonFXConfiguration angleConfigs = new TalonFXConfiguration();
     angleConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     angleConfigs.MotorOutput.Inverted = Constants.angleLeftTalonShooterMotorDefaultDirection;
-    // FeedbackConfigs
+    // FeedbackConfigs and offsets
     angleConfigs.Slot0 = angleMotorGains;
-    angleConfigs.Feedback.SensorToMechanismRatio = angleMotorGearRatio;
-    // not setting ClosedLoopGeneral.ContinuousWrap = true; because shooter does not physically spin 360 degrees
-    // TODO THIS DID NOT WORK!! DONT REENABLE UNTIL YOU FIGURE OUT WHY!!
-    // angleConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
-    // angleConfigs.Feedback.FeedbackRemoteSensorID = Constants.shooterLeftAngleEncoderCanId;
-    // don't think need to set motor offset if it is sync'd to can coder
-    // angleConfigs.Feedback.FeedbackRotorOffset = degreesToRotations(Constants.shooterAngleOffsetDegrees);
+    if (InstalledHardware.shooterAngleCanCoderInstalled) {
+      angleConfigs.Feedback.SensorToMechanismRatio = angleEncoderGearRatio;
+      angleConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
+      angleConfigs.Feedback.FeedbackRemoteSensorID = Constants.shooterLeftAngleEncoderCanId;
+      // offset is set in CanCoder config above
+    } 
+    else {
+      angleConfigs.Feedback.SensorToMechanismRatio = angleMotorGearRatio;
+      angleConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; // the internal encoder
+      angleConfigs.Feedback.FeedbackRotorOffset = degreesToRotations(Constants.shooterStartingAngleOffsetDegrees);
+    }
     angleConfigs.MotionMagic.MotionMagicCruiseVelocity = 800.0;
     angleConfigs.MotionMagic.MotionMagicAcceleration = 160;
     angleConfigs.MotionMagic.MotionMagicJerk = 800; 

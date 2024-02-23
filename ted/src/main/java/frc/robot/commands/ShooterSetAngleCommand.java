@@ -24,8 +24,6 @@ public class ShooterSetAngleCommand extends Command {
 
   private TalonShooterSubsystem shooter;
   private double desiredAngleDegrees; 
-  private boolean isDone = false;
-  private Timer timer = new Timer();
 
   /**
    * Constructor for ShooterShootCommand
@@ -43,33 +41,24 @@ public class ShooterSetAngleCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    timer.reset();
-    timer.start();
-    isDone = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // wait for shooter to be a the right angle 
     shooter.setAngleDegrees(desiredAngleDegrees);
-    isDone = shooter.isAngleWithinTolerance(desiredAngleDegrees);
-    if (timer.hasElapsed(Constants.shooterSetAngleDuration)){
-      isDone = true;
-    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    isDone = true;
     System.out.println("end of ShootAtSpeedCommand ... ");
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return isDone;
+    return true; 
   }
 
 }
