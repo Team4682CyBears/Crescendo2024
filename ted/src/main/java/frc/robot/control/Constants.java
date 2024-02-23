@@ -144,7 +144,7 @@ public final class Constants {
     public static final double shooterStartingAngleOffsetDegrees = 20.0; 
     public static SensorDirectionValue shooterAngleSensorDirection = SensorDirectionValue.CounterClockwise_Positive;
     public static final double shooterAngleMaxDegrees = 90;
-    public static final double shooterAngleMinDegrees = 0;  
+    public static final double shooterAngleMinDegrees = 20;  
     // stow angle should be low enough to drive under the stage
     public static final double shooterAngleStowDegrees = 45; 
     public static final double shooterAngleToleranceDegrees = 0.5;

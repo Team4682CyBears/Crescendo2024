@@ -45,6 +45,7 @@ public class TalonShooterSubsystem extends SubsystemBase {
   // Shooter gearing - currently 1:1
   private static final double outfeedShooterGearRatio = 1.0;
   private static final double angleMotorGearRatio = 450.0; // 450:1 (100:1 -> 72:16) 
+  //private static final double angleMotorGearRatio = 45.0; // remove 1 10x gearbox stage for testing
   private static final double angleEncoderGearRatio = 1.0; // angle encoder is mounted directly onto shaft
   
   private static final double kMinDeadband = 0.001;
@@ -67,6 +68,7 @@ public class TalonShooterSubsystem extends SubsystemBase {
   // angleRightMotor follows angleLeftMotor, so it doesn't need its own VoltageController
   private boolean shooterIsAtDesiredAngle = true; // don't start moving until angle is set. 
   private double desiredAngleDegrees; 
+  private double internalAngleOffsetDegrees = 0; // used when running from intenral motor encoder, ignored when using CanCoder
 
   // Converted old settings to new settings using calculator at:
   // https://v6.docs.ctr-electronics.com/en/stable/docs/migration/migration-guide/closed-loop-guide.html
@@ -84,17 +86,19 @@ public class TalonShooterSubsystem extends SubsystemBase {
   public TalonShooterSubsystem() {
     configureOutfeedMotors();
     configureAngleEncoder();
-    configureAngleMotors();    
+    configureAngleMotors();  
+    setInternalEncoderOffset();   
     /* Make control requests synchronous */
     leftTopVoltageController.UpdateFreqHz = 0;
     leftBottomVoltageController.UpdateFreqHz = 0;
     rightTopVoltageController.UpdateFreqHz = 0; 
     rightBottomVoltageController.UpdateFreqHz = 0; 
     angleLeftVoltageController.UpdateFreqHz = 0;
-    // set angleRightMotor to strict-follow angleLeftMotor
-    // strict followers ignore the leader's invert and use their own
-    angleRightMotor.setControl(new StrictFollower(angleLeftMotor.getDeviceID()));
-
+    if (InstalledHardware.shooterRightAngleMotorrInstalled) {
+      // set angleRightMotor to strict-follow angleLeftMotor
+      // strict followers ignore the leader's invert and use their own
+      angleRightMotor.setControl(new StrictFollower(angleLeftMotor.getDeviceID()));
+    }
     CommandScheduler.getInstance().registerSubsystem(this);
   }
 
@@ -103,7 +107,8 @@ public class TalonShooterSubsystem extends SubsystemBase {
    * @return angle in degrees
    */
   public double getAngleDegrees(){
-    return rotationsToDegrees(angleLeftMotor.getPosition().getValue());
+    double offset = InstalledHardware.shooterAngleCanCoderInstalled? 0 : internalAngleOffsetDegrees;
+    return rotationsToDegrees(angleLeftMotor.getPosition().getValue()) + offset;
   }
 
   /**
@@ -196,7 +201,8 @@ public class TalonShooterSubsystem extends SubsystemBase {
       "exceeded bounds of [" + Constants.shooterAngleMinDegrees + " .. " + Constants.shooterAngleMaxDegrees +
       "]. Clamped to " + clampedDegrees + ".");
     }
-    desiredAngleDegrees = clampedDegrees;
+    double offset = InstalledHardware.shooterAngleCanCoderInstalled? 0 : internalAngleOffsetDegrees;
+    desiredAngleDegrees = clampedDegrees - offset;
     shooterIsAtDesiredAngle = false; 
   }
 
@@ -228,7 +234,7 @@ public class TalonShooterSubsystem extends SubsystemBase {
   }
 
   /**
-   * Set the top shooter motor to a specific velocity using the in-built PID controller
+   * the top shooter motor to a specific velocity using the in-built PID controller
    * @param revolutionsPerMinute - the RPM that the top motor should spin
    */
   public void setShooterVelocityLeft(double revolutionsPerMinute) {
@@ -289,15 +295,16 @@ public class TalonShooterSubsystem extends SubsystemBase {
     // FeedbackConfigs and offsets
     angleConfigs.Slot0 = angleMotorGains;
     if (InstalledHardware.shooterAngleCanCoderInstalled) {
+      System.out.println("Configuring Shooter Angle Motor with CanCoder Feedback.");
       angleConfigs.Feedback.SensorToMechanismRatio = angleEncoderGearRatio;
       angleConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
       angleConfigs.Feedback.FeedbackRemoteSensorID = Constants.shooterLeftAngleEncoderCanId;
       // offset is set in CanCoder config above
     } 
     else {
+      System.out.println("Configuring Shooter Angle Motor with Internal Encoder Feedback.");
       angleConfigs.Feedback.SensorToMechanismRatio = angleMotorGearRatio;
       angleConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; // the internal encoder
-      angleConfigs.Feedback.FeedbackRotorOffset = degreesToRotations(Constants.shooterStartingAngleOffsetDegrees);
     }
     angleConfigs.MotionMagic.MotionMagicCruiseVelocity = 800.0;
     angleConfigs.MotionMagic.MotionMagicAcceleration = 160;
@@ -378,6 +385,13 @@ public class TalonShooterSubsystem extends SubsystemBase {
 
   private double rotationsPerSToRpm(double rotationsPerS, double targetGearRatio){
     return rotationsPerS / targetGearRatio * 60.0;
+  }
+
+  private void setInternalEncoderOffset(){
+    // onlyu call this at startup!
+    if (!InstalledHardware.shooterAngleCanCoderInstalled){
+      internalAngleOffsetDegrees = Constants.shooterStartingAngleOffsetDegrees - rotationsToDegrees(angleLeftMotor.getPosition().getValue());
+    }
   }
 
   private double degreesToRotations(double degrees)
