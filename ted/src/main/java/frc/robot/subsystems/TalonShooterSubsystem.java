@@ -377,7 +377,7 @@ public class TalonShooterSubsystem extends SubsystemBase {
     double targetUnitsPerS = 
       MotorUtils.truncateValue(
         targetRpm,
-        Constants.talonMaximumRevolutionsPerMinute * -1.0,
+        -1.0 * Constants.talonMaximumRevolutionsPerMinute * targetGearRatio / 60.0,
         Constants.talonMaximumRevolutionsPerMinute) *
       targetGearRatio / 60.0;
     return targetUnitsPerS;

@@ -25,20 +25,30 @@ public class ShooterShootCommand extends Command {
   private TalonShooterSubsystem shooter;
   private FeederSubsystem feeder;
   private double desiredAngleDegrees; 
+  private double desiredLeftSpeedRpm; 
+  private double desiredRightSpeedRpm;  
   private boolean isAtDesiredAngle = false;
   private boolean isDone = false;
   private Timer timer = new Timer();
 
   /**
    * Constructor for ShooterShootCommand
-   * Will set shooter to desired angle before shooting
+   * Will set shooter to desired angle and speeds before shooting
    * @param desiredAngleDegrees
+   * @param desiredLeftSpeedRpm
+   * @param desiredRightSpeedRpm
    * @param shooter
    * @param feeder
    */
-  public ShooterShootCommand(double desiredAngleDegrees, TalonShooterSubsystem shooter,
+  public ShooterShootCommand(
+      double desiredAngleDegrees,
+      double desiredLeftSpeedRpm,
+      double desiredRightSpeedRpm,
+      TalonShooterSubsystem shooter,
       FeederSubsystem feeder) {
     this.desiredAngleDegrees = desiredAngleDegrees;
+    this.desiredLeftSpeedRpm = desiredLeftSpeedRpm;
+    this.desiredRightSpeedRpm = desiredRightSpeedRpm;
     this.isAtDesiredAngle = false;
     this.shooter = shooter;
     this.feeder = feeder;
@@ -48,16 +58,48 @@ public class ShooterShootCommand extends Command {
 
   /**
    * Constructor for ShooterShootCommand
-   * assumes shooter is already at the desired angle
+   * Will set shooter to desired angle before shooting
+   * uses default shooter speeds
+   * 
+   * @param desiredAngleDegrees
    * @param shooter
    * @param feeder
    */
-  public ShooterShootCommand(TalonShooterSubsystem shooter, FeederSubsystem feeder) {
+  public ShooterShootCommand(double desiredAngleDegrees, TalonShooterSubsystem shooter,
+      FeederSubsystem feeder) {
+    this(desiredAngleDegrees, Constants.shooterLeftDefaultSpeedRpm, Constants.shooterRightDefaultSpeedRpm, 
+    shooter, feeder);
+  }
+
+  /**
+   * Constructor for ShooterShootCommand
+   * assumes shooter is already at the desired angle
+   * uses specified speeds
+   * @param desiredLeftSpeedRpm
+   * @param desiredRightSpeedRpm
+   * @param shooter
+   * @param feeder
+   */
+  public ShooterShootCommand(double desiredLeftSpeedRpm, double desiredRightSpeedRpm,
+  TalonShooterSubsystem shooter, FeederSubsystem feeder) {
+    this.desiredLeftSpeedRpm = desiredLeftSpeedRpm;
+    this.desiredRightSpeedRpm = desiredRightSpeedRpm;
     this.isAtDesiredAngle = true;
     this.shooter = shooter;
     this.feeder = feeder;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter, feeder);
+  }
+
+  /**
+   * Constructor for ShooterShootCommand
+   * assumes shooter is already at the desired angle
+   * uses default shooter speeds
+   * @param shooter
+   * @param feeder
+   */
+  public ShooterShootCommand(TalonShooterSubsystem shooter, FeederSubsystem feeder) {
+    this(Constants.shooterLeftDefaultSpeedRpm, Constants.shooterRightDefaultSpeedRpm, shooter, feeder);
   }
 
   // Called when the command is initially scheduled.
@@ -70,8 +112,8 @@ public class ShooterShootCommand extends Command {
     if (!isAtDesiredAngle) {
       shooter.setAngleDegrees(desiredAngleDegrees);
     }
-    shooter.setShooterVelocityLeft(Constants.shooterLeftDefaultSpeedRpm);
-    shooter.setShooterVelocityRight(Constants.shooterRightDefaultSpeedRpm);
+    shooter.setShooterVelocityLeft(desiredLeftSpeedRpm);
+    shooter.setShooterVelocityRight(desiredRightSpeedRpm);
 
     timer.reset();
     isDone = false;
