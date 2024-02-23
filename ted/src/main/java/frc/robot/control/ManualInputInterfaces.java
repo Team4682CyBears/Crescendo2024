@@ -13,6 +13,9 @@ package frc.robot.control;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+
+import java.io.Serial;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -314,7 +317,7 @@ public class ManualInputInterfaces {
         );
 
       this.coDriverController.y().onTrue(
-        new ParallelCommandGroup(
+        new SequentialCommandGroup(
           //TODO include an actual ShooterOuttake command here
           new ShooterSpinUpCommand(this.subsystemCollection.getShooterSubsystem()),
           new ShooterShootCommand(45, this.subsystemCollection.getShooterSubsystem(), this.subsystemCollection.getFeederSubsystem()),

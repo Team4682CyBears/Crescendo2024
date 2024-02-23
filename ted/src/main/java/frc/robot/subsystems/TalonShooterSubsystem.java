@@ -90,7 +90,6 @@ public class TalonShooterSubsystem extends SubsystemBase {
     // strict followers ignore the leader's invert and use their own
     angleRightMotor.setControl(new StrictFollower(angleLeftMotor.getDeviceID()));
 
-    CommandScheduler.getInstance().registerSubsystem(this);
   }
 
   /**
