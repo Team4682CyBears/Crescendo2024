@@ -74,7 +74,7 @@ public class TalonShooterSubsystem extends SubsystemBase {
   // new settings
   private Slot0Configs leftMotorGains = new Slot0Configs().withKP(1.2012).withKI(2.4023).withKD(0.0120).withKV(0.1189);
   private Slot0Configs rightMotorGains = new Slot0Configs().withKP(1.2012).withKI(2.4023).withKD(0.0120).withKV(0.1189);
-  private Slot0Configs angleMotorGains = new Slot0Configs().withKP(4.8).withKI(0.0).withKD(0.1).withKV(0.12).withKS(10.0);
+  private Slot0Configs angleMotorGains = new Slot0Configs().withKP(80).withKI(0.0).withKD(5.0).withKV(0.12);
 
   /**
    * Constructor for shooter subsystem
@@ -101,7 +101,7 @@ public class TalonShooterSubsystem extends SubsystemBase {
    * @return angle in degrees
    */
   public double getAngleDegrees(){
-    return rotationsToDegrees(angleLeftMotor.getPosition().getValue()/angleMotorGearRatio);
+    return rotationsToDegrees(angleLeftMotor.getPosition().getValue());
   }
 
   /**
@@ -135,7 +135,7 @@ public class TalonShooterSubsystem extends SubsystemBase {
    */
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Shooter Absolute Angle Degrees", angleEncoder.getPosition().getValue());
+    SmartDashboard.putNumber("Shooter Absolute Angle Degrees", rotationsToDegrees(angleEncoder.getPosition().getValue()));
     SmartDashboard.putNumber("Shooter Motor Encoder Degrees", getAngleDegrees());
     SmartDashboard.putNumber("Shooter Angle Motor Rotations ", angleLeftMotor.getPosition().getValue());
   }
@@ -188,7 +188,7 @@ public class TalonShooterSubsystem extends SubsystemBase {
       "]. Clamped to " + clampedDegrees + ".");
     }
     // use motionMagic voltage control
-    angleLeftMotor.setControl(angleLeftVoltageController.withPosition(degreesToRotations(clampedDegrees)*angleMotorGearRatio));
+    angleLeftMotor.setControl(angleLeftVoltageController.withPosition(degreesToRotations(clampedDegrees)));
     // angleRightMotor acts as a follower
   }
 
@@ -280,17 +280,15 @@ public class TalonShooterSubsystem extends SubsystemBase {
     angleConfigs.MotorOutput.Inverted = Constants.angleLeftTalonShooterMotorDefaultDirection;
     // FeedbackConfigs
     angleConfigs.Slot0 = angleMotorGains;
-    // angleConfigs.Feedback.SensorToMechanismRatio = angleMotorGearRatio;
-    // TODO test whether this does the right thing along with gear ratio above. 
-    // not sure we need continuous wrap, since we can't physicall spin the shooter around 360 degrees
-    // angleConfigs.ClosedLoopGeneral.ContinuousWrap = true;
-    // TODO put this back. removing sync during debugging. 
+    angleConfigs.Feedback.SensorToMechanismRatio = angleMotorGearRatio;
+    // not setting ClosedLoopGeneral.ContinuousWrap = true; because shooter does not physically spin 360 degrees
+    // TODO THIS DID NOT WORK!! DONT REENABLE UNTIL YOU FIGURE OUT WHY!!
     // angleConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
     // angleConfigs.Feedback.FeedbackRemoteSensorID = Constants.shooterLeftAngleEncoderCanId;
     // don't think need to set motor offset if it is sync'd to can coder
     // angleConfigs.Feedback.FeedbackRotorOffset = degreesToRotations(Constants.shooterAngleOffsetDegrees);
-    angleConfigs.MotionMagic.MotionMagicCruiseVelocity = 80.0;
-    angleConfigs.MotionMagic.MotionMagicAcceleration = 80;
+    angleConfigs.MotionMagic.MotionMagicCruiseVelocity = 800.0;
+    angleConfigs.MotionMagic.MotionMagicAcceleration = 160;
     angleConfigs.MotionMagic.MotionMagicJerk = 800; 
     // apply configs
     StatusCode response = angleLeftMotor.getConfigurator().apply(angleConfigs);

@@ -140,13 +140,13 @@ public final class Constants {
     // TODO depending on which side the motor is mounted, may need to invert these.
     public static InvertedValue angleLeftTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;
     public static InvertedValue angleRightTalonShooterMotorDefaultDirection = InvertedValue.Clockwise_Positive;
-    public static final double shooterAngleOffsetDegrees = -0.0;
-    public static SensorDirectionValue shooterAngleSensorDirection = SensorDirectionValue.Clockwise_Positive;
+    public static final double shooterAngleOffsetDegrees = 58.5;
+    public static SensorDirectionValue shooterAngleSensorDirection = SensorDirectionValue.CounterClockwise_Positive;
     public static final double shooterAngleMaxDegrees = 90;
     public static final double shooterAngleMinDegrees = 0;  
     // stow angle should be low enough to drive under the stage
     public static final double shooterAngleStowDegrees = 45; 
-    public static final double shooterAngleToleranceDegrees = 2;
+    public static final double shooterAngleToleranceDegrees = 0.5;
     public static final double shooterSetAngleDuration = 3.0;
 
     // ******************************************************************

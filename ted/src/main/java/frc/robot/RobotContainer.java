@@ -77,8 +77,8 @@ public class RobotContainer {
           "Spin Up Shooter",
           new ShooterSpinUpCommand(this.subsystems.getShooterSubsystem()));
       SmartDashboard.putData(
-          "Set Shooter Angle to 90",
-          new ShooterSetAngleCommand(90, this.subsystems.getShooterSubsystem()));
+          "Set Shooter Angle to 70",
+          new ShooterSetAngleCommand(70, this.subsystems.getShooterSubsystem()));
       SmartDashboard.putData(
           "Set Shooter Angle to 0",
           new ShooterSetAngleCommand(0, this.subsystems.getShooterSubsystem()));
