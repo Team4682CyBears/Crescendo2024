@@ -256,6 +256,24 @@ public class DrivetrainSubsystem extends SubsystemBase {
     this.speedReductionFactor = MotorUtils.truncateValue(value, 0.0, 1.0);
   }
 
+  private ChassisSpeeds discretize(ChassisSpeeds speeds) {
+    // a fudge factor to increase the size of the discretization correction. 
+    // other teams use [1..4]
+    double timeScaleFactor = 1.9; 
+    var desiredDeltaPose = new Pose2d(
+      speeds.vxMetersPerSecond * deltaTimeSeconds, 
+      speeds.vyMetersPerSecond * deltaTimeSeconds, 
+      new Rotation2d(speeds.omegaRadiansPerSecond * deltaTimeSeconds * timeScaleFactor)
+    );
+    var twist = new Pose2d().log(desiredDeltaPose);
+
+    return new ChassisSpeeds(
+      (twist.dx / deltaTimeSeconds), 
+      (twist.dy / deltaTimeSeconds), 
+      (speeds.omegaRadiansPerSecond));
+    // return(speeds);
+  }
+
   /**
    * Obtains the current gyroscope's rotation about the Z axis when looking down at the robot where positive is measured in the 
    * counter-clockwise direction.
@@ -468,7 +486,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         chassisSpeeds.omegaRadiansPerSecond * Math.min(1.0, this.speedReductionFactor * 1.25));
 
       // apply acceleration control
-      reducedChassisSpeeds = limitChassisSpeedsAccel(reducedChassisSpeeds);
+      reducedChassisSpeeds = discretize(limitChassisSpeedsAccel(reducedChassisSpeeds));
       previousChassisSpeeds = reducedChassisSpeeds; 
 
       // take the current 'requested' chassis speeds and ask the ask the swerve modules to attempt this

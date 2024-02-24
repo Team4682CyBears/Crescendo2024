@@ -10,25 +10,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.commands.ShootAllStopCommand;
-import frc.robot.commands.ShooterSpinUpCommand;
 import frc.robot.common.FeederMode;
-import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.common.TestTrajectories;
 import frc.robot.control.InstalledHardware;
 import frc.robot.control.ManualInputInterfaces;
 import frc.robot.control.SubsystemCollection;
-import frc.robot.subsystems.CameraSubsystem;
-import frc.robot.subsystems.DrivetrainPowerSubsystem;
-import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.FeederSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.PowerDistributionPanelWatcherSubsystem;
-import frc.robot.subsystems.TalonShooterSubsystem;
-import frc.robot.subsystems.SteerMotorCanCoderSubsystem;
-import frc.robot.subsystems.SteerMotorSubsystem;
-import frc.robot.commands.DriveTimeCommand;
-import frc.robot.commands.FeedNoteCommand;
-import frc.robot.commands.IntakeNoteCommand;
+import frc.robot.subsystems.*;
+import frc.robot.commands.*;
 
 public class RobotContainer {
 
@@ -70,6 +58,13 @@ public class RobotContainer {
       new DriveTimeCommand(this.subsystems.getDriveTrainSubsystem(),
       new ChassisSpeeds(0.6, 0.0, 0.0),
       3.0));
+    
+    TestTrajectories testtrajectories = new TestTrajectories(this.subsystems.getDriveTrainSubsystem().getTrajectoryConfig());
+
+    SmartDashboard.putData("Basic Forward", new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testtrajectories.traverseSimpleForward));
+    SmartDashboard.putData("Forward Arc", new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testtrajectories.traverseForwardArc));
+    SmartDashboard.putData("Turn 90", new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testtrajectories.turn90));
+
 
     if (InstalledHardware.shooterInstalled) {
       SmartDashboard.putData(
