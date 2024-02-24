@@ -210,6 +210,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   /**
+   * returns chassis speeds (robot relative)
+   * @return chassis speeds
+   */
+  public ChassisSpeeds getChassisSpeeds(){
+    return chassisSpeeds;
+  }
+
+  /**
    * returns navx euler angle (pitch, roll, yaw) in degrees
    * @return EulerAngle
    */
@@ -497,23 +505,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
       else { // normal rotation mode 
         states = swerveKinematics.toSwerveModuleStates(reducedChassisSpeeds);
       }
-      // next we take the theoretical values and bring them down (if neecessary) to incorporate physical constraints (like motor maximum speeds)
-      SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
     } 
-
-    // now we take the four states and ask that the modules attempt to perform the wheel speed and direction built above
-    frontLeftModule.set(
-      states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
-      states[0].angle.getRadians());
-    frontRightModule.set(
-      states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
-      states[1].angle.getRadians());
-    backLeftModule.set(
-      states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
-      states[2].angle.getRadians());
-    backRightModule.set(
-      states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
-      states[3].angle.getRadians());
+    // next we take the state and set the states on the swerve modules
+    setSwerveModuleStates(states);
   }
 
   /**
@@ -571,6 +565,30 @@ public class DrivetrainSubsystem extends SubsystemBase {
    */
   public void setSwerveDriveCenterOfRotation(SwerveDriveCenterOfRotation swerveDriveCenterOfRotation) {
     this.swerveDriveCenterOfRotation = swerveDriveCenterOfRotation;
+  }
+
+  /**
+   * A method to set the swerve module states
+   * @param states - swerve module states
+   */
+  private void setSwerveModuleStates(SwerveModuleState[]  states){
+    // we take the theoretical values and bring them down (if neecessary) to incorporate physical constraints (like motor maximum speeds)
+    SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
+
+    // now we take the four states and ask that the modules attempt to perform the wheel speed and direction built above
+    frontLeftModule.set(
+      states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
+      states[0].angle.getRadians());
+    frontRightModule.set(
+      states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
+      states[1].angle.getRadians());
+    backLeftModule.set(
+      states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
+      states[2].angle.getRadians());
+    backRightModule.set(
+      states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
+      states[3].angle.getRadians());
+
   }
 
   /**

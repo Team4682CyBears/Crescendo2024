@@ -15,6 +15,8 @@ import frc.robot.common.TestTrajectories;
 import frc.robot.control.InstalledHardware;
 import frc.robot.control.ManualInputInterfaces;
 import frc.robot.control.SubsystemCollection;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.auto.NamedCommands;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 
@@ -65,6 +67,13 @@ public class RobotContainer {
     SmartDashboard.putData("Forward Arc", new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testtrajectories.traverseForwardArc));
     SmartDashboard.putData("Turn 90", new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testtrajectories.turn90));
 
+    PathPlannerPath close4NoteAutoPath = PathPlannerPath.fromPathFile("Close4NoteAuto");
+    SmartDashboard.putData("DriveStraightPath",
+      FollowTrajectoryCommandBuilder.build(close4NoteAutoPath, this.subsystems.getDriveTrainSubsystem(), true));
+
+    PathPlannerPath FarNote3Path = PathPlannerPath.fromPathFile("FarNote3");
+    SmartDashboard.putData("DriveHookRightPath",
+        FollowTrajectoryCommandBuilder.build(FarNote3Path, this.subsystems.getDriveTrainSubsystem(), true));
 
     if (InstalledHardware.shooterInstalled) {
       SmartDashboard.putData(
