@@ -60,7 +60,7 @@ public final class Falcon500DriveControllerFactoryBuilder {
             CurrentLimitsConfigs currentConfigs = new CurrentLimitsConfigs();
             VoltageOut voltageRequest = new VoltageOut(0);           
 
-            double sensorPositionCoefficient = Math.PI * moduleConfiguration.getWheelDiameter() * moduleConfiguration.getDriveReduction() / TICKS_PER_ROTATION;
+            double sensorPositionCoefficient = Math.PI * moduleConfiguration.getWheelDiameter() * moduleConfiguration.getDriveReduction();
             double sensorVelocityCoefficient = sensorPositionCoefficient * 10.0;
 
             if (hasVoltageCompensation()) {

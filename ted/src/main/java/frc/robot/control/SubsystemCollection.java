@@ -9,14 +9,7 @@
 // ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
 
 package frc.robot.control;
-import frc.robot.subsystems.DrivetrainPowerSubsystem;
-import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.FeederSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.PowerDistributionPanelWatcherSubsystem;
-import frc.robot.subsystems.TalonShooterSubsystem;
-import frc.robot.subsystems.SteerMotorSubsystem;
-import frc.robot.subsystems.SteerMotorCanCoderSubsystem;
+import frc.robot.subsystems.*;
 
 public class SubsystemCollection
 {
@@ -25,6 +18,7 @@ public class SubsystemCollection
 
     // declaring and init subsystems  
     private DrivetrainSubsystem driveTrainSubsystem = null;
+    private CameraSubsystem cameraSubsystem = null;
     private DrivetrainPowerSubsystem driveTrainPowerSubsystem = null;
     private PowerDistributionPanelWatcherSubsystem powerDistributionPanelWatcherSubsystem = null; 
     private TalonShooterSubsystem shooterSubsystem = null;
@@ -40,6 +34,9 @@ public class SubsystemCollection
 
     public DrivetrainSubsystem getDriveTrainSubsystem() { return driveTrainSubsystem; }
     public void setDriveTrainSubsystem(DrivetrainSubsystem value) { driveTrainSubsystem = value; }
+
+    public CameraSubsystem getCameraSubsystem() { return cameraSubsystem; }
+    public void setCameraSubsystem(CameraSubsystem value) { cameraSubsystem = value; }
 
     public DrivetrainPowerSubsystem getDriveTrainPowerSubsystem() { return driveTrainPowerSubsystem; }
     public void setDriveTrainPowerSubsystem(DrivetrainPowerSubsystem value) { driveTrainPowerSubsystem = value; }

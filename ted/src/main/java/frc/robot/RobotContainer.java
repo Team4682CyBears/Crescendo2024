@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -13,25 +16,12 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.common.TestTrajectories;
 import frc.robot.common.SwerveTrajectoryConfig;
-import frc.robot.commands.ShootAllStopCommand;
-import frc.robot.commands.ShooterSpinUpCommand;
 import frc.robot.common.FeederMode;
-import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.control.InstalledHardware;
 import frc.robot.control.ManualInputInterfaces;
 import frc.robot.control.SubsystemCollection;
-import frc.robot.subsystems.CameraSubsystem;
-import frc.robot.subsystems.DrivetrainPowerSubsystem;
-import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.FeederSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.PowerDistributionPanelWatcherSubsystem;
-import frc.robot.subsystems.TalonShooterSubsystem;
-import frc.robot.subsystems.SteerMotorCanCoderSubsystem;
-import frc.robot.subsystems.SteerMotorSubsystem;
-import frc.robot.commands.DriveTimeCommand;
-import frc.robot.commands.FeedNoteCommand;
-import frc.robot.commands.IntakeNoteCommand;
+import frc.robot.subsystems.*;
+import frc.robot.commands.*;
 
 public class RobotContainer {
 
@@ -105,6 +95,9 @@ public class RobotContainer {
 
     private final TestTrajectories testTrajectories = new TestTrajectories(subsystems.getDriveTrainSubsystem().getTrajectoryConfig());
     
+    SmartDashboard.putData("Allign relative to tag", 
+      new AllignRelativeToTagCommand(this.subsystems.getDriveTrainSubsystem(), this.subsystems.getCameraSubsystem(), new Pose2d(new Translation2d(1.0, 0.0), new Rotation2d(0.0)), 7.0));
+
     SmartDashboard.putData("Drive Forward Trajectory",
       new DriveTrajectoryCommand(subsystems.getDriveTrainSubsystem(), testTrajectories.traverseSimpleForward));
 
