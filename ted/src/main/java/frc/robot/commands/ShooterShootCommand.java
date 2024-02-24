@@ -17,6 +17,8 @@ import frc.robot.subsystems.TalonShooterSubsystem;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
+import java.util.function.DoubleSupplier; 
+
 /**
  * Forms a command to shoot the shooter
  */
@@ -27,6 +29,9 @@ public class ShooterShootCommand extends Command {
   private double desiredAngleDegrees; 
   private double desiredLeftSpeedRpm; 
   private double desiredRightSpeedRpm;  
+  private DoubleSupplier desiredLeftSpeedRpmSupplier; 
+  private DoubleSupplier desiredRightSpeedRpmSupplier;  
+  private boolean setSpeedsFromSupplier = false;
   private boolean isAtDesiredAngle = false;
   private boolean isDone = false;
   private Timer timer = new Timer();
@@ -94,6 +99,27 @@ public class ShooterShootCommand extends Command {
   /**
    * Constructor for ShooterShootCommand
    * assumes shooter is already at the desired angle
+   * uses specified speed suppliers
+   * @param desiredLeftSpeedRpmSupplier
+   * @param desiredRightSpeedRpmSupplier
+   * @param shooter
+   * @param feeder
+   */
+  public ShooterShootCommand(DoubleSupplier desiredLeftSpeedRpm, DoubleSupplier desiredRightSpeedRpm,
+  TalonShooterSubsystem shooter, FeederSubsystem feeder) {
+    this.desiredLeftSpeedRpmSupplier = desiredLeftSpeedRpmSupplier;
+    this.desiredRightSpeedRpmSupplier = desiredRightSpeedRpmSupplier;
+    this.setSpeedsFromSupplier = true;
+    this.isAtDesiredAngle = true;
+    this.shooter = shooter;
+    this.feeder = feeder;
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(shooter, feeder);
+  }
+
+  /**
+   * Constructor for ShooterShootCommand
+   * assumes shooter is already at the desired angle
    * uses default shooter speeds
    * @param shooter
    * @param feeder
@@ -105,6 +131,10 @@ public class ShooterShootCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    if (setSpeedsFromSupplier) {
+      this.desiredLeftSpeedRpm = this.desiredLeftSpeedRpmSupplier.getAsDouble();
+      this.desiredRightSpeedRpm = this.desiredRightSpeedRpmSupplier.getAsDouble();
+    }
     // stop the feeder so the note doesn't go through shooter before shooter is setup
     feeder.setAllStop();
     feeder.setFeederMode(FeederMode.FeedToShooter);

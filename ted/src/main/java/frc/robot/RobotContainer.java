@@ -98,7 +98,7 @@ public class RobotContainer {
       SmartDashboard.putNumber("Shooter Right Speed RPM Setter", Constants.shooterRightDefaultSpeedRpm);
       SmartDashboard.putData(
           "Shooter Shoot to Current Angle and Specified Speeds",
-          new ShooterShootTesterCommand(
+          new ShooterShootCommand(
             () -> SmartDashboard.getNumber("Shooter Left Speed RPM Setter", Constants.shooterLeftDefaultSpeedRpm),
             () -> SmartDashboard.getNumber("Shooter Right Speed RPM Setter", Constants.shooterRightDefaultSpeedRpm),
           this.subsystems.getShooterSubsystem(), this.subsystems.getFeederSubsystem()));
