@@ -35,6 +35,7 @@ public class ShooterShootCommand extends Command {
   private boolean isAtDesiredAngle = false;
   private boolean isDone = false;
   private Timer timer = new Timer();
+  private Timer delayTimer = new Timer();
 
   /**
    * Constructor for ShooterShootCommand
@@ -146,6 +147,7 @@ public class ShooterShootCommand extends Command {
     shooter.setShooterVelocityRight(desiredRightSpeedRpm);
 
     timer.reset();
+    delayTimer.reset();
     isDone = false;
   }
 
@@ -157,6 +159,9 @@ public class ShooterShootCommand extends Command {
       isAtDesiredAngle = shooter.isAngleWithinTolerance(desiredAngleDegrees);
     }
     if (isAtDesiredAngle && shooter.isAtSpeed()){
+      delayTimer.start();
+    }
+    if (delayTimer.hasElapsed(Constants.shooterSpinUpDelay)){
       feeder.setFeederSpeed(Constants.feederSpeed);
       timer.start();
     }
