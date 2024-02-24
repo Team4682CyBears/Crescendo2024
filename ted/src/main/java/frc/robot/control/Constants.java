@@ -23,38 +23,59 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 public final class Constants {
 
     public final static double DriveVoltageScalar = 1.0;
+
+    //////////////////// TED DRIVETRAIN ////////////////////
     /**
      * The left-to-right distance between the drivetrain wheels
-     *
      * Should be measured from center to center.
      */
-    public static final double DRIVETRAIN_TRACKWIDTH_METERS = Units.inchesToMeters(23.25); 
+    public static final double TED_DRIVETRAIN_TRACKWIDTH_METERS = Units.inchesToMeters(23.25); 
     /**
      * The front-to-back distance between the drivetrain wheels.
-     *
      * Should be measured from center to center.
      */
-    public static final double DRIVETRAIN_WHEELBASE_METERS = Units.inchesToMeters(22.75); 
+    public static final double TED_DRIVETRAIN_WHEELBASE_METERS = Units.inchesToMeters(22.75); 
+
+    public static final double TED_FRONT_LEFT_MODULE_STEER_OFFSET = Math.toRadians(281.8 + 3.8 + 173.5);
+    public static final double TED_FRONT_RIGHT_MODULE_STEER_OFFSET = Math.toRadians(327.9 + 3.6 - 0.3); 
+    public static final double TED_BACK_LEFT_MODULE_STEER_OFFSET = Math.toRadians(209.1 + 2.5 - 7.9);
+    public static final double TED_BACK_RIGHT_MODULE_STEER_OFFSET = Math.toRadians(49.0 + 356.6 + 0.5);
+
+    //////////////////// BABYBEAR DRIVETRAIN ////////////////////
+    /**
+     * The left-to-right distance between the drivetrain wheels
+     * Should be measured from center to center.
+     */
+    public static final double BABYBEAR_DRIVETRAIN_TRACKWIDTH_METERS = Units.inchesToMeters(17.179); 
+    /**
+     * The front-to-back distance between the drivetrain wheels.
+     * Should be measured from center to center.
+     */
+    public static final double BABYBEAR_DRIVETRAIN_WHEELBASE_METERS = Units.inchesToMeters(17.179); 
+
+    public static final double BABYBEAR_FRONT_LEFT_MODULE_STEER_OFFSET = Math.toRadians(281.8 + 3.8 + 173.5);
+    public static final double BABYBEAR_FRONT_RIGHT_MODULE_STEER_OFFSET = Math.toRadians(327.9 + 3.6 - 0.3); 
+    public static final double BABYBEAR_BACK_LEFT_MODULE_STEER_OFFSET = Math.toRadians(209.1 + 2.5 - 7.9);
+    public static final double BABYBEAR_BACK_RIGHT_MODULE_STEER_OFFSET = Math.toRadians(49.0 + 356.6 + 0.5);
+
+    //////////////////// COMMON DRIVETRAIN ////////////////////
 
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 1; 
     public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 2; 
     public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 3; 
-    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = Math.toRadians(281.8 + 3.8 + 173.5);
 
     public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 4; 
     public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 5; 
     public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 6; 
-    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = Math.toRadians(327.9 + 3.6 - 0.3); 
 
     public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 7; 
     public static final int BACK_LEFT_MODULE_STEER_MOTOR = 8; 
     public static final int BACK_LEFT_MODULE_STEER_ENCODER = 9; 
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = Math.toRadians(209.1 + 2.5 - 7.9);
 
     public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 10; 
     public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 11; 
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 12; 
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = Math.toRadians(49.0 + 356.6 + 0.5);
+
     // *****************************************************************
     // standard stuff constants - motors rotation, etc.
     public static final double DegreesPerRevolution = 360.0;

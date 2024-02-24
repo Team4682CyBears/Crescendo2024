@@ -31,6 +31,7 @@ import frc.robot.common.SwerveTrajectoryConfig;
 import frc.robot.swerveHelpers.SwerveModuleHelper;
 import frc.robot.swerveHelpers.SwerveModule;
 import frc.robot.swerveHelpers.WcpModuleConfigurations;
+import frc.robot.swerveLib.ModuleConfiguration;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -69,6 +70,37 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 6.0;
 
   public static final double MIN_VELOCITY_BOUNDARY_METERS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND * 0.14; // 0.14 a magic number based on testing
+
+  private double DRIVETRAIN_TRACKWIDTH_METERS;
+  private double DRIVETRAIN_WHEELBASE_METERS;
+  private ModuleConfiguration swerveModuleConfiguration;
+  private double FRONT_LEFT_MODULE_STEER_OFFSET;
+  private double FRONT_RIGHT_MODULE_STEER_OFFSET;
+  private double BACK_LEFT_MODULE_STEER_OFFSET;
+  private double BACK_RIGHT_MODULE_STEER_OFFSET;
+
+  if (InstalledHardware.tedDrivetrainInstalled){
+    DRIVETRAIN_TRACKWIDTH_METERS = TED_DRIVETRAIN_TRACKWIDTH_METERS;
+    DRIVETRAIN_WHEELBASE_METERS = TED_DRIVETRAIN_WHEELBASE_METERS;
+    swerveModuleConfiguration = WcpModuleConfigurations.TED;
+    FRONT_LEFT_MODULE_STEER_OFFSET = TED_FRONT_LEFT_MODULE_STEER_OFFSET;
+    FRONT_RIGHT_MODULE_STEER_OFFSET = TED_FRONT_RIGHT_MODULE_STEER_OFFSET;
+    BACK_LEFT_MODULE_STEER_OFFSET = TED_BACK_LEFT_MODULE_STEER_OFFSET;
+    BACK_RIGHT_MODULE_STEER_OFFSET = TED_BACK_RIGHT_MODULE_STEER_OFFSET;
+  }
+  else if (InstalledHardware.babybearDrivetrainInstalled){
+    DRIVETRAIN_TRACKWIDTH_METERS = BABYBEAR_DRIVETRAIN_TRACKWIDTH_METERS;
+    DRIVETRAIN_WHEELBASE_METERS = BABYBEAR_DRIVETRAIN_WHEELBASE_METERS;
+    swerveModuleConfiguration = WcpModuleConfigurations.BABYBEAR;
+    FRONT_LEFT_MODULE_STEER_OFFSET = BABYBEAR_FRONT_LEFT_MODULE_STEER_OFFSET;
+    FRONT_RIGHT_MODULE_STEER_OFFSET = BABYBEAR_FRONT_RIGHT_MODULE_STEER_OFFSET;
+    BACK_LEFT_MODULE_STEER_OFFSET = BABYBEAR_BACK_LEFT_MODULE_STEER_OFFSET;
+    BACK_RIGHT_MODULE_STEER_OFFSET = BABYBEAR_BACK_RIGHT_MODULE_STEER_OFFSET;
+  } 
+  else {
+    System.out.println("ERROR: no drivetrain was enabled in InstalledHardware!!!");
+  }
+
   /**
    * The maximum angular velocity of the robot in radians per second.
    * <p>
