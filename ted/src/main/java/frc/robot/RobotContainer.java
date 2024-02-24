@@ -41,13 +41,7 @@ public class RobotContainer {
     // init the pdp watcher
     this.initializePowerDistributionPanelWatcherSubsystem();
 
-    // init the various subsystems
-    this.initializeDrivetrainSubsystem();
-
-    // init the input system 
-    this.initializeManualInputInterfaces();
-
-    // intake subsystem init
+        // intake subsystem init
     this.initializeIntakeSubsystem();
 
     // feeder subsystem init
@@ -55,6 +49,12 @@ public class RobotContainer {
 
     // shooter subsystem init
     this.initializeShooterSubsystem();
+
+    // init the various subsystems
+    this.initializeDrivetrainSubsystem();
+
+    // init the input system 
+    this.initializeManualInputInterfaces();
 
     // Configure the button bindings
     if(this.subsystems.isManualInputInterfacesAvailable()) {
