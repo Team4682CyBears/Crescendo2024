@@ -28,8 +28,6 @@ import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PowerDistributionPanelWatcherSubsystem;
 import frc.robot.subsystems.TalonShooterSubsystem;
-import frc.robot.subsystems.SteerMotorCanCoderSubsystem;
-import frc.robot.subsystems.SteerMotorSubsystem;
 import frc.robot.commands.DriveTimeCommand;
 import frc.robot.commands.FeedNoteCommand;
 import frc.robot.commands.IntakeNoteCommand;
@@ -58,24 +56,22 @@ public class RobotContainer {
     // shooter subsystem init
     this.initializeShooterSubsystem();
 
-    // steer motor subsystem init
-    this.initializeSteerMotorSubsystem();
-
-    // steer motor can coder subsystem init
-    this.initializeSteerMotorCanCoderSubsystem();
-
     // Configure the button bindings
-    System.out.println(">>>> Initializing button bindings.");
-    this.subsystems.getManualInputInterfaces().initializeButtonCommandBindings();
-    System.out.println(">>>> Finished initializing button bindings.");
+    if(this.subsystems.isManualInputInterfacesAvailable()) {
+      System.out.println(">>>> Initializing button bindings.");
+      this.subsystems.getManualInputInterfaces().initializeButtonCommandBindings();
+      System.out.println(">>>> Finished initializing button bindings.");
+    }
 
-    SmartDashboard.putData(
-      "DriveForwardRobotCentric",
-      new DriveTimeCommand(this.subsystems.getDriveTrainSubsystem(),
-      new ChassisSpeeds(0.6, 0.0, 0.0),
-      3.0));
+    if(this.subsystems.isDriveTrainSubsystemAvailable()) {
+      SmartDashboard.putData(
+        "DriveForwardRobotCentric",
+        new DriveTimeCommand(this.subsystems.getDriveTrainSubsystem(),
+        new ChassisSpeeds(0.6, 0.0, 0.0),
+        3.0));
+    }
 
-    if (InstalledHardware.shooterInstalled) {
+    if (this.subsystems.isShooterSubsystemAvailable()) {
       SmartDashboard.putData(
           "Spin Up Shooter",
           new ShooterSpinUpCommand(this.subsystems.getShooterSubsystem()));
@@ -103,19 +99,19 @@ public class RobotContainer {
           this.subsystems.getShooterSubsystem(), this.subsystems.getFeederSubsystem()));
     }
 
-    if (InstalledHardware.intakeInstalled) {
+    if (this.subsystems.isIntakeSubsystemAvailable()) {
       SmartDashboard.putData(
           "Run Intake",
           new IntakeNoteCommand(this.subsystems.getIntakeSubsystem()));
     }
 
-    if (InstalledHardware.feederInstalled) {
+    if (this.subsystems.isFeederSubsystemAvailable()) {
       SmartDashboard.putData(
           "Run Feeder to Shooter",
           new FeedNoteCommand(this.subsystems.getFeederSubsystem(), FeederMode.FeedToShooter));
     }
 
-    if(this.subsystems.getDriveTrainPowerSubsystem() != null) {
+    if(this.subsystems.isDriveTrainPowerSubsystemAvailable()) {
       SmartDashboard.putData(
         "DriveForwardRobotCentric",
         new DriveTimeCommand(this.subsystems.getDriveTrainSubsystem(),
@@ -132,8 +128,13 @@ public class RobotContainer {
    * A method to init the PDP watcher
    */
   private void initializePowerDistributionPanelWatcherSubsystem() {
-    subsystems.setPowerDistributionPanelWatcherSubsystem(new PowerDistributionPanelWatcherSubsystem());
-    System.out.println("SUCCESS: initializePowerDistributionPanelWatcherSubsystem");
+    if(InstalledHardware.powerDistributionPanelInstalled) {
+      subsystems.setPowerDistributionPanelWatcherSubsystem(new PowerDistributionPanelWatcherSubsystem());
+      System.out.println("SUCCESS: initializePowerDistributionPanelWatcherSubsystem");
+    }
+    else {
+      System.out.println("FAIL: initializePowerDistributionPanelWatcherSubsystem");
+    }
   }
 
   /**
@@ -171,7 +172,6 @@ public class RobotContainer {
           () -> -RobotContainer.modifyAxisSquare(subsystems.getManualInputInterfaces().getInputArcadeDriveX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
           () -> -RobotContainer.modifyAxisSquare(subsystems.getManualInputInterfaces().getInputSpinDriveX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
           ));
-
     }
     else {
       System.out.println("FAIL: initializeDrivetrain");
@@ -248,36 +248,6 @@ public class RobotContainer {
     }
     else {
       System.out.println("FAIL: ShooterSubsystem");
-    }
-  }
-
-  /**
-   * A method to init the steer motor subsystem
-   */
-  private void initializeSteerMotorSubsystem() {
-    if(InstalledHardware.leftFrontDriveInstalledForTesting) {
-      // The robot's subsystems and commands are defined here...
-      subsystems.setSteerMotorSubsystem(new SteerMotorSubsystem());
-      SmartDashboard.putData("Debug: SteerMotorSubsystem", subsystems.getSteerMotorSubsystem());
-      System.out.println("SUCCESS: SteerMotorSubsystem");
-    }
-    else {
-      System.out.println("FAIL: SteerMotorSubsystem");
-    }
-  }
-
-  /**
-   * A method to init the steer motor subsystem
-   */
-  private void initializeSteerMotorCanCoderSubsystem() {
-    if(InstalledHardware.leftFrontDriveCanCoderInstalledForTesting) {
-      // The robot's subsystems and commands are defined here...
-      subsystems.setSteerMotorCanCoderSubsystem(new SteerMotorCanCoderSubsystem());
-      SmartDashboard.putData("Debug: SteerMotorCanCoderSubsystem", subsystems.getSteerMotorCanCoderSubsystem());
-      System.out.println("SUCCESS: SteerMotorCanCoderSubsystem");
-    }
-    else {
-      System.out.println("FAIL: SteerMotorCanCoderSubsystem");
     }
   }
 
