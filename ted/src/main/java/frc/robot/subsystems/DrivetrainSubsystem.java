@@ -22,6 +22,8 @@ import static frc.robot.control.Constants.*;
 import frc.robot.NavX.AHRS;
 
 import frc.robot.control.Constants;
+import frc.robot.control.InstalledHardware;
+import frc.robot.common.DrivetrainConfig;
 import frc.robot.common.EulerAngle;
 import frc.robot.common.VectorUtils;
 import frc.robot.control.SwerveDriveMode;
@@ -71,35 +73,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   public static final double MIN_VELOCITY_BOUNDARY_METERS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND * 0.14; // 0.14 a magic number based on testing
 
-  private double DRIVETRAIN_TRACKWIDTH_METERS;
-  private double DRIVETRAIN_WHEELBASE_METERS;
-  private ModuleConfiguration swerveModuleConfiguration;
-  private double FRONT_LEFT_MODULE_STEER_OFFSET;
-  private double FRONT_RIGHT_MODULE_STEER_OFFSET;
-  private double BACK_LEFT_MODULE_STEER_OFFSET;
-  private double BACK_RIGHT_MODULE_STEER_OFFSET;
-
-  if (InstalledHardware.tedDrivetrainInstalled){
-    DRIVETRAIN_TRACKWIDTH_METERS = TED_DRIVETRAIN_TRACKWIDTH_METERS;
-    DRIVETRAIN_WHEELBASE_METERS = TED_DRIVETRAIN_WHEELBASE_METERS;
-    swerveModuleConfiguration = WcpModuleConfigurations.TED;
-    FRONT_LEFT_MODULE_STEER_OFFSET = TED_FRONT_LEFT_MODULE_STEER_OFFSET;
-    FRONT_RIGHT_MODULE_STEER_OFFSET = TED_FRONT_RIGHT_MODULE_STEER_OFFSET;
-    BACK_LEFT_MODULE_STEER_OFFSET = TED_BACK_LEFT_MODULE_STEER_OFFSET;
-    BACK_RIGHT_MODULE_STEER_OFFSET = TED_BACK_RIGHT_MODULE_STEER_OFFSET;
-  }
-  else if (InstalledHardware.babybearDrivetrainInstalled){
-    DRIVETRAIN_TRACKWIDTH_METERS = BABYBEAR_DRIVETRAIN_TRACKWIDTH_METERS;
-    DRIVETRAIN_WHEELBASE_METERS = BABYBEAR_DRIVETRAIN_WHEELBASE_METERS;
-    swerveModuleConfiguration = WcpModuleConfigurations.BABYBEAR;
-    FRONT_LEFT_MODULE_STEER_OFFSET = BABYBEAR_FRONT_LEFT_MODULE_STEER_OFFSET;
-    FRONT_RIGHT_MODULE_STEER_OFFSET = BABYBEAR_FRONT_RIGHT_MODULE_STEER_OFFSET;
-    BACK_LEFT_MODULE_STEER_OFFSET = BABYBEAR_BACK_LEFT_MODULE_STEER_OFFSET;
-    BACK_RIGHT_MODULE_STEER_OFFSET = BABYBEAR_BACK_RIGHT_MODULE_STEER_OFFSET;
-  } 
-  else {
-    System.out.println("ERROR: no drivetrain was enabled in InstalledHardware!!!");
-  }
+  private static DrivetrainConfig drivetrainConfig = 
+    InstalledHardware.tedDrivetrainInstalled ? Constants.tedDrivertainConfig : Constants.babybearDrivetrainConfig;
+  private static double DRIVETRAIN_TRACKWIDTH_METERS = drivetrainConfig.getTrackwidthMeters();
+  private static double DRIVETRAIN_WHEELBASE_METERS = drivetrainConfig.getWheelbaseMeters();
+  private static ModuleConfiguration swerveModuleConfiguration = drivetrainConfig.getSwerveModuleConfiguration();
+  private static double FRONT_LEFT_MODULE_STEER_OFFSET = drivetrainConfig.getFrontLeftModuleSteerOffset();
+  private static double FRONT_RIGHT_MODULE_STEER_OFFSET = drivetrainConfig.getFrontRightModuleSteerOffset();
+  private static double BACK_LEFT_MODULE_STEER_OFFSET = drivetrainConfig.getBackLeftModuleSteerOffset();
+  private static double BACK_RIGHT_MODULE_STEER_OFFSET = drivetrainConfig.getBackRightModuleSteerOffset();
 
   /**
    * The maximum angular velocity of the robot in radians per second.
@@ -188,7 +170,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
             tab.getLayout("Front Right Module", BuiltInLayouts.kList)
                     .withSize(2, 4)
                     .withPosition(2, 0),
-            WcpModuleConfigurations.SWERVEX,
+            swerveModuleConfiguration,
             FRONT_RIGHT_MODULE_DRIVE_MOTOR,
             FRONT_RIGHT_MODULE_STEER_MOTOR,
             FRONT_RIGHT_MODULE_STEER_ENCODER,
@@ -199,7 +181,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
             tab.getLayout("Back Left Module", BuiltInLayouts.kList)
                     .withSize(2, 4)
                     .withPosition(4, 0),
-            WcpModuleConfigurations.SWERVEX,
+            swerveModuleConfiguration,
             BACK_LEFT_MODULE_DRIVE_MOTOR,
             BACK_LEFT_MODULE_STEER_MOTOR,
             BACK_LEFT_MODULE_STEER_ENCODER,
@@ -210,7 +192,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
             tab.getLayout("Back Right Module", BuiltInLayouts.kList)
                     .withSize(2, 4)
                     .withPosition(6, 0),
-            WcpModuleConfigurations.SWERVEX,
+            swerveModuleConfiguration,
             BACK_RIGHT_MODULE_DRIVE_MOTOR,
             BACK_RIGHT_MODULE_STEER_MOTOR,
             BACK_RIGHT_MODULE_STEER_ENCODER,
