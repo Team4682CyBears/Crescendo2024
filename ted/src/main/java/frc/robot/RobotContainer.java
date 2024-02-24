@@ -11,9 +11,13 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.ShootAllStopCommand;
+import frc.robot.commands.ShooterSetAngleCommand;
+import frc.robot.commands.ShooterSetAngleTesterCommand;
+import frc.robot.commands.ShooterShootCommand;
 import frc.robot.commands.ShooterSpinUpCommand;
 import frc.robot.common.FeederMode;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.control.Constants;
 import frc.robot.control.InstalledHardware;
 import frc.robot.control.ManualInputInterfaces;
 import frc.robot.control.SubsystemCollection;
@@ -37,13 +41,7 @@ public class RobotContainer {
     // init the pdp watcher
     this.initializePowerDistributionPanelWatcherSubsystem();
 
-    // init the various subsystems
-    this.initializeDrivetrainSubsystem();
-
-    // init the input system 
-    this.initializeManualInputInterfaces();
-
-    // intake subsystem init
+        // intake subsystem init
     this.initializeIntakeSubsystem();
 
     // feeder subsystem init
@@ -51,6 +49,12 @@ public class RobotContainer {
 
     // shooter subsystem init
     this.initializeShooterSubsystem();
+
+    // init the various subsystems
+    this.initializeDrivetrainSubsystem();
+
+    // init the input system 
+    this.initializeManualInputInterfaces();
 
     // Configure the button bindings
     if(this.subsystems.isManualInputInterfacesAvailable()) {
@@ -71,6 +75,28 @@ public class RobotContainer {
       SmartDashboard.putData(
           "Spin Up Shooter",
           new ShooterSpinUpCommand(this.subsystems.getShooterSubsystem()));
+      SmartDashboard.putNumber("Shooter Angle Setter", Constants.shooterStartingAngleOffsetDegrees);
+      SmartDashboard.putData(
+          "Set Shooter To Specified Angle",
+          new ShooterSetAngleTesterCommand(
+            () -> SmartDashboard.getNumber("Shooter Angle Setter", Constants.shooterStartingAngleOffsetDegrees),
+            this.subsystems.getShooterSubsystem()
+          )
+      );
+    }
+
+    if (this.subsystems.isIntakeSubsystemAvailable() && this.subsystems.isShooterSubsystemAvailable()){
+      SmartDashboard.putData(
+          "Shoot Shooter (at current angle and default speeds)",
+          new ShooterShootCommand(Constants.shooterLeftDefaultSpeedRpm, Constants.shooterRightDefaultSpeedRpm, this.subsystems.getShooterSubsystem(), this.subsystems.getFeederSubsystem()));
+      SmartDashboard.putNumber("Shooter Left Speed RPM Setter", Constants.shooterLeftDefaultSpeedRpm);
+      SmartDashboard.putNumber("Shooter Right Speed RPM Setter", Constants.shooterRightDefaultSpeedRpm);
+      SmartDashboard.putData(
+          "Shooter Shoot to Current Angle and Specified Speeds",
+          new ShooterShootCommand(
+            () -> SmartDashboard.getNumber("Shooter Left Speed RPM Setter", Constants.shooterLeftDefaultSpeedRpm),
+            () -> SmartDashboard.getNumber("Shooter Right Speed RPM Setter", Constants.shooterRightDefaultSpeedRpm),
+          this.subsystems.getShooterSubsystem(), this.subsystems.getFeederSubsystem()));
     }
 
     if (this.subsystems.isIntakeSubsystemAvailable()) {
