@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.ShootAllStopCommand;
 import frc.robot.commands.ShooterSetAngleCommand;
 import frc.robot.commands.ShooterSetAngleTesterCommand;
@@ -240,17 +241,14 @@ public class RobotContainer {
       SmartDashboard.putData("Debug: ShooterSubsystem", subsystems.getShooterSubsystem());
       System.out.println("SUCCESS: ShooterSubsystem");
 
-      // Set up the default command for the arm.
-      // Left stick X axis -> horizontal arm in / out movement
-      // Left stick Y axis -> vertical arm in / out movement
-      subsystems.getShooterSubsystem().setDefaultCommand(new ShootAllStopCommand(
-        subsystems.getShooterSubsystem()));
-
-      //TODO create ShooterAngleCommand
-      /*subsystems.getShooterSubsystem().setDefaultCommand(new ShooterAngleCommand(
-      subsystems.getShooterSubsystem(),
-      () -> subsystems.getManualInputInterfaces().getInputShooterAngle()));*/
-
+      // Set up the default command for the shooter.
+      subsystems.getShooterSubsystem().setDefaultCommand(
+        new SequentialCommandGroup(
+          new ShootAllStopCommand(subsystems.getShooterSubsystem()),
+          new ShooterSetAngleTesterCommand(
+            () -> subsystems.getManualInputInterfaces().getInputShooterAngle(), 
+            subsystems.getShooterSubsystem()))
+      );
     }
     else {
       System.out.println("FAIL: ShooterSubsystem");

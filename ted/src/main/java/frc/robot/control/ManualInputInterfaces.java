@@ -84,11 +84,21 @@ public class ManualInputInterfaces {
     return -1.0 * coDriverController.getLeftY();
   }
 
+  /**
+   * Get the next angle
+   * @return incrementing or decrementing angle depending on positive or negative
+   */
   public double getInputShooterAngle() 
   {
-    // use the co drivers right Z to represent the vertical movement
-    // and multiply by -1.0 as xbox reports values flipped
-    return coDriverController.getRightY();
+    double stickInput = coDriverController.getRightY();
+    double currentAngle = this.subsystemCollection.getShooterSubsystem().getAngleDegrees();
+    if(stickInput > Constants.shooterControllerInputPositiveStickAngleIncrement){
+      currentAngle += 1.0;
+    }
+    else if (stickInput < Constants.shooterControllerInputPositiveStickAngleIncrement) {
+      currentAngle -= 1.0;
+    }
+    return currentAngle;
   }
 
   /**
@@ -201,6 +211,7 @@ public class ManualInputInterfaces {
             "align on target")
           )
         );
+
         // left trigger de-press will put drivetrain in normal drive mode  
         this.driverController.leftTrigger().onFalse(
           new ParallelCommandGroup(
@@ -336,7 +347,7 @@ public class ManualInputInterfaces {
             new ParallelCommandGroup(
                 new FeedNoteCommand(
                   this.subsystemCollection.getFeederSubsystem(),
-                  FeederMode.FeedToShooter),
+                  FeederMode.FeedToDunker),
                 new ButtonPressCommand(
                 "coDriverController.start()",
                 "send note to dunker"))
