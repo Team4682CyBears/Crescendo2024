@@ -135,6 +135,10 @@ public class ShooterShootCommand extends Command {
       shooter.setAllStop();
       isDone = true;
     }
+    else {
+      shooter.setShooterVelocityLeft(desiredLeftSpeedRpm);
+      shooter.setShooterVelocityRight(desiredRightSpeedRpm);
+    }
   }
 
   // Called once the command ends or is interrupted.

@@ -80,11 +80,11 @@ public class RobotContainer {
       SmartDashboard.putData(
           "Spin Up Shooter",
           new ShooterSpinUpCommand(this.subsystems.getShooterSubsystem()));
-      SmartDashboard.putNumber("Shooter Angle", Constants.shooterStartingAngleOffsetDegrees);
+      SmartDashboard.putNumber("Shooter Angle Setter", Constants.shooterStartingAngleOffsetDegrees);
       SmartDashboard.putData(
-          "Set Shooter Angle",
+          "Set Shooter To Specified Angle",
           new ShooterSetAngleTesterCommand(
-            () -> SmartDashboard.getNumber("Shooter Angle", Constants.shooterStartingAngleOffsetDegrees),
+            () -> SmartDashboard.getNumber("Shooter Angle Setter", Constants.shooterStartingAngleOffsetDegrees),
             this.subsystems.getShooterSubsystem()
           )
       );
@@ -92,18 +92,15 @@ public class RobotContainer {
 
     if (InstalledHardware.shooterInstalled && InstalledHardware.feederInstalled){
       SmartDashboard.putData(
-          "Shoot Shooter (at current angle)",
-          new ShooterShootCommand(this.subsystems.getShooterSubsystem(), this.subsystems.getFeederSubsystem()));
-      SmartDashboard.putNumber("Shooter Left Speed RPM", Constants.shooterLeftDefaultSpeedRpm);
-      SmartDashboard.putNumber("Shooter Right Speed RPM", Constants.shooterRightDefaultSpeedRpm);
-      SmartDashboard.putData(
-          "Set Shooter Angle to Specified Value", // TODO angle supplier
-          new ShooterSetAngleCommand(45, this.subsystems.getShooterSubsystem()));
+          "Shoot Shooter (at current angle and default speeds)",
+          new ShooterShootCommand(Constants.shooterLeftDefaultSpeedRpm, Constants.shooterRightDefaultSpeedRpm, this.subsystems.getShooterSubsystem(), this.subsystems.getFeederSubsystem()));
+      SmartDashboard.putNumber("Shooter Left Speed RPM Setter", Constants.shooterLeftDefaultSpeedRpm);
+      SmartDashboard.putNumber("Shooter Right Speed RPM Setter", Constants.shooterRightDefaultSpeedRpm);
       SmartDashboard.putData(
           "Shooter Shoot to Current Angle and Specified Speeds",
           new ShooterShootTesterCommand(
-            () -> SmartDashboard.getNumber("Shooter Left Speed RPM", Constants.shooterLeftDefaultSpeedRpm),
-            () -> SmartDashboard.getNumber("Shooter Right Speed RPM", Constants.shooterRightDefaultSpeedRpm),
+            () -> SmartDashboard.getNumber("Shooter Left Speed RPM Setter", Constants.shooterLeftDefaultSpeedRpm),
+            () -> SmartDashboard.getNumber("Shooter Right Speed RPM Setter", Constants.shooterRightDefaultSpeedRpm),
           this.subsystems.getShooterSubsystem(), this.subsystems.getFeederSubsystem()));
     }
 
