@@ -93,7 +93,7 @@ public class RobotContainer {
         3.0));
     }
 
-    private final TestTrajectories testTrajectories = new TestTrajectories(subsystems.getDriveTrainSubsystem().getTrajectoryConfig());
+    final TestTrajectories testTrajectories = new TestTrajectories(subsystems.getDriveTrainSubsystem().getTrajectoryConfig());
     
     SmartDashboard.putData("Allign relative to tag", 
       new AllignRelativeToTagCommand(this.subsystems.getDriveTrainSubsystem(), this.subsystems.getCameraSubsystem(), new Pose2d(new Translation2d(1.0, 0.0), new Rotation2d(0.0)), 7.0));

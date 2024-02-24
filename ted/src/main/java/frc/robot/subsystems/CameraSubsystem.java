@@ -13,12 +13,14 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.units.Distance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.common.VisionMeasurement;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.common.DistanceMeasurement;
 
 /**
  * A class to encapsulate the camera subsystem
@@ -63,6 +65,19 @@ public class CameraSubsystem extends SubsystemBase {
     return table.getEntry("tid").getDouble(0);
   }
 
+  public DistanceMeasurement getDistanceFromTag(double tId){
+    DistanceMeasurement measurement = new DistanceMeasurement(false, 0.0);
+    if(getTagId() == tId){
+      measurement.setIsValid(true);
+
+      double xDistance = getVisionBotPoseInTargetSpace().getTranslation().getX();
+      double yDistance = getVisionBotPoseInTargetSpace().getTranslation().getY();
+      double totalDistance = Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
+      measurement.setDistanceMeteres(totalDistance);
+    }
+    return measurement;
+  }
+
   /**
    * a method that returns a vision measurement. 
    * pose portion of the vision measurement is null if there is no valid measurement. 
@@ -90,5 +105,10 @@ public class CameraSubsystem extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("relative X", this.getVisionBotPoseInTargetSpace().getX());
     SmartDashboard.putNumber("relative Y", this.getVisionBotPoseInTargetSpace().getY());
+
+    DistanceMeasurement measurement = this.getDistanceFromTag(7.0);
+    if(measurement.getIsValid()){
+      SmartDashboard.putNumber("distance from tag", measurement.getDistanceMeters());
+    }
   }
 }
