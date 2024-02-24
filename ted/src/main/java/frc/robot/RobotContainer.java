@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.common.FeederMode;
 import frc.robot.common.TestTrajectories;
 import frc.robot.control.InstalledHardware;
@@ -71,8 +72,11 @@ public class RobotContainer {
     // commands to drive path planner test trajectories
     // Register Named Commands 
     NamedCommands.registerCommand("ShootNote", 
-    new ShooterShootCommand(this.subsystems.getShooterSubsystem(), this.subsystems.getFeederSubsystem()));
-    
+    new ParallelCommandGroup(
+      new ButtonPressCommand("PATH PLANNER COMMAND: ", "Shoot"),
+      new SetDashboardVariableCommand("PathPlannerVariable", 999, 0.5, 1000)
+    ));
+
     PathPlannerPath close4NoteAutoPath = PathPlannerPath.fromPathFile("Close4NoteAuto");
     SmartDashboard.putData("DriveStraightPath",
       FollowTrajectoryCommandBuilder.build(close4NoteAutoPath, this.subsystems.getDriveTrainSubsystem(), true));
