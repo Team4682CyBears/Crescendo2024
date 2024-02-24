@@ -57,6 +57,9 @@ public class RobotContainer {
     // init the input system 
     this.initializeManualInputInterfaces();
 
+    // do late binding of default commands
+    this.lateBindDefaultCommands();
+
     // Configure the button bindings
     if(this.subsystems.isManualInputInterfacesAvailable()) {
       System.out.println(">>>> Initializing button bindings.");
@@ -241,17 +244,29 @@ public class RobotContainer {
       SmartDashboard.putData("Debug: ShooterSubsystem", subsystems.getShooterSubsystem());
       System.out.println("SUCCESS: ShooterSubsystem");
 
-      // Set up the default command for the shooter.
-      subsystems.getShooterSubsystem().setDefaultCommand(
-        new SequentialCommandGroup(
-          new ShootAllStopCommand(subsystems.getShooterSubsystem()),
-          new ShooterSetAngleTesterCommand(
-            () -> subsystems.getManualInputInterfaces().getInputShooterAngle(), 
-            subsystems.getShooterSubsystem()))
-      );
+
     }
     else {
       System.out.println("FAIL: ShooterSubsystem");
+    }
+  }
+
+  /**
+   * A method to late binding of default commands
+   */
+  private void lateBindDefaultCommands() {
+
+    // shooter subsystem default commands
+    if(this.subsystems.isShooterSubsystemAvailable() && 
+    this.subsystems.isManualInputInterfacesAvailable()) {
+            // Set up the default command for the shooter.
+      this.subsystems.getShooterSubsystem().setDefaultCommand(
+        new SequentialCommandGroup(
+          new ShootAllStopCommand(this.subsystems.getShooterSubsystem()),
+          new ShooterSetAngleTesterCommand(
+            () -> this.subsystems.getManualInputInterfaces().getInputShooterAngle(), 
+            this.subsystems.getShooterSubsystem()))
+      );
     }
   }
 
