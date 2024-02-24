@@ -85,7 +85,7 @@ public class RobotContainer {
       );
     }
 
-    if (InstalledHardware.shooterInstalled && InstalledHardware.feederInstalled){
+    if (this.subsystems.isIntakeSubsystemAvailable() && this.subsystems.isShooterSubsystemAvailable()){
       SmartDashboard.putData(
           "Shoot Shooter (at current angle and default speeds)",
           new ShooterShootCommand(Constants.shooterLeftDefaultSpeedRpm, Constants.shooterRightDefaultSpeedRpm, this.subsystems.getShooterSubsystem(), this.subsystems.getFeederSubsystem()));

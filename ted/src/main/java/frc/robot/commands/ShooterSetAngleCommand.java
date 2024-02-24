@@ -10,11 +10,8 @@
 
 package frc.robot.commands;
 
-import frc.robot.common.FeederMode;
 import frc.robot.control.Constants;
-import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.TalonShooterSubsystem;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -23,7 +20,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class ShooterSetAngleCommand extends Command {
 
   private TalonShooterSubsystem shooter;
-  private double desiredAngleDegrees; 
+  protected double desiredAngleDegrees; 
+  private boolean updatedAngleSet = false;
+  private boolean done = false;
 
   /**
    * Constructor for ShooterShootCommand
@@ -35,30 +34,40 @@ public class ShooterSetAngleCommand extends Command {
     this.desiredAngleDegrees = desiredAngleDegrees;
     this.shooter = shooter;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooter);
+    this.addRequirements(shooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    this.updatedAngleSet = false;
+    this.done = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.setAngleDegrees(desiredAngleDegrees);
+    if(!this.updatedAngleSet) {
+      shooter.setAngleDegrees(desiredAngleDegrees);
+    }
+    else {
+      done = shooter.isAngleWithinTolerance(Constants.shooterAngleToleranceDegrees);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("end of ShootAtSpeedCommand ... ");
+    if(interrupted){
+      done = true;
+      System.out.println("interrupted end of ShooterSetAngleCommand ... ");
+    }
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true; 
+    return done; 
   }
 
 }
