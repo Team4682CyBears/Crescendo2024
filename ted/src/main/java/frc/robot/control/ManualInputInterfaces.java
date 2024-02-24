@@ -18,18 +18,13 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.*;
-import frc.robot.commands.RumbleCommand;
 import frc.robot.common.TestTrajectories;
-import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AllStopCommand;
 import frc.robot.commands.ButtonPressCommand;
 import frc.robot.commands.DriveToPointCommand;
 import frc.robot.commands.DriveTrajectoryCommand;
 import frc.robot.commands.ShooterShootCommand;
-import frc.robot.commands.SteerMotorToAngleCommand;
 
 public class ManualInputInterfaces {
 
@@ -101,11 +96,9 @@ public class ManualInputInterfaces {
    * Will attach commands to the Driver XBox buttons 
    */
   private void bindCommandsToDriverXboxButtons(){
-    if(InstalledHardware.driverXboxControllerInstalled){
-      
-      DrivetrainSubsystem localDrive = subsystemCollection.getDriveTrainSubsystem();
+    if(InstalledHardware.driverXboxControllerInstalled){    
 
-      if(localDrive != null){
+      if(this.subsystemCollection.isDriveTrainSubsystemAvailable()){
 
         if(InstalledHardware.applyBasicDriveToPointButtonsToDriverXboxController){
           this.bindBasicDriveToPointButtonsToDriverXboxController();
@@ -124,7 +117,7 @@ public class ManualInputInterfaces {
               "zero gyroscope")
             )
           );
-    }
+      }
 
       // x button press will stop all      
       this.driverController.x().onTrue(
@@ -137,7 +130,7 @@ public class ManualInputInterfaces {
           )
       );
 
-      if((subsystemCollection.getShooterSubsystem() != null) && (subsystemCollection.getFeederSubsystem() != null)) {
+      if((this.subsystemCollection.isShooterSubsystemAvailable()) && (this.subsystemCollection.isFeederSubsystemAvailable())) {
         System.out.println("STARTING Registering this.driverController.a().whileTrue() ... ");
         this.driverController.a().whileTrue(
             new ParallelCommandGroup(
@@ -150,32 +143,7 @@ public class ManualInputInterfaces {
         System.out.println("FINISHED registering this.driverController.a().whileTrue() ... ");
       }
 
-      if(subsystemCollection.getSteerMotorSubsystem() != null) {
-        System.out.println("STARTING Registering this.driverController.y().whileTrue() ... ");
-        this.driverController.y().whileTrue(
-            new ParallelCommandGroup(
-              new SteerMotorToAngleCommand(subsystemCollection.getSteerMotorSubsystem(), 0.0),
-              new ButtonPressCommand(
-                "driverController.y()",
-                "SteerMotorToAngleCommand - 0.0 degrees")
-              )
-          );
-        System.out.println("FINISHED registering this.driverController.y().whileTrue() ... ");
-
-        System.out.println("STARTING Registering this.driverController.b().whileTrue() ... ");
-        this.driverController.b().whileTrue(
-            new ParallelCommandGroup(
-              new SteerMotorToAngleCommand(subsystemCollection.getSteerMotorSubsystem(), 180.0),
-              new ButtonPressCommand(
-                "driverController.y()",
-                "SteerMotorToAngleCommand - 180.0 degrees")
-              )
-          );
-        System.out.println("FINISHED registering this.driverController.b().whileTrue() ... ");
-      }
-
-
-      if(subsystemCollection.getDriveTrainSubsystem() != null){
+      if(this.subsystemCollection.isDriveTrainPowerSubsystemAvailable() && this.subsystemCollection.isDriveTrainSubsystemAvailable()){
         // left bumper press will decrement power factor  
         this.driverController.leftBumper().onTrue(
           new ParallelCommandGroup(

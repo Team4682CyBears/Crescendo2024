@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.common.FeederMode;
 import frc.robot.control.Constants;
 import frc.robot.subsystems.FeederSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
 
 /**
  * Forms a command to feed the note to the shooter or dunker
