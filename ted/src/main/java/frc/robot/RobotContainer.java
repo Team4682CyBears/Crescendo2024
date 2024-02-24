@@ -10,6 +10,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.common.TestTrajectories;
+import frc.robot.common.SwerveTrajectoryConfig;
 import frc.robot.commands.ShootAllStopCommand;
 import frc.robot.commands.ShooterSpinUpCommand;
 import frc.robot.common.FeederMode;
@@ -38,6 +41,9 @@ public class RobotContainer {
 
     // init the pdp watcher
     this.initializePowerDistributionPanelWatcherSubsystem();
+
+    // init the camera (before drivetrain)
+    this.initializeCameraSubsystem();
 
     // init the various subsystems
     this.initializeDrivetrainSubsystem();
@@ -96,6 +102,17 @@ public class RobotContainer {
         new ChassisSpeeds(0.6, 0.0, 0.0),
         3.0));
     }
+
+    private final TestTrajectories testTrajectories = new TestTrajectories(subsystems.getDriveTrainSubsystem().getTrajectoryConfig());
+    
+    SmartDashboard.putData("Drive Forward Trajectory",
+      new DriveTrajectoryCommand(subsystems.getDriveTrainSubsystem(), testTrajectories.traverseSimpleForward));
+
+    SmartDashboard.putData("Drive ZigZag Trajectory",
+      new DriveTrajectoryCommand(subsystems.getDriveTrainSubsystem(), testTrajectories.traverseZigZag));
+
+    SmartDashboard.putData("Drive Turn90 Trajectory",
+      new DriveTrajectoryCommand(subsystems.getDriveTrainSubsystem(), testTrajectories.turn90));
   }
 
   public Command getAutonomousCommand() {
@@ -127,7 +144,7 @@ public class RobotContainer {
       InstalledHardware.rightRearDriveInstalled &&
       InstalledHardware.navxInstalled) {
       // The robot's subsystems and commands are defined here...
-      subsystems.setDriveTrainSubsystem(new DrivetrainSubsystem());
+      subsystems.setDriveTrainSubsystem(new DrivetrainSubsystem(subsystems));
       subsystems.getDriveTrainSubsystem().zeroRobotPosition(); // can I add this?
       subsystems.setDriveTrainPowerSubsystem(new DrivetrainPowerSubsystem(subsystems.getDriveTrainSubsystem()));
       SmartDashboard.putData("Debug: DrivetrainSub", subsystems.getDriveTrainSubsystem());
@@ -149,6 +166,19 @@ public class RobotContainer {
     }
     else {
       System.out.println("FAIL: initializeDrivetrain");
+    }
+  }
+
+  /**
+   * A method to init the Limelight
+   */
+  private void initializeCameraSubsystem(){
+    if(InstalledHardware.limelightInstalled) {
+      subsystems.setCameraSubsystem(new CameraSubsystem());
+      System.out.println("SUCCESS: initializeCamera");
+    }
+    else {
+      System.out.println("FAIL: initializeCamera");
     }
   }
   
