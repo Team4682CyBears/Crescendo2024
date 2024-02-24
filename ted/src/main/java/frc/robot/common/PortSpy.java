@@ -10,12 +10,12 @@
 
 package frc.robot.common;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 
 public class PortSpy {
     private int portToWatch = -1;
     private double currentLimit = 0.0;
-    private CommandBase action = null;
+    private Command action = null;
     private String description = "";
     private boolean enabled = true;
 
@@ -26,7 +26,7 @@ public class PortSpy {
      * @param action
      * @param actionDescription
      */
-    public PortSpy(int port, double limit, CommandBase action, String actionDescription)
+    public PortSpy(int port, double limit, Command action, String actionDescription)
     {
         this.portToWatch = port;
         this.currentLimit = limit;
@@ -50,11 +50,11 @@ public class PortSpy {
         return this.currentLimit;
     }
 
-    public void setAction(CommandBase action) {
+    public void setAction(Command action) {
         this.action = action;
     }
 
-    public CommandBase getAction() {
+    public Command getAction() {
         return this.action;
     }
 

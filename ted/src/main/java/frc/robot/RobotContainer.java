@@ -67,6 +67,12 @@ public class RobotContainer {
     SmartDashboard.putData("Forward Arc", new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testtrajectories.traverseForwardArc));
     SmartDashboard.putData("Turn 90", new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testtrajectories.turn90));
 
+    // Path Planner Path Commands
+    // commands to drive path planner test trajectories
+    // Register Named Commands 
+    NamedCommands.registerCommand("ShootNote", 
+    new ShooterShootCommand(this.subsystems.getShooterSubsystem(), this.subsystems.getFeederSubsystem()));
+    
     PathPlannerPath close4NoteAutoPath = PathPlannerPath.fromPathFile("Close4NoteAuto");
     SmartDashboard.putData("DriveStraightPath",
       FollowTrajectoryCommandBuilder.build(close4NoteAutoPath, this.subsystems.getDriveTrainSubsystem(), true));

@@ -20,7 +20,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -46,7 +45,7 @@ public class FollowTrajectoryCommandBuilder {
      * @param isFirstPath - true if this is the first path in the sequence (resets the odometry to traj starting point)
      * @return - a command to follow the trajectory
      */
-    public static CommandBase build(PathPlannerPath traj, DrivetrainSubsystem drivetrain, boolean isFirstPath) {
+    public static Command build(PathPlannerPath traj, DrivetrainSubsystem drivetrain, boolean isFirstPath) {
         return new SequentialCommandGroup(
                 new InstantCommand(() -> {
                     // Reset odometry for the first path you run during auto
@@ -71,7 +70,7 @@ public class FollowTrajectoryCommandBuilder {
      * @param drivetrain - drivetrain subsystem
      * @return - a command to follow the trajectory
      */
-    public static CommandBase build(PathPlannerPath traj, DrivetrainSubsystem drivetrain) {
+    public static Command build(PathPlannerPath traj, DrivetrainSubsystem drivetrain) {
         return build(traj, drivetrain, false);
     }
 
@@ -79,11 +78,14 @@ public class FollowTrajectoryCommandBuilder {
      * A method that returns true when we are on the red alliance
      * Used for paths that should be mirrored when we are on red alliance
      */
-    public static boolean mirrorPathForRedAliance(){        
+    public static boolean mirrorPathForRedAliance(){   
+        // TODO FIX THIS!!!  types not matching   
+        /**   
         var alliance = DriverStation.getAlliance();
         if (alliance != Alliance.Invalid) {
             return alliance == Alliance.Red;
         }
+        */
         return false;
     }
 
