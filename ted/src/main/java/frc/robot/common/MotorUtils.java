@@ -10,7 +10,6 @@
 
 package frc.robot.common;
 
-import java.util.*;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static java.lang.Math.signum;

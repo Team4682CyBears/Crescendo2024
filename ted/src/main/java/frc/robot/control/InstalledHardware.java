@@ -45,9 +45,6 @@ public class InstalledHardware
     public static final boolean rightFrontDriveInstalled = true;
     public static final boolean rightRearDriveInstalled = true;
 
-    public static final boolean leftFrontDriveInstalledForTesting = true && !leftFrontDriveInstalled;
-    public static final boolean leftFrontDriveCanCoderInstalledForTesting = true && !leftFrontDriveInstalled;
-
     // Intake Related Hardware
     public static final boolean intakeInstalled = true;
 
@@ -56,6 +53,11 @@ public class InstalledHardware
 
     // Shooter Related Hardware
     public static final boolean shooterInstalled = true;
+    // for testing, to decrease the power of the shooter angle mechanism, 
+    // reduce the left motor gear box to 10x (instaed of 100x)
+    // and disconnect the right motor from the chain. 
+    public static final boolean shooterRightAngleMotorrInstalled = true;
+    public static final boolean shooterAngleCanCoderInstalled = false; 
 
     // Controller button install control
     public static final boolean applyBasicDriveToPointButtonsToDriverXboxController = false;

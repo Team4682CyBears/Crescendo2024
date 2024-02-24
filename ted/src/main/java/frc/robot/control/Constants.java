@@ -15,7 +15,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -119,31 +118,37 @@ public final class Constants {
     public static final double feederTimeoutSeconds = 10.0;
 
     // *******************************************************************
-    // shooter constants  
+    // shooter outfeed constants  
     public static final int leftTopTalonShooterMotorCanId = 18; 
     public static final int leftBottomTalonShooterMotorCanId = 19;
     public static InvertedValue leftTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;  
     public static final int rightTopTalonShooterMotorCanId = 20; 
     public static final int rightBottomTalonShooterMotorCanId = 21; 
     public static InvertedValue rightTalonShooterMotorDefaultDirection = InvertedValue.Clockwise_Positive;  
-    public static final int shooterLeftAngleMotorCanId = 22;
-    public static final int shooterRightAngleMotorCanId = 23;
-    public static final int shooterLeftAngleEncoderCanId = 24;
-    // TODO depending on which side the motor is mounted, may need to invert these.
-    public static InvertedValue angleLeftTalonShooterMotorDefaultDirection = InvertedValue.Clockwise_Positive;
-    public static InvertedValue angleRightTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;
-    public static final double shooterAngleOffsetDegrees = -0.0;
-    public static SensorDirectionValue shooterAngleSensorDirection = SensorDirectionValue.Clockwise_Positive;
-    public static final double shooterAngleMaxDegrees = 90;
-    public static final double shooterAngleMinDegrees = 0;  
-    // stow angle should be low enough to drive under the stage
-    public static final double shooterAngleStowDegrees = 45; 
     private static double shooterBaseRpm = 6500;
     public static final double shooterLeftDefaultSpeedRpm = shooterBaseRpm * 1.0;
     public static final double shooterRightDefaultSpeedRpm = shooterBaseRpm * 0.75;
     public static final double shooterSpinUpTimeoutSeconds = 5.0;
-    public static final double shooterAngleToleranceDegrees = 3;
-    public static final double shooterShootDuration = 0.5;
+    public static final double shooterShootDuration = 5.0;
+    public static final double shooterSpinUpDelay = 2.0;
+
+    // *******************************************************************
+    // shooter angle constants  
+    public static final int shooterLeftAngleMotorCanId = 22;
+    public static final int shooterRightAngleMotorCanId = 23;
+    public static final int shooterLeftAngleEncoderCanId = 24;
+    // TODO depending on which side the motor is mounted, may need to invert these.
+    public static InvertedValue angleLeftTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;
+    public static InvertedValue angleRightTalonShooterMotorDefaultDirection = InvertedValue.Clockwise_Positive;
+    public static final double shooterAbsoluteAngleOffsetDegrees = 58.5;
+    public static final double shooterStartingAngleOffsetDegrees = 20.0; 
+    public static SensorDirectionValue shooterAngleSensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+    public static final double shooterAngleMaxDegrees = 90;
+    public static final double shooterAngleMinDegrees = 20;  
+    // stow angle should be low enough to drive under the stage
+    public static final double shooterAngleStowDegrees = 45; 
+    public static final double shooterAngleToleranceDegrees = 0.5;
+    public static final double shooterSetAngleDuration = 3.0;
 
     // ******************************************************************
     // climber constants

@@ -28,6 +28,7 @@ import frc.robot.common.FeederMode;
 import frc.robot.common.TestTrajectories;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.FeederSubsystem;
+import frc.robot.common.TestTrajectories;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AllStopCommand;
 import frc.robot.commands.ButtonPressCommand;
@@ -127,11 +128,17 @@ public class ManualInputInterfaces {
    * Will attach commands to the Driver XBox buttons 
    */
   private void bindCommandsToDriverXboxButtons(){
-    if(InstalledHardware.driverXboxControllerInstalled){
-      
-      DrivetrainSubsystem localDrive = subsystemCollection.getDriveTrainSubsystem();
+    if(InstalledHardware.driverXboxControllerInstalled){    
 
-      if(localDrive != null){
+      if(this.subsystemCollection.isDriveTrainSubsystemAvailable()){
+
+        if(InstalledHardware.applyBasicDriveToPointButtonsToDriverXboxController){
+          this.bindBasicDriveToPointButtonsToDriverXboxController();
+        }
+        if(InstalledHardware.applyDriveTrajectoryButtonsToDriverXboxController){
+          this.bindDriveTrajectoryButtonsToDriverXboxController();
+        }
+
         // Back button zeros the gyroscope (as in zero yaw)
         this.driverController.back().onTrue(
           new ParallelCommandGroup(
@@ -142,7 +149,7 @@ public class ManualInputInterfaces {
               "zero gyroscope")
             )
           );
-    }
+      }
 
       this.driverController.b().onTrue(
           new ParallelCommandGroup(
@@ -165,7 +172,7 @@ public class ManualInputInterfaces {
           )
       );
 
-      if((subsystemCollection.getShooterSubsystem() != null) && (subsystemCollection.getFeederSubsystem() != null)) {
+      if((this.subsystemCollection.isShooterSubsystemAvailable()) && (this.subsystemCollection.isFeederSubsystemAvailable())) {
         System.out.println("STARTING Registering this.driverController.a().whileTrue() ... ");
         this.driverController.a().whileTrue(
             new ParallelCommandGroup(
@@ -202,8 +209,8 @@ public class ManualInputInterfaces {
         System.out.println("FINISHED registering this.driverController.b().whileTrue() ... ");
       }
 
-
       if(localDrive != null){
+      if(this.subsystemCollection.isDriveTrainPowerSubsystemAvailable() && this.subsystemCollection.isDriveTrainSubsystemAvailable()){
         // left bumper press will decrement power factor  
         this.driverController.leftBumper().onTrue(
           new ParallelCommandGroup(
