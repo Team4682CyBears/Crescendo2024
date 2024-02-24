@@ -45,9 +45,6 @@ public class InstalledHardware
     public static final boolean rightFrontDriveInstalled = true;
     public static final boolean rightRearDriveInstalled = true;
 
-    public static final boolean leftFrontDriveInstalledForTesting = true && !leftFrontDriveInstalled;
-    public static final boolean leftFrontDriveCanCoderInstalledForTesting = true && !leftFrontDriveInstalled;
-
     // Intake Related Hardware
     public static final boolean intakeInstalled = true;
 
