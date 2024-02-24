@@ -130,7 +130,7 @@ public final class Constants {
     public static final double shooterLeftDefaultSpeedRpm = shooterBaseRpm * 1.0;
     public static final double shooterRightDefaultSpeedRpm = shooterBaseRpm * 0.75;
     public static final double shooterSpinUpTimeoutSeconds = 5.0;
-    public static final double shooterShootDuration = 0.5;
+    public static final double shooterShootDuration = 1.0;
 
     // *******************************************************************
     // shooter angle constants  

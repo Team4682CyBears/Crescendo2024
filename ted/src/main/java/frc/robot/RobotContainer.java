@@ -14,7 +14,6 @@ import frc.robot.commands.ShootAllStopCommand;
 import frc.robot.commands.ShooterSetAngleCommand;
 import frc.robot.commands.ShooterSetAngleTesterCommand;
 import frc.robot.commands.ShooterShootCommand;
-import frc.robot.commands.ShooterShootTesterCommand;
 import frc.robot.commands.ShooterSpinUpCommand;
 import frc.robot.common.FeederMode;
 import frc.robot.commands.DefaultDriveCommand;

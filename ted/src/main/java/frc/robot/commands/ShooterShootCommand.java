@@ -105,7 +105,7 @@ public class ShooterShootCommand extends Command {
    * @param shooter
    * @param feeder
    */
-  public ShooterShootCommand(DoubleSupplier desiredLeftSpeedRpm, DoubleSupplier desiredRightSpeedRpm,
+  public ShooterShootCommand(DoubleSupplier desiredLeftSpeedRpmSupplier, DoubleSupplier desiredRightSpeedRpmSupplier,
   TalonShooterSubsystem shooter, FeederSubsystem feeder) {
     this.desiredLeftSpeedRpmSupplier = desiredLeftSpeedRpmSupplier;
     this.desiredRightSpeedRpmSupplier = desiredRightSpeedRpmSupplier;
