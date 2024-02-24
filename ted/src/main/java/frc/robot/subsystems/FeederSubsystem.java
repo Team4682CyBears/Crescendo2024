@@ -44,6 +44,8 @@ public class FeederSubsystem extends SubsystemBase {
     config.peakCurrentDuration = 1500; // the time at the peak current before the limit triggers, in ms
     config.continuousCurrentLimit = 30; // the current to maintain if the peak limit is triggered
     feederMotor.configAllSettings(config); // apply the config settings; this selects the quadrature encoder
+    shooterBeambreakSensor.setDisplayName("Shooter TOF");
+    dunkerBeambreakSensor.setDisplayName("Dunker TOF");
   }
 
   /**

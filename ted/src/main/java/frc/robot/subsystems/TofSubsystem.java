@@ -14,7 +14,6 @@ import com.playingwithfusion.TimeOfFlight.RangingMode;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
@@ -26,10 +25,12 @@ public class TofSubsystem extends SubsystemBase {
   private int canID;
   private double currentRangeInches;
   private boolean currentRangeIsValid;
+  private String displayName;
 
   public TofSubsystem(int canID){
     tofSensor = new TimeOfFlight(canID);
     this.canID = canID;
+    this.displayName = "TOF ID " + this.canID;
     // short mode is accurate to 1.3m 
     // 20ms sample time matches robot update rate
     tofSensor.setRangingMode(RangingMode.Short, 20);
@@ -53,6 +54,13 @@ public class TofSubsystem extends SubsystemBase {
       return true;
     }
     return false;
+  }
+
+  /** 
+   * A method to return the display name
+   */
+  public String getDisplayName(){
+    return displayName;
   }
 
   /**
@@ -87,13 +95,17 @@ public class TofSubsystem extends SubsystemBase {
     currentRangeIsValid = isRangeValid();
   }
 
+  public void setDisplayName(String displayName){
+    this.displayName = displayName;
+  }
+
   /**
    * periodic for this subsystem. Called once per scheduler run (20ms) 
    */
   @Override
   public void periodic(){
     readSensor();
-    SmartDashboard.putNumber("TOF ID " + canID + " Range Inches" , currentRangeInches);
-    SmartDashboard.putBoolean("TOF ID " + canID + " Note Detected", isNoteDetected());
+    SmartDashboard.putNumber(displayName + " Range Inches" , currentRangeInches);
+    SmartDashboard.putBoolean(displayName + " Note Detected", isNoteDetected());
   } 
 }

@@ -17,7 +17,6 @@ import com.revrobotics.REVLibError;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.control.Constants;
 
@@ -69,6 +68,7 @@ public class IntakeSubsystem extends SubsystemBase {
         System.out.println(ex.toString());
       }
     }
+    beambreakSensor.setDisplayName("Intake TOF");
   }
 
   /**
