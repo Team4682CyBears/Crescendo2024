@@ -14,31 +14,15 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
-import java.io.Serial;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.*;
-import frc.robot.commands.RumbleCommand;
 import frc.robot.common.FeederMode;
-import frc.robot.common.TestTrajectories;
-import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.FeederSubsystem;
-import frc.robot.common.TestTrajectories;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AllStopCommand;
 import frc.robot.commands.ButtonPressCommand;
-import frc.robot.commands.DriveToPointCommand;
-import frc.robot.commands.DriveTrajectoryCommand;
 import frc.robot.commands.FeedNoteCommand;
 import frc.robot.commands.IntakeNoteCommand;
 import frc.robot.commands.ShooterShootCommand;
 import frc.robot.commands.ShooterSpinUpCommand;
-import frc.robot.commands.SteerMotorToAngleCommand;
 
 public class ManualInputInterfaces {
 
@@ -131,14 +115,6 @@ public class ManualInputInterfaces {
     if(InstalledHardware.driverXboxControllerInstalled){    
 
       if(this.subsystemCollection.isDriveTrainSubsystemAvailable()){
-
-        if(InstalledHardware.applyBasicDriveToPointButtonsToDriverXboxController){
-          this.bindBasicDriveToPointButtonsToDriverXboxController();
-        }
-        if(InstalledHardware.applyDriveTrajectoryButtonsToDriverXboxController){
-          this.bindDriveTrajectoryButtonsToDriverXboxController();
-        }
-
         // Back button zeros the gyroscope (as in zero yaw)
         this.driverController.back().onTrue(
           new ParallelCommandGroup(
@@ -151,15 +127,17 @@ public class ManualInputInterfaces {
           );
       }
 
-      this.driverController.b().onTrue(
-          new ParallelCommandGroup(
-            //TODO include actual IntakeCommand here once it's created.
-            new IntakeNoteCommand(this.subsystemCollection.getIntakeSubsystem()), 
-            new ButtonPressCommand(
-              "driverController.b()",
-              "intake")
-            )
-          );
+      if(this.subsystemCollection.isIntakeSubsystemAvailable()) {
+        // b button will intake a note
+        this.driverController.b().onTrue(
+            new ParallelCommandGroup(
+              new IntakeNoteCommand(this.subsystemCollection.getIntakeSubsystem()), 
+              new ButtonPressCommand(
+                "driverController.b()",
+                "intake")
+              )
+            );
+      }
 
       // x button press will stop all      
       this.driverController.x().onTrue(
@@ -172,7 +150,8 @@ public class ManualInputInterfaces {
           )
       );
 
-      if((this.subsystemCollection.isShooterSubsystemAvailable()) && (this.subsystemCollection.isFeederSubsystemAvailable())) {
+      if(this.subsystemCollection.isShooterSubsystemAvailable() &&
+         this.subsystemCollection.isFeederSubsystemAvailable()) {
         System.out.println("STARTING Registering this.driverController.a().whileTrue() ... ");
         this.driverController.a().whileTrue(
             new ParallelCommandGroup(
@@ -185,32 +164,8 @@ public class ManualInputInterfaces {
         System.out.println("FINISHED registering this.driverController.a().whileTrue() ... ");
       }
 
-      if(subsystemCollection.getSteerMotorSubsystem() != null) {
-        System.out.println("STARTING Registering this.driverController.y().whileTrue() ... ");
-        this.driverController.y().whileTrue(
-            new ParallelCommandGroup(
-              new SteerMotorToAngleCommand(subsystemCollection.getSteerMotorSubsystem(), 0.0),
-              new ButtonPressCommand(
-                "driverController.y()",
-                "SteerMotorToAngleCommand - 0.0 degrees")
-              )
-          );
-        System.out.println("FINISHED registering this.driverController.y().whileTrue() ... ");
-
-        System.out.println("STARTING Registering this.driverController.b().whileTrue() ... ");
-        this.driverController.b().whileTrue(
-            new ParallelCommandGroup(
-              new SteerMotorToAngleCommand(subsystemCollection.getSteerMotorSubsystem(), 180.0),
-              new ButtonPressCommand(
-                "driverController.y()",
-                "SteerMotorToAngleCommand - 180.0 degrees")
-              )
-          );
-        System.out.println("FINISHED registering this.driverController.b().whileTrue() ... ");
-      }
-
-      if(localDrive != null){
-      if(this.subsystemCollection.isDriveTrainPowerSubsystemAvailable() && this.subsystemCollection.isDriveTrainSubsystemAvailable()){
+      if(this.subsystemCollection.isDriveTrainPowerSubsystemAvailable() && 
+         this.subsystemCollection.isDriveTrainSubsystemAvailable()){
         // left bumper press will decrement power factor  
         this.driverController.leftBumper().onTrue(
           new ParallelCommandGroup(
@@ -233,6 +188,7 @@ public class ManualInputInterfaces {
               "increment power factor")
             )
           );
+
         // left trigger press will align robot on a target   
         this.driverController.leftTrigger().onTrue(
           new ParallelCommandGroup(
@@ -257,6 +213,7 @@ public class ManualInputInterfaces {
             "normal driving")
           )
         );
+
         // right trigger press will ramp down drivetrain to reduced speed mode 
         this.driverController.rightTrigger().onTrue(
           new ParallelCommandGroup(
@@ -267,6 +224,7 @@ public class ManualInputInterfaces {
             "ramp down to reduced speed")
           )
         );
+
         // right trigger de-press will ramp up drivetrain to max speed
         this.driverController.rightTrigger().onFalse(
           new ParallelCommandGroup(
@@ -277,6 +235,7 @@ public class ManualInputInterfaces {
             "ramp up to default speed")
           )
         );
+
         // Dpad will control fine placement mode
         this.driverController.povRight().whileTrue(
           //TODO replace InstantCommand with actual driveFinePlacement command once it exist. 
@@ -292,7 +251,6 @@ public class ManualInputInterfaces {
         //TODO replace InstantCommand with actual driveFinePlacement command once it exist. 
             new InstantCommand()
           /**  
-
           new DriveFinePlacementCommand(
             localDrive, 
             Constants.FinePlacementRotationalVelocity
@@ -323,23 +281,25 @@ public class ManualInputInterfaces {
           )
         );
 
-      this.coDriverController.y().onTrue(
-        new SequentialCommandGroup(
-          //TODO include an actual ShooterOuttake command here
-          new ShooterSpinUpCommand(this.subsystemCollection.getShooterSubsystem()),
-          new ShooterShootCommand(45, this.subsystemCollection.getShooterSubsystem(), this.subsystemCollection.getFeederSubsystem()),
-          new ButtonPressCommand(
-            "coDriverController.y()",
-              "shoots the shooter")
-          )
-      );
+      if(this.subsystemCollection.isShooterSubsystemAvailable()) {
+        this.coDriverController.y().onTrue(
+          new SequentialCommandGroup(
+            //TODO include an actual ShooterOuttake command here
+            new ShooterSpinUpCommand(this.subsystemCollection.getShooterSubsystem()),
+            new ShooterShootCommand(45, this.subsystemCollection.getShooterSubsystem(), this.subsystemCollection.getFeederSubsystem()),
+            new ButtonPressCommand(
+              "coDriverController.y()",
+                "shoots the shooter")
+            )
+        );
+      }
 
       this.coDriverController.b().onTrue(
         new ParallelCommandGroup(
           //TODO include an actual DunkerOuttake command here
           new ButtonPressCommand(
             "coDriverController.b()",
-              "score to amp or dunker")
+              "[TEMPORARY FAKE] score to amp or dunker")
           )
       );
 
@@ -348,7 +308,7 @@ public class ManualInputInterfaces {
           //TODO include an actual Climb command here
           new ButtonPressCommand(
             "coDriverController.a()",
-              "climb")
+              "[TEMPORARY FAKE] climb")
           )
       );
 
@@ -357,34 +317,31 @@ public class ManualInputInterfaces {
             //TODO include an actual ShooterToLocation command here
             new ButtonPressCommand(
               "coDriverController.rightBumper()",
-              "stow")
+              "[TEMPORARY FAKE] stow")
             )
           );
 
+      if(this.subsystemCollection.isFeederSubsystemAvailable()) {
           this.coDriverController.back().onTrue(
-                //TODO add FeederSubsystem here
-                new ParallelCommandGroup(
-                  
-                new FeedNoteCommand(this.subsystemCollection.getFeederSubsystem(), FeederMode.FeedToShooter),
-
-              new ButtonPressCommand(
-                "coDriverController.back()",
-                "send note to shooter")
-                )
-              
+              new ParallelCommandGroup(
+                new FeedNoteCommand(
+                  this.subsystemCollection.getFeederSubsystem(),
+                  FeederMode.FeedToShooter),
+                new ButtonPressCommand(
+                  "coDriverController.back()",
+                  "send note to shooter"))
             );
 
           this.coDriverController.start().onTrue(
-          new ParallelCommandGroup(
-              //TODO add FeederSubsystem here
-              new FeedNoteCommand(this.subsystemCollection.getFeederSubsystem(), FeederMode.FeedToShooter),
-           
-              new ButtonPressCommand(
-              "coDriverController.start()",
-              "send note to dunker")
-          )
-            );            
-
+            new ParallelCommandGroup(
+                new FeedNoteCommand(
+                  this.subsystemCollection.getFeederSubsystem(),
+                  FeederMode.FeedToShooter),
+                new ButtonPressCommand(
+                "coDriverController.start()",
+                "send note to dunker"))
+          );
+      }
     }
   }
 }

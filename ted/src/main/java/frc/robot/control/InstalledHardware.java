@@ -59,8 +59,4 @@ public class InstalledHardware
     public static final boolean shooterRightAngleMotorrInstalled = true;
     public static final boolean shooterAngleCanCoderInstalled = false; 
 
-    // Controller button install control
-    public static final boolean applyBasicDriveToPointButtonsToDriverXboxController = false;
-    public static final boolean applyDriveTrajectoryButtonsToDriverXboxController = false;
-
 }
