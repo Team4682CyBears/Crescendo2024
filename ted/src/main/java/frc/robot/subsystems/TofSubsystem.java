@@ -107,6 +107,7 @@ public class TofSubsystem extends SubsystemBase {
     readSensor();
     SmartDashboard.putNumber(displayName + " Range Inches" , currentRangeInches);
     SmartDashboard.putBoolean(displayName + " Note Detected", isNoteDetected());
-    SmartDashboard.putBoolean(displayName + " Range is Valid", isRangeValid());
+    SmartDashboard.putBoolean(displayName + " Range Is Valid", isRangeValid());
+    SmartDashboard.putString(displayName + " TOF Status", tofSensor.getStatus().toString());
   } 
 }
