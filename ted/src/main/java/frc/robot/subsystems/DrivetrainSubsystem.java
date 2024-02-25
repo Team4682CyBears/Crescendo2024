@@ -22,6 +22,8 @@ import static frc.robot.control.Constants.*;
 import frc.robot.NavX.AHRS;
 
 import frc.robot.control.Constants;
+import frc.robot.control.InstalledHardware;
+import frc.robot.common.DrivetrainConfig;
 import frc.robot.common.EulerAngle;
 import frc.robot.common.VectorUtils;
 import frc.robot.control.SwerveDriveMode;
@@ -31,6 +33,7 @@ import frc.robot.common.SwerveTrajectoryConfig;
 import frc.robot.swerveHelpers.SwerveModuleHelper;
 import frc.robot.swerveHelpers.SwerveModule;
 import frc.robot.swerveHelpers.WcpModuleConfigurations;
+import frc.robot.swerveLib.ModuleConfiguration;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -69,6 +72,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 6.0;
 
   public static final double MIN_VELOCITY_BOUNDARY_METERS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND * 0.14; // 0.14 a magic number based on testing
+
+  private static DrivetrainConfig drivetrainConfig = 
+    InstalledHardware.tedDrivetrainInstalled ? Constants.tedDrivertainConfig : Constants.babybearDrivetrainConfig;
+  private static double DRIVETRAIN_TRACKWIDTH_METERS = drivetrainConfig.getTrackwidthMeters();
+  private static double DRIVETRAIN_WHEELBASE_METERS = drivetrainConfig.getWheelbaseMeters();
+  private static ModuleConfiguration swerveModuleConfiguration = drivetrainConfig.getSwerveModuleConfiguration();
+  private static double FRONT_LEFT_MODULE_STEER_OFFSET = drivetrainConfig.getFrontLeftModuleSteerOffset();
+  private static double FRONT_RIGHT_MODULE_STEER_OFFSET = drivetrainConfig.getFrontRightModuleSteerOffset();
+  private static double BACK_LEFT_MODULE_STEER_OFFSET = drivetrainConfig.getBackLeftModuleSteerOffset();
+  private static double BACK_RIGHT_MODULE_STEER_OFFSET = drivetrainConfig.getBackRightModuleSteerOffset();
+
   /**
    * The maximum angular velocity of the robot in radians per second.
    * <p>
@@ -140,7 +154,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
                     .withSize(2, 4)
                     .withPosition(0, 0),
             // This can either be STANDARD or FAST depending on your gear configuration 
-            WcpModuleConfigurations.SWERVEX,
+            swerveModuleConfiguration,
             // This is the ID of the drive motor
             FRONT_LEFT_MODULE_DRIVE_MOTOR,
             // This is the ID of the steer motor
@@ -156,7 +170,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
             tab.getLayout("Front Right Module", BuiltInLayouts.kList)
                     .withSize(2, 4)
                     .withPosition(2, 0),
-            WcpModuleConfigurations.SWERVEX,
+            swerveModuleConfiguration,
             FRONT_RIGHT_MODULE_DRIVE_MOTOR,
             FRONT_RIGHT_MODULE_STEER_MOTOR,
             FRONT_RIGHT_MODULE_STEER_ENCODER,
@@ -167,7 +181,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
             tab.getLayout("Back Left Module", BuiltInLayouts.kList)
                     .withSize(2, 4)
                     .withPosition(4, 0),
-            WcpModuleConfigurations.SWERVEX,
+            swerveModuleConfiguration,
             BACK_LEFT_MODULE_DRIVE_MOTOR,
             BACK_LEFT_MODULE_STEER_MOTOR,
             BACK_LEFT_MODULE_STEER_ENCODER,
@@ -178,7 +192,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
             tab.getLayout("Back Right Module", BuiltInLayouts.kList)
                     .withSize(2, 4)
                     .withPosition(6, 0),
-            WcpModuleConfigurations.SWERVEX,
+            swerveModuleConfiguration,
             BACK_RIGHT_MODULE_DRIVE_MOTOR,
             BACK_RIGHT_MODULE_STEER_MOTOR,
             BACK_RIGHT_MODULE_STEER_ENCODER,

@@ -200,7 +200,7 @@ public class TalonShooterSubsystem extends SubsystemBase {
       "exceeded bounds of [" + Constants.shooterAngleMinDegrees + " .. " + Constants.shooterAngleMaxDegrees +
       "]. Clamped to " + clampedDegrees + ".");
     }
-    double offset = InstalledHardware.shooterAngleCanCoderInstalled? 0 : internalAngleOffsetDegrees;
+    double offset = InstalledHardware.shooterAngleCanCoderInstalled ? 0 : internalAngleOffsetDegrees;
     desiredAngleDegrees = clampedDegrees - offset;
     shooterIsAtDesiredAngle = false;
   }

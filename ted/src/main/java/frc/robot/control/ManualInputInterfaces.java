@@ -21,6 +21,7 @@ import frc.robot.commands.AllStopCommand;
 import frc.robot.commands.ButtonPressCommand;
 import frc.robot.commands.FeedNoteCommand;
 import frc.robot.commands.IntakeNoteCommand;
+import frc.robot.commands.RemoveNoteCommand;
 import frc.robot.commands.ShooterShootCommand;
 import frc.robot.commands.ShooterSpinUpCommand;
 
@@ -151,7 +152,9 @@ public class ManualInputInterfaces {
         this.driverController.b().onTrue(
             new ParallelCommandGroup(
               new IntakeNoteCommand(this.subsystemCollection.getIntakeSubsystem()), 
-              new FeedNoteCommand(this.subsystemCollection.getFeederSubsystem(), FeederMode.FeedToShooter), 
+              new FeedNoteCommand(
+                this.subsystemCollection.getFeederSubsystem(),
+                FeederMode.FeedToShooter), 
               new ButtonPressCommand(
                 "driverController.b()",
                 "intake")
@@ -289,8 +292,6 @@ public class ManualInputInterfaces {
    */
   private void bindCommandsToCoDriverXboxButtons()
   {
-   //FeedNoteCommand feederToShooter = new FeedNoteCommand(subsystemCollection.getFeederSubsystem(), FeederMode.FeedToShooter);
-   //FeedNoteCommand feederToDunker = new FeedNoteCommand(subsystemCollection.getFeederSubsystem(), FeederMode.FeedToDunker);
     if(InstalledHardware.coDriverXboxControllerInstalled)
     {
       // x button press will stop all
@@ -304,12 +305,11 @@ public class ManualInputInterfaces {
           )
         );
 
-      if(this.subsystemCollection.isShooterSubsystemAvailable()) {
+      if(this.subsystemCollection.isShooterSubsystemAvailable() && this.subsystemCollection.isFeederSubsystemAvailable()) {
         this.coDriverController.y().onTrue(
-          new SequentialCommandGroup(
-            //TODO include an actual ShooterOuttake command here
-            new ShooterSpinUpCommand(this.subsystemCollection.getShooterSubsystem()),
-            new ShooterShootCommand(45, this.subsystemCollection.getShooterSubsystem(), this.subsystemCollection.getFeederSubsystem()),
+          new ParallelCommandGroup(
+            // shoot at the current angle
+            new ShooterShootCommand(this.subsystemCollection.getShooterSubsystem(), this.subsystemCollection.getFeederSubsystem()),
             new ButtonPressCommand(
               "coDriverController.y()",
                 "shoots the shooter")
@@ -317,14 +317,17 @@ public class ManualInputInterfaces {
         );
       }
 
-      this.coDriverController.b().onTrue(
-        new ParallelCommandGroup(
-          //TODO include an actual DunkerOuttake command here
-          new ButtonPressCommand(
-            "coDriverController.b()",
-              "[TEMPORARY FAKE] score to amp or dunker")
-          )
-      );
+      if(this.subsystemCollection.isIntakeSubsystemAvailable()) {
+        // remove the note
+        this.coDriverController.b().onTrue(
+          new ParallelCommandGroup(
+            new RemoveNoteCommand(this.subsystemCollection.getIntakeSubsystem()),
+            new ButtonPressCommand(
+              "coDriverController.b()",
+                "remove note")
+            )
+        );
+      }
 
       this.coDriverController.a().onTrue(
         new ParallelCommandGroup(
