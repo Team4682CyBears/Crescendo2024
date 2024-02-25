@@ -259,14 +259,15 @@ public class RobotContainer {
     // shooter subsystem default commands
     if(this.subsystems.isShooterSubsystemAvailable() && 
     this.subsystems.isManualInputInterfacesAvailable()) {
+      System.out.println("********************* GOT TO SHOOTER DEFAULT COMMAND *******************");
             // Set up the default command for the shooter.
       this.subsystems.getShooterSubsystem().setDefaultCommand(
-        new SequentialCommandGroup(
-          new ShootAllStopCommand(this.subsystems.getShooterSubsystem()),
+//        new SequentialCommandGroup(
+//          new ShootAllStopCommand(this.subsystems.getShooterSubsystem()),
           new ShooterSetAngleTesterCommand(
-            () -> this.subsystems.getManualInputInterfaces().getInputShooterAngle(), 
-            this.subsystems.getShooterSubsystem()))
-      );
+            () -> this.subsystems.getManualInputInterfaces().getInputShooterAngle(),
+            this.subsystems.getShooterSubsystem())//)
+            );
     }
   }
 

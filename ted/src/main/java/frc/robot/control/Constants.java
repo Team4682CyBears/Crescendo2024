@@ -150,8 +150,8 @@ public final class Constants {
     public static final double shooterAngleToleranceDegrees = 0.5;
     public static final double shooterSetAngleDuration = 3.0;
     // angles increment ranges of stick input (deadband range)
-    public static final double shooterControllerInputPositiveStickAngleIncrement = 0.1;
-    public static final double shooterControllerInputNegativeStickAngleIncrement = -0.1;
+    public static final double shooterControllerInputPositiveStickAngleIncrement = 0.15;
+    public static final double shooterControllerInputNegativeStickAngleIncrement = -0.15;
 
     // ******************************************************************
     // climber constants

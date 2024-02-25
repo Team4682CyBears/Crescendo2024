@@ -90,15 +90,23 @@ public class ManualInputInterfaces {
    */
   public double getInputShooterAngle() 
   {
+    System.out.println("<<<getInputShooterAngle>>>");
+    // remember that the Y on xbox will be negative upward
     double stickInput = coDriverController.getRightY();
-    double currentAngle = this.subsystemCollection.getShooterSubsystem().getAngleDegrees();
+    double startAngle = this.subsystemCollection.getShooterSubsystem().getAngleDegrees();
+    double updatedAngle = startAngle;
     if(stickInput > Constants.shooterControllerInputPositiveStickAngleIncrement){
-      currentAngle += 1.0;
+      updatedAngle -= 2.0;
+      System.out.println("decrementing angle from " + startAngle + " to " + updatedAngle);
     }
-    else if (stickInput < Constants.shooterControllerInputPositiveStickAngleIncrement) {
-      currentAngle -= 1.0;
+    else if (stickInput < Constants.shooterControllerInputNegativeStickAngleIncrement) {
+      updatedAngle += 2.0;
+      System.out.println("incrementing angle from " + startAngle + " to " + updatedAngle);
     }
-    return currentAngle;
+    else {
+      System.out.println("!!!NO shooter delta!!!");
+    }
+    return updatedAngle;
   }
 
   /**
@@ -137,11 +145,13 @@ public class ManualInputInterfaces {
           );
       }
 
-      if(this.subsystemCollection.isIntakeSubsystemAvailable()) {
+      if(this.subsystemCollection.isIntakeSubsystemAvailable() && 
+       this.subsystemCollection.isFeederSubsystemAvailable()) {
         // b button will intake a note
         this.driverController.b().onTrue(
             new ParallelCommandGroup(
               new IntakeNoteCommand(this.subsystemCollection.getIntakeSubsystem()), 
+              new FeedNoteCommand(this.subsystemCollection.getFeederSubsystem(), FeederMode.FeedToShooter), 
               new ButtonPressCommand(
                 "driverController.b()",
                 "intake")
@@ -165,7 +175,9 @@ public class ManualInputInterfaces {
         System.out.println("STARTING Registering this.driverController.a().whileTrue() ... ");
         this.driverController.a().whileTrue(
             new ParallelCommandGroup(
-              new ShooterShootCommand(subsystemCollection.getShooterSubsystem(), subsystemCollection.getFeederSubsystem()),
+              new ShooterShootCommand(
+                subsystemCollection.getShooterSubsystem(), 
+                subsystemCollection.getFeederSubsystem()),
               new ButtonPressCommand(
                 "driverController.a()",
                 "Shoot at speed!!")
