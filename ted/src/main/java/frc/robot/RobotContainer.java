@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.ShootAllStopCommand;
-import frc.robot.commands.ShooterSetAngleCommand;
 import frc.robot.commands.ShooterSetAngleTesterCommand;
 import frc.robot.commands.ShooterShootCommand;
 import frc.robot.commands.ShooterSpinUpCommand;
@@ -271,7 +270,7 @@ public class RobotContainer {
         new SequentialCommandGroup(
           new ShootAllStopCommand(this.subsystems.getShooterSubsystem()),
           new ShooterSetAngleTesterCommand(
-            () -> this.subsystems.getManualInputInterfaces().getInputShooterAngle(),
+            () -> RobotContainer.getShooterAngle(this.subsystems), // was: () -> this.subsystems.getManualInputInterfaces().getInputShooterAngle(),
             this.subsystems.getShooterSubsystem())));
     }
   }
@@ -299,6 +298,11 @@ public class RobotContainer {
 
     return value;
   }
+
+  private static double getShooterAngle(SubsystemCollection collection) {
+    return collection.getManualInputInterfaces().getInputShooterAngle();
+  }
+
   //TODO create climber arms in InstalledHardware
   //TODO create climber arms subsystem
   
