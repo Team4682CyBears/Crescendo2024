@@ -47,10 +47,10 @@ public class InstalledHardware
     public static final boolean rightRearDriveInstalled = true;
 
     // Intake Related Hardware
-    public static final boolean intakeInstalled = false;
+    public static final boolean intakeInstalled = true;
 
     // Feeder Related Hardware
-    public static final boolean feederInstalled = false;
+    public static final boolean feederInstalled = true;
 
     // Shooter Related Hardware
     public static final boolean shooterInstalled = true;
