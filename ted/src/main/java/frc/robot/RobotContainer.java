@@ -67,6 +67,9 @@ public class RobotContainer {
       System.out.println(">>>> Finished initializing button bindings.");
     }
 
+    // Put command scheduler on dashboard
+    SmartDashboard.putData(CommandScheduler.getInstance());
+
     if(this.subsystems.isDriveTrainSubsystemAvailable()) {
       SmartDashboard.putData(
         "DriveForwardRobotCentric",
@@ -87,6 +90,9 @@ public class RobotContainer {
             this.subsystems.getShooterSubsystem()
           )
       );
+      // put shooter subsystem status on dashboard
+      SmartDashboard.putData(this.subsystems.getShooterSubsystem());
+
     }
 
     if (this.subsystems.isIntakeSubsystemAvailable() && this.subsystems.isShooterSubsystemAvailable()){
