@@ -31,10 +31,10 @@ public final class Constants {
         Units.inchesToMeters(23.25), 
         Units.inchesToMeters(22.75), 
         WcpModuleConfigurations.TED,
-        Math.toRadians(281.8 + 3.8 + 173.5), // FRONT LEFT
-        Math.toRadians(327.9 + 3.6 - 0.3), // FRONT RIGHT 
-        Math.toRadians(209.1 + 2.5 - 7.9), // BACK LEFT
-        Math.toRadians(49.0 + 356.6 + 0.5)); // BACK RIGHT
+        Math.toRadians(-215.15), // FRONT LEFT
+        Math.toRadians(-180.61), // FRONT RIGHT 
+        Math.toRadians(-191.33), // BACK LEFT
+        Math.toRadians(-58.35)); // BACK RIGHT
 
     //////////////////// BABYBEAR DRIVETRAIN ////////////////////
     public static final DrivetrainConfig babybearDrivetrainConfig = new DrivetrainConfig (
