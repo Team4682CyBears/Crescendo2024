@@ -109,6 +109,7 @@ public final class Constants {
     public static final int intakeTofCanId = 14;
     // intakeSpeed is [-1.0 .. 1.0]
     public static final double intakeSpeed = -1.0;
+    public static final double removeSpeed = 1.0;
     // intake will run until note is detected or this timeout has expired
     public static final double intakeTimeoutSeconds = 10.0;
 
