@@ -47,16 +47,16 @@ public class CameraSubsystem extends SubsystemBase {
    */
   public VisionMeasurement getVisionBotPose(){
     double tagId = table.getEntry("tid").getDouble(0);
-    double[] botpose = table.getEntry("botpose").getDoubleArray(new double[defaultDoubleArraySize]);
-    Double timestamp = Timer.getFPGATimestamp() - (botpose[TimestampIndex]/milisecondsInSeconds);
-    Translation2d botTranslation = new Translation2d(botpose[botPositionXIndex], botpose[botPositionYIndex]);
-    Rotation2d botYaw = Rotation2d.fromDegrees(botpose[botRotationIndex]);
-    Pose2d realRobotPosition = new Pose2d(botTranslation, botYaw);
 
     if (tagId == noTagInSightId){
       return new VisionMeasurement(null, 0.0);
     }
     else{
+      double[] botpose = table.getEntry("botpose").getDoubleArray(new double[defaultDoubleArraySize]);
+      Double timestamp = Timer.getFPGATimestamp() - (botpose[TimestampIndex]/milisecondsInSeconds);
+      Translation2d botTranslation = new Translation2d(botpose[botPositionXIndex], botpose[botPositionYIndex]);
+      Rotation2d botYaw = Rotation2d.fromDegrees(botpose[botRotationIndex]);
+      Pose2d realRobotPosition = new Pose2d(botTranslation, botYaw);
       return new VisionMeasurement(realRobotPosition, timestamp);
     }
   }
@@ -67,7 +67,7 @@ public class CameraSubsystem extends SubsystemBase {
 
   public DistanceMeasurement getDistanceFromTag(double tId){
     DistanceMeasurement measurement = new DistanceMeasurement(false, 0.0);
-    if(getTagId() == tId){
+    if(getTagId() == tId && getVisionBotPoseInTargetSpace() != null){
       measurement.setIsValid(true);
 
       double xDistance = getVisionBotPoseInTargetSpace().getTranslation().getX();
