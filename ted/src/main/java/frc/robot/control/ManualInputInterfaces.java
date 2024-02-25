@@ -305,12 +305,11 @@ public class ManualInputInterfaces {
           )
         );
 
-      if(this.subsystemCollection.isShooterSubsystemAvailable()) {
+      if(this.subsystemCollection.isShooterSubsystemAvailable() && this.subsystemCollection.isFeederSubsystemAvailable()) {
         this.coDriverController.y().onTrue(
-          new SequentialCommandGroup(
-            //TODO include an actual ShooterOuttake command here
-            new ShooterSpinUpCommand(this.subsystemCollection.getShooterSubsystem()),
-            new ShooterShootCommand(45, this.subsystemCollection.getShooterSubsystem(), this.subsystemCollection.getFeederSubsystem()),
+          new ParallelCommandGroup(
+            // shoot at the current angle
+            new ShooterShootCommand(this.subsystemCollection.getShooterSubsystem(), this.subsystemCollection.getFeederSubsystem()),
             new ButtonPressCommand(
               "coDriverController.y()",
                 "shoots the shooter")
