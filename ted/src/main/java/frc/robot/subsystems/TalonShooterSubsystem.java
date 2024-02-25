@@ -193,18 +193,16 @@ public class TalonShooterSubsystem extends SubsystemBase {
    * @param degrees
    */
   public void setAngleDegrees(double degrees){
-    if(!this.isAngleWithinTolerance(degrees)) {
-      System.out.println("Setting Shooter Angle to " + degrees + " degrees.");
-      double clampedDegrees = MotorUtils.clamp(degrees, Constants.shooterAngleMinDegrees, Constants.shooterAngleMaxDegrees);
-      if (clampedDegrees != degrees){
-        System.out.println("Warning: Shooter Angle requested degrees of " + degrees + 
-        "exceeded bounds of [" + Constants.shooterAngleMinDegrees + " .. " + Constants.shooterAngleMaxDegrees +
-        "]. Clamped to " + clampedDegrees + ".");
-      }
-      double offset = InstalledHardware.shooterAngleCanCoderInstalled? 0 : internalAngleOffsetDegrees;
-      desiredAngleDegrees = clampedDegrees - offset;
-      shooterIsAtDesiredAngle = false;
+    System.out.println("Setting Shooter Angle to " + degrees + " degrees.");
+    double clampedDegrees = MotorUtils.clamp(degrees, Constants.shooterAngleMinDegrees, Constants.shooterAngleMaxDegrees);
+    if (clampedDegrees != degrees){
+      System.out.println("Warning: Shooter Angle requested degrees of " + degrees + 
+      "exceeded bounds of [" + Constants.shooterAngleMinDegrees + " .. " + Constants.shooterAngleMaxDegrees +
+      "]. Clamped to " + clampedDegrees + ".");
     }
+    double offset = InstalledHardware.shooterAngleCanCoderInstalled? 0 : internalAngleOffsetDegrees;
+    desiredAngleDegrees = clampedDegrees - offset;
+    shooterIsAtDesiredAngle = false;
   }
 
   /**
