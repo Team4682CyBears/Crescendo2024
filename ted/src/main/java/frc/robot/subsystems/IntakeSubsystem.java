@@ -10,7 +10,10 @@
 
 package frc.robot.subsystems;
 
+import java.util.Random;
+
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.REVLibError;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -24,15 +27,48 @@ import frc.robot.control.Constants;
  */
 public class IntakeSubsystem extends SubsystemBase {
   //Neo motor
-  private CANSparkMax intakeMotor = new CANSparkMax(Constants.intakeMotorCanId, MotorType.kBrushless);
+  private CANSparkMax intakeMotor = null;
   //BeamBreak sensor
   private TofSubsystem beambreakSensor = new TofSubsystem(Constants.intakeTofCanId);
+  private int maximumInitTries = 10;
+  private int minimumInitWaitDuration = 10;
+  private int maximumInitWaitDuration = 100;
+  private int defaultInitWaitDuration = 500;
+  private Random randy = new Random();
 
   /**
    * Constructor for the IntakeSubsystem
    */
   public IntakeSubsystem() {
-    intakeMotor.setIdleMode(IdleMode.kBrake);
+    // move the motor creation to the constructor, since it was erroring when done as a class variable. 
+    for(int inx = 0; inx < this.maximumInitTries && intakeMotor == null; ++inx) {
+      System.out.println("Initializing Intake Motor try# " + inx+1 + " ...");
+      boolean allIsWell = true;
+      try {
+        CANSparkMax assembledMotor = new CANSparkMax(Constants.intakeMotorCanId, MotorType.kBrushless);
+        allIsWell &= this.confirmLastErrorOnMotor(assembledMotor);
+        assembledMotor.setIdleMode(IdleMode.kBrake);
+        allIsWell &= this.confirmLastErrorOnMotor(assembledMotor);
+        assembledMotor.set(0.0);
+        allIsWell &= this.confirmLastErrorOnMotor(assembledMotor);
+
+        if(allIsWell){
+          intakeMotor = assembledMotor;
+          int loopCount = this.defaultInitWaitDuration / this.minimumInitWaitDuration;
+          for(int jnx = 0; jnx < loopCount; ++jnx) {
+            Thread.sleep(this.minimumInitWaitDuration);
+            System.out.print(".");
+          }
+        }
+        else{
+          int randomWaitMilliseconds = randy.nextInt(this.minimumInitWaitDuration, this.maximumInitWaitDuration);
+          Thread.sleep(randomWaitMilliseconds);
+        }
+      }
+      catch(Exception ex){
+        System.out.println(ex.toString());
+      }
+    }
   }
 
   /**
@@ -72,4 +108,17 @@ public class IntakeSubsystem extends SubsystemBase {
   public void simulationPeriodic() {
   }
 
+  /**
+   * Method to test last motor error of success or failure
+   * @param motor - the instance of a CANSparkMax motor that we are testing
+   * @return true if all is good / last error kOK
+   */
+  private boolean confirmLastErrorOnMotor(CANSparkMax motor) {
+    REVLibError error = motor.getLastError();
+    boolean result = (error == REVLibError.kOk);
+    if(!result){
+      System.out.println("Not OK motor last error == " + motor.getLastError());    
+    }
+    return result;
+  }
 }

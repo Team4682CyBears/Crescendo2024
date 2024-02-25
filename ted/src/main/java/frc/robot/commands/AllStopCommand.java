@@ -27,8 +27,17 @@ public class AllStopCommand extends Command {
      */
     public AllStopCommand(SubsystemCollection collection) {
         subsystems = collection;
-        if(this.subsystems.getDriveTrainSubsystem() != null) {
+        if(this.subsystems.isDriveTrainSubsystemAvailable()) {
             addRequirements(this.subsystems.getDriveTrainSubsystem());
+        }
+        if(this.subsystems.isFeederSubsystemAvailable()) {
+            addRequirements(this.subsystems.getFeederSubsystem());
+        }
+        if(this.subsystems.isIntakeSubsystemAvailable()) {
+            addRequirements(this.subsystems.getIntakeSubsystem());
+        }
+        if(this.subsystems.isShooterSubsystemAvailable()) {
+            addRequirements(this.subsystems.getShooterSubsystem());
         }
     }
 
@@ -38,9 +47,18 @@ public class AllStopCommand extends Command {
 
     @Override
     public void execute() {
-        if(this.subsystems.getDriveTrainSubsystem() != null) {
+        if(this.subsystems.isDriveTrainSubsystemAvailable()) {
             this.subsystems.getDriveTrainSubsystem().drive(new ChassisSpeeds(0.0,0.0,0.0));
             this.subsystems.getDriveTrainSubsystem().setSwerveDriveMode(SwerveDriveMode.NORMAL_DRIVING);
+        }
+        if(this.subsystems.isFeederSubsystemAvailable()) {
+            this.subsystems.getFeederSubsystem().setAllStop();
+        }
+        if(this.subsystems.isIntakeSubsystemAvailable()) {
+            this.subsystems.getIntakeSubsystem().setAllStop();
+        }
+        if(this.subsystems.isShooterSubsystemAvailable()) {
+            this.subsystems.getShooterSubsystem().setAllStop();
         }
     }
 

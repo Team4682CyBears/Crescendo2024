@@ -15,8 +15,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import frc.robot.common.DrivetrainConfig;
+import frc.robot.swerveHelpers.WcpModuleConfigurations;
 
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
@@ -24,38 +25,44 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 public final class Constants {
 
     public final static double DriveVoltageScalar = 1.0;
-    /**
-     * The left-to-right distance between the drivetrain wheels
-     *
-     * Should be measured from center to center.
-     */
-    public static final double DRIVETRAIN_TRACKWIDTH_METERS = Units.inchesToMeters(23.25); 
-    /**
-     * The front-to-back distance between the drivetrain wheels.
-     *
-     * Should be measured from center to center.
-     */
-    public static final double DRIVETRAIN_WHEELBASE_METERS = Units.inchesToMeters(22.75); 
 
+    //////////////////// TED DRIVETRAIN ////////////////////
+    public static final DrivetrainConfig tedDrivertainConfig = new DrivetrainConfig(
+        Units.inchesToMeters(23.25), 
+        Units.inchesToMeters(22.75), 
+        WcpModuleConfigurations.TED,
+        Math.toRadians(-215.15), // FRONT LEFT
+        Math.toRadians(-180.61), // FRONT RIGHT 
+        Math.toRadians(-191.33), // BACK LEFT
+        Math.toRadians(-58.35)); // BACK RIGHT
+
+    //////////////////// BABYBEAR DRIVETRAIN ////////////////////
+    public static final DrivetrainConfig babybearDrivetrainConfig = new DrivetrainConfig (
+        Units.inchesToMeters(17.179), 
+        Units.inchesToMeters(17.179),
+        WcpModuleConfigurations.BABYBEAR,
+        Math.toRadians(281.8 + 3.8 + 173.5), // FRONT LEFT
+        Math.toRadians(327.9 + 3.6 - 0.3), // FRONT RIGHT
+        Math.toRadians(209.1 + 2.5 - 7.9), // BACK LEFT
+        Math.toRadians(49.0 + 356.6 + 0.5)); // BACK RIGHT
+
+    //////////////////// COMMON DRIVETRAIN ////////////////////
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 1; 
     public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 2; 
     public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 3; 
-    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = Math.toRadians(281.8 + 3.8 + 173.5);
 
     public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 4; 
     public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 5; 
     public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 6; 
-    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = Math.toRadians(327.9 + 3.6 - 0.3); 
 
     public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 7; 
     public static final int BACK_LEFT_MODULE_STEER_MOTOR = 8; 
     public static final int BACK_LEFT_MODULE_STEER_ENCODER = 9; 
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = Math.toRadians(209.1 + 2.5 - 7.9);
 
     public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 10; 
     public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 11; 
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 12; 
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = Math.toRadians(49.0 + 356.6 + 0.5);
+
     // *****************************************************************
     // standard stuff constants - motors rotation, etc.
     public static final double DegreesPerRevolution = 360.0;
@@ -86,14 +93,13 @@ public final class Constants {
     // TODO test tightening up these values
     public static final Pose2d TrajectoryPoseTol = new Pose2d(0.1, 0.1, Rotation2d.fromDegrees(5));
 
-    // *************************************** 
-    // For auto constants
-    public static final double snoutDepth = Units.inchesToMeters(2.75);
-
     //*****************************************
     // Fine placement constants
     // Center of rotation for fine placement
-    public static final Translation2d RobotFrontRotationalCenter = new Translation2d(DRIVETRAIN_WHEELBASE_METERS/2 + snoutDepth + Units.inchesToMeters(10), 0.0);
+    public static final Translation2d RobotFrontRotationalCenter = 
+        InstalledHardware.tedDrivetrainInstalled ?
+        new Translation2d(tedDrivertainConfig.getWheelbaseMeters()/2 + Units.inchesToMeters(10), 0.0) :
+        new Translation2d(babybearDrivetrainConfig.getWheelbaseMeters()/2 + Units.inchesToMeters(10), 0.0);
     // velocity for fine placement
     public static final double FinePlacementRotationalVelocity = 0.7;
 
@@ -103,6 +109,7 @@ public final class Constants {
     public static final int intakeTofCanId = 14;
     // intakeSpeed is [-1.0 .. 1.0]
     public static final double intakeSpeed = -1.0;
+    public static final double removeSpeed = 1.0;
     // intake will run until note is detected or this timeout has expired
     public static final double intakeTimeoutSeconds = 10.0;
 
@@ -119,31 +126,40 @@ public final class Constants {
     public static final double feederTimeoutSeconds = 10.0;
 
     // *******************************************************************
-    // shooter constants  
+    // shooter outfeed constants  
     public static final int leftTopTalonShooterMotorCanId = 18; 
     public static final int leftBottomTalonShooterMotorCanId = 19;
     public static InvertedValue leftTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;  
     public static final int rightTopTalonShooterMotorCanId = 20; 
     public static final int rightBottomTalonShooterMotorCanId = 21; 
     public static InvertedValue rightTalonShooterMotorDefaultDirection = InvertedValue.Clockwise_Positive;  
-    public static final int shooterLeftAngleMotorCanId = 22;
-    public static final int shooterRightAngleMotorCanId = 23;
-    public static final int shooterLeftAngleEncoderCanId = 24;
-    // TODO depending on which side the motor is mounted, may need to invert these.
-    public static InvertedValue angleLeftTalonShooterMotorDefaultDirection = InvertedValue.Clockwise_Positive;
-    public static InvertedValue angleRightTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;
-    public static final double shooterAngleOffsetDegrees = -0.0;
-    public static SensorDirectionValue shooterAngleSensorDirection = SensorDirectionValue.Clockwise_Positive;
-    public static final double shooterAngleMaxDegrees = 90;
-    public static final double shooterAngleMinDegrees = 0;  
-    // stow angle should be low enough to drive under the stage
-    public static final double shooterAngleStowDegrees = 45; 
     private static double shooterBaseRpm = 6500;
     public static final double shooterLeftDefaultSpeedRpm = shooterBaseRpm * 1.0;
     public static final double shooterRightDefaultSpeedRpm = shooterBaseRpm * 0.75;
     public static final double shooterSpinUpTimeoutSeconds = 5.0;
-    public static final double shooterAngleToleranceDegrees = 3;
-    public static final double shooterShootDuration = 0.5;
+    public static final double shooterShootDuration = 5.0;
+    public static final double shooterSpinUpDelay = 2.0;
+
+    // *******************************************************************
+    // shooter angle constants  
+    public static final int shooterLeftAngleMotorCanId = 22;
+    public static final int shooterRightAngleMotorCanId = 23;
+    public static final int shooterLeftAngleEncoderCanId = 24;
+    // TODO depending on which side the motor is mounted, may need to invert these.
+    public static InvertedValue angleLeftTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;
+    public static InvertedValue angleRightTalonShooterMotorDefaultDirection = InvertedValue.Clockwise_Positive;
+    public static final double shooterAbsoluteAngleOffsetDegrees = 58.5;
+    public static final double shooterStartingAngleOffsetDegrees = 20.0; 
+    public static SensorDirectionValue shooterAngleSensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+    public static final double shooterAngleMaxDegrees = 90;
+    public static final double shooterAngleMinDegrees = 20;  
+    // stow angle should be low enough to drive under the stage
+    public static final double shooterAngleStowDegrees = 45; 
+    public static final double shooterAngleToleranceDegrees = 0.5;
+    public static final double shooterSetAngleDuration = 3.0;
+    // angles increment ranges of stick input (deadband range)
+    public static final double shooterControllerInputPositiveStickAngleIncrement = 0.15;
+    public static final double shooterControllerInputNegativeStickAngleIncrement = -0.15;
 
     // ******************************************************************
     // climber constants

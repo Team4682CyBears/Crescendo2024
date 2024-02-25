@@ -49,7 +49,6 @@ public class DriveToPointCommand extends Command
   private boolean isTrapazoidalProfile = false;  
 
   private static final int CommandSchedulerPeriodMilliseconds = 20;
-  private static final int CommandSchedulerCyclesPerSecond = 1000/CommandSchedulerPeriodMilliseconds;
   private static final int RecentRepresentativeSampleCount = 10; // last 10 samples ... 200 ms
 
   /** 
