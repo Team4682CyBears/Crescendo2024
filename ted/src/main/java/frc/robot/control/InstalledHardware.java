@@ -37,7 +37,7 @@ public class InstalledHardware
 
     // External Input Hardware
     public static final boolean driverXboxControllerInstalled = true;
-    public static final boolean coDriverXboxControllerInstalled = false;
+    public static final boolean coDriverXboxControllerInstalled = true;
 
     // DriveTrain Related Hardware
     public static final boolean tedDrivetrainInstalled = true; // true is ted, false is babybear
@@ -59,9 +59,5 @@ public class InstalledHardware
     // and disconnect the right motor from the chain. 
     public static final boolean shooterRightAngleMotorrInstalled = true;
     public static final boolean shooterAngleCanCoderInstalled = false; 
-
-    // Controller button install control
-    public static final boolean applyBasicDriveToPointButtonsToDriverXboxController = false;
-    public static final boolean applyDriveTrajectoryButtonsToDriverXboxController = false;
 
 }
