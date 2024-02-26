@@ -17,7 +17,9 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.common.FeederMode;
+import frc.robot.common.NoteTofSensor;
 import frc.robot.control.Constants;
+import frc.robot.control.InstalledHardware;
 
 /**
  * Forms a class for the feeder subsystem consisting of
@@ -27,8 +29,8 @@ public class FeederSubsystem extends SubsystemBase {
   // Bag motor
   private TalonSRX feederMotor = new TalonSRX(Constants.feederMotorCanId);
   // BeamBreak sensors
-  private TofSubsystem shooterBeambreakSensor = new TofSubsystem(Constants.feederToShooterTofCanId);
-  private TofSubsystem dunkerBeambreakSensor = new TofSubsystem(Constants.feederToDunkerTofCanId);
+  private NoteTofSensor shooterBeambreakSensor = null;
+  private NoteTofSensor dunkerBeambreakSensor = null;
   // Direction Mode default is feed to shooter
   FeederMode feederMode = FeederMode.FeedToShooter;
   private int shooterDirection = -1; // set 1 for not inverted, set -1 for inverted
@@ -44,6 +46,14 @@ public class FeederSubsystem extends SubsystemBase {
     config.peakCurrentDuration = 1500; // the time at the peak current before the limit triggers, in ms
     config.continuousCurrentLimit = 30; // the current to maintain if the peak limit is triggered
     feederMotor.configAllSettings(config); // apply the config settings; this selects the quadrature encoder
+    if (InstalledHardware.feederToShooterTofInstalled){
+      shooterBeambreakSensor = new NoteTofSensor(Constants.feederToShooterTofCanId);
+      shooterBeambreakSensor.setDisplayName("Shooter TOF");
+    }
+    if (InstalledHardware.feederToDunkerTofInstalled){
+      dunkerBeambreakSensor = new NoteTofSensor(Constants.feederToDunkerTofCanId);
+      dunkerBeambreakSensor.setDisplayName("Dunker TOF");
+    }
   }
 
   /**
@@ -59,7 +69,10 @@ public class FeederSubsystem extends SubsystemBase {
    * @return true if the note is detected
    */
   public boolean isDunkerNoteDetected(){
-    return dunkerBeambreakSensor.isNoteDetected();
+    if (dunkerBeambreakSensor != null){
+      return dunkerBeambreakSensor.isNoteDetected();
+    }
+    return false;
   }
   
   /**
@@ -67,7 +80,10 @@ public class FeederSubsystem extends SubsystemBase {
    * @return true if the note is detected
    */
   public boolean isShooterNoteDetected(){
-    return shooterBeambreakSensor.isNoteDetected();
+    if (shooterBeambreakSensor != null){
+      return shooterBeambreakSensor.isNoteDetected();
+    }
+    return false;
   }
 
   /**
@@ -75,6 +91,12 @@ public class FeederSubsystem extends SubsystemBase {
    */
   @Override
   public void periodic() {
+    if(this.dunkerBeambreakSensor != null) {
+      this.dunkerBeambreakSensor.publishTelemetery();
+    }
+    if(this.shooterBeambreakSensor != null) {
+      this.shooterBeambreakSensor.publishTelemetery();
+    }
   }
 
   /**
