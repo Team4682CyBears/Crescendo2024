@@ -36,19 +36,19 @@ public class ClimberArmToPosition extends ClimberArmToHeight {
   private static double getHeightInInchesForNamedPosition(ClimberArmTargetPosition position) {
     double targetHeight = 0.0;
     if(position == ClimberArmTargetPosition.FullDeploy) {
-        targetHeight = 26.0;
+        targetHeight = 19.5;
     }
     else if(position == ClimberArmTargetPosition.FullRetract) {
         targetHeight = 0.0;
     }
     else if(position == ClimberArmTargetPosition.HighChain) {
-        targetHeight = 22.0;
-    }
-    else if(position == ClimberArmTargetPosition.LowChain) {
         targetHeight = 18.0;
     }
+    else if(position == ClimberArmTargetPosition.LowChain) {
+        targetHeight = 15.0;
+    }
     else if(position == ClimberArmTargetPosition.HangRobot) {
-        targetHeight = 2.0;
+        targetHeight = 10.0;
     }
     return targetHeight;
   }

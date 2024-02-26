@@ -29,8 +29,8 @@ public class ClimberSubsystem extends SubsystemBase{
     // important - this should be the maximum extension of the arms' hook and it must also be the length of the cord on the spool - in inches!
     private static final double minimumOverageArmHeightInches = -0.1;
     private static final double minimumArmHeightInches = 0.0;
-    private static final double maximumArmHeightInches = 31.0;
-    private static final double maximumOverageArmHeightInches = 31.1;
+    private static final double maximumArmHeightInches = 19.5;
+    private static final double maximumOverageArmHeightInches = 19.6;
     private static final double slowSpeedToleranceInches = 1.5;
     private static final double maximumHeightFromStoredPositionInches = maximumArmHeightInches - minimumArmHeightInches;
     // measurements of spool diameter in 4 discrete ranges
