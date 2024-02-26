@@ -152,7 +152,9 @@ public class ManualInputInterfaces {
         this.driverController.b().onTrue(
             new ParallelCommandGroup(
               new IntakeNoteCommand(this.subsystemCollection.getIntakeSubsystem()), 
-              new FeedNoteCommand(this.subsystemCollection.getFeederSubsystem(), FeederMode.FeedToShooter), 
+              new FeedNoteCommand(
+                this.subsystemCollection.getFeederSubsystem(),
+                FeederMode.FeedToShooter), 
               new ButtonPressCommand(
                 "driverController.b()",
                 "intake")
@@ -290,8 +292,6 @@ public class ManualInputInterfaces {
    */
   private void bindCommandsToCoDriverXboxButtons()
   {
-   //FeedNoteCommand feederToShooter = new FeedNoteCommand(subsystemCollection.getFeederSubsystem(), FeederMode.FeedToShooter);
-   //FeedNoteCommand feederToDunker = new FeedNoteCommand(subsystemCollection.getFeederSubsystem(), FeederMode.FeedToDunker);
     if(InstalledHardware.coDriverXboxControllerInstalled)
     {
       // x button press will stop all

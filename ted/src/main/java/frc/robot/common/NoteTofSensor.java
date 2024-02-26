@@ -1,35 +1,37 @@
+
 // ************************************************************
 // Bishop Blanchet Robotics
 // Home of the Cybears
 // FRC - Charged Up - 2024
-// File: TofSubsystem.java
+// File: NoteTofSensor.java
 // Intent: Subsystem for ToF sensor to detect when note enters its range
 // ************************************************************
 
 // ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
-package frc.robot.subsystems;
+package frc.robot.common;
 
 import com.playingwithfusion.TimeOfFlight;
 import com.playingwithfusion.TimeOfFlight.RangingMode;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 /**
  * Forms a class for the TofSubsystem that detects when a note is present. 
  */
-public class TofSubsystem extends SubsystemBase {
-  private static TimeOfFlight tofSensor;
-  private int canID;
-  private double currentRangeInches;
-  private boolean currentRangeIsValid;
+public class NoteTofSensor {
 
-  public TofSubsystem(int canID){
+  private static final double noteDetectedThreshold = 8.0;
+  private TimeOfFlight tofSensor;
+  private int canID;
+  private String displayName;
+
+  public NoteTofSensor(int canID){
     tofSensor = new TimeOfFlight(canID);
     this.canID = canID;
+    this.displayName = "TOF ID " + this.canID;
     // short mode is accurate to 1.3m 
     // 20ms sample time matches robot update rate
     tofSensor.setRangingMode(RangingMode.Short, 20);
@@ -43,24 +45,20 @@ public class TofSubsystem extends SubsystemBase {
     tofSensor.identifySensor();
   }
 
-  /**
-   * A method to detect the presence of a note
-   * @return true if note is detected
+    /** 
+   * A method to return the display name
+   * @return - the display name
    */
-  public boolean isNoteDetected(){
-    double noteDetectedThreshold = 8.0;
-    if(currentRangeIsValid && (currentRangeInches < noteDetectedThreshold)){
-      return true;
-    }
-    return false;
+  public String getDisplayName(){
+    return displayName;
   }
 
   /**
    * A method to get the sensor range in inches
-   * @return
+   * @return - the current range in inches
    */
   public double getRangeInches(){
-      return currentRangeInches;
+      return Units.metersToInches(tofSensor.getRange()/1000);
   }
 
   /**
@@ -68,7 +66,19 @@ public class TofSubsystem extends SubsystemBase {
    * @return standard deviation in millimeters
    */
   public final double getRangeSigma(){
-    return  tofSensor.getRangeSigma();
+      return tofSensor.getRangeSigma();
+  }
+
+  /**
+   * A method to detect the presence of a note
+   * @return true if note is detected
+   */
+  public boolean isNoteDetected(){
+    double currentRangeInches = this.getRangeInches();
+    if(this.isRangeValid() && (currentRangeInches < noteDetectedThreshold)){
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -76,24 +86,25 @@ public class TofSubsystem extends SubsystemBase {
    * @return true if the sensor correctly measured the distance
    */
   public boolean isRangeValid(){
-    return tofSensor.isRangeValid();
+      return tofSensor.isRangeValid();
   }
 
   /**
-   * A method to read the sesnor value
+   * A method that will publish the telemetry associated with this TOF sensor to Shuffleboard
    */
-  private void readSensor(){
-    currentRangeInches = Units.metersToInches(tofSensor.getRange()/1000);
-    currentRangeIsValid = isRangeValid();
-  }
-
-  /**
-   * periodic for this subsystem. Called once per scheduler run (20ms) 
-   */
-  @Override
-  public void periodic(){
-    readSensor();
-    SmartDashboard.putNumber("TOF ID " + canID + " Range Inches" , currentRangeInches);
-    SmartDashboard.putBoolean("TOF ID " + canID + " Note Detected", isNoteDetected());
+  public void publishTelemetery(){
+    SmartDashboard.putNumber(displayName + " Range Inches" , this.getRangeInches());
+    SmartDashboard.putBoolean(displayName + " Note Detected", this.isNoteDetected());
+    SmartDashboard.putBoolean(displayName + " Range Is Valid", this.isRangeValid());
+    SmartDashboard.putString(displayName + " TOF Status", this.tofSensor.getStatus().toString());
   } 
+
+  /**
+   * Updates the display name of this sensor
+   * @param displayName - the updated name to associate to this sensor
+   */
+  public void setDisplayName(String displayName){
+      this.displayName = displayName;
+  }
+
 }

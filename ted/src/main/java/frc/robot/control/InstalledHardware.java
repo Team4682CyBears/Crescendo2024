@@ -40,7 +40,7 @@ public class InstalledHardware
     public static final boolean coDriverXboxControllerInstalled = true;
 
     // DriveTrain Related Hardware
-    public static final boolean tedDrivetrainInstalled = true; // true is ted, false is babybear
+    public static final boolean tedDrivetrainInstalled = true; // true is ted, false is babybear/minibear
     public static final boolean leftFrontDriveInstalled = true;
     public static final boolean leftRearDriveInstalled = true;
     public static final boolean rightFrontDriveInstalled = true;
@@ -51,6 +51,14 @@ public class InstalledHardware
 
     // Feeder Related Hardware
     public static final boolean feederInstalled = true;
+
+    // TOF Sensor Hardware
+    // Important! You must disable any TOF sensor that is not installed!! 
+    // If you try to configure a TOF sensor that is not installed
+    // the other TOF sensors that are installed will not work. 
+    public static final boolean intakeTofInstalled = false;
+    public static final boolean feederToShooterTofInstalled = true;
+    public static final boolean feederToDunkerTofInstalled = false;
 
     // Shooter Related Hardware
     public static final boolean shooterInstalled = true;
