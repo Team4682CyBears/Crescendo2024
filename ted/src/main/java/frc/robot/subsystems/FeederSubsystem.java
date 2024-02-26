@@ -130,5 +130,4 @@ public class FeederSubsystem extends SubsystemBase {
   @Override
   public void simulationPeriodic() {
   }
-
 }

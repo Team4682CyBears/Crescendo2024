@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.ShootAllStopCommand;
-import frc.robot.commands.ShooterSetAngleCommand;
 import frc.robot.commands.ShooterSetAngleTesterCommand;
 import frc.robot.commands.ShooterShootCommand;
 import frc.robot.commands.ShooterSpinUpCommand;
@@ -56,12 +56,18 @@ public class RobotContainer {
     // init the input system 
     this.initializeManualInputInterfaces();
 
+    // do late binding of default commands
+    this.lateBindDefaultCommands();
+
     // Configure the button bindings
     if(this.subsystems.isManualInputInterfacesAvailable()) {
       System.out.println(">>>> Initializing button bindings.");
       this.subsystems.getManualInputInterfaces().initializeButtonCommandBindings();
       System.out.println(">>>> Finished initializing button bindings.");
     }
+
+    // Put command scheduler on dashboard
+    SmartDashboard.putData(CommandScheduler.getInstance());
 
     if(this.subsystems.isDriveTrainSubsystemAvailable()) {
       SmartDashboard.putData(
@@ -83,6 +89,9 @@ public class RobotContainer {
             this.subsystems.getShooterSubsystem()
           )
       );
+      // put shooter subsystem status on dashboard
+      SmartDashboard.putData(this.subsystems.getShooterSubsystem());
+
     }
 
     if (this.subsystems.isIntakeSubsystemAvailable() && this.subsystems.isShooterSubsystemAvailable()){
@@ -240,14 +249,29 @@ public class RobotContainer {
       SmartDashboard.putData("Debug: ShooterSubsystem", subsystems.getShooterSubsystem());
       System.out.println("SUCCESS: ShooterSubsystem");
 
-      // Set up the default command for the arm.
-      // Left stick X axis -> horizontal arm in / out movement
-      // Left stick Y axis -> vertical arm in / out movement
-      subsystems.getShooterSubsystem().setDefaultCommand(new ShootAllStopCommand(
-        subsystems.getShooterSubsystem()));
+
     }
     else {
       System.out.println("FAIL: ShooterSubsystem");
+    }
+  }
+
+  /**
+   * A method to late binding of default commands
+   */
+  private void lateBindDefaultCommands() {
+
+    // shooter subsystem default commands
+    if(this.subsystems.isShooterSubsystemAvailable() && 
+    this.subsystems.isManualInputInterfacesAvailable()) {
+      System.out.println("********************* GOT TO SHOOTER DEFAULT COMMAND *******************");
+      // Set up the default command for the shooter.
+      this.subsystems.getShooterSubsystem().setDefaultCommand(
+        new SequentialCommandGroup(
+          new ShootAllStopCommand(this.subsystems.getShooterSubsystem()),
+          new ShooterSetAngleTesterCommand(
+            () -> RobotContainer.getShooterAngle(this.subsystems), // was: () -> this.subsystems.getManualInputInterfaces().getInputShooterAngle(),
+            this.subsystems.getShooterSubsystem())));
     }
   }
 
@@ -274,4 +298,31 @@ public class RobotContainer {
 
     return value;
   }
+
+  private static double getShooterAngle(SubsystemCollection collection) {
+    return collection.getManualInputInterfaces().getInputShooterAngle();
+  }
+
+  //TODO create climber arms in InstalledHardware
+  //TODO create climber arms subsystem
+  
+  /*private void initializeClimberArmsSubsystem() {
+    if(InstalledHardware.climberArmMotorInstalled) {
+      // The robot's subsystems and commands are defined here...
+      subsystems.setClimberArmsSubsystem(new ClimberArmsSubsystem());
+      SmartDashboard.putData("Debug: ClimerArmSub", subsystems.getClimberArmsSubsystem());
+      System.out.println("SUCCESS: initializeClimberArm");
+
+      // Set up the default command for the arm.
+      // Left stick Y axis -> vertical arm in / out movement
+      subsystems.getClimberArmsSubsystem().setDefaultCommand(new DefaultArmCommand(
+        subsystems.getClimberArmsSubsystem(),
+        () -> subsystems.getManualInputInterfaces().getInputClimberArmsZ()
+      ));
+    }
+    else {
+      System.out.println("FAIL: initializeArms");
+    }
+  }*/
+
 }
