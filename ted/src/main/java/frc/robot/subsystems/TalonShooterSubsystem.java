@@ -25,7 +25,6 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.control.Constants;
 import frc.robot.control.InstalledHardware;
@@ -53,14 +52,10 @@ public class TalonShooterSubsystem extends SubsystemBase {
   private static final int kTimeoutMs = 30;
   private static final double kMaxVoltage = 12;
 
-  private TalonFX leftTopMotor = new TalonFX(Constants.leftTopTalonShooterMotorCanId);
-  final VoltageOut leftTopVoltageController = new VoltageOut(0);
-  private TalonFX leftBottomMotor = new TalonFX(Constants.leftBottomTalonShooterMotorCanId);
-  final VoltageOut leftBottomVoltageController = new VoltageOut(0);
-  private TalonFX rightTopMotor = new TalonFX(Constants.rightTopTalonShooterMotorCanId);
-  final VoltageOut rightTopVoltageController = new VoltageOut(0);
-  private TalonFX rightBottomMotor = new TalonFX(Constants.rightBottomTalonShooterMotorCanId);
-  final VoltageOut rightBottomVoltageController = new VoltageOut(0);
+  private TalonFX leftMotor = new TalonFX(Constants.leftTalonShooterMotorCanId);
+  final VoltageOut leftVoltageController = new VoltageOut(0);
+  private TalonFX rightMotor = new TalonFX(Constants.rightTalonShooterMotorCanId);
+  final VoltageOut rightVoltageController = new VoltageOut(0);
   private TalonFX angleLeftMotor = new TalonFX(Constants.shooterLeftAngleMotorCanId);
   private TalonFX angleRightMotor = new TalonFX(Constants.shooterRightAngleMotorCanId);
   private CANcoder angleEncoder = new CANcoder(Constants.shooterLeftAngleEncoderCanId);
@@ -89,10 +84,8 @@ public class TalonShooterSubsystem extends SubsystemBase {
     configureAngleMotors();  
     setInternalEncoderOffset();   
     /* Make control requests synchronous */
-    leftTopVoltageController.UpdateFreqHz = 0;
-    leftBottomVoltageController.UpdateFreqHz = 0;
-    rightTopVoltageController.UpdateFreqHz = 0; 
-    rightBottomVoltageController.UpdateFreqHz = 0; 
+    leftVoltageController.UpdateFreqHz = 0;
+    rightVoltageController.UpdateFreqHz = 0; 
     angleLeftVoltageController.UpdateFreqHz = 0;
     if (InstalledHardware.shooterRightAngleMotorrInstalled) {
       // set angleRightMotor to strict-follow angleLeftMotor
@@ -114,8 +107,8 @@ public class TalonShooterSubsystem extends SubsystemBase {
    * A method to get the top left shooter speed
    * @return spped in RPM
    */
-  public double getTopLeftSpeedRpm(){
-    return rotationsPerSToRpm(leftTopMotor.getVelocity().getValue(), outfeedShooterGearRatio);
+  public double getLeftSpeedRpm(){
+    return rotationsPerSToRpm(leftMotor.getVelocity().getValue(), outfeedShooterGearRatio);
   }
 
   /**
@@ -132,7 +125,7 @@ public class TalonShooterSubsystem extends SubsystemBase {
    * @return true if the shooter is at speed
    */
   public boolean isAtSpeed() {
-    return (Math.abs(getTopLeftSpeedRpm() - Constants.shooterLeftDefaultSpeedRpm)
+    return (Math.abs(getLeftSpeedRpm() - Constants.shooterLeftDefaultSpeedRpm)
         / Constants.shooterLeftDefaultSpeedRpm) < velocitySufficientWarmupThreshold;
   }
 
@@ -219,8 +212,7 @@ public class TalonShooterSubsystem extends SubsystemBase {
    * @param speed a percentage [0 .. 1]
    */
   public void setShooterSpeedLeft(double speed) {
-    leftTopMotor.setControl(leftTopVoltageController.withOutput(kMaxVoltage * speed));
-    leftBottomMotor.setControl(leftBottomVoltageController.withOutput(kMaxVoltage * speed));
+    leftMotor.setControl(leftVoltageController.withOutput(kMaxVoltage * speed));
   }
 
   /**
@@ -228,8 +220,7 @@ public class TalonShooterSubsystem extends SubsystemBase {
    * @param speed a percentage [0 .. 1]
    */
   public void setShooterSpeedRight(double speed) {
-    rightTopMotor.setControl(rightTopVoltageController.withOutput(kMaxVoltage * speed));
-    rightBottomMotor.setControl(rightTopVoltageController.withOutput(kMaxVoltage * speed));
+    rightMotor.setControl(rightVoltageController.withOutput(kMaxVoltage * speed));
   }
 
   /**
@@ -237,16 +228,13 @@ public class TalonShooterSubsystem extends SubsystemBase {
    * @param revolutionsPerMinute - the RPM that the top motor should spin
    */
   public void setShooterVelocityLeft(double revolutionsPerMinute) {
-    final VelocityVoltage velocityTopController = new VelocityVoltage(0);
-    final VelocityVoltage velocityBottomController = new VelocityVoltage(0);
-    velocityTopController.Slot = kPIDLoopIdx;
-    velocityBottomController.Slot = kPIDLoopIdx;
+    final VelocityVoltage velocityController = new VelocityVoltage(0);
+    velocityController.Slot = kPIDLoopIdx;
     double revsPerS = this.convertShooterRpmToMotorUnitsPerS(revolutionsPerMinute,
     TalonShooterSubsystem.outfeedShooterGearRatio);
 
     System.out.println("attempting left shooter velocity at " + revsPerS + " revs/s.");
-    leftTopMotor.setControl(velocityTopController.withVelocity(revsPerS));
-    leftBottomMotor.setControl(velocityBottomController.withVelocity(revsPerS));
+    leftMotor.setControl(velocityController.withVelocity(revsPerS));
   }
 
   /**
@@ -254,15 +242,12 @@ public class TalonShooterSubsystem extends SubsystemBase {
    * @param revolutionsPerMinute - the RPM that the top motor should spin
    */
   public void setShooterVelocityRight(double revolutionsPerMinute) {
-    final VelocityVoltage velocityTopController = new VelocityVoltage(0);
-    final VelocityVoltage velocityBottomController = new VelocityVoltage(0);
-    velocityTopController.Slot = kPIDLoopIdx;
-    velocityBottomController.Slot = kPIDLoopIdx;
+    final VelocityVoltage velocityController = new VelocityVoltage(0);
+    velocityController.Slot = kPIDLoopIdx;
     double revsPerS = this.convertShooterRpmToMotorUnitsPerS(revolutionsPerMinute,
     TalonShooterSubsystem.outfeedShooterGearRatio);
 
-    rightTopMotor.setControl(velocityTopController.withVelocity(revsPerS));
-    rightBottomMotor.setControl(velocityBottomController.withVelocity(revsPerS));
+    rightMotor.setControl(velocityController.withVelocity(revsPerS));
   }
 
   /**
@@ -341,15 +326,10 @@ public class TalonShooterSubsystem extends SubsystemBase {
      * leftMotor.configNominalOutputReverse(0, TalonShooterSubsystem.kTimeoutMs);
      */
     // apply configs
-    StatusCode response = leftTopMotor.getConfigurator().apply(talonConfigs);
+    StatusCode response = leftMotor.getConfigurator().apply(talonConfigs);
     if (!response.isOK()) {
       System.out.println(
-          "TalonFX ID " + leftTopMotor.getDeviceID() + " failed config with error " + response.toString());
-    }
-    response = leftBottomMotor.getConfigurator().apply(talonConfigs);
-    if (!response.isOK()) {
-      System.out.println(
-          "TalonFX ID " + leftBottomMotor.getDeviceID() + " failed config with error " + response.toString());
+          "TalonFX ID " + leftMotor.getDeviceID() + " failed config with error " + response.toString());
     }
 
     // Config right motor
@@ -358,15 +338,10 @@ public class TalonShooterSubsystem extends SubsystemBase {
     talonConfigs.MotorOutput.Inverted = Constants.rightTalonShooterMotorDefaultDirection;
     talonConfigs.Slot0 = rightMotorGains;
     // apply configs
-    response = rightTopMotor.getConfigurator().apply(talonConfigs);
+    response = rightMotor.getConfigurator().apply(talonConfigs);
     if (!response.isOK()) {
       System.out.println(
-          "TalonFX ID " + rightTopMotor.getDeviceID() + " failed config with error " + response.toString());
-    }
-    response = rightBottomMotor.getConfigurator().apply(talonConfigs);
-    if (!response.isOK()) {
-      System.out.println(
-          "TalonFX ID " + rightBottomMotor.getDeviceID() + " failed config with error " + response.toString());
+          "TalonFX ID " + rightMotor.getDeviceID() + " failed config with error " + response.toString());
     }
   }
 
