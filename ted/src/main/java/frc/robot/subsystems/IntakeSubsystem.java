@@ -18,6 +18,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.common.NoteTofSensor;
 import frc.robot.control.Constants;
 import frc.robot.control.InstalledHardware;
 
@@ -29,7 +30,7 @@ public class IntakeSubsystem extends SubsystemBase {
   //Neo motor
   private CANSparkMax intakeMotor = null;
   //BeamBreak sensor
-  private TofSubsystem beambreakSensor = null;
+  private NoteTofSensor beambreakSensor = null;
   private int maximumInitTries = 10;
   private int minimumInitWaitDuration = 10;
   private int maximumInitWaitDuration = 100;
@@ -70,7 +71,7 @@ public class IntakeSubsystem extends SubsystemBase {
       }
     }
     if (InstalledHardware.intakeTofInstalled){
-      beambreakSensor = new TofSubsystem(Constants.intakeTofCanId);
+      beambreakSensor = new NoteTofSensor(Constants.intakeTofCanId);
       beambreakSensor.setDisplayName("Intake TOF");
     }
   }
@@ -91,6 +92,9 @@ public class IntakeSubsystem extends SubsystemBase {
    */
   @Override
   public void periodic() {
+    if(this.beambreakSensor != null) {
+      this.beambreakSensor.publishTelemetery();
+    }
   }
 
   /**

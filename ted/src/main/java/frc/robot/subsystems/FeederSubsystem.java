@@ -17,6 +17,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.common.FeederMode;
+import frc.robot.common.NoteTofSensor;
 import frc.robot.control.Constants;
 import frc.robot.control.InstalledHardware;
 
@@ -28,8 +29,8 @@ public class FeederSubsystem extends SubsystemBase {
   // Bag motor
   private TalonSRX feederMotor = new TalonSRX(Constants.feederMotorCanId);
   // BeamBreak sensors
-  private TofSubsystem shooterBeambreakSensor = null;
-  private TofSubsystem dunkerBeambreakSensor = null;
+  private NoteTofSensor shooterBeambreakSensor = null;
+  private NoteTofSensor dunkerBeambreakSensor = null;
   // Direction Mode default is feed to shooter
   FeederMode feederMode = FeederMode.FeedToShooter;
   private int shooterDirection = -1; // set 1 for not inverted, set -1 for inverted
@@ -46,11 +47,11 @@ public class FeederSubsystem extends SubsystemBase {
     config.continuousCurrentLimit = 30; // the current to maintain if the peak limit is triggered
     feederMotor.configAllSettings(config); // apply the config settings; this selects the quadrature encoder
     if (InstalledHardware.feederToShooterTofInstalled){
-      shooterBeambreakSensor = new TofSubsystem(Constants.feederToShooterTofCanId);
+      shooterBeambreakSensor = new NoteTofSensor(Constants.feederToShooterTofCanId);
       shooterBeambreakSensor.setDisplayName("Shooter TOF");
     }
     if (InstalledHardware.feederToDunkerTofInstalled){
-      dunkerBeambreakSensor = new TofSubsystem(Constants.feederToDunkerTofCanId);
+      dunkerBeambreakSensor = new NoteTofSensor(Constants.feederToDunkerTofCanId);
       dunkerBeambreakSensor.setDisplayName("Dunker TOF");
     }
   }
@@ -90,6 +91,12 @@ public class FeederSubsystem extends SubsystemBase {
    */
   @Override
   public void periodic() {
+    if(this.dunkerBeambreakSensor != null) {
+      this.dunkerBeambreakSensor.publishTelemetery();
+    }
+    if(this.shooterBeambreakSensor != null) {
+      this.shooterBeambreakSensor.publishTelemetery();
+    }
   }
 
   /**
