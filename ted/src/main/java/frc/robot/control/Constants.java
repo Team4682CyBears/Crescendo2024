@@ -167,6 +167,7 @@ public final class Constants {
     public static final int rightClimberMotorCanId = 26;
     public static final int leftClimberSensorDioId = 1;
     public static final int rightClimberSensorDioId= 2;
+    public static final double climberStandardToleranceInches = 0.25;
 
     // ******************************************************************
     // amp/dunker constants

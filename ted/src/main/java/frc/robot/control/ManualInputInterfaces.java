@@ -15,10 +15,13 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.common.ClimberArm;
+import frc.robot.common.ClimberArmTargetPosition;
 import frc.robot.common.FeederMode;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AllStopCommand;
 import frc.robot.commands.ButtonPressCommand;
+import frc.robot.commands.ClimberArmToPosition;
 import frc.robot.commands.FeedNoteCommand;
 import frc.robot.commands.IntakeNoteCommand;
 import frc.robot.commands.RemoveNoteCommand;
@@ -329,14 +332,29 @@ public class ManualInputInterfaces {
         );
       }
 
-      this.coDriverController.a().onTrue(
-        new ParallelCommandGroup(
-          //TODO include an actual Climb command here
-          new ButtonPressCommand(
-            "coDriverController.a()",
-              "[TEMPORARY FAKE] climb")
+      if(this.subsystemCollection.isClimberSubsystemAvailable() && 
+        this.subsystemCollection.isDriveTrainPowerSubsystemAvailable()) {
+        // TODO - need to have more work here to:
+        // 1. square robot
+        // 2. drive robot forward
+        this.coDriverController.a().onTrue(
+          new SequentialCommandGroup(
+            new ButtonPressCommand(
+              "coDriverController.a()",
+                "[TEMPORARY FAKE] climb"),
+            // TODO - square robot
+            new ClimberArmToPosition(
+              this.subsystemCollection.getClimberSubsystem(),
+              ClimberArm.BothClimbers,
+              ClimberArmTargetPosition.FullDeploy),
+            // TODO - move robot forward
+            new ClimberArmToPosition(
+              this.subsystemCollection.getClimberSubsystem(),
+              ClimberArm.BothClimbers,
+              ClimberArmTargetPosition.HangRobot)
           )
-      );
+        );
+      }
 
       this.coDriverController.rightBumper().onTrue(
           new ParallelCommandGroup(

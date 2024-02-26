@@ -39,6 +39,9 @@ public class AllStopCommand extends Command {
         if(this.subsystems.isShooterSubsystemAvailable()) {
             addRequirements(this.subsystems.getShooterSubsystem());
         }
+        if(this.subsystems.isClimberSubsystemAvailable()) {
+            addRequirements(this.subsystems.getClimberSubsystem());
+        }
     }
 
     @Override
@@ -59,6 +62,9 @@ public class AllStopCommand extends Command {
         }
         if(this.subsystems.isShooterSubsystemAvailable()) {
             this.subsystems.getShooterSubsystem().setAllStop();
+        }
+        if(this.subsystems.isClimberSubsystemAvailable()) {
+            this.subsystems.getClimberSubsystem().cancelClimberMovement();
         }
     }
 

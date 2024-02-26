@@ -22,6 +22,7 @@ import frc.robot.control.InstalledHardware;
 import frc.robot.control.ManualInputInterfaces;
 import frc.robot.control.SubsystemCollection;
 import frc.robot.subsystems.CameraSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DrivetrainPowerSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.FeederSubsystem;
@@ -41,7 +42,7 @@ public class RobotContainer {
     // init the pdp watcher
     this.initializePowerDistributionPanelWatcherSubsystem();
 
-        // intake subsystem init
+    // intake subsystem init
     this.initializeIntakeSubsystem();
 
     // feeder subsystem init
@@ -50,8 +51,11 @@ public class RobotContainer {
     // shooter subsystem init
     this.initializeShooterSubsystem();
 
-    // init the various subsystems
+    // init the drivetrain subsystem
     this.initializeDrivetrainSubsystem();
+
+    // init the climber subsystem
+    this.initializeClimberSubsystem();
 
     // init the input system 
     this.initializeManualInputInterfaces();
@@ -131,6 +135,19 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
+  }
+
+  /**
+   * A method to init the climbers
+   */
+  private void initializeClimberSubsystem() {
+    if(InstalledHardware.leftClimberInstalled && InstalledHardware.rightClimberInstalled) {
+      subsystems.setClimberSubsystem(new ClimberSubsystem());
+      System.out.println("SUCCESS: ClimberSubsystem");
+    }
+    else {
+      System.out.println("FAIL: ClimberSubsystem");
+    }
   }
 
   /**

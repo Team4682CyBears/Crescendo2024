@@ -94,7 +94,7 @@ public class TalonShooterSubsystem extends SubsystemBase {
     rightTopVoltageController.UpdateFreqHz = 0; 
     rightBottomVoltageController.UpdateFreqHz = 0; 
     angleLeftVoltageController.UpdateFreqHz = 0;
-    if (InstalledHardware.shooterRightAngleMotorrInstalled) {
+    if (InstalledHardware.shooterRightAngleMotorInstalled) {
       // set angleRightMotor to strict-follow angleLeftMotor
       // strict followers ignore the leader's invert and use their own
       angleRightMotor.setControl(new StrictFollower(angleLeftMotor.getDeviceID()));
