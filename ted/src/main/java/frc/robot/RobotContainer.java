@@ -63,13 +63,10 @@ public class RobotContainer {
       this.subsystems.getManualInputInterfaces().initializeButtonCommandBindings();
       System.out.println(">>>> Finished initializing button bindings.");
     }
-
-    SmartDashboard.putData(
-      "DriveForwardRobotCentric",
-      new DriveTimeCommand(this.subsystems.getDriveTrainSubsystem(),
-      new ChassisSpeeds(0.6, 0.0, 0.0),
-      3.0));
     
+    // TODO For debugging. Can remove for final competition build. 
+    this.initializeDebugDashboard();
+
     TestTrajectories testtrajectories = new TestTrajectories(this.subsystems.getDriveTrainSubsystem().getTrajectoryConfig());
 
     SmartDashboard.putData("Basic Forward", new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testtrajectories.traverseSimpleForward));
@@ -78,24 +75,22 @@ public class RobotContainer {
 
     // Path Planner Path Commands
     // commands to drive path planner test trajectories
-    // Register Named Commands 
+    // Register Named Commands
     NamedCommands.registerCommand("ShootFromSpeaker",
-      new ButtonPressCommand(">>>>>> SHOOT FROM SPEAKER <<<<<", "Shooting...")
-      //new ShooterShootCommand(55.0, this.subsystems.getShooterSubsystem(), this.subsystems.getFeederSubsystem())
-    );
-
-    NamedCommands.registerCommand("ShootFromNote", 
-      new ButtonPressCommand(">>>>>> SHOOT FROM NOTE <<<<<<<<", "Shooting...")
-      //new ShooterShootCommand(30.0, this.subsystems.getShooterSubsystem(), this.subsystems.getFeederSubsystem())
-    );    
-
-    SmartDashboard.putNumber("PAth planner variable", 0.0);
-
-    NamedCommands.registerCommand("IntakeNote", 
-    new ParallelCommandGroup(
-      new ButtonPressCommand(">>>>>>>> INTAKE <<<<<<", "intaking"),
-      new IntakeAndFeedNoteCommand(this.subsystems.getIntakeSubsystem(), this.subsystems.getFeederSubsystem(), FeederMode.FeedToShooter))
-    );
+        new ParallelCommandGroup(
+            new ButtonPressCommand("PathPlanner", "ShootFromSpeaker"),
+            new ShooterShootCommand(55.0, this.subsystems.getShooterOutfeedSubsystem(),
+                this.subsystems.getShooterAngleSubsystem(), this.subsystems.getFeederSubsystem())));
+    NamedCommands.registerCommand("ShootFromNote",
+        new ParallelCommandGroup(
+            new ButtonPressCommand("PathPlanner", "ShootFromNote"),
+            new ShooterShootCommand(40.0, this.subsystems.getShooterOutfeedSubsystem(),
+                this.subsystems.getShooterAngleSubsystem(), this.subsystems.getFeederSubsystem())));
+    NamedCommands.registerCommand("IntakeNote",
+        new ParallelCommandGroup(
+            new ButtonPressCommand("PathPlanner", "IntakeNote"),
+            new IntakeAndFeedNoteCommand(this.subsystems.getIntakeSubsystem(), this.subsystems.getFeederSubsystem(),
+                FeederMode.FeedToShooter)));
 
     PathPlannerPath shootAndMobility = PathPlannerPath.fromPathFile("ShootAndMobility");
     SmartDashboard.putData("ShootAndMobility Path",
@@ -109,16 +104,6 @@ public class RobotContainer {
 
     SmartDashboard.putData("Shoot from speaker",
       new ShooterShootCommand(45.0, this.subsystems.getShooterOutfeedSubsystem(), this.subsystems.getShooterAngleSubsystem(), this.subsystems.getFeederSubsystem()));
-    // Put command scheduler on dashboard
-    SmartDashboard.putData(CommandScheduler.getInstance());
-
-    if(this.subsystems.isDriveTrainSubsystemAvailable()) {
-      SmartDashboard.putData(
-        "DriveForwardRobotCentric",
-        new DriveTimeCommand(this.subsystems.getDriveTrainSubsystem(),
-        new ChassisSpeeds(0.6, 0.0, 0.0),
-        3.0));
-    }
 
     if (this.subsystems.isShooterOutfeedSubsystemAvailable()) {
       SmartDashboard.putData(
@@ -298,8 +283,6 @@ public class RobotContainer {
       subsystems.setShooterOutfeedSubsystem(new ShooterOutfeedSubsystem());
       SmartDashboard.putData("Debug: ShooterSubsystem", subsystems.getShooterOutfeedSubsystem());
       System.out.println("SUCCESS: ShooterOutfeedSubsystem");
-
-
     }
     else {
       System.out.println("FAIL: ShooterOutfeedSubsystem");
@@ -315,8 +298,6 @@ public class RobotContainer {
       subsystems.setShooterAngleSubsystem(new ShooterAngleSubsystem());
       SmartDashboard.putData("Debug: ShooterAngleSubsystem", subsystems.getShooterAngleSubsystem());
       System.out.println("SUCCESS: ShooterAngleSubsystem");
-
-
     }
     else {
       System.out.println("FAIL: ShooterAngleSubsystem");
@@ -331,7 +312,6 @@ public class RobotContainer {
     // shooter subsystem default commands
     if(this.subsystems.isShooterOutfeedSubsystemAvailable() && 
     this.subsystems.isManualInputInterfacesAvailable()) {
-      System.out.println("********************* GOT TO SHOOTER Outfeed DEFAULT COMMAND *******************");
       // Set up the default command for the shooter.
       this.subsystems.getShooterOutfeedSubsystem().setDefaultCommand(
         new ShootAllStopCommand(this.subsystems.getShooterOutfeedSubsystem()));
@@ -339,7 +319,6 @@ public class RobotContainer {
 
     if(this.subsystems.isShooterAngleSubsystemAvailable() && 
     this.subsystems.isManualInputInterfacesAvailable()) {
-      System.out.println("********************* GOT TO SHOOTER Angle DEFAULT COMMAND *******************");
       // Set up the default command for the shooter.
       this.subsystems.getShooterAngleSubsystem().setDefaultCommand(
         new ShooterSetAngleDefaultCommand(
