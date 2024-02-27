@@ -21,12 +21,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.ShootAllStopCommand;
-import frc.robot.commands.ShooterSetAngleTesterCommand;
-import frc.robot.commands.ShooterShootCommand;
-import frc.robot.commands.ShooterSpinUpCommand;
 import frc.robot.common.FeederMode;
-import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.control.Constants;
 import frc.robot.control.InstalledHardware;
 import frc.robot.control.ManualInputInterfaces;
@@ -38,9 +33,6 @@ import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PowerDistributionPanelWatcherSubsystem;
 import frc.robot.subsystems.TalonShooterSubsystem;
-import frc.robot.commands.DriveTimeCommand;
-import frc.robot.commands.FeedNoteCommand;
-import frc.robot.commands.IntakeNoteCommand;
 
 public class RobotContainer {
 
@@ -91,19 +83,28 @@ public class RobotContainer {
     // Path Planner Path Commands
     // commands to drive path planner test trajectories
     // Register Named Commands 
-    NamedCommands.registerCommand("ShootNote", 
-    new ParallelCommandGroup(
-      new ButtonPressCommand("PATH PLANNER COMMAND: ", "Shoot"),
-      new SetDashboardVariableCommand("PathPlannerVariable", 999, 0.5, 1000)
-    ));
+    NamedCommands.registerCommand("Shoot From Speaker", 
+      new ShooterShootCommand(45.0, this.subsystems.getShooterSubsystem(), this.subsystems.getFeederSubsystem())
+    );
 
-    PathPlannerPath close4NoteAutoPath = PathPlannerPath.fromPathFile("Close4NoteAuto");
-    SmartDashboard.putData("DriveStraightPath",
-      FollowTrajectoryCommandBuilder.build(close4NoteAutoPath, this.subsystems.getDriveTrainSubsystem(), true));
+    NamedCommands.registerCommand("Shoot From Note", 
+      new ShooterShootCommand(30.0, this.subsystems.getShooterSubsystem(), this.subsystems.getFeederSubsystem())
+    );    
 
-    PathPlannerPath FarNote3Path = PathPlannerPath.fromPathFile("FarNote3");
-    SmartDashboard.putData("DriveHookRightPath",
-        FollowTrajectoryCommandBuilder.build(FarNote3Path, this.subsystems.getDriveTrainSubsystem(), true));
+    NamedCommands.registerCommand("Intake Note", 
+      new IntakeAndFeedNoteCommand(this.subsystems.getIntakeSubsystem(), this.subsystems.getFeederSubsystem(), FeederMode.FeedToShooter)
+    );
+
+    PathPlannerPath shootAndMobility = PathPlannerPath.fromPathFile("ShootAndMobility");
+    SmartDashboard.putData("ShootAndMobility Path",
+        FollowTrajectoryCommandBuilder.build(shootAndMobility, this.subsystems.getDriveTrainSubsystem(), true));
+
+    PathPlannerPath shootPickShoot = PathPlannerPath.fromPathFile("ShootPickShoot");
+    SmartDashboard.putData("ShootPickShoot Path",
+        FollowTrajectoryCommandBuilder.build(shootPickShoot, this.subsystems.getDriveTrainSubsystem(), true));
+
+    SmartDashboard.putData("Shoot from speaker",
+      new ShooterShootCommand(45.0, this.subsystems.getShooterSubsystem(), this.subsystems.getFeederSubsystem()));
     // Put command scheduler on dashboard
     SmartDashboard.putData(CommandScheduler.getInstance());
 
