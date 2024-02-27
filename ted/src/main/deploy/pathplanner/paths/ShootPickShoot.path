@@ -32,32 +32,53 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Shoot From Speaker",
+      "name": "ShootFromSpeaker",
       "waypointRelativePos": 0.0,
       "command": {
         "type": "sequential",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "ShootFromSpeaker"
+              }
+            }
+          ]
         }
       }
     },
     {
-      "name": "Intake Note",
-      "waypointRelativePos": 0.9,
+      "name": "IntakeNote",
+      "waypointRelativePos": 0.8,
       "command": {
         "type": "parallel",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "IntakeNote"
+              }
+            }
+          ]
         }
       }
     },
     {
-      "name": "Shoot From Note",
+      "name": "ShootFromNote",
       "waypointRelativePos": 1.0,
       "command": {
         "type": "sequential",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "ShootFromNote"
+              }
+            }
+          ]
         }
       }
     }

@@ -186,7 +186,7 @@ public class TalonShooterSubsystem extends SubsystemBase {
    * @param degrees
    */
   public void setAngleDegrees(double degrees){
-    System.out.println("Setting Shooter Angle to " + degrees + " degrees.");
+    // System.out.println("Setting Shooter Angle to " + degrees + " degrees.");
     double clampedDegrees = MotorUtils.clamp(degrees, Constants.shooterAngleMinDegrees, Constants.shooterAngleMaxDegrees);
     if (clampedDegrees != degrees){
       System.out.println("Warning: Shooter Angle requested degrees of " + degrees + 
@@ -233,7 +233,7 @@ public class TalonShooterSubsystem extends SubsystemBase {
     double revsPerS = this.convertShooterRpmToMotorUnitsPerS(revolutionsPerMinute,
     TalonShooterSubsystem.outfeedShooterGearRatio);
 
-    System.out.println("attempting left shooter velocity at " + revsPerS + " revs/s.");
+    // System.out.println("attempting left shooter velocity at " + revsPerS + " revs/s.");
     leftMotor.setControl(velocityController.withVelocity(revsPerS));
   }
 

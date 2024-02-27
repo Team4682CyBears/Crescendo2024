@@ -132,6 +132,13 @@ public class ShooterShootCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    System.out.println(">>>>>>>>>>>>Starting Shooter Shoot Command<<<<<<<<<<<<<<");
+    System.out.println("Already at angle? " + isAtDesiredAngle);
+    if (!isAtDesiredAngle){
+      System.out.println("Setting Angle to " + desiredAngleDegrees + " degrees");
+    }
+
+
     if (setSpeedsFromSupplier) {
       this.desiredLeftSpeedRpm = this.desiredLeftSpeedRpmSupplier.getAsDouble();
       this.desiredRightSpeedRpm = this.desiredRightSpeedRpmSupplier.getAsDouble();
@@ -143,6 +150,8 @@ public class ShooterShootCommand extends Command {
     if (!isAtDesiredAngle) {
       shooter.setAngleDegrees(desiredAngleDegrees);
     }
+    System.out.println("Spinning up shooter...");
+    System.out.println("Target RPM: Left " + desiredLeftSpeedRpm + ". Right RPM: " + desiredRightSpeedRpm);
     shooter.setShooterVelocityLeft(desiredLeftSpeedRpm);
     shooter.setShooterVelocityRight(desiredRightSpeedRpm);
 
@@ -159,10 +168,13 @@ public class ShooterShootCommand extends Command {
       isAtDesiredAngle = shooter.isAngleWithinTolerance(desiredAngleDegrees);
     }
     if (isAtDesiredAngle && shooter.isAtSpeed()){
+      System.out.println("Shooter at desired speed and angle.");
+      System.out.println("Wait for feeder delay");
       delayTimer.start();
     }
     if (delayTimer.hasElapsed(Constants.shooterSpinUpDelay)){
       feeder.setFeederSpeed(Constants.feederSpeed);
+      System.out.println("Feeding Note");
       timer.start();
     }
     if (timer.hasElapsed(Constants.shooterShootDuration)){

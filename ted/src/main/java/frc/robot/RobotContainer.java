@@ -83,16 +83,22 @@ public class RobotContainer {
     // Path Planner Path Commands
     // commands to drive path planner test trajectories
     // Register Named Commands 
-    NamedCommands.registerCommand("Shoot From Speaker", 
-      new ShooterShootCommand(45.0, this.subsystems.getShooterSubsystem(), this.subsystems.getFeederSubsystem())
+    NamedCommands.registerCommand("ShootFromSpeaker",
+      new ButtonPressCommand(">>>>>> SHOOT FROM SPEAKER <<<<<", "Shooting...")
+      //new ShooterShootCommand(55.0, this.subsystems.getShooterSubsystem(), this.subsystems.getFeederSubsystem())
     );
 
-    NamedCommands.registerCommand("Shoot From Note", 
-      new ShooterShootCommand(30.0, this.subsystems.getShooterSubsystem(), this.subsystems.getFeederSubsystem())
+    NamedCommands.registerCommand("ShootFromNote", 
+      new ButtonPressCommand(">>>>>> SHOOT FROM NOTE <<<<<<<<", "Shooting...")
+      //new ShooterShootCommand(30.0, this.subsystems.getShooterSubsystem(), this.subsystems.getFeederSubsystem())
     );    
 
-    NamedCommands.registerCommand("Intake Note", 
-      new IntakeAndFeedNoteCommand(this.subsystems.getIntakeSubsystem(), this.subsystems.getFeederSubsystem(), FeederMode.FeedToShooter)
+    SmartDashboard.putNumber("PAth planner variable", 0.0);
+
+    NamedCommands.registerCommand("IntakeNote", 
+    new ParallelCommandGroup(
+      new ButtonPressCommand(">>>>>>>> INTAKE <<<<<<", "intaking"),
+      new IntakeAndFeedNoteCommand(this.subsystems.getIntakeSubsystem(), this.subsystems.getFeederSubsystem(), FeederMode.FeedToShooter))
     );
 
     PathPlannerPath shootAndMobility = PathPlannerPath.fromPathFile("ShootAndMobility");
@@ -101,7 +107,9 @@ public class RobotContainer {
 
     PathPlannerPath shootPickShoot = PathPlannerPath.fromPathFile("ShootPickShoot");
     SmartDashboard.putData("ShootPickShoot Path",
-        FollowTrajectoryCommandBuilder.build(shootPickShoot, this.subsystems.getDriveTrainSubsystem(), true));
+    new SequentialCommandGroup(
+        FollowTrajectoryCommandBuilder.build(shootPickShoot, this.subsystems.getDriveTrainSubsystem(), true),
+        new IntakeAndFeedNoteCommand(this.subsystems.getIntakeSubsystem(), this.subsystems.getFeederSubsystem(), FeederMode.FeedToShooter)));
 
     SmartDashboard.putData("Shoot from speaker",
       new ShooterShootCommand(45.0, this.subsystems.getShooterSubsystem(), this.subsystems.getFeederSubsystem()));
@@ -149,7 +157,7 @@ public class RobotContainer {
 
     if (this.subsystems.isIntakeSubsystemAvailable()) {
       SmartDashboard.putData(
-          "Run Intake",
+          "RunIntake",
           new IntakeNoteCommand(this.subsystems.getIntakeSubsystem()));
     }
 
@@ -157,6 +165,12 @@ public class RobotContainer {
       SmartDashboard.putData(
           "Run Feeder to Shooter",
           new FeedNoteCommand(this.subsystems.getFeederSubsystem(), FeederMode.FeedToShooter));
+    }
+
+    if (this.subsystems.isIntakeSubsystemAvailable() && this.subsystems.isFeederSubsystemAvailable()){
+      SmartDashboard.putData(
+        "Run Intake and Feeder",
+        new IntakeAndFeedNoteCommand(this.subsystems.getIntakeSubsystem(), this.subsystems.getFeederSubsystem(), FeederMode.FeedToShooter));
     }
 
     if(this.subsystems.isDriveTrainPowerSubsystemAvailable()) {
