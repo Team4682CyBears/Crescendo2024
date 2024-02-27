@@ -21,7 +21,6 @@ public class ShooterSetAngleCommand extends Command {
 
   private ShooterAngleSubsystem shooterAngleSubsystem;
   protected double desiredAngleDegrees; 
-  private boolean updatedAngleSet = false;
   private boolean done = false;
 
   /**
@@ -40,21 +39,14 @@ public class ShooterSetAngleCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("Initialize ShooteSetAngleCommand");
-    this.updatedAngleSet = false;
+    System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Initialize ShooteSetAngleCommand");
     this.done = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("Execute ShooteSetAngleCommand");
-    if(!this.updatedAngleSet) {
-      shooterAngleSubsystem.setAngleDegrees(desiredAngleDegrees);
-    }
-    else {
-      done = shooterAngleSubsystem.isAngleWithinTolerance(Constants.shooterAngleToleranceDegrees);
-    }
+    shooterAngleSubsystem.setAngleDegrees(desiredAngleDegrees); 
   }
 
   // Called once the command ends or is interrupted.
@@ -70,7 +62,7 @@ public class ShooterSetAngleCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return done; 
+    return shooterAngleSubsystem.isAngleWithinTolerance(Constants.shooterAngleToleranceDegrees);
   }
 
 }
