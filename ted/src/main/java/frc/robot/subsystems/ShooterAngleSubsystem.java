@@ -52,7 +52,7 @@ public class ShooterAngleSubsystem extends SubsystemBase {
   private double internalAngleOffsetDegrees = 0; // used when running from intenral motor encoder, ignored when using CanCoder
 
   // Motor controller gains
-  private Slot0Configs angleMotorGains = new Slot0Configs().withKP(80).withKI(0.0).withKD(5.0).withKV(0.12);
+  private Slot0Configs angleMotorGains = new Slot0Configs().withKP(250).withKI(0).withKD(50.0).withKV(0);
 
   /**
    * Constructor for shooter subsystem
@@ -97,7 +97,6 @@ public class ShooterAngleSubsystem extends SubsystemBase {
   public void periodic() {
     if (!shooterIsAtDesiredAngle) {
         // use motionMagic voltage control
-        System.out.println("Shooter angle not at desired angle. Desired Angle: " + desiredAngleDegrees + " current angle: " + getAngleDegrees());
         angleLeftMotor.setControl(angleLeftVoltageController.withPosition(degreesToRotations(desiredAngleDegrees - getOffset())));
         // angleRightMotor acts as a follower
         // keep moving until it reaches target angle
@@ -148,7 +147,7 @@ public class ShooterAngleSubsystem extends SubsystemBase {
       "]. Clamped to " + clampedDegrees + ".");
     }
     desiredAngleDegrees = clampedDegrees;
-    shooterIsAtDesiredAngle = false;
+    shooterIsAtDesiredAngle = isAngleWithinTolerance(desiredAngleDegrees);
   }
 
   /**

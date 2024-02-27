@@ -35,8 +35,12 @@ public class ShooterSetAngleTesterCommand extends ShooterSetAngleCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("Initialize ShooteSetAngleTesterCommand");
     super.desiredAngleDegrees = desiredAngleDegreesSupplier.getAsDouble();
     super.initialize();
+  }
+
+  @Override
+  public void end(boolean interrupted){
+    super.end(interrupted);
   }
 }

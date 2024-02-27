@@ -92,20 +92,15 @@ public class ManualInputInterfaces {
    */
   public double getInputShooterAngleIncrement() 
   {
-    System.out.println("<<<getInputShooterAngle>>>");
+    double incrementMagnitude = 0.5;
     // remember that the Y on xbox will be negative upward
     double stickInput = coDriverController.getRightY();
     double updatedAngle = 0.0; 
     if(stickInput > Constants.shooterControllerInputPositiveStickAngleIncrement){
-      updatedAngle = -2.0;
-      System.out.println("decrementing angle by " + updatedAngle);
+      updatedAngle = -incrementMagnitude;
     }
     else if (stickInput < Constants.shooterControllerInputNegativeStickAngleIncrement) {
-      updatedAngle = 2.0;
-      System.out.println("incrementing angle by " + updatedAngle);
-    }
-    else {
-      System.out.println("!!!NO shooter delta!!!");
+      updatedAngle = incrementMagnitude;
     }
     return updatedAngle;
   }

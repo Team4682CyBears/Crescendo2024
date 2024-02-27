@@ -10,6 +10,8 @@
 
 package frc.robot.commands;
 
+import frc.robot.common.MotorUtils;
+import frc.robot.control.Constants;
 import frc.robot.subsystems.ShooterAngleSubsystem;
 import java.util.function.DoubleSupplier; 
 
@@ -39,7 +41,6 @@ public class ShooterSetAngleDefaultCommand extends ShooterSetAngleCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("Initialize ShooteSetAngleDefaultCommand");
     // start out wanting current shooter angle
     desiredAngleDegrees = this.shooter.getAngleDegrees();
     super.desiredAngleDegrees = desiredAngleDegrees;
@@ -49,6 +50,7 @@ public class ShooterSetAngleDefaultCommand extends ShooterSetAngleCommand {
   @Override
   public void execute() {
     desiredAngleDegrees += desiredAngleDegreesSupplier.getAsDouble();
+    desiredAngleDegrees = MotorUtils.clamp(desiredAngleDegrees, Constants.shooterAngleMinDegrees, Constants.shooterAngleMaxDegrees);
     super.desiredAngleDegrees = desiredAngleDegrees;
     super.execute();
   }
