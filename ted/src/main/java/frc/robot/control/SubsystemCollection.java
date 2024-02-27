@@ -14,7 +14,8 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PowerDistributionPanelWatcherSubsystem;
-import frc.robot.subsystems.TalonShooterSubsystem;
+import frc.robot.subsystems.ShooterAngleSubsystem;
+import frc.robot.subsystems.ShooterOutfeedSubsystem;
 
 public class SubsystemCollection
 {
@@ -25,7 +26,8 @@ public class SubsystemCollection
     private DrivetrainSubsystem driveTrainSubsystem = null;
     private DrivetrainPowerSubsystem driveTrainPowerSubsystem = null;
     private PowerDistributionPanelWatcherSubsystem powerDistributionPanelWatcherSubsystem = null; 
-    private TalonShooterSubsystem shooterSubsystem = null;
+    private ShooterOutfeedSubsystem shooterOutfeedSubsystem = null;
+    private ShooterAngleSubsystem shooterAngleSubsystem = null;
     private IntakeSubsystem intakeSubsystem = null;
     private FeederSubsystem feederSubsystem = null;
 
@@ -58,7 +60,11 @@ public class SubsystemCollection
     public void setFeederSubsystem(FeederSubsystem value) { feederSubsystem = value; }
     public boolean isFeederSubsystemAvailable() { return feederSubsystem != null; }
 
-    public TalonShooterSubsystem getShooterSubsystem() { return shooterSubsystem; }
-    public void setShooterSubsystem(TalonShooterSubsystem value) { shooterSubsystem = value; }
-    public boolean isShooterSubsystemAvailable() { return shooterSubsystem != null; }
+    public ShooterOutfeedSubsystem getShooterOutfeedSubsystem() { return shooterOutfeedSubsystem; }
+    public void setShooterOutfeedSubsystem(ShooterOutfeedSubsystem value) { shooterOutfeedSubsystem = value; }
+    public boolean isShooterOutfeedSubsystemAvailable() { return shooterOutfeedSubsystem != null; }
+
+    public ShooterAngleSubsystem getShooterAngleSubsystem() { return shooterAngleSubsystem; }
+    public void setShooterAngleSubsystem(ShooterAngleSubsystem value) { shooterAngleSubsystem = value; }
+    public boolean isShooterAngleSubsystemAvailable() { return shooterAngleSubsystem != null; }
 }

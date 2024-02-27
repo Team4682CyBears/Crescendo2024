@@ -36,8 +36,8 @@ public class AllStopCommand extends Command {
         if(this.subsystems.isIntakeSubsystemAvailable()) {
             addRequirements(this.subsystems.getIntakeSubsystem());
         }
-        if(this.subsystems.isShooterSubsystemAvailable()) {
-            addRequirements(this.subsystems.getShooterSubsystem());
+        if(this.subsystems.isShooterOutfeedSubsystemAvailable()) {
+            addRequirements(this.subsystems.getShooterOutfeedSubsystem());
         }
     }
 
@@ -57,8 +57,8 @@ public class AllStopCommand extends Command {
         if(this.subsystems.isIntakeSubsystemAvailable()) {
             this.subsystems.getIntakeSubsystem().setAllStop();
         }
-        if(this.subsystems.isShooterSubsystemAvailable()) {
-            this.subsystems.getShooterSubsystem().setAllStop();
+        if(this.subsystems.isShooterOutfeedSubsystemAvailable()) {
+            this.subsystems.getShooterOutfeedSubsystem().setAllStop();
         }
     }
 

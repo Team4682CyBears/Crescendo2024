@@ -95,7 +95,7 @@ public class ManualInputInterfaces {
     System.out.println("<<<getInputShooterAngle>>>");
     // remember that the Y on xbox will be negative upward
     double stickInput = coDriverController.getRightY();
-    double startAngle = this.subsystemCollection.getShooterSubsystem().getAngleDegrees();
+    double startAngle = this.subsystemCollection.getShooterAngleSubsystem().getAngleDegrees();
     double updatedAngle = startAngle;
     if(stickInput > Constants.shooterControllerInputPositiveStickAngleIncrement){
       updatedAngle -= 2.0;
@@ -174,13 +174,13 @@ public class ManualInputInterfaces {
           )
       );
 
-      if(this.subsystemCollection.isShooterSubsystemAvailable() &&
+      if(this.subsystemCollection.isShooterOutfeedSubsystemAvailable() &&
          this.subsystemCollection.isFeederSubsystemAvailable()) {
         System.out.println("STARTING Registering this.driverController.a().whileTrue() ... ");
         this.driverController.a().whileTrue(
             new ParallelCommandGroup(
               new ShooterShootCommand(
-                subsystemCollection.getShooterSubsystem(), 
+                subsystemCollection.getShooterOutfeedSubsystem(), 
                 subsystemCollection.getFeederSubsystem()),
               new ButtonPressCommand(
                 "driverController.a()",
@@ -306,11 +306,11 @@ public class ManualInputInterfaces {
           )
         );
 
-      if(this.subsystemCollection.isShooterSubsystemAvailable() && this.subsystemCollection.isFeederSubsystemAvailable()) {
+      if(this.subsystemCollection.isShooterOutfeedSubsystemAvailable() && this.subsystemCollection.isFeederSubsystemAvailable()) {
         this.coDriverController.y().onTrue(
           new ParallelCommandGroup(
             // shoot at the current angle
-            new ShooterShootCommand(this.subsystemCollection.getShooterSubsystem(), this.subsystemCollection.getFeederSubsystem()),
+            new ShooterShootCommand(this.subsystemCollection.getShooterOutfeedSubsystem(), this.subsystemCollection.getFeederSubsystem()),
             new ButtonPressCommand(
               "coDriverController.y()",
                 "shoots the shooter")

@@ -32,7 +32,8 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PowerDistributionPanelWatcherSubsystem;
-import frc.robot.subsystems.TalonShooterSubsystem;
+import frc.robot.subsystems.ShooterOutfeedSubsystem;
+import frc.robot.subsystems.ShooterAngleSubsystem;
 
 public class RobotContainer {
 
@@ -50,7 +51,8 @@ public class RobotContainer {
     this.initializeFeederSubsystem();
 
     // shooter subsystem init
-    this.initializeShooterSubsystem();
+    this.initializeShooterOutfeedSubsystem();
+    this.initializeShooterAngleSubsystem();
 
     // init the various subsystems
     this.initializeDrivetrainSubsystem();
@@ -112,7 +114,7 @@ public class RobotContainer {
         new IntakeAndFeedNoteCommand(this.subsystems.getIntakeSubsystem(), this.subsystems.getFeederSubsystem(), FeederMode.FeedToShooter)));
 
     SmartDashboard.putData("Shoot from speaker",
-      new ShooterShootCommand(45.0, this.subsystems.getShooterSubsystem(), this.subsystems.getFeederSubsystem()));
+      new ShooterShootCommand(45.0, this.subsystems.getShooterOutfeedSubsystem(), this.subsystems.getShooterAngleSubsystem(), this.subsystems.getFeederSubsystem()));
     // Put command scheduler on dashboard
     SmartDashboard.putData(CommandScheduler.getInstance());
 
@@ -124,27 +126,28 @@ public class RobotContainer {
         3.0));
     }
 
-    if (this.subsystems.isShooterSubsystemAvailable()) {
+    if (this.subsystems.isShooterOutfeedSubsystemAvailable()) {
       SmartDashboard.putData(
           "Spin Up Shooter",
-          new ShooterSpinUpCommand(this.subsystems.getShooterSubsystem()));
+          new ShooterSpinUpCommand(this.subsystems.getShooterOutfeedSubsystem()));
+    }
+
+    if (this.subsystems.isShooterAngleSubsystemAvailable()) {
       SmartDashboard.putNumber("Shooter Angle Setter", Constants.shooterStartingAngleOffsetDegrees);
       SmartDashboard.putData(
           "Set Shooter To Specified Angle",
           new ShooterSetAngleTesterCommand(
             () -> SmartDashboard.getNumber("Shooter Angle Setter", Constants.shooterStartingAngleOffsetDegrees),
-            this.subsystems.getShooterSubsystem()
+            this.subsystems.getShooterAngleSubsystem()
           )
       );
-      // put shooter subsystem status on dashboard
-      SmartDashboard.putData(this.subsystems.getShooterSubsystem());
-
     }
 
-    if (this.subsystems.isIntakeSubsystemAvailable() && this.subsystems.isShooterSubsystemAvailable()){
+    if (this.subsystems.isIntakeSubsystemAvailable() && this.subsystems.isShooterOutfeedSubsystemAvailable()){
       SmartDashboard.putData(
           "Shoot Shooter (at current angle and default speeds)",
-          new ShooterShootCommand(Constants.shooterLeftDefaultSpeedRpm, Constants.shooterRightDefaultSpeedRpm, this.subsystems.getShooterSubsystem(), this.subsystems.getFeederSubsystem()));
+          new ShooterShootCommand(Constants.shooterLeftDefaultSpeedRpm, Constants.shooterRightDefaultSpeedRpm, 
+          this.subsystems.getShooterOutfeedSubsystem(), this.subsystems.getFeederSubsystem()));
       SmartDashboard.putNumber("Shooter Left Speed RPM Setter", Constants.shooterLeftDefaultSpeedRpm);
       SmartDashboard.putNumber("Shooter Right Speed RPM Setter", Constants.shooterRightDefaultSpeedRpm);
       SmartDashboard.putData(
@@ -152,7 +155,7 @@ public class RobotContainer {
           new ShooterShootCommand(
             () -> SmartDashboard.getNumber("Shooter Left Speed RPM Setter", Constants.shooterLeftDefaultSpeedRpm),
             () -> SmartDashboard.getNumber("Shooter Right Speed RPM Setter", Constants.shooterRightDefaultSpeedRpm),
-          this.subsystems.getShooterSubsystem(), this.subsystems.getFeederSubsystem()));
+          this.subsystems.getShooterOutfeedSubsystem(), this.subsystems.getFeederSubsystem()));
     }
 
     if (this.subsystems.isIntakeSubsystemAvailable()) {
@@ -293,19 +296,36 @@ public class RobotContainer {
   }
 
   /**
-   * A method to init the shooter
+   * A method to init the shooter outfeed
    */
-  private void initializeShooterSubsystem() {
-    if(InstalledHardware.shooterInstalled) {
+  private void initializeShooterOutfeedSubsystem() {
+    if(InstalledHardware.shooterOutfeedInstalled) {
       // The robot's subsystems and commands are defined here...
-      subsystems.setShooterSubsystem(new TalonShooterSubsystem());
-      SmartDashboard.putData("Debug: ShooterSubsystem", subsystems.getShooterSubsystem());
-      System.out.println("SUCCESS: ShooterSubsystem");
+      subsystems.setShooterOutfeedSubsystem(new ShooterOutfeedSubsystem());
+      SmartDashboard.putData("Debug: ShooterSubsystem", subsystems.getShooterOutfeedSubsystem());
+      System.out.println("SUCCESS: ShooterOutfeedSubsystem");
 
 
     }
     else {
-      System.out.println("FAIL: ShooterSubsystem");
+      System.out.println("FAIL: ShooterOutfeedSubsystem");
+    }
+  }
+
+  /**
+   * A method to init the shooter angle
+   */
+  private void initializeShooterAngleSubsystem() {
+    if(InstalledHardware.shooterAngleInstalled) {
+      // The robot's subsystems and commands are defined here...
+      subsystems.setShooterAngleSubsystem(new ShooterAngleSubsystem());
+      SmartDashboard.putData("Debug: ShooterAngleSubsystem", subsystems.getShooterAngleSubsystem());
+      System.out.println("SUCCESS: ShooterAngleSubsystem");
+
+
+    }
+    else {
+      System.out.println("FAIL: ShooterAngleSubsystem");
     }
   }
 
@@ -315,16 +335,22 @@ public class RobotContainer {
   private void lateBindDefaultCommands() {
 
     // shooter subsystem default commands
-    if(this.subsystems.isShooterSubsystemAvailable() && 
+    if(this.subsystems.isShooterOutfeedSubsystemAvailable() && 
     this.subsystems.isManualInputInterfacesAvailable()) {
-      System.out.println("********************* GOT TO SHOOTER DEFAULT COMMAND *******************");
+      System.out.println("********************* GOT TO SHOOTER Outfeed DEFAULT COMMAND *******************");
       // Set up the default command for the shooter.
-      this.subsystems.getShooterSubsystem().setDefaultCommand(
-        new SequentialCommandGroup(
-          new ShootAllStopCommand(this.subsystems.getShooterSubsystem()),
-          new ShooterSetAngleTesterCommand(
-            () -> RobotContainer.getShooterAngle(this.subsystems), // was: () -> this.subsystems.getManualInputInterfaces().getInputShooterAngle(),
-            this.subsystems.getShooterSubsystem())));
+      this.subsystems.getShooterOutfeedSubsystem().setDefaultCommand(
+        new ShootAllStopCommand(this.subsystems.getShooterOutfeedSubsystem()));
+    }
+
+    if(this.subsystems.isShooterAngleSubsystemAvailable() && 
+    this.subsystems.isManualInputInterfacesAvailable()) {
+      System.out.println("********************* GOT TO SHOOTER Angle DEFAULT COMMAND *******************");
+      // Set up the default command for the shooter.
+      this.subsystems.getShooterAngleSubsystem().setDefaultCommand(
+        new ShooterSetAngleTesterCommand(
+          () -> RobotContainer.getShooterAngle(this.subsystems), // was: () -> this.subsystems.getManualInputInterfaces().getInputShooterAngle(),
+          this.subsystems.getShooterAngleSubsystem()));
     }
   }
 

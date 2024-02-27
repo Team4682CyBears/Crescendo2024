@@ -11,7 +11,7 @@
 package frc.robot.commands;
 
 import frc.robot.control.Constants;
-import frc.robot.subsystems.TalonShooterSubsystem;
+import frc.robot.subsystems.ShooterAngleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class ShooterSetAngleCommand extends Command {
 
-  private TalonShooterSubsystem shooter;
+  private ShooterAngleSubsystem shooterAngleSubsystem;
   protected double desiredAngleDegrees; 
   private boolean updatedAngleSet = false;
   private boolean done = false;
@@ -28,18 +28,19 @@ public class ShooterSetAngleCommand extends Command {
    * Constructor for ShooterShootCommand
    * Will set shooter to desired angle before shooting
    * @param desiredAngleDegrees
-   * @param shooter
+   * @param shooterAngle
    */
-  public ShooterSetAngleCommand(double desiredAngleDegrees, TalonShooterSubsystem shooter) {
+  public ShooterSetAngleCommand(double desiredAngleDegrees, ShooterAngleSubsystem shooterAngleSubsystem) {
     this.desiredAngleDegrees = desiredAngleDegrees;
-    this.shooter = shooter;
+    this.shooterAngleSubsystem = shooterAngleSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-    this.addRequirements(shooter);
+    this.addRequirements(shooterAngleSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    System.out.println("Initialize ShooteSetAngleCommand");
     this.updatedAngleSet = false;
     this.done = false;
   }
@@ -47,17 +48,19 @@ public class ShooterSetAngleCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    System.out.println("Execute ShooteSetAngleCommand");
     if(!this.updatedAngleSet) {
-      shooter.setAngleDegrees(desiredAngleDegrees);
+      shooterAngleSubsystem.setAngleDegrees(desiredAngleDegrees);
     }
     else {
-      done = shooter.isAngleWithinTolerance(Constants.shooterAngleToleranceDegrees);
+      done = shooterAngleSubsystem.isAngleWithinTolerance(Constants.shooterAngleToleranceDegrees);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    System.out.println("End ShooteSetAngleCommand");
     if(interrupted){
       done = true;
       System.out.println("interrupted end of ShooterSetAngleCommand ... ");
