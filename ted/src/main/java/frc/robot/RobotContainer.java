@@ -342,8 +342,8 @@ public class RobotContainer {
       System.out.println("********************* GOT TO SHOOTER Angle DEFAULT COMMAND *******************");
       // Set up the default command for the shooter.
       this.subsystems.getShooterAngleSubsystem().setDefaultCommand(
-        new ShooterSetAngleTesterCommand(
-          () -> RobotContainer.getShooterAngle(this.subsystems), // was: () -> this.subsystems.getManualInputInterfaces().getInputShooterAngle(),
+        new ShooterSetAngleDefaultCommand(
+          () -> getShooterAngleIncrement(subsystems),
           this.subsystems.getShooterAngleSubsystem()));
     }
   }
@@ -372,8 +372,8 @@ public class RobotContainer {
     return value;
   }
 
-  private static double getShooterAngle(SubsystemCollection collection) {
-    return collection.getManualInputInterfaces().getInputShooterAngle();
+  private static double getShooterAngleIncrement(SubsystemCollection collection) {
+    return collection.getManualInputInterfaces().getInputShooterAngleIncrement();
   }
 
   //TODO create climber arms in InstalledHardware
