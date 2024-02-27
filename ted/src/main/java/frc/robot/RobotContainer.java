@@ -17,7 +17,12 @@ import frc.robot.control.InstalledHardware;
 import frc.robot.control.ManualInputInterfaces;
 import frc.robot.control.SubsystemCollection;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.ReplanningConfig;
+import com.pathplanner.lib.util.PIDConstants;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -83,36 +88,42 @@ public class RobotContainer {
     // Path Planner Path Commands
     // commands to drive path planner test trajectories
     // Register Named Commands 
-    NamedCommands.registerCommand("ShootFromSpeaker",
-      new ButtonPressCommand(">>>>>> SHOOT FROM SPEAKER <<<<<", "Shooting...")
-      //new ShooterShootCommand(55.0, this.subsystems.getShooterSubsystem(), this.subsystems.getFeederSubsystem())
+    NamedCommands.registerCommand("ShootFromSpeaker", 
+      new ShooterShootCommand(55.0, this.subsystems.getShooterSubsystem(), this.subsystems.getFeederSubsystem())
     );
 
     NamedCommands.registerCommand("ShootFromNote", 
-      new ButtonPressCommand(">>>>>> SHOOT FROM NOTE <<<<<<<<", "Shooting...")
-      //new ShooterShootCommand(30.0, this.subsystems.getShooterSubsystem(), this.subsystems.getFeederSubsystem())
+      new ShooterShootCommand(40.0, this.subsystems.getShooterSubsystem(), this.subsystems.getFeederSubsystem())
     );    
 
-    SmartDashboard.putNumber("PAth planner variable", 0.0);
-
     NamedCommands.registerCommand("IntakeNote", 
-    new ParallelCommandGroup(
-      new ButtonPressCommand(">>>>>>>> INTAKE <<<<<<", "intaking"),
-      new IntakeAndFeedNoteCommand(this.subsystems.getIntakeSubsystem(), this.subsystems.getFeederSubsystem(), FeederMode.FeedToShooter))
+      new IntakeAndFeedNoteCommand(this.subsystems.getIntakeSubsystem(), this.subsystems.getFeederSubsystem(), FeederMode.FeedToShooter)
     );
 
-    PathPlannerPath shootAndMobility = PathPlannerPath.fromPathFile("ShootAndMobility");
-    SmartDashboard.putData("ShootAndMobility Path",
-        FollowTrajectoryCommandBuilder.build(shootAndMobility, this.subsystems.getDriveTrainSubsystem(), true));
+    HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(                        
+      new PIDConstants(2.0, 0, 0),  // Translation PID constants
+      new PIDConstants(4.5, 0.001, 0), // Rotation PID constants
+      2.3, // Max module speed, in m/s
+      0.43, // Drive base radius in meters. Distance from robot center to furthest module.
+      new ReplanningConfig() // Default path replanning config. See the API for the options here
+  );
 
-    PathPlannerPath shootPickShoot = PathPlannerPath.fromPathFile("ShootPickShoot");
-    SmartDashboard.putData("ShootPickShoot Path",
-    new SequentialCommandGroup(
-        FollowTrajectoryCommandBuilder.build(shootPickShoot, this.subsystems.getDriveTrainSubsystem(), true),
-        new IntakeAndFeedNoteCommand(this.subsystems.getIntakeSubsystem(), this.subsystems.getFeederSubsystem(), FeederMode.FeedToShooter)));
+    PathPlannerPath straightBackToNote = PathPlannerPath.fromPathFile("StraightBackToNote");
+    AutoBuilder.configureHolonomic(
+      subsystems.getDriveTrainSubsystem()::getRobotPosition, // Pose supplier
+      subsystems.getDriveTrainSubsystem()::setRobotPosition, // Position setter
+      subsystems.getDriveTrainSubsystem()::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+      subsystems.getDriveTrainSubsystem()::drive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+      pathFollowerConfig,
+      () -> false,
+      subsystems.getDriveTrainSubsystem());
 
-    SmartDashboard.putData("Shoot from speaker",
-      new ShooterShootCommand(45.0, this.subsystems.getShooterSubsystem(), this.subsystems.getFeederSubsystem()));
+    Command shootPickShootAuto = new AutoBuilder.buildAuto("PickShootPick");
+    SmartDashboard.putData("ShootPickShoot Auto", shootPickShootAuto);
+
+    SmartDashboard.putData("straightBackToNote Path",
+        FollowTrajectoryCommandBuilder.build(straightBackToNote, this.subsystems.getDriveTrainSubsystem(), true));
+      
     // Put command scheduler on dashboard
     SmartDashboard.putData(CommandScheduler.getInstance());
 
@@ -157,7 +168,7 @@ public class RobotContainer {
 
     if (this.subsystems.isIntakeSubsystemAvailable()) {
       SmartDashboard.putData(
-          "RunIntake",
+          "Run Intake",
           new IntakeNoteCommand(this.subsystems.getIntakeSubsystem()));
     }
 
@@ -165,12 +176,6 @@ public class RobotContainer {
       SmartDashboard.putData(
           "Run Feeder to Shooter",
           new FeedNoteCommand(this.subsystems.getFeederSubsystem(), FeederMode.FeedToShooter));
-    }
-
-    if (this.subsystems.isIntakeSubsystemAvailable() && this.subsystems.isFeederSubsystemAvailable()){
-      SmartDashboard.putData(
-        "Run Intake and Feeder",
-        new IntakeAndFeedNoteCommand(this.subsystems.getIntakeSubsystem(), this.subsystems.getFeederSubsystem(), FeederMode.FeedToShooter));
     }
 
     if(this.subsystems.isDriveTrainPowerSubsystemAvailable()) {
