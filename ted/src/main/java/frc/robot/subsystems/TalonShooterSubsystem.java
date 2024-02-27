@@ -122,11 +122,12 @@ public class TalonShooterSubsystem extends SubsystemBase {
 
   /**
    * A method to test whether the shooter is at speed
+   * @param shooterLeftTargetSpeedRpm
    * @return true if the shooter is at speed
    */
-  public boolean isAtSpeed() {
-    return (Math.abs(getLeftSpeedRpm() - Constants.shooterLeftDefaultSpeedRpm)
-        / Constants.shooterLeftDefaultSpeedRpm) < velocitySufficientWarmupThreshold;
+  public boolean isAtSpeed(double shooterLeftTargetSpeedRpm) {
+    return (Math.abs(getLeftSpeedRpm() - shooterLeftTargetSpeedRpm)
+        / shooterLeftTargetSpeedRpm) < velocitySufficientWarmupThreshold;
   }
 
   /**

@@ -167,14 +167,14 @@ public class ShooterShootCommand extends Command {
     if (!isAtDesiredAngle){
       isAtDesiredAngle = shooter.isAngleWithinTolerance(desiredAngleDegrees);
     }
-    if (isAtDesiredAngle && shooter.isAtSpeed()){
+    if (isAtDesiredAngle && shooter.isAtSpeed(desiredLeftSpeedRpm)){
       System.out.println("Shooter at desired speed and angle.");
-      System.out.println("Wait for feeder delay");
+      System.out.println("Wait for feeder delay...");
       delayTimer.start();
     }
     if (delayTimer.hasElapsed(Constants.shooterSpinUpDelay)){
       feeder.setFeederSpeed(Constants.feederSpeed);
-      System.out.println("Feeding Note");
+      System.out.println("Feeding Note...");
       timer.start();
     }
     if (timer.hasElapsed(Constants.shooterShootDuration)){
