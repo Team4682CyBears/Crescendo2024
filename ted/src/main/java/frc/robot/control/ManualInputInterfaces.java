@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AllStopCommand;
 import frc.robot.commands.ButtonPressCommand;
 import frc.robot.commands.FeedNoteCommand;
+import frc.robot.commands.IntakeAndFeedNoteCommand;
 import frc.robot.commands.IntakeNoteCommand;
 import frc.robot.commands.RemoveNoteCommand;
 import frc.robot.commands.ShooterShootCommand;
@@ -151,8 +152,8 @@ public class ManualInputInterfaces {
         // b button will intake a note
         this.driverController.b().onTrue(
             new ParallelCommandGroup(
-              new IntakeNoteCommand(this.subsystemCollection.getIntakeSubsystem()), 
-              new FeedNoteCommand(
+              new IntakeAndFeedNoteCommand(
+                this.subsystemCollection.getIntakeSubsystem(),
                 this.subsystemCollection.getFeederSubsystem(),
                 FeederMode.FeedToShooter), 
               new ButtonPressCommand(
