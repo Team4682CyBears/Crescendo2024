@@ -40,10 +40,7 @@ public class ShooterAngleSubsystem extends SubsystemBase {
   private static final double angleMotorGearRatio = 450.0; // 450:1 (100:1 -> 72:16) 
   //private static final double angleMotorGearRatio = 45.0; // remove 1 10x gearbox stage for testing
   private static final double angleEncoderGearRatio = 1.0; // angle encoder is mounted directly onto shaft
-  
-  private static final double kMinDeadband = 0.001;
-  private static final int kPIDLoopIdx = 0;
-  private static final double kMaxVoltage = 12;
+  private static final double shooterAngleLowVelocityTol = 10; // rotations per second (max 512)
 
   private TalonFX angleLeftMotor = new TalonFX(Constants.shooterLeftAngleMotorCanId);
   private TalonFX angleRightMotor = new TalonFX(Constants.shooterRightAngleMotorCanId);
@@ -78,8 +75,7 @@ public class ShooterAngleSubsystem extends SubsystemBase {
    * @return angle in degrees
    */
   public double getAngleDegrees(){
-    double offset = InstalledHardware.shooterAngleCanCoderInstalled ? 0 : internalAngleOffsetDegrees;
-    return rotationsToDegrees(angleLeftMotor.getPosition().getValue()) + offset;
+    return rotationsToDegrees(angleLeftMotor.getPosition().getValue()) + getOffset();
   }
 
   /**
@@ -88,7 +84,10 @@ public class ShooterAngleSubsystem extends SubsystemBase {
    * @return true if the angle is within tolerance
    */
   public boolean isAngleWithinTolerance(double targetAngleDegrees){
-    return Math.abs(getAngleDegrees() - targetAngleDegrees) < Constants.shooterAngleToleranceDegrees;
+    // check both the position and velocity. To allow PID to not stop before settling. 
+    boolean positionTargetReached = Math.abs(getAngleDegrees() - targetAngleDegrees) < Constants.shooterAngleToleranceDegrees;
+    boolean velocityIsSmall = Math.abs(angleLeftMotor.getVelocity().getValue()) < shooterAngleLowVelocityTol;
+    return positionTargetReached && velocityIsSmall;
   }
 
   /**
@@ -98,7 +97,8 @@ public class ShooterAngleSubsystem extends SubsystemBase {
   public void periodic() {
     if (!shooterIsAtDesiredAngle) {
         // use motionMagic voltage control
-        angleLeftMotor.setControl(angleLeftVoltageController.withPosition(degreesToRotations(desiredAngleDegrees)));
+        System.out.println("Shooter angle not at desired angle. Desired Angle: " + desiredAngleDegrees + " current angle: " + getAngleDegrees());
+        angleLeftMotor.setControl(angleLeftVoltageController.withPosition(degreesToRotations(desiredAngleDegrees - getOffset())));
         // angleRightMotor acts as a follower
         // keep moving until it reaches target angle
         shooterIsAtDesiredAngle = isAngleWithinTolerance(desiredAngleDegrees);
@@ -147,8 +147,7 @@ public class ShooterAngleSubsystem extends SubsystemBase {
       "exceeded bounds of [" + Constants.shooterAngleMinDegrees + " .. " + Constants.shooterAngleMaxDegrees +
       "]. Clamped to " + clampedDegrees + ".");
     }
-    double offset = InstalledHardware.shooterAngleCanCoderInstalled ? 0 : internalAngleOffsetDegrees;
-    desiredAngleDegrees = clampedDegrees - offset;
+    desiredAngleDegrees = clampedDegrees;
     shooterIsAtDesiredAngle = false;
   }
 
@@ -218,6 +217,10 @@ public class ShooterAngleSubsystem extends SubsystemBase {
       System.out.println(
           "TalonFX ID " + angleRightMotor.getDeviceID() + " failed config with error " + response.toString());
     }
+  }
+
+  private double getOffset(){
+    return InstalledHardware.shooterAngleCanCoderInstalled ? 0 : internalAngleOffsetDegrees;
   }
 
   private void setInternalEncoderOffset(){
