@@ -130,7 +130,7 @@ public final class Constants {
     // shooter outfeed constants
     public static final int leftTalonShooterMotorCanId = 18; 
     public static InvertedValue leftTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;  
-    public static final int rightTalonShooterMotorCanId = 20; 
+    public static final int rightTalonShooterMotorCanId = 21; 
     public static InvertedValue rightTalonShooterMotorDefaultDirection = InvertedValue.Clockwise_Positive;  
     private static double shooterBaseRpm = 6500;
     public static final double shooterLeftDefaultSpeedRpm = shooterBaseRpm * 1.0;
