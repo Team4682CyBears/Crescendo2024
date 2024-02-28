@@ -298,8 +298,6 @@ public class RobotContainer {
       subsystems.setShooterOutfeedSubsystem(new ShooterOutfeedSubsystem());
       SmartDashboard.putData("Debug: ShooterSubsystem", subsystems.getShooterOutfeedSubsystem());
       System.out.println("SUCCESS: ShooterOutfeedSubsystem");
-
-
     }
     else {
       System.out.println("FAIL: ShooterOutfeedSubsystem");
@@ -315,8 +313,6 @@ public class RobotContainer {
       subsystems.setShooterAngleSubsystem(new ShooterAngleSubsystem());
       SmartDashboard.putData("Debug: ShooterAngleSubsystem", subsystems.getShooterAngleSubsystem());
       System.out.println("SUCCESS: ShooterAngleSubsystem");
-
-
     }
     else {
       System.out.println("FAIL: ShooterAngleSubsystem");

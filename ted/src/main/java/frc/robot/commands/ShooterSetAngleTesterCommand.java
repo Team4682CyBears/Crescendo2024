@@ -38,9 +38,4 @@ public class ShooterSetAngleTesterCommand extends ShooterSetAngleCommand {
     super.desiredAngleDegrees = desiredAngleDegreesSupplier.getAsDouble();
     super.initialize();
   }
-
-  @Override
-  public void end(boolean interrupted){
-    super.end(interrupted);
-  }
 }

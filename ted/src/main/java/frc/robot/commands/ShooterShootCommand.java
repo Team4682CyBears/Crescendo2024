@@ -38,6 +38,7 @@ public class ShooterShootCommand extends Command {
   private boolean isDone = false;
   private Timer timer = new Timer();
   private Timer delayTimer = new Timer();
+  private boolean isAtDesiredAngleBaseline = false;
 
   /**
    * Constructor for ShooterShootCommand
@@ -60,6 +61,7 @@ public class ShooterShootCommand extends Command {
     this.desiredLeftSpeedRpm = desiredLeftSpeedRpm;
     this.desiredRightSpeedRpm = desiredRightSpeedRpm;
     this.isAtDesiredAngle = false;
+    this.isAtDesiredAngleBaseline = this.isAtDesiredAngle;
     this.shooterOutfeed = shooterOutfeed;
     this.shooterAngle = shooterAngle;
     this.feeder = feeder;
@@ -97,6 +99,7 @@ public class ShooterShootCommand extends Command {
     this.desiredLeftSpeedRpm = desiredLeftSpeedRpm;
     this.desiredRightSpeedRpm = desiredRightSpeedRpm;
     this.isAtDesiredAngle = true;
+    this.isAtDesiredAngleBaseline = this.isAtDesiredAngle;
     this.shooterOutfeed = shooterOutfeed;
     this.feeder = feeder;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -118,6 +121,7 @@ public class ShooterShootCommand extends Command {
     this.desiredRightSpeedRpmSupplier = desiredRightSpeedRpmSupplier;
     this.setSpeedsFromSupplier = true;
     this.isAtDesiredAngle = true;
+    this.isAtDesiredAngleBaseline = this.isAtDesiredAngle;
     this.shooterOutfeed = shooterOutfeed;
     this.feeder = feeder;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -138,17 +142,16 @@ public class ShooterShootCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println(">>>>>>>>>>>>Starting Shooter Shoot Command<<<<<<<<<<<<<<");
-    System.out.println("Already at angle? " + isAtDesiredAngle);
-    if (!isAtDesiredAngle){
+    this.isAtDesiredAngle = this.isAtDesiredAngleBaseline;
+    if (!isAtDesiredAngle) {
       System.out.println("Setting Angle to " + desiredAngleDegrees + " degrees");
     }
-
 
     if (setSpeedsFromSupplier) {
       this.desiredLeftSpeedRpm = this.desiredLeftSpeedRpmSupplier.getAsDouble();
       this.desiredRightSpeedRpm = this.desiredRightSpeedRpmSupplier.getAsDouble();
     }
+
     // stop the feeder so the note doesn't go through shooter before shooter is setup
     feeder.setAllStop();
     feeder.setFeederMode(FeederMode.FeedToShooter);
@@ -156,6 +159,7 @@ public class ShooterShootCommand extends Command {
     if (!isAtDesiredAngle) {
       shooterAngle.setAngleDegrees(desiredAngleDegrees);
     }
+    
     System.out.println("Spinning up shooter...");
     System.out.println("Target RPM: Left " + desiredLeftSpeedRpm + ". Right RPM: " + desiredRightSpeedRpm);
     shooterOutfeed.setShooterVelocityLeft(desiredLeftSpeedRpm);

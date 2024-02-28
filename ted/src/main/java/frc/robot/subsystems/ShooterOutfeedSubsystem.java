@@ -41,10 +41,9 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
   private static final double kMaxVoltage = 12;
 
   private TalonFX leftMotor = new TalonFX(Constants.leftTalonShooterMotorCanId);
-  final VoltageOut leftVoltageController = new VoltageOut(0);
+  private final VoltageOut leftVoltageController = new VoltageOut(0);
   private TalonFX rightMotor = new TalonFX(Constants.rightTalonShooterMotorCanId);
-  final VoltageOut rightVoltageController = new VoltageOut(0);
-  private final MotionMagicVoltage angleLeftVoltageController = new MotionMagicVoltage(0);
+  private final VoltageOut rightVoltageController = new VoltageOut(0);
   // angleRightMotor follows angleLeftMotor, so it doesn't need its own VoltageController
 
   // Converted old settings to new settings using calculator at:
