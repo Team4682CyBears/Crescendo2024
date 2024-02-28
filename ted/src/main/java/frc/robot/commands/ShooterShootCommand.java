@@ -13,7 +13,8 @@ package frc.robot.commands;
 import frc.robot.common.FeederMode;
 import frc.robot.control.Constants;
 import frc.robot.subsystems.FeederSubsystem;
-import frc.robot.subsystems.TalonShooterSubsystem;
+import frc.robot.subsystems.ShooterAngleSubsystem;
+import frc.robot.subsystems.ShooterOutfeedSubsystem;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -24,7 +25,8 @@ import java.util.function.DoubleSupplier;
  */
 public class ShooterShootCommand extends Command {
 
-  private TalonShooterSubsystem shooter;
+  private ShooterOutfeedSubsystem shooterOutfeed;
+  private ShooterAngleSubsystem shooterAngle;
   private FeederSubsystem feeder;
   private double desiredAngleDegrees; 
   private double desiredLeftSpeedRpm; 
@@ -36,6 +38,7 @@ public class ShooterShootCommand extends Command {
   private boolean isDone = false;
   private Timer timer = new Timer();
   private Timer delayTimer = new Timer();
+  private boolean isAtDesiredAngleBaseline = false;
 
   /**
    * Constructor for ShooterShootCommand
@@ -43,23 +46,27 @@ public class ShooterShootCommand extends Command {
    * @param desiredAngleDegrees
    * @param desiredLeftSpeedRpm
    * @param desiredRightSpeedRpm
-   * @param shooter
+   * @param shooterOutfeed
+   * @param shooterAngle
    * @param feeder
    */
   public ShooterShootCommand(
       double desiredAngleDegrees,
       double desiredLeftSpeedRpm,
       double desiredRightSpeedRpm,
-      TalonShooterSubsystem shooter,
+      ShooterOutfeedSubsystem shooterOutfeed,
+      ShooterAngleSubsystem shooterAngle,
       FeederSubsystem feeder) {
     this.desiredAngleDegrees = desiredAngleDegrees;
     this.desiredLeftSpeedRpm = desiredLeftSpeedRpm;
     this.desiredRightSpeedRpm = desiredRightSpeedRpm;
     this.isAtDesiredAngle = false;
-    this.shooter = shooter;
+    this.isAtDesiredAngleBaseline = this.isAtDesiredAngle;
+    this.shooterOutfeed = shooterOutfeed;
+    this.shooterAngle = shooterAngle;
     this.feeder = feeder;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooter, feeder);
+    addRequirements(shooterOutfeed, shooterAngle, feeder);
   }
 
   /**
@@ -68,13 +75,14 @@ public class ShooterShootCommand extends Command {
    * uses default shooter speeds
    * 
    * @param desiredAngleDegrees
-   * @param shooter
+   * @param shooterOutfeed
+   * @param shooterAngle
    * @param feeder
    */
-  public ShooterShootCommand(double desiredAngleDegrees, TalonShooterSubsystem shooter,
-      FeederSubsystem feeder) {
+  public ShooterShootCommand(double desiredAngleDegrees, ShooterOutfeedSubsystem shooterOutfeed,
+      ShooterAngleSubsystem shooterAngle, FeederSubsystem feeder) {
     this(desiredAngleDegrees, Constants.shooterLeftDefaultSpeedRpm, Constants.shooterRightDefaultSpeedRpm, 
-    shooter, feeder);
+    shooterOutfeed, shooterAngle, feeder);
   }
 
   /**
@@ -83,18 +91,19 @@ public class ShooterShootCommand extends Command {
    * uses specified speeds
    * @param desiredLeftSpeedRpm
    * @param desiredRightSpeedRpm
-   * @param shooter
+   * @param shooterOutfeed
    * @param feeder
    */
   public ShooterShootCommand(double desiredLeftSpeedRpm, double desiredRightSpeedRpm,
-  TalonShooterSubsystem shooter, FeederSubsystem feeder) {
+  ShooterOutfeedSubsystem shooterOutfeed, FeederSubsystem feeder) {
     this.desiredLeftSpeedRpm = desiredLeftSpeedRpm;
     this.desiredRightSpeedRpm = desiredRightSpeedRpm;
     this.isAtDesiredAngle = true;
-    this.shooter = shooter;
+    this.isAtDesiredAngleBaseline = this.isAtDesiredAngle;
+    this.shooterOutfeed = shooterOutfeed;
     this.feeder = feeder;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooter, feeder);
+    addRequirements(shooterOutfeed, feeder);
   }
 
   /**
@@ -103,57 +112,58 @@ public class ShooterShootCommand extends Command {
    * uses specified speed suppliers
    * @param desiredLeftSpeedRpmSupplier
    * @param desiredRightSpeedRpmSupplier
-   * @param shooter
+   * @param shooterOutfeed
    * @param feeder
    */
   public ShooterShootCommand(DoubleSupplier desiredLeftSpeedRpmSupplier, DoubleSupplier desiredRightSpeedRpmSupplier,
-  TalonShooterSubsystem shooter, FeederSubsystem feeder) {
+  ShooterOutfeedSubsystem shooterOutfeed, FeederSubsystem feeder) {
     this.desiredLeftSpeedRpmSupplier = desiredLeftSpeedRpmSupplier;
     this.desiredRightSpeedRpmSupplier = desiredRightSpeedRpmSupplier;
     this.setSpeedsFromSupplier = true;
     this.isAtDesiredAngle = true;
-    this.shooter = shooter;
+    this.isAtDesiredAngleBaseline = this.isAtDesiredAngle;
+    this.shooterOutfeed = shooterOutfeed;
     this.feeder = feeder;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooter, feeder);
+    addRequirements(shooterOutfeed, feeder);
   }
 
   /**
    * Constructor for ShooterShootCommand
    * assumes shooter is already at the desired angle
    * uses default shooter speeds
-   * @param shooter
+   * @param shooterOutfeed
    * @param feeder
    */
-  public ShooterShootCommand(TalonShooterSubsystem shooter, FeederSubsystem feeder) {
-    this(Constants.shooterLeftDefaultSpeedRpm, Constants.shooterRightDefaultSpeedRpm, shooter, feeder);
+  public ShooterShootCommand(ShooterOutfeedSubsystem shooterOutfeed, FeederSubsystem feeder) {
+    this(Constants.shooterLeftDefaultSpeedRpm, Constants.shooterRightDefaultSpeedRpm, shooterOutfeed, feeder);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println(">>>>>>>>>>>>Starting Shooter Shoot Command<<<<<<<<<<<<<<");
-    System.out.println("Already at angle? " + isAtDesiredAngle);
-    if (!isAtDesiredAngle){
+    this.isAtDesiredAngle = this.isAtDesiredAngleBaseline;
+    if (!isAtDesiredAngle) {
       System.out.println("Setting Angle to " + desiredAngleDegrees + " degrees");
     }
-
 
     if (setSpeedsFromSupplier) {
       this.desiredLeftSpeedRpm = this.desiredLeftSpeedRpmSupplier.getAsDouble();
       this.desiredRightSpeedRpm = this.desiredRightSpeedRpmSupplier.getAsDouble();
     }
+
     // stop the feeder so the note doesn't go through shooter before shooter is setup
     feeder.setAllStop();
     feeder.setFeederMode(FeederMode.FeedToShooter);
     // set shooter angle and speeds
     if (!isAtDesiredAngle) {
-      shooter.setAngleDegrees(desiredAngleDegrees);
+      shooterAngle.setAngleDegrees(desiredAngleDegrees);
     }
+
     System.out.println("Spinning up shooter...");
     System.out.println("Target RPM: Left " + desiredLeftSpeedRpm + ". Right RPM: " + desiredRightSpeedRpm);
-    shooter.setShooterVelocityLeft(desiredLeftSpeedRpm);
-    shooter.setShooterVelocityRight(desiredRightSpeedRpm);
+    shooterOutfeed.setShooterVelocityLeft(desiredLeftSpeedRpm);
+    shooterOutfeed.setShooterVelocityRight(desiredRightSpeedRpm);
 
     timer.reset();
     delayTimer.reset();
@@ -165,9 +175,9 @@ public class ShooterShootCommand extends Command {
   public void execute() {
     // wait for shooter to be a the right angle and spped
     if (!isAtDesiredAngle){
-      isAtDesiredAngle = shooter.isAngleWithinTolerance(desiredAngleDegrees);
+      isAtDesiredAngle = shooterAngle.isAngleWithinTolerance(desiredAngleDegrees);
     }
-    if (isAtDesiredAngle && shooter.isAtSpeed(desiredLeftSpeedRpm)){
+    if (isAtDesiredAngle && shooterOutfeed.isAtSpeed(desiredLeftSpeedRpm, desiredRightSpeedRpm)){
       System.out.println("Shooter at desired speed and angle.");
       System.out.println("Wait for feeder delay...");
       delayTimer.start();
@@ -179,12 +189,12 @@ public class ShooterShootCommand extends Command {
     }
     if (timer.hasElapsed(Constants.shooterShootDuration)){
       feeder.setAllStop();
-      shooter.setAllStop();
+      shooterOutfeed.setAllStop();
       isDone = true;
     }
     else {
-      shooter.setShooterVelocityLeft(desiredLeftSpeedRpm);
-      shooter.setShooterVelocityRight(desiredRightSpeedRpm);
+      shooterOutfeed.setShooterVelocityLeft(desiredLeftSpeedRpm);
+      shooterOutfeed.setShooterVelocityRight(desiredRightSpeedRpm);
     }
   }
 
@@ -192,7 +202,7 @@ public class ShooterShootCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     feeder.setAllStop();
-    shooter.setAllStop();
+    shooterOutfeed.setAllStop();
     isDone = true;
     System.out.println("end of ShootAtSpeedCommand ... ");
   }

@@ -41,6 +41,11 @@ public class IntakeSubsystem extends SubsystemBase {
    * Constructor for the IntakeSubsystem
    */
   public IntakeSubsystem() {
+
+    intakeMotor = new CANSparkMax(Constants.intakeMotorCanId, MotorType.kBrushless);
+
+    // TODO - DECIDE IF THIS IS NECESSARY OR NOT!!!
+    /* 
     // move the motor creation to the constructor, since it was erroring when done as a class variable. 
     for(int inx = 0; inx < this.maximumInitTries && intakeMotor == null; ++inx) {
       System.out.println("Initializing Intake Motor try# " + inx+1 + " ...");
@@ -70,6 +75,8 @@ public class IntakeSubsystem extends SubsystemBase {
         System.out.println(ex.toString());
       }
     }
+  */
+
     if (InstalledHardware.intakeTofInstalled){
       beambreakSensor = new NoteTofSensor(Constants.intakeTofCanId);
       beambreakSensor.setDisplayName("Intake TOF");
