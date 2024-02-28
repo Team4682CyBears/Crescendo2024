@@ -159,7 +159,7 @@ public class ShooterShootCommand extends Command {
     if (!isAtDesiredAngle) {
       shooterAngle.setAngleDegrees(desiredAngleDegrees);
     }
-    
+
     System.out.println("Spinning up shooter...");
     System.out.println("Target RPM: Left " + desiredLeftSpeedRpm + ". Right RPM: " + desiredRightSpeedRpm);
     shooterOutfeed.setShooterVelocityLeft(desiredLeftSpeedRpm);
@@ -177,7 +177,7 @@ public class ShooterShootCommand extends Command {
     if (!isAtDesiredAngle){
       isAtDesiredAngle = shooterAngle.isAngleWithinTolerance(desiredAngleDegrees);
     }
-    if (isAtDesiredAngle && shooterOutfeed.isAtSpeed(desiredLeftSpeedRpm)){
+    if (isAtDesiredAngle && shooterOutfeed.isAtSpeed(desiredLeftSpeedRpm, desiredRightSpeedRpm)){
       System.out.println("Shooter at desired speed and angle.");
       System.out.println("Wait for feeder delay...");
       delayTimer.start();

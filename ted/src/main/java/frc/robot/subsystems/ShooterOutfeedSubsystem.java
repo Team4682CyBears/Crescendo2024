@@ -74,13 +74,21 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
   }
 
   /**
+   * A method to get the top left shooter speed
+   * @return spped in RPM
+   */
+  public double getRightSpeedRpm(){
+    return rotationsPerSToRpm(rightMotor.getVelocity().getValue(), outfeedShooterGearRatio);
+  }
+
+  /**
    * A method to test whether the shooter is at speed
    * @param shooterLeftTargetSpeedRpm
    * @return true if the shooter is at speed
    */
-  public boolean isAtSpeed(double shooterLeftTargetSpeedRpm) {
-    return (Math.abs(getLeftSpeedRpm() - shooterLeftTargetSpeedRpm)
-        / shooterLeftTargetSpeedRpm) < velocitySufficientWarmupThreshold;
+  public boolean isAtSpeed(double shooterLeftTargetSpeedRpm, double shooterRightTargetSpeedRpm) {
+    return (Math.abs(getLeftSpeedRpm() - shooterLeftTargetSpeedRpm) / shooterLeftTargetSpeedRpm) < velocitySufficientWarmupThreshold &&
+      (Math.abs(getRightSpeedRpm() - shooterRightTargetSpeedRpm) / shooterRightTargetSpeedRpm) < velocitySufficientWarmupThreshold;
   }
 
   /**
