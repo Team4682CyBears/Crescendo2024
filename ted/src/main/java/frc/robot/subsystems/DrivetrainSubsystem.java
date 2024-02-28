@@ -69,7 +69,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * Gear ratio: 7.85:1. Free speed of 14.19 ft/s = 4.3251 m/s
    */
   public static final double MAX_VELOCITY_METERS_PER_SECOND = 4.3251;
-  public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 6.0;
+  public static final double ACCELERATION_INCREASE_FOR_TED = 1.333;
+  public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 6.0 * ACCELERATION_INCREASE_FOR_TED;
 
   public static final double MIN_VELOCITY_BOUNDARY_METERS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND * 0.14; // 0.14 a magic number based on testing
 
@@ -92,7 +93,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND /
           Math.hypot(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0);
   public static final double MIN_ANGULAR_VELOCITY_BOUNDARY_RADIANS_PER_SECOND = MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * 0.06; // 0.06 a magic number based on testing
-  private double MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED = 10.0;
+  private double MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED = 10.0 * ACCELERATION_INCREASE_FOR_TED;
 
   private static final int PositionHistoryWindowTimeMilliseconds = 5000;
   private static final int CommandSchedulerPeriodMilliseconds = 20;

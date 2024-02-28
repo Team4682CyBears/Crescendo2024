@@ -31,7 +31,7 @@ import frc.robot.common.MotorUtils;
 public class ShooterOutfeedSubsystem extends SubsystemBase {
 
   // Talon info
-  private static final double velocitySufficientWarmupThreshold = 0.8;
+  private static final double velocitySufficientWarmupThreshold = 0.9;
 
   // Shooter gearing - currently 1:1
   private static final double outfeedShooterGearRatio = 1.0;
