@@ -10,21 +10,22 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.TalonShooterSubsystem;
+import frc.robot.subsystems.ShooterOutfeedSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class ShootAllStopCommand extends Command {
   
-  private final TalonShooterSubsystem shooterSubsystem;
+  private final ShooterOutfeedSubsystem shooterSubsystem;
 
-  public ShootAllStopCommand(TalonShooterSubsystem theShooterSubsystem) {
+  public ShootAllStopCommand(ShooterOutfeedSubsystem theShooterSubsystem) {
     shooterSubsystem = theShooterSubsystem;
     addRequirements(shooterSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

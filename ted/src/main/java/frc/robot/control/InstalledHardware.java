@@ -61,7 +61,8 @@ public class InstalledHardware
     public static final boolean feederToDunkerTofInstalled = false;
 
     // Shooter Related Hardware
-    public static final boolean shooterInstalled = true;
+    public static final boolean shooterOutfeedInstalled = true;
+    public static final boolean shooterAngleInstalled = true;
     // for testing, to decrease the power of the shooter angle mechanism, 
     // reduce the left motor gear box to 10x (instaed of 100x)
     // and disconnect the right motor from the chain. 

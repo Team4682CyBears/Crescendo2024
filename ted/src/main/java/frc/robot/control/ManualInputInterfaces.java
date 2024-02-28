@@ -23,6 +23,7 @@ import frc.robot.commands.AllStopCommand;
 import frc.robot.commands.ButtonPressCommand;
 import frc.robot.commands.ClimberArmToPosition;
 import frc.robot.commands.FeedNoteCommand;
+import frc.robot.commands.IntakeAndFeedNoteCommand;
 import frc.robot.commands.IntakeNoteCommand;
 import frc.robot.commands.RemoveNoteCommand;
 import frc.robot.commands.ShooterShootCommand;
@@ -89,26 +90,19 @@ public class ManualInputInterfaces {
   }
 
   /**
-   * Get the next angle
+   * Get the angle increment
    * @return incrementing or decrementing angle depending on positive or negative
    */
-  public double getInputShooterAngle() 
+  public double getInputShooterAngleIncrement() 
   {
-    System.out.println("<<<getInputShooterAngle>>>");
     // remember that the Y on xbox will be negative upward
     double stickInput = coDriverController.getRightY();
-    double startAngle = this.subsystemCollection.getShooterSubsystem().getAngleDegrees();
-    double updatedAngle = startAngle;
+    double updatedAngle = 0.0; 
     if(stickInput > Constants.shooterControllerInputPositiveStickAngleIncrement){
-      updatedAngle -= 2.0;
-      System.out.println("decrementing angle from " + startAngle + " to " + updatedAngle);
+      updatedAngle = -Constants.shooterAngleStickIncrementMagnitude;
     }
     else if (stickInput < Constants.shooterControllerInputNegativeStickAngleIncrement) {
-      updatedAngle += 2.0;
-      System.out.println("incrementing angle from " + startAngle + " to " + updatedAngle);
-    }
-    else {
-      System.out.println("!!!NO shooter delta!!!");
+      updatedAngle = Constants.shooterAngleStickIncrementMagnitude;
     }
     return updatedAngle;
   }
@@ -154,8 +148,8 @@ public class ManualInputInterfaces {
         // b button will intake a note
         this.driverController.b().onTrue(
             new ParallelCommandGroup(
-              new IntakeNoteCommand(this.subsystemCollection.getIntakeSubsystem()), 
-              new FeedNoteCommand(
+              new IntakeAndFeedNoteCommand(
+                this.subsystemCollection.getIntakeSubsystem(),
                 this.subsystemCollection.getFeederSubsystem(),
                 FeederMode.FeedToShooter), 
               new ButtonPressCommand(
@@ -176,13 +170,13 @@ public class ManualInputInterfaces {
           )
       );
 
-      if(this.subsystemCollection.isShooterSubsystemAvailable() &&
+      if(this.subsystemCollection.isShooterOutfeedSubsystemAvailable() &&
          this.subsystemCollection.isFeederSubsystemAvailable()) {
         System.out.println("STARTING Registering this.driverController.a().whileTrue() ... ");
         this.driverController.a().whileTrue(
             new ParallelCommandGroup(
               new ShooterShootCommand(
-                subsystemCollection.getShooterSubsystem(), 
+                subsystemCollection.getShooterOutfeedSubsystem(), 
                 subsystemCollection.getFeederSubsystem()),
               new ButtonPressCommand(
                 "driverController.a()",
@@ -217,39 +211,39 @@ public class ManualInputInterfaces {
             )
           );
 
-        // left trigger press will align robot on a target   
-        this.driverController.leftTrigger().onTrue(
+        // right trigger press will align robot on a target   
+        this.driverController.rightTrigger().onTrue(
           new ParallelCommandGroup(
             //TODO create and add target driving mode here
             new InstantCommand(
               /*() -> subsystemCollection.getDriveTrainSubsystem().setSwerveDriveMode(SwerveDriveMode.TARGET_DRIVING)*/
             ),
             new ButtonPressCommand(
-            "driverController.leftTrigger()",
+            "driverController.rightTrigger()",
             "align on target")
           )
         );
 
-        // left trigger de-press will put drivetrain in normal drive mode  
-        this.driverController.leftTrigger().onFalse(
+        // right trigger de-press will put drivetrain in normal drive mode  
+        this.driverController.rightTrigger().onFalse(
           new ParallelCommandGroup(
             //
             new InstantCommand(
               /*() -> subsystemCollection.getDriveTrainSubsystem().setSwerveDriveMode(SwerveDriveMode.NORMAL_DRIVING)*/
             ),
             new ButtonPressCommand(
-            "driverController.leftTrigger()",
+            "driverController.rightTrigger()",
             "normal driving")
           )
         );
 
-        // right trigger press will ramp down drivetrain to reduced speed mode 
-        this.driverController.rightTrigger().onTrue(
+        // left trigger press will ramp down drivetrain to reduced speed mode 
+        this.driverController.leftTrigger().onTrue(
           new ParallelCommandGroup(
             new InstantCommand(subsystemCollection.getDriveTrainPowerSubsystem()::setReducedPowerReductionFactor,
             subsystemCollection.getDriveTrainPowerSubsystem()),
             new ButtonPressCommand(
-            "driverController.rightTrigger()",
+            "driverController.leftTrigger()",
             "ramp down to reduced speed")
           )
         );
@@ -308,11 +302,11 @@ public class ManualInputInterfaces {
           )
         );
 
-      if(this.subsystemCollection.isShooterSubsystemAvailable() && this.subsystemCollection.isFeederSubsystemAvailable()) {
+      if(this.subsystemCollection.isShooterOutfeedSubsystemAvailable() && this.subsystemCollection.isFeederSubsystemAvailable()) {
         this.coDriverController.y().onTrue(
           new ParallelCommandGroup(
             // shoot at the current angle
-            new ShooterShootCommand(this.subsystemCollection.getShooterSubsystem(), this.subsystemCollection.getFeederSubsystem()),
+            new ShooterShootCommand(this.subsystemCollection.getShooterOutfeedSubsystem(), this.subsystemCollection.getFeederSubsystem()),
             new ButtonPressCommand(
               "coDriverController.y()",
                 "shoots the shooter")

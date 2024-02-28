@@ -11,7 +11,7 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.TalonShooterSubsystem;
+import frc.robot.subsystems.ShooterAngleSubsystem;
 import java.util.function.DoubleSupplier; 
 
 /**
@@ -27,7 +27,7 @@ public class ShooterSetAngleTesterCommand extends ShooterSetAngleCommand {
    * @param desiredAngleDegreesSupplier
    * @param shooter
    */
-  public ShooterSetAngleTesterCommand(DoubleSupplier desiredAngleDegreesSupplier, TalonShooterSubsystem shooter) {
+  public ShooterSetAngleTesterCommand(DoubleSupplier desiredAngleDegreesSupplier, ShooterAngleSubsystem shooter) {
     super(desiredAngleDegreesSupplier.getAsDouble(), shooter);
     this.desiredAngleDegreesSupplier = desiredAngleDegreesSupplier;
   }
