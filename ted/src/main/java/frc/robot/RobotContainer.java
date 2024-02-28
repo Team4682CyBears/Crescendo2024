@@ -116,7 +116,7 @@ public class RobotContainer {
       () -> false,
       subsystems.getDriveTrainSubsystem());
 
-    Command shootPickShootAuto = AutoBuilder.buildAuto("PickShootPick");
+    Command shootPickShootAuto = AutoBuilder.buildAuto("ShootPickShoot");
     SmartDashboard.putData("ShootPickShoot Auto", shootPickShootAuto);
 
     SmartDashboard.putData("straightBackToNote Path",
