@@ -133,8 +133,8 @@ public final class Constants {
     public static final int rightTalonShooterMotorCanId = 21; 
     public static InvertedValue rightTalonShooterMotorDefaultDirection = InvertedValue.Clockwise_Positive;  
     private static double shooterBaseRpm = 6500;
-    public static final double shooterLeftDefaultSpeedRpm = shooterBaseRpm * 1.0;
-    public static final double shooterRightDefaultSpeedRpm = shooterBaseRpm * 0.75;
+    public static final double shooterLeftDefaultSpeedRpm = shooterBaseRpm * 0.15;
+    public static final double shooterRightDefaultSpeedRpm = shooterBaseRpm * 0.15;
     public static final double shooterSpinUpTimeoutSeconds = 5.0;
     public static final double shooterShootDuration = 5.0;
     public static final double shooterSpinUpDelay = 2.0;
@@ -159,6 +159,7 @@ public final class Constants {
     // angles increment ranges of stick input (deadband range)
     public static final double shooterControllerInputPositiveStickAngleIncrement = 0.15;
     public static final double shooterControllerInputNegativeStickAngleIncrement = -0.15;
+    public static final double shooterAngleStickIncrementMagnitude = 0.5;
 
     // ******************************************************************
     // climber constants
