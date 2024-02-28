@@ -414,32 +414,6 @@
               "_showGlyph": false
             }
           },
-          "6,2": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Run Feeder to Shooter",
-              "_title": "/SmartDashboard/Run Feeder to Shooter",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "6,3": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Run Intake",
-              "_title": "/SmartDashboard/Run Intake",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
           "8,2": {
             "size": [
               2,
@@ -609,7 +583,7 @@
               "_showGlyph": false
             }
           },
-          "6,4": {
+          "6,2": {
             "size": [
               2,
               1
@@ -633,26 +607,6 @@
               "_title": "SmartDashboard/PAth planner variable",
               "_glyph": 148,
               "_showGlyph": false
-            }
-          },
-          "3,3": {
-            "size": [
-              3,
-              3
-            ],
-            "content": {
-              "_type": "Graph",
-              "_source0": "network_table:///SmartDashboard/Shooter Motor Encoder Degrees",
-              "_title": "SmartDashboard/Shooter Motor Encoder Degrees",
-              "_glyph": 148,
-              "_showGlyph": false,
-              "Graph/Visible time": 30.0,
-              "Graph/X-axis auto scrolling": true,
-              "Y-axis/Automatic bounds": true,
-              "Y-axis/Upper bound": 1.0,
-              "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul",
-              "Visible data/SmartDashboard/Shooter Motor Encoder Degrees": true
             }
           }
         }
@@ -733,6 +687,6 @@
     "x": -10.0,
     "y": 0.0,
     "width": 1936.0,
-    "height": 962.0
+    "height": 855.0
   }
 }
