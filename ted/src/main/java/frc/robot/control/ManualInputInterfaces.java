@@ -208,39 +208,39 @@ public class ManualInputInterfaces {
             )
           );
 
-        // left trigger press will align robot on a target   
-        this.driverController.leftTrigger().onTrue(
+        // right trigger press will align robot on a target   
+        this.driverController.rightTrigger().onTrue(
           new ParallelCommandGroup(
             //TODO create and add target driving mode here
             new InstantCommand(
               /*() -> subsystemCollection.getDriveTrainSubsystem().setSwerveDriveMode(SwerveDriveMode.TARGET_DRIVING)*/
             ),
             new ButtonPressCommand(
-            "driverController.leftTrigger()",
+            "driverController.rightTrigger()",
             "align on target")
           )
         );
 
-        // left trigger de-press will put drivetrain in normal drive mode  
-        this.driverController.leftTrigger().onFalse(
+        // right trigger de-press will put drivetrain in normal drive mode  
+        this.driverController.rightTrigger().onFalse(
           new ParallelCommandGroup(
             //
             new InstantCommand(
               /*() -> subsystemCollection.getDriveTrainSubsystem().setSwerveDriveMode(SwerveDriveMode.NORMAL_DRIVING)*/
             ),
             new ButtonPressCommand(
-            "driverController.leftTrigger()",
+            "driverController.rightTrigger()",
             "normal driving")
           )
         );
 
-        // right trigger press will ramp down drivetrain to reduced speed mode 
-        this.driverController.rightTrigger().onTrue(
+        // left trigger press will ramp down drivetrain to reduced speed mode 
+        this.driverController.leftTrigger().onTrue(
           new ParallelCommandGroup(
             new InstantCommand(subsystemCollection.getDriveTrainPowerSubsystem()::setReducedPowerReductionFactor,
             subsystemCollection.getDriveTrainPowerSubsystem()),
             new ButtonPressCommand(
-            "driverController.rightTrigger()",
+            "driverController.leftTrigger()",
             "ramp down to reduced speed")
           )
         );
