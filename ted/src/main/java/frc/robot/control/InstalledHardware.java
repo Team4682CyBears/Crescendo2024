@@ -37,16 +37,14 @@ public class InstalledHardware
 
     // External Input Hardware
     public static final boolean driverXboxControllerInstalled = true;
-    public static final boolean coDriverXboxControllerInstalled = false;
+    public static final boolean coDriverXboxControllerInstalled = true;
 
     // DriveTrain Related Hardware
+    public static final boolean tedDrivetrainInstalled = true; // true is ted, false is babybear/minibear
     public static final boolean leftFrontDriveInstalled = true;
     public static final boolean leftRearDriveInstalled = true;
     public static final boolean rightFrontDriveInstalled = true;
     public static final boolean rightRearDriveInstalled = true;
-
-    public static final boolean leftFrontDriveInstalledForTesting = true && !leftFrontDriveInstalled;
-    public static final boolean leftFrontDriveCanCoderInstalledForTesting = true && !leftFrontDriveInstalled;
 
     // Intake Related Hardware
     public static final boolean intakeInstalled = true;
@@ -54,11 +52,21 @@ public class InstalledHardware
     // Feeder Related Hardware
     public static final boolean feederInstalled = true;
 
-    // Shooter Related Hardware
-    public static final boolean shooterInstalled = true;
+    // TOF Sensor Hardware
+    // Important! You must disable any TOF sensor that is not installed!! 
+    // If you try to configure a TOF sensor that is not installed
+    // the other TOF sensors that are installed will not work. 
+    public static final boolean intakeTofInstalled = false;
+    public static final boolean feederToShooterTofInstalled = true;
+    public static final boolean feederToDunkerTofInstalled = false;
 
-    // Controller button install control
-    public static final boolean applyBasicDriveToPointButtonsToDriverXboxController = false;
-    public static final boolean applyDriveTrajectoryButtonsToDriverXboxController = false;
+    // Shooter Related Hardware
+    public static final boolean shooterOutfeedInstalled = true;
+    public static final boolean shooterAngleInstalled = true;
+    // for testing, to decrease the power of the shooter angle mechanism, 
+    // reduce the left motor gear box to 10x (instaed of 100x)
+    // and disconnect the right motor from the chain. 
+    public static final boolean shooterRightAngleMotorrInstalled = true;
+    public static final boolean shooterAngleCanCoderInstalled = false; 
 
 }

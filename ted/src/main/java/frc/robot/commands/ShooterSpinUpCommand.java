@@ -12,8 +12,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.control.Constants;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.TalonShooterSubsystem;
+import frc.robot.subsystems.ShooterOutfeedSubsystem;
 
 /**
  * Forms a command to intake the note
@@ -21,20 +20,20 @@ import frc.robot.subsystems.TalonShooterSubsystem;
  */
 public class ShooterSpinUpCommand extends Command
 {
-  private TalonShooterSubsystem shooter;
+  private ShooterOutfeedSubsystem shooterOutfeed;
   private Timer timer = new Timer();
   private boolean done = false;
   
   /** 
   * Creates a new intake command 
   * 
-  * @param shooterSubsystem - the intake subsystem
+  * @param shooterSubsystem - the shooter outfeed subsystem
   */
-  public ShooterSpinUpCommand(TalonShooterSubsystem shooterSubsystem)
+  public ShooterSpinUpCommand(ShooterOutfeedSubsystem shooterSubsystem)
   {
-    this.shooter = shooterSubsystem;
+    this.shooterOutfeed = shooterSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooter);
+    addRequirements(shooterOutfeed);
   }
 
   // Called when the command is initially scheduled.
@@ -53,11 +52,11 @@ public class ShooterSpinUpCommand extends Command
   @Override
   public void execute()
   {
-    shooter.setShooterVelocityLeft(Constants.shooterLeftDefaultSpeedRpm);
-    shooter.setShooterVelocityRight(Constants.shooterRightDefaultSpeedRpm);
+    shooterOutfeed.setShooterVelocityLeft(Constants.shooterLeftDefaultSpeedRpm);
+    shooterOutfeed.setShooterVelocityRight(Constants.shooterRightDefaultSpeedRpm);
   if (timer.hasElapsed(Constants.shooterSpinUpTimeoutSeconds))
   {
-    shooter.setAllStop();
+    shooterOutfeed.setAllStop();
     done = true;
   }
   }

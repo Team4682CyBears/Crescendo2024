@@ -22,6 +22,17 @@ import frc.robot.control.ManualInputInterfaces;
 import frc.robot.control.SubsystemCollection;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.auto.NamedCommands;
+import frc.robot.control.Constants;
+import frc.robot.subsystems.DrivetrainPowerSubsystem;
+import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.FeederSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.PowerDistributionPanelWatcherSubsystem;
+import frc.robot.subsystems.ShooterOutfeedSubsystem;
+import frc.robot.subsystems.ShooterAngleSubsystem;
 
 public class RobotContainer {
 
@@ -35,57 +46,125 @@ public class RobotContainer {
     // init the camera (before drivetrain)
     this.initializeCameraSubsystem();
 
-    // init the various subsystems
-    this.initializeDrivetrainSubsystem();
-
-    // init the input system 
-    this.initializeManualInputInterfaces();
-
     // intake subsystem init
+        // intake subsystem init
     this.initializeIntakeSubsystem();
 
     // feeder subsystem init
     this.initializeFeederSubsystem();
 
     // shooter subsystem init
-    this.initializeShooterSubsystem();
+    this.initializeShooterOutfeedSubsystem();
+    this.initializeShooterAngleSubsystem();
 
-    // steer motor subsystem init
-    this.initializeSteerMotorSubsystem();
+    // init the various subsystems
+    this.initializeDrivetrainSubsystem();
 
-    // steer motor can coder subsystem init
-    this.initializeSteerMotorCanCoderSubsystem();
+    // init the input system 
+    this.initializeManualInputInterfaces();
+
+    // do late binding of default commands
+    this.lateBindDefaultCommands();
 
     // Configure the button bindings
-    System.out.println(">>>> Initializing button bindings.");
-    this.subsystems.getManualInputInterfaces().initializeButtonCommandBindings();
-    System.out.println(">>>> Finished initializing button bindings.");
+    if(this.subsystems.isManualInputInterfacesAvailable()) {
+      System.out.println(">>>> Initializing button bindings.");
+      this.subsystems.getManualInputInterfaces().initializeButtonCommandBindings();
+      System.out.println(">>>> Finished initializing button bindings.");
+    }
+    
+    // TODO For debugging. Can remove for final competition build. 
+    this.initializeDebugDashboard();
 
-    SmartDashboard.putData(
-      "DriveForwardRobotCentric",
-      new DriveTimeCommand(this.subsystems.getDriveTrainSubsystem(),
-      new ChassisSpeeds(0.6, 0.0, 0.0),
-      3.0));
+    TestTrajectories testtrajectories = new TestTrajectories(this.subsystems.getDriveTrainSubsystem().getTrajectoryConfig());
 
-    if (InstalledHardware.shooterInstalled) {
+    SmartDashboard.putData("Basic Forward", new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testtrajectories.traverseSimpleForward));
+    SmartDashboard.putData("Forward Arc", new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testtrajectories.traverseForwardArc));
+    SmartDashboard.putData("Turn 90", new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testtrajectories.turn90));
+
+    // Path Planner Path Commands
+    // commands to drive path planner test trajectories
+    // Register Named Commands
+    NamedCommands.registerCommand("ShootFromSpeaker",
+        new ParallelCommandGroup(
+            new ButtonPressCommand("PathPlanner", "ShootFromSpeaker"),
+            new ShooterShootCommand(55.0, this.subsystems.getShooterOutfeedSubsystem(),
+                this.subsystems.getShooterAngleSubsystem(), this.subsystems.getFeederSubsystem())));
+    NamedCommands.registerCommand("ShootFromNote",
+        new ParallelCommandGroup(
+            new ButtonPressCommand("PathPlanner", "ShootFromNote"),
+            new ShooterShootCommand(40.0, this.subsystems.getShooterOutfeedSubsystem(),
+                this.subsystems.getShooterAngleSubsystem(), this.subsystems.getFeederSubsystem())));
+    NamedCommands.registerCommand("IntakeNote",
+        new ParallelCommandGroup(
+            new ButtonPressCommand("PathPlanner", "IntakeNote"),
+            new IntakeAndFeedNoteCommand(this.subsystems.getIntakeSubsystem(), this.subsystems.getFeederSubsystem(),
+                FeederMode.FeedToShooter)));
+
+    PathPlannerPath shootAndMobility = PathPlannerPath.fromPathFile("ShootAndMobility");
+    SmartDashboard.putData("ShootAndMobility Path",
+        FollowTrajectoryCommandBuilder.build(shootAndMobility, this.subsystems.getDriveTrainSubsystem(), true));
+
+    PathPlannerPath shootPickShoot = PathPlannerPath.fromPathFile("ShootPickShoot");
+    SmartDashboard.putData("ShootPickShoot Path",
+    new SequentialCommandGroup(
+        FollowTrajectoryCommandBuilder.build(shootPickShoot, this.subsystems.getDriveTrainSubsystem(), true),
+        new IntakeAndFeedNoteCommand(this.subsystems.getIntakeSubsystem(), this.subsystems.getFeederSubsystem(), FeederMode.FeedToShooter)));
+
+    SmartDashboard.putData("Shoot from speaker",
+      new ShooterShootCommand(45.0, this.subsystems.getShooterOutfeedSubsystem(), this.subsystems.getShooterAngleSubsystem(), this.subsystems.getFeederSubsystem()));
+
+    if (this.subsystems.isShooterOutfeedSubsystemAvailable()) {
       SmartDashboard.putData(
           "Spin Up Shooter",
-          new ShooterSpinUpCommand(this.subsystems.getShooterSubsystem()));
+          new ShooterSpinUpCommand(this.subsystems.getShooterOutfeedSubsystem()));
     }
 
-    if (InstalledHardware.intakeInstalled) {
+    if (this.subsystems.isShooterAngleSubsystemAvailable()) {
+      SmartDashboard.putNumber("Shooter Angle Setter", Constants.shooterStartingAngleOffsetDegrees);
       SmartDashboard.putData(
-          "Run Intake",
+          "Set Shooter To Specified Angle",
+          new ShooterSetAngleTesterCommand(
+            () -> SmartDashboard.getNumber("Shooter Angle Setter", Constants.shooterStartingAngleOffsetDegrees),
+            this.subsystems.getShooterAngleSubsystem()
+          )
+      );
+    }
+
+    if (this.subsystems.isIntakeSubsystemAvailable() && this.subsystems.isShooterOutfeedSubsystemAvailable()){
+      SmartDashboard.putData(
+          "Shoot Shooter (at current angle and default speeds)",
+          new ShooterShootCommand(Constants.shooterLeftDefaultSpeedRpm, Constants.shooterRightDefaultSpeedRpm, 
+          this.subsystems.getShooterOutfeedSubsystem(), this.subsystems.getFeederSubsystem()));
+      SmartDashboard.putNumber("Shooter Left Speed RPM Setter", Constants.shooterLeftDefaultSpeedRpm);
+      SmartDashboard.putNumber("Shooter Right Speed RPM Setter", Constants.shooterRightDefaultSpeedRpm);
+      SmartDashboard.putData(
+          "Shooter Shoot to Current Angle and Specified Speeds",
+          new ShooterShootCommand(
+            () -> SmartDashboard.getNumber("Shooter Left Speed RPM Setter", Constants.shooterLeftDefaultSpeedRpm),
+            () -> SmartDashboard.getNumber("Shooter Right Speed RPM Setter", Constants.shooterRightDefaultSpeedRpm),
+          this.subsystems.getShooterOutfeedSubsystem(), this.subsystems.getFeederSubsystem()));
+    }
+
+    if (this.subsystems.isIntakeSubsystemAvailable()) {
+      SmartDashboard.putData(
+          "RunIntake",
           new IntakeNoteCommand(this.subsystems.getIntakeSubsystem()));
     }
 
-    if (InstalledHardware.feederInstalled) {
+    if (this.subsystems.isFeederSubsystemAvailable()) {
       SmartDashboard.putData(
           "Run Feeder to Shooter",
           new FeedNoteCommand(this.subsystems.getFeederSubsystem(), FeederMode.FeedToShooter));
     }
 
-    if(this.subsystems.getDriveTrainPowerSubsystem() != null) {
+    if (this.subsystems.isIntakeSubsystemAvailable() && this.subsystems.isFeederSubsystemAvailable()){
+      SmartDashboard.putData(
+        "Run Intake and Feeder",
+        new IntakeAndFeedNoteCommand(this.subsystems.getIntakeSubsystem(), this.subsystems.getFeederSubsystem(), FeederMode.FeedToShooter));
+    }
+
+    if(this.subsystems.isDriveTrainPowerSubsystemAvailable()) {
       SmartDashboard.putData(
         "DriveForwardRobotCentric",
         new DriveTimeCommand(this.subsystems.getDriveTrainSubsystem(),
@@ -116,8 +195,13 @@ public class RobotContainer {
    * A method to init the PDP watcher
    */
   private void initializePowerDistributionPanelWatcherSubsystem() {
-    subsystems.setPowerDistributionPanelWatcherSubsystem(new PowerDistributionPanelWatcherSubsystem());
-    System.out.println("SUCCESS: initializePowerDistributionPanelWatcherSubsystem");
+    if(InstalledHardware.powerDistributionPanelInstalled) {
+      subsystems.setPowerDistributionPanelWatcherSubsystem(new PowerDistributionPanelWatcherSubsystem());
+      System.out.println("SUCCESS: initializePowerDistributionPanelWatcherSubsystem");
+    }
+    else {
+      System.out.println("FAIL: initializePowerDistributionPanelWatcherSubsystem");
+    }
   }
 
   /**
@@ -155,7 +239,6 @@ public class RobotContainer {
           () -> -RobotContainer.modifyAxisSquare(subsystems.getManualInputInterfaces().getInputArcadeDriveX()) * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
           () -> -RobotContainer.modifyAxisSquare(subsystems.getManualInputInterfaces().getInputSpinDriveX()) * DrivetrainSubsystem.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND
           ));
-
     }
     else {
       System.out.println("FAIL: initializeDrivetrain");
@@ -228,53 +311,55 @@ public class RobotContainer {
   }
 
   /**
-   * A method to init the shooter
+   * A method to init the shooter outfeed
    */
-  private void initializeShooterSubsystem() {
-    if(InstalledHardware.shooterInstalled) {
+  private void initializeShooterOutfeedSubsystem() {
+    if(InstalledHardware.shooterOutfeedInstalled) {
       // The robot's subsystems and commands are defined here...
-      subsystems.setShooterSubsystem(new TalonShooterSubsystem());
-      SmartDashboard.putData("Debug: ShooterSubsystem", subsystems.getShooterSubsystem());
-      System.out.println("SUCCESS: ShooterSubsystem");
-
-      // Set up the default command for the arm.
-      // Left stick X axis -> horizontal arm in / out movement
-      // Left stick Y axis -> vertical arm in / out movement
-      subsystems.getShooterSubsystem().setDefaultCommand(new ShootAllStopCommand(
-        subsystems.getShooterSubsystem()));
+      subsystems.setShooterOutfeedSubsystem(new ShooterOutfeedSubsystem());
+      SmartDashboard.putData("Debug: ShooterSubsystem", subsystems.getShooterOutfeedSubsystem());
+      System.out.println("SUCCESS: ShooterOutfeedSubsystem");
     }
     else {
-      System.out.println("FAIL: ShooterSubsystem");
+      System.out.println("FAIL: ShooterOutfeedSubsystem");
     }
   }
 
   /**
-   * A method to init the steer motor subsystem
+   * A method to init the shooter angle
    */
-  private void initializeSteerMotorSubsystem() {
-    if(InstalledHardware.leftFrontDriveInstalledForTesting) {
+  private void initializeShooterAngleSubsystem() {
+    if(InstalledHardware.shooterAngleInstalled) {
       // The robot's subsystems and commands are defined here...
-      subsystems.setSteerMotorSubsystem(new SteerMotorSubsystem());
-      SmartDashboard.putData("Debug: SteerMotorSubsystem", subsystems.getSteerMotorSubsystem());
-      System.out.println("SUCCESS: SteerMotorSubsystem");
+      subsystems.setShooterAngleSubsystem(new ShooterAngleSubsystem());
+      SmartDashboard.putData("Debug: ShooterAngleSubsystem", subsystems.getShooterAngleSubsystem());
+      System.out.println("SUCCESS: ShooterAngleSubsystem");
     }
     else {
-      System.out.println("FAIL: SteerMotorSubsystem");
+      System.out.println("FAIL: ShooterAngleSubsystem");
     }
   }
 
   /**
-   * A method to init the steer motor subsystem
+   * A method to late binding of default commands
    */
-  private void initializeSteerMotorCanCoderSubsystem() {
-    if(InstalledHardware.leftFrontDriveCanCoderInstalledForTesting) {
-      // The robot's subsystems and commands are defined here...
-      subsystems.setSteerMotorCanCoderSubsystem(new SteerMotorCanCoderSubsystem());
-      SmartDashboard.putData("Debug: SteerMotorCanCoderSubsystem", subsystems.getSteerMotorCanCoderSubsystem());
-      System.out.println("SUCCESS: SteerMotorCanCoderSubsystem");
+  private void lateBindDefaultCommands() {
+
+    // shooter subsystem default commands
+    if(this.subsystems.isShooterOutfeedSubsystemAvailable() && 
+    this.subsystems.isManualInputInterfacesAvailable()) {
+      // Set up the default command for the shooter.
+      this.subsystems.getShooterOutfeedSubsystem().setDefaultCommand(
+        new ShootAllStopCommand(this.subsystems.getShooterOutfeedSubsystem()));
     }
-    else {
-      System.out.println("FAIL: SteerMotorCanCoderSubsystem");
+
+    if(this.subsystems.isShooterAngleSubsystemAvailable() && 
+    this.subsystems.isManualInputInterfacesAvailable()) {
+      // Set up the default command for the shooter.
+      this.subsystems.getShooterAngleSubsystem().setDefaultCommand(
+        new ShooterSetAngleDefaultCommand(
+          () -> getShooterAngleIncrement(subsystems),
+          this.subsystems.getShooterAngleSubsystem()));
     }
   }
 
@@ -301,4 +386,31 @@ public class RobotContainer {
 
     return value;
   }
+
+  private static double getShooterAngleIncrement(SubsystemCollection collection) {
+    return collection.getManualInputInterfaces().getInputShooterAngleIncrement();
+  }
+
+  //TODO create climber arms in InstalledHardware
+  //TODO create climber arms subsystem
+  
+  /*private void initializeClimberArmsSubsystem() {
+    if(InstalledHardware.climberArmMotorInstalled) {
+      // The robot's subsystems and commands are defined here...
+      subsystems.setClimberArmsSubsystem(new ClimberArmsSubsystem());
+      SmartDashboard.putData("Debug: ClimerArmSub", subsystems.getClimberArmsSubsystem());
+      System.out.println("SUCCESS: initializeClimberArm");
+
+      // Set up the default command for the arm.
+      // Left stick Y axis -> vertical arm in / out movement
+      subsystems.getClimberArmsSubsystem().setDefaultCommand(new DefaultArmCommand(
+        subsystems.getClimberArmsSubsystem(),
+        () -> subsystems.getManualInputInterfaces().getInputClimberArmsZ()
+      ));
+    }
+    else {
+      System.out.println("FAIL: initializeArms");
+    }
+  }*/
+
 }

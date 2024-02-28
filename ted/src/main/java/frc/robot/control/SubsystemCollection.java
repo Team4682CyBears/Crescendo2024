@@ -9,7 +9,14 @@
 // ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
 
 package frc.robot.control;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.DrivetrainPowerSubsystem;
+import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.FeederSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.PowerDistributionPanelWatcherSubsystem;
+import frc.robot.subsystems.ShooterAngleSubsystem;
+import frc.robot.subsystems.ShooterOutfeedSubsystem;
+import frc.robot.subsystems.CameraSubsystem;
 
 public class SubsystemCollection
 {
@@ -21,11 +28,10 @@ public class SubsystemCollection
     private CameraSubsystem cameraSubsystem = null;
     private DrivetrainPowerSubsystem driveTrainPowerSubsystem = null;
     private PowerDistributionPanelWatcherSubsystem powerDistributionPanelWatcherSubsystem = null; 
-    private TalonShooterSubsystem shooterSubsystem = null;
-    private SteerMotorSubsystem steerMotorSubsystem = null;
+    private ShooterOutfeedSubsystem shooterOutfeedSubsystem = null;
+    private ShooterAngleSubsystem shooterAngleSubsystem = null;
     private IntakeSubsystem intakeSubsystem = null;
     private FeederSubsystem feederSubsystem = null;
-    private SteerMotorCanCoderSubsystem steerMotorCanCoderSubsystem = null;
 
     /**
      * Default constructor
@@ -34,31 +40,37 @@ public class SubsystemCollection
 
     public DrivetrainSubsystem getDriveTrainSubsystem() { return driveTrainSubsystem; }
     public void setDriveTrainSubsystem(DrivetrainSubsystem value) { driveTrainSubsystem = value; }
+    public boolean isDriveTrainSubsystemAvailable() { return driveTrainSubsystem != null; }
 
     public CameraSubsystem getCameraSubsystem() { return cameraSubsystem; }
     public void setCameraSubsystem(CameraSubsystem value) { cameraSubsystem = value; }
+    public boolean isCameraSubsystemAvailable() { return cameraSubsystem != null; }
 
     public DrivetrainPowerSubsystem getDriveTrainPowerSubsystem() { return driveTrainPowerSubsystem; }
     public void setDriveTrainPowerSubsystem(DrivetrainPowerSubsystem value) { driveTrainPowerSubsystem = value; }
+    public boolean isDriveTrainPowerSubsystemAvailable() { return driveTrainPowerSubsystem != null; }
 
     public PowerDistributionPanelWatcherSubsystem getPowerDistributionPanelWatcherSubsystem() { return powerDistributionPanelWatcherSubsystem; }
     public void setPowerDistributionPanelWatcherSubsystem(PowerDistributionPanelWatcherSubsystem value) { powerDistributionPanelWatcherSubsystem = value; }
+    public boolean isPowerDistributionPanelWatcherSubsystemAvailable() { return powerDistributionPanelWatcherSubsystem != null; }
     
     public ManualInputInterfaces getManualInputInterfaces() { return manualInput; }
     public void setManualInputInterfaces(ManualInputInterfaces value) { manualInput = value; }
+    public boolean isManualInputInterfacesAvailable() { return manualInput != null; }
 
     public IntakeSubsystem getIntakeSubsystem() { return intakeSubsystem; }
     public void setIntakeSubsystem(IntakeSubsystem value) { intakeSubsystem = value; }
+    public boolean isIntakeSubsystemAvailable() { return intakeSubsystem != null; }
 
     public FeederSubsystem getFeederSubsystem() { return feederSubsystem; }
     public void setFeederSubsystem(FeederSubsystem value) { feederSubsystem = value; }
+    public boolean isFeederSubsystemAvailable() { return feederSubsystem != null; }
 
-    public TalonShooterSubsystem getShooterSubsystem() { return shooterSubsystem; }
-    public void setShooterSubsystem(TalonShooterSubsystem value) { shooterSubsystem = value; }
+    public ShooterOutfeedSubsystem getShooterOutfeedSubsystem() { return shooterOutfeedSubsystem; }
+    public void setShooterOutfeedSubsystem(ShooterOutfeedSubsystem value) { shooterOutfeedSubsystem = value; }
+    public boolean isShooterOutfeedSubsystemAvailable() { return shooterOutfeedSubsystem != null; }
 
-    public SteerMotorSubsystem getSteerMotorSubsystem() { return steerMotorSubsystem; }
-    public void setSteerMotorSubsystem(SteerMotorSubsystem value) { steerMotorSubsystem = value; }
-
-    public SteerMotorCanCoderSubsystem getSteerMotorCanCoderSubsystem() { return steerMotorCanCoderSubsystem; }
-    public void setSteerMotorCanCoderSubsystem(SteerMotorCanCoderSubsystem value) { steerMotorCanCoderSubsystem = value; }
+    public ShooterAngleSubsystem getShooterAngleSubsystem() { return shooterAngleSubsystem; }
+    public void setShooterAngleSubsystem(ShooterAngleSubsystem value) { shooterAngleSubsystem = value; }
+    public boolean isShooterAngleSubsystemAvailable() { return shooterAngleSubsystem != null; }
 }

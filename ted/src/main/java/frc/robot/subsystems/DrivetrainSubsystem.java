@@ -22,6 +22,8 @@ import static frc.robot.control.Constants.*;
 import frc.robot.NavX.AHRS;
 
 import frc.robot.control.Constants;
+import frc.robot.control.InstalledHardware;
+import frc.robot.common.DrivetrainConfig;
 import frc.robot.common.EulerAngle;
 import frc.robot.common.VectorUtils;
 import frc.robot.control.SwerveDriveMode;
@@ -33,6 +35,7 @@ import frc.robot.common.VisionMeasurement;
 import frc.robot.swerveHelpers.SwerveModuleHelper;
 import frc.robot.swerveHelpers.SwerveModule;
 import frc.robot.swerveHelpers.WcpModuleConfigurations;
+import frc.robot.swerveLib.ModuleConfiguration;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -81,6 +84,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 6.0;
 
   public static final double MIN_VELOCITY_BOUNDARY_METERS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND * 0.14; // 0.14 a magic number based on testing
+
+  private static DrivetrainConfig drivetrainConfig = 
+    InstalledHardware.tedDrivetrainInstalled ? Constants.tedDrivertainConfig : Constants.babybearDrivetrainConfig;
+  private static double DRIVETRAIN_TRACKWIDTH_METERS = drivetrainConfig.getTrackwidthMeters();
+  private static double DRIVETRAIN_WHEELBASE_METERS = drivetrainConfig.getWheelbaseMeters();
+  private static ModuleConfiguration swerveModuleConfiguration = drivetrainConfig.getSwerveModuleConfiguration();
+  private static double FRONT_LEFT_MODULE_STEER_OFFSET = drivetrainConfig.getFrontLeftModuleSteerOffset();
+  private static double FRONT_RIGHT_MODULE_STEER_OFFSET = drivetrainConfig.getFrontRightModuleSteerOffset();
+  private static double BACK_LEFT_MODULE_STEER_OFFSET = drivetrainConfig.getBackLeftModuleSteerOffset();
+  private static double BACK_RIGHT_MODULE_STEER_OFFSET = drivetrainConfig.getBackRightModuleSteerOffset();
+
   /**
    * The maximum angular velocity of the robot in radians per second.
    * <p>
@@ -110,6 +124,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
           // Back right
           new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0)
   );
+
+  private double maximumAccelerationMultiplicationFactor = 1.0;
+  private double maximumAngularAccelerationMultiplicationFactor = 1.0;
 
   // private byte navxSampleRate = InstalledHardware.navx2Installed? (byte) 50 : (byte) 200;
   private byte navxSampleRate = (byte) 50;
@@ -154,7 +171,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
                     .withSize(2, 4)
                     .withPosition(0, 0),
             // This can either be STANDARD or FAST depending on your gear configuration 
-            WcpModuleConfigurations.SWERVEX,
+            swerveModuleConfiguration,
             // This is the ID of the drive motor
             FRONT_LEFT_MODULE_DRIVE_MOTOR,
             // This is the ID of the steer motor
@@ -170,7 +187,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
             tab.getLayout("Front Right Module", BuiltInLayouts.kList)
                     .withSize(2, 4)
                     .withPosition(2, 0),
-            WcpModuleConfigurations.SWERVEX,
+            swerveModuleConfiguration,
             FRONT_RIGHT_MODULE_DRIVE_MOTOR,
             FRONT_RIGHT_MODULE_STEER_MOTOR,
             FRONT_RIGHT_MODULE_STEER_ENCODER,
@@ -181,7 +198,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
             tab.getLayout("Back Left Module", BuiltInLayouts.kList)
                     .withSize(2, 4)
                     .withPosition(4, 0),
-            WcpModuleConfigurations.SWERVEX,
+            swerveModuleConfiguration,
             BACK_LEFT_MODULE_DRIVE_MOTOR,
             BACK_LEFT_MODULE_STEER_MOTOR,
             BACK_LEFT_MODULE_STEER_ENCODER,
@@ -192,7 +209,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
             tab.getLayout("Back Right Module", BuiltInLayouts.kList)
                     .withSize(2, 4)
                     .withPosition(6, 0),
-            WcpModuleConfigurations.SWERVEX,
+            swerveModuleConfiguration,
             BACK_RIGHT_MODULE_DRIVE_MOTOR,
             BACK_RIGHT_MODULE_STEER_MOTOR,
             BACK_RIGHT_MODULE_STEER_ENCODER,
@@ -201,6 +218,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     // We assume the robot is level at startup.  Take out any bias the NavX is reading on Pitch/Roll.  
     removePitchRollBias(); 
+
+    // TODO - P1 remove this once the acceleration factors are dialed in
+    SmartDashboard.putNumber("maximumAccelerationMultiplicationFactor", this.maximumAccelerationMultiplicationFactor);
+    SmartDashboard.putNumber("maximumAngularAccelerationMultiplicationFactor", this.maximumAngularAccelerationMultiplicationFactor);
   }
 
   /**
@@ -221,6 +242,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
       frontRightModule.getAbsoluteEncoderOffset(),
       backLeftModule.getAbsoluteEncoderOffset(),
       backRightModule.getAbsoluteEncoderOffset()};
+  }
+
+  /**
+   * returns chassis speeds (robot relative)
+   * @return chassis speeds
+   */
+  public ChassisSpeeds getChassisSpeeds(){
+    return chassisSpeeds;
   }
 
   /**
@@ -272,6 +301,24 @@ public class DrivetrainSubsystem extends SubsystemBase {
    */
   public void setSpeedReductionFactor(double value) {
     this.speedReductionFactor = MotorUtils.truncateValue(value, 0.0, 1.0);
+  }
+
+  private ChassisSpeeds discretize(ChassisSpeeds speeds) {
+    // a fudge factor to increase the size of the discretization correction. 
+    // other teams use [1..4]
+    double timeScaleFactor = 1.9; 
+    var desiredDeltaPose = new Pose2d(
+      speeds.vxMetersPerSecond * deltaTimeSeconds, 
+      speeds.vyMetersPerSecond * deltaTimeSeconds, 
+      new Rotation2d(speeds.omegaRadiansPerSecond * deltaTimeSeconds * timeScaleFactor)
+    );
+    var twist = new Pose2d().log(desiredDeltaPose);
+
+    return new ChassisSpeeds(
+      (twist.dx / deltaTimeSeconds), 
+      (twist.dy / deltaTimeSeconds), 
+      (speeds.omegaRadiansPerSecond));
+    // return(speeds);
   }
 
   /**
@@ -473,6 +520,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     this.displayDiagnostics();
 
+    // TODO - P1 remove this once the acceleration factors are dialed in
+    this.maximumAccelerationMultiplicationFactor = SmartDashboard.getNumber("maximumAccelerationMultiplicationFactor", this.maximumAccelerationMultiplicationFactor);
+    this.maximumAngularAccelerationMultiplicationFactor = SmartDashboard.getNumber("maximumAngularAccelerationMultiplicationFactor", this.maximumAngularAccelerationMultiplicationFactor);
+
     SwerveModuleState[] states; 
     if (swerveDriveMode == SwerveDriveMode.IMMOVABLE_STANCE && chassisSpeedsAreZero()) {
       // only change to ImmovableStance if chassis is not moving.
@@ -488,7 +539,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         chassisSpeeds.omegaRadiansPerSecond * Math.min(1.0, this.speedReductionFactor * 1.25));
 
       // apply acceleration control
-      reducedChassisSpeeds = limitChassisSpeedsAccel(reducedChassisSpeeds);
+      reducedChassisSpeeds = discretize(limitChassisSpeedsAccel(reducedChassisSpeeds));
       previousChassisSpeeds = reducedChassisSpeeds; 
 
       // take the current 'requested' chassis speeds and ask the ask the swerve modules to attempt this
@@ -499,23 +550,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
       else { // normal rotation mode 
         states = swerveKinematics.toSwerveModuleStates(reducedChassisSpeeds);
       }
-      // next we take the theoretical values and bring them down (if neecessary) to incorporate physical constraints (like motor maximum speeds)
-      SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
     } 
-
-    // now we take the four states and ask that the modules attempt to perform the wheel speed and direction built above
-    frontLeftModule.set(
-      states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
-      states[0].angle.getRadians());
-    frontRightModule.set(
-      states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
-      states[1].angle.getRadians());
-    backLeftModule.set(
-      states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
-      states[2].angle.getRadians());
-    backRightModule.set(
-      states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
-      states[3].angle.getRadians());
+    // next we take the state and set the states on the swerve modules
+    setSwerveModuleStates(states);
   }
 
   /**
@@ -573,6 +610,29 @@ public class DrivetrainSubsystem extends SubsystemBase {
    */
   public void setSwerveDriveCenterOfRotation(SwerveDriveCenterOfRotation swerveDriveCenterOfRotation) {
     this.swerveDriveCenterOfRotation = swerveDriveCenterOfRotation;
+  }
+
+  /**
+   * A method to set the swerve module states
+   * @param states - swerve module states
+   */
+  private void setSwerveModuleStates(SwerveModuleState[]  states){
+    // we take the theoretical values and bring them down (if neecessary) to incorporate physical constraints (like motor maximum speeds)
+    SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
+
+    // now we take the four states and ask that the modules attempt to perform the wheel speed and direction built above
+    frontLeftModule.set(
+      states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
+      states[0].angle.getRadians());
+    frontRightModule.set(
+      states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
+      states[1].angle.getRadians());
+    backLeftModule.set(
+      states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
+      states[2].angle.getRadians());
+    backRightModule.set(
+      states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
+      states[3].angle.getRadians());
   }
 
   /**
@@ -719,9 +779,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @return
    */
   private ChassisSpeeds limitChassisSpeedsAccel(ChassisSpeeds speeds) {
-    double xVelocityLimited = limitAxisSpeed(speeds.vxMetersPerSecond, previousChassisSpeeds.vxMetersPerSecond, MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
-    double yVelocityLimited = limitAxisSpeed(speeds.vyMetersPerSecond, previousChassisSpeeds.vyMetersPerSecond, MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
-    double omegaVelocityLimited = limitAxisSpeed(speeds.omegaRadiansPerSecond, previousChassisSpeeds.omegaRadiansPerSecond, MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED);
+    double xVelocityLimited = limitAxisSpeed(speeds.vxMetersPerSecond, previousChassisSpeeds.vxMetersPerSecond, MAX_ACCELERATION_METERS_PER_SECOND_SQUARED * maximumAccelerationMultiplicationFactor);
+    double yVelocityLimited = limitAxisSpeed(speeds.vyMetersPerSecond, previousChassisSpeeds.vyMetersPerSecond, MAX_ACCELERATION_METERS_PER_SECOND_SQUARED * maximumAccelerationMultiplicationFactor);
+    double omegaVelocityLimited = limitAxisSpeed(speeds.omegaRadiansPerSecond, previousChassisSpeeds.omegaRadiansPerSecond, MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED * maximumAngularAccelerationMultiplicationFactor);
     return new ChassisSpeeds(xVelocityLimited, yVelocityLimited, omegaVelocityLimited);
   }
 

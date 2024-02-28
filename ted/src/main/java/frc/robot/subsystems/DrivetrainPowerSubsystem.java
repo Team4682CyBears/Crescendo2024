@@ -10,7 +10,6 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.common.MotorUtils;
 
@@ -20,7 +19,7 @@ public class DrivetrainPowerSubsystem extends SubsystemBase {
  
     private final double maximumSpeedReductionFactor = 1.0;
     private final double defaultSpeedReductionFactor = 1.0;
-    private final double reducedSpeedReductionFactor = 0.2; // used for fine control
+    private final double reducedSpeedReductionFactor = 0.5; // used for fine control
     private double speedReductionFactor = defaultSpeedReductionFactor;
     private double speedReductionFactorIncrement = 0.1;
 
@@ -31,7 +30,6 @@ public class DrivetrainPowerSubsystem extends SubsystemBase {
     public DrivetrainPowerSubsystem(DrivetrainSubsystem currentDrivetrain) {
         currentDrivetrainSubsystem = currentDrivetrain;
         this.speedReductionFactor = currentDrivetrainSubsystem.getSpeedReductionFactor();
-//        CommandScheduler.getInstance().registerSubsystem(this);
     }
     
     /**
