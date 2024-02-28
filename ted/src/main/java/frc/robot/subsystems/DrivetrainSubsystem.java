@@ -205,6 +205,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // We assume the robot is level at startup.  Take out any bias the NavX is reading on Pitch/Roll.  
     removePitchRollBias(); 
 
+    // TODO - P1 remove this once the acceleration factors are dialed in
     SmartDashboard.putNumber("maximumAccelerationMultiplicationFactor", this.maximumAccelerationMultiplicationFactor);
     SmartDashboard.putNumber("maximumAngularAccelerationMultiplicationFactor", this.maximumAngularAccelerationMultiplicationFactor);
   }
@@ -499,7 +500,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     this.displayDiagnostics();
 
-    // TODO - remove this soon!!
+    // TODO - P1 remove this once the acceleration factors are dialed in
     this.maximumAccelerationMultiplicationFactor = SmartDashboard.getNumber("maximumAccelerationMultiplicationFactor", this.maximumAccelerationMultiplicationFactor);
     this.maximumAngularAccelerationMultiplicationFactor = SmartDashboard.getNumber("maximumAngularAccelerationMultiplicationFactor", this.maximumAngularAccelerationMultiplicationFactor);
 
