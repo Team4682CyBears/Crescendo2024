@@ -103,12 +103,17 @@ public class CameraSubsystem extends SubsystemBase {
    */
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("relative X", this.getVisionBotPoseInTargetSpace().getX());
-    SmartDashboard.putNumber("relative Y", this.getVisionBotPoseInTargetSpace().getY());
+    if(getVisionBotPoseInTargetSpace() != null){
+      SmartDashboard.putNumber("relative X", this.getVisionBotPoseInTargetSpace().getX());
+      SmartDashboard.putNumber("relative Y", this.getVisionBotPoseInTargetSpace().getY());
+    } 
 
     DistanceMeasurement measurement = this.getDistanceFromTag(7.0);
+    double putter = 0.0;
     if(measurement.getIsValid()){
-      SmartDashboard.putNumber("distance from tag", measurement.getDistanceMeters());
+      putter = measurement.getDistanceMeters();
     }
+    SmartDashboard.putNumber("distance from tag", putter);
+
   }
 }

@@ -40,7 +40,7 @@ public class InstalledHardware
     public static final boolean coDriverXboxControllerInstalled = true;
 
     // DriveTrain Related Hardware
-    public static final boolean tedDrivetrainInstalled = true; // true is ted, false is babybear/minibear
+    public static final boolean tedDrivetrainInstalled = false; // true is ted, false is babybear/minibear
     public static final boolean leftFrontDriveInstalled = true;
     public static final boolean leftRearDriveInstalled = true;
     public static final boolean rightFrontDriveInstalled = true;
