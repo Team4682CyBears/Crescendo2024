@@ -132,7 +132,7 @@ public final class Constants {
     public static InvertedValue leftTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;  
     public static final int rightTalonShooterMotorCanId = 21; 
     public static InvertedValue rightTalonShooterMotorDefaultDirection = InvertedValue.Clockwise_Positive;  
-    private static double shooterBaseRpm = 6500;
+    private static double shooterBaseRpm = talonMaximumRevolutionsPerMinute;
     public static final double shooterLeftDefaultSpeedRpm = shooterBaseRpm * 0.15;
     public static final double shooterRightDefaultSpeedRpm = shooterBaseRpm * 0.15;
     public static final double shooterSpinUpTimeoutSeconds = 5.0;
