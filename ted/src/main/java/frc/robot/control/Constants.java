@@ -185,8 +185,8 @@ public final class Constants {
     // climber constants
     public static final int leftClimberMotorCanId = 25;
     public static final int rightClimberMotorCanId = 26;
-    public static final int leftClimberSensorDioId = 1;
-    public static final int rightClimberSensorDioId= 2;
+    public static final int leftClimberSensorDioId = 0;
+    public static final int rightClimberSensorDioId= 1;
     public static final double climberStandardToleranceInches = 0.25;
     // increment ranges of stick input (deadband range)
     public static final double climberControllerInputPositiveStickAngleIncrement = shooterControllerInputPositiveStickAngleIncrement;

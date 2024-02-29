@@ -608,6 +608,45 @@
               "_glyph": 148,
               "_showGlyph": false
             }
+          },
+          "4,3": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/ShootPickShoot Auto",
+              "_title": "SmartDashboard/ShootPickShoot Auto",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "4,4": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/SourceSideWing Auto",
+              "_title": "SmartDashboard/SourceSideWing Auto",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "6,3": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/123SourceSide Auto",
+              "_title": "/SmartDashboard/123SourceSide Auto",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
           }
         }
       }
@@ -677,6 +716,154 @@
               "_title": "SmartDashboard/Shooter TOF TOF Status",
               "_glyph": 148,
               "_showGlyph": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Climber",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "3,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ClimberArmsLeftArmMotionDescription",
+              "_title": "/SmartDashboard/ClimberArmsLeftArmMotionDescription",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "3,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ClimberArmsLeftClimberHeightInInches",
+              "_title": "/SmartDashboard/ClimberArmsLeftClimberHeightInInches",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "3,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ClimberArmsLeftEncoderPosition",
+              "_title": "/SmartDashboard/ClimberArmsLeftEncoderPosition",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "3,3": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ClimberArmsLeftMotorSpeed",
+              "_title": "/SmartDashboard/ClimberArmsLeftMotorSpeed",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "3,4": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/ClimberArmsLeftSensorDetected",
+              "_title": "/SmartDashboard/ClimberArmsLeftSensorDetected",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "5,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ClimberArmsRightArmMotionDescription",
+              "_title": "/SmartDashboard/ClimberArmsRightArmMotionDescription",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "5,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ClimberArmsRightClimberHeightInInches",
+              "_title": "/SmartDashboard/ClimberArmsRightClimberHeightInInches",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "5,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ClimberArmsRightEncoderPosition",
+              "_title": "/SmartDashboard/ClimberArmsRightEncoderPosition",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "5,3": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ClimberArmsRightMotorSpeed",
+              "_title": "/SmartDashboard/ClimberArmsRightMotorSpeed",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "5,4": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/ClimberArmsRightSensorDetected",
+              "_title": "/SmartDashboard/ClimberArmsRightSensorDetected",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
             }
           }
         }

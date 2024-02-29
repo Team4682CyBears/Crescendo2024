@@ -36,6 +36,7 @@ public class ClimberSubsystem extends SubsystemBase{
     // measurements of spool diameter in 4 discrete ranges
     // intended to be an average measurement of wire/chord on the spool when the spool is 'fractionaly wound'
     // for example when 0-25% of the cord is wound on the spool we need the diameter of the average winding to be placed in climberArmsSpoolDiameterInches0to25
+    // TODO remove this logic, since the sting does not overlap itself on Ted spool design. 
     private static final double climberArmsSpoolDiameterInches0to25 = 1.50; 
     private static final double climberArmsSpoolDiameterInches26to50 = 1.51; 
     private static final double climberArmsSpoolDiameterInches51to75 = 1.52; 
@@ -498,6 +499,9 @@ public class ClimberSubsystem extends SubsystemBase{
         SmartDashboard.putString("ClimberArmsRightArmMotionDescription", this.getRightArmMotionDescription());     
         SmartDashboard.putNumber("ClimberArmsRightClimberHeightInInches", this.getRightClimberHeightInInches());
         SmartDashboard.putNumber("ClimberArmsRightEncoderPosition", this.getRightMotorEncoderPosition());
+        SmartDashboard.putBoolean("ClimberArmsLeftSensorDetected", this.leftMageneticSensor.get());
+        SmartDashboard.putBoolean("ClimberArmsRightSensorDetected", this.rightMageneticSensor.get());
+        
     }
 
 }
