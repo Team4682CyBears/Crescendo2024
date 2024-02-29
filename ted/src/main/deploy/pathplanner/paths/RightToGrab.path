@@ -3,41 +3,54 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3745725990970648,
-        "y": 5.574034784276125
+        "x": 5.200948934992683,
+        "y": 1.9091387019983346
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5170878196355146,
-        "y": 5.495578638749864
+        "x": 6.184889650637978,
+        "y": 1.2335973151373854
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.552011912927029,
-        "y": 4.864616708832055
+        "x": 7.770943341528902,
+        "y": 0.7636554807993345
       },
       "prevControl": {
-        "x": 1.552011912927029,
-        "y": 4.864616708832055
+        "x": 6.640145802652966,
+        "y": 1.1895402681681935
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 0.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Shoot From Speaker",
-      "waypointRelativePos": 0.0,
+      "name": "Intake Note",
+      "waypointRelativePos": 0.85,
       "command": {
-        "type": "sequential",
+        "type": "parallel",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "IntakeNote"
+              }
+            }
+          ]
         }
       }
     }
@@ -50,13 +63,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 0.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Tests",
+  "folder": "SourceSideWing",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -35.3112134396332,
     "velocity": 0
   },
   "useDefaultConstraints": true

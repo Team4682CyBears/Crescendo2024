@@ -608,6 +608,19 @@
               "_glyph": 148,
               "_showGlyph": false
             }
+          },
+          "4,3": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/ShootPickShoot Auto",
+              "_title": "SmartDashboard/ShootPickShoot Auto",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
           }
         }
       }

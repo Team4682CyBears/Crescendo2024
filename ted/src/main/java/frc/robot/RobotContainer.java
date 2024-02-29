@@ -92,6 +92,11 @@ public class RobotContainer {
             new ButtonPressCommand("PathPlanner", "ShootFromNote"),
             new ShooterShootCommand(37.0, 6000.0, 6000.0, this.subsystems.getShooterOutfeedSubsystem(),
                 this.subsystems.getShooterAngleSubsystem(), this.subsystems.getFeederSubsystem())));
+    NamedCommands.registerCommand("ShootFromSourceWing",
+        new ParallelCommandGroup(
+            new ButtonPressCommand("PathPlanner", "ShootFromSourceWing"),
+            new ShooterShootCommand(22.0, 6500.0, 6500.0, this.subsystems.getShooterOutfeedSubsystem(),
+                this.subsystems.getShooterAngleSubsystem(), this.subsystems.getFeederSubsystem())));
     NamedCommands.registerCommand("IntakeNote",
         new ParallelCommandGroup(
             new ButtonPressCommand("PathPlanner", "IntakeNote"),
@@ -102,7 +107,7 @@ public class RobotContainer {
     HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(                        
       new PIDConstants(2.0, 0, 0),  // Translation PID constants
       new PIDConstants(4.5, 0.001, 0), // Rotation PID constants
-      2.3, // Max module speed, in m/s
+      1.8, // Max module speed, in m/s
       0.43, // Drive base radius in meters. Distance from robot center to furthest module.
       new ReplanningConfig() // Default path replanning config. See the API for the options here
   );
@@ -119,6 +124,9 @@ public class RobotContainer {
 
     Command shootPickShootAuto = AutoBuilder.buildAuto("ShootPickShoot");
     SmartDashboard.putData("ShootPickShoot Auto", shootPickShootAuto);
+
+    Command sourceSideWingAuto = AutoBuilder.buildAuto("SourceSideWing");
+    SmartDashboard.putData("SourceSideWing Auto", sourceSideWingAuto);
 
     SmartDashboard.putData("straightBackToNote Path",
         FollowTrajectoryCommandBuilder.build(straightBackToNote, this.subsystems.getDriveTrainSubsystem(), true));
