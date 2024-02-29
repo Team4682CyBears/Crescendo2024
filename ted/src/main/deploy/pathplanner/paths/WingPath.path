@@ -3,25 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3499985088160098,
-        "y": 5.5471471702718285
+        "x": 0.6924444618120014,
+        "y": 6.726042503963363
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5126821123412604,
-        "y": 5.5471471702718285
+        "x": 1.3826715309960145,
+        "y": 8.444267335761863
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.3487301368054063,
-        "y": 5.5471471702718285
+        "x": 4.275750948639644,
+        "y": 7.460326620116567
       },
       "prevControl": {
-        "x": 1.8213041187871724,
-        "y": 5.5471471702718285
+        "x": 2.853757351435736,
+        "y": 7.813700851015298
+      },
+      "nextControl": {
+        "x": 5.697744545843552,
+        "y": 7.106952389217836
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.638772200621324,
+        "y": 7.460326620116567
+      },
+      "prevControl": {
+        "x": 7.111346182603091,
+        "y": 7.460326620116567
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +49,7 @@
   "eventMarkers": [
     {
       "name": "Intake Note",
-      "waypointRelativePos": 0.9,
+      "waypointRelativePos": 1.8,
       "command": {
         "type": "parallel",
         "data": {
@@ -63,7 +79,7 @@
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 58.43818815835065,
     "velocity": 0
   },
   "useDefaultConstraints": true
