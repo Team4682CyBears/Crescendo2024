@@ -180,6 +180,7 @@ public final class Constants {
     public static final double shooterAngleDegreesClimbStow = 90; 
     public static final double shooterAngleDegreesMinimum = 20;
     public static final double shooterAngleDegreesMaximum = 110;
+
     // ******************************************************************
     // climber constants
     public static final int leftClimberMotorCanId = 25;
@@ -187,6 +188,10 @@ public final class Constants {
     public static final int leftClimberSensorDioId = 1;
     public static final int rightClimberSensorDioId= 2;
     public static final double climberStandardToleranceInches = 0.25;
+    // increment ranges of stick input (deadband range)
+    public static final double climberControllerInputPositiveStickAngleIncrement = shooterControllerInputPositiveStickAngleIncrement;
+    public static final double climberControllerInputNegativeStickAngleIncrement = shooterControllerInputNegativeStickAngleIncrement;
+    public static final double climberAngleStickIncrementMagnitude = shooterAngleStickIncrementMagnitude;
 
     // ******************************************************************
     // amp/dunker constants

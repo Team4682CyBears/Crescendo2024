@@ -325,24 +325,26 @@ public class RobotContainer {
    * A method to late binding of default commands
    */
   private void lateBindDefaultCommands() {
+    if(this.subsystems.isManualInputInterfacesAvailable()) {
+      // shooter outfeed subsystem default command
+      if(this.subsystems.isShooterOutfeedSubsystemAvailable()) {
+        this.subsystems.getShooterOutfeedSubsystem().setDefaultCommand(
+          new ShooterIdleCommand(
+            this.subsystems.getShooterOutfeedSubsystem(),
+            this.subsystems.getManualInputInterfaces()));
+      }
 
-    // shooter subsystem default commands
-    if(this.subsystems.isShooterOutfeedSubsystemAvailable() && 
-    this.subsystems.isManualInputInterfacesAvailable()) {
-      // Set up the default command for the shooter.
-      this.subsystems.getShooterOutfeedSubsystem().setDefaultCommand(
-        new ShooterIdleCommand(
-          this.subsystems.getShooterOutfeedSubsystem(),
-          this.subsystems.getManualInputInterfaces()));
-    }
+      // shooter angle subsystem default command
+      if(this.subsystems.isShooterAngleSubsystemAvailable()) {
+        this.subsystems.getShooterAngleSubsystem().setDefaultCommand(
+            new InstantCommand(() -> RobotContainer.getShooterDefaultCommand(subsystems)));
+      }
 
-    if(this.subsystems.isShooterAngleSubsystemAvailable() && 
-    this.subsystems.isManualInputInterfacesAvailable()) {
-      // Set up the default command for the shooter.
-      this.subsystems.getShooterAngleSubsystem().setDefaultCommand(
-        new ShooterSetAngleDefaultCommand(
-          () -> getShooterAngleIncrement(subsystems),
-          this.subsystems.getShooterAngleSubsystem()));
+      // climber subsystem default command
+      if(this.subsystems.isClimberSubsystemAvailable()) {
+        this.subsystems.getClimberSubsystem().setDefaultCommand(
+            new InstantCommand(() -> RobotContainer.getClimberDefaultCommand(subsystems)));
+      }
     }
   }
 
@@ -370,30 +372,21 @@ public class RobotContainer {
     return value;
   }
 
-  private static double getShooterAngleIncrement(SubsystemCollection collection) {
-    return collection.getManualInputInterfaces().getInputShooterAngleIncrement();
+  /**
+   * A wrapper method to build up the default command group for shooter
+   * @param collection the subsystems in effect here
+   * @return a parallel command group of commands to run
+   */
+  private static ParallelCommandGroup getShooterDefaultCommand(SubsystemCollection collection) {
+      return collection.getManualInputInterfaces().buildDefaultShooterAngleCommand();
   }
 
-  //TODO create climber arms in InstalledHardware
-  //TODO create climber arms subsystem
-  
-  /*private void initializeClimberArmsSubsystem() {
-    if(InstalledHardware.climberArmMotorInstalled) {
-      // The robot's subsystems and commands are defined here...
-      subsystems.setClimberArmsSubsystem(new ClimberArmsSubsystem());
-      SmartDashboard.putData("Debug: ClimerArmSub", subsystems.getClimberArmsSubsystem());
-      System.out.println("SUCCESS: initializeClimberArm");
-
-      // Set up the default command for the arm.
-      // Left stick Y axis -> vertical arm in / out movement
-      subsystems.getClimberArmsSubsystem().setDefaultCommand(new DefaultArmCommand(
-        subsystems.getClimberArmsSubsystem(),
-        () -> subsystems.getManualInputInterfaces().getInputClimberArmsZ()
-      ));
-    }
-    else {
-      System.out.println("FAIL: initializeArms");
-    }
-  }*/
-
+  /**
+   * A wrapper method to build up the default command group for climbers
+   * @param collection the subsystems in effect here
+   * @return a parallel command group of commands to run
+   */
+  private static ParallelCommandGroup getClimberDefaultCommand(SubsystemCollection collection) {
+      return collection.getManualInputInterfaces().buildDefaultClimberCommand();
+  }
 }
