@@ -621,6 +621,19 @@
               "_glyph": 148,
               "_showGlyph": false
             }
+          },
+          "4,4": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/SourceSideWing Auto",
+              "_title": "SmartDashboard/SourceSideWing Auto",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
           }
         }
       }

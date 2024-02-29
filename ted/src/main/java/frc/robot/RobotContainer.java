@@ -128,6 +128,9 @@ public class RobotContainer {
     Command sourceSideWingAuto = AutoBuilder.buildAuto("SourceSideWing");
     SmartDashboard.putData("SourceSideWing Auto", sourceSideWingAuto);
 
+    Command oneTwoThreeSourceSideAuto = AutoBuilder.buildAuto("123SourceSide");
+    SmartDashboard.putData("123SourceSide Auto", oneTwoThreeSourceSideAuto);
+
     SmartDashboard.putData("straightBackToNote Path",
         FollowTrajectoryCommandBuilder.build(straightBackToNote, this.subsystems.getDriveTrainSubsystem(), true));
       
