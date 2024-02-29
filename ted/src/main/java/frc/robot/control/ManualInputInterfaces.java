@@ -10,6 +10,7 @@
 
 package frc.robot.control;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -17,7 +18,11 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.common.ClimberArm;
 import frc.robot.common.ClimberArmTargetPosition;
+import frc.robot.common.CoDriverMode;
 import frc.robot.common.FeederMode;
+import frc.robot.common.ShooterOutfeedSpeed;
+import frc.robot.common.ShooterPosition;
+import frc.robot.subsystems.ShooterAngleSubsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AllStopCommand;
 import frc.robot.commands.ButtonPressCommand;
@@ -26,6 +31,8 @@ import frc.robot.commands.FeedNoteCommand;
 import frc.robot.commands.IntakeAndFeedNoteCommand;
 import frc.robot.commands.IntakeNoteCommand;
 import frc.robot.commands.RemoveNoteCommand;
+import frc.robot.commands.ShooterSetAngleCommand;
+import frc.robot.commands.ShooterSetAngleDefaultCommand;
 import frc.robot.commands.ShooterShootCommand;
 import frc.robot.commands.ShooterSpinUpCommand;
 
@@ -38,6 +45,9 @@ public class ManualInputInterfaces {
 
   // subsystems needed for inputs
   private SubsystemCollection subsystemCollection = null;
+  private CoDriverMode currentCoDriverMode = CoDriverMode.SpeakerScore;
+  private FeederMode currentFeederMode = FeederMode.FeedToShooter;
+  private ShooterOutfeedSpeed currentDefaultOutfeedSpeedSelected = ShooterOutfeedSpeed.Stopped;
 
   /**
    * The constructor to build this 'manual input' conduit
@@ -52,6 +62,30 @@ public class ManualInputInterfaces {
    */
   public final XboxController getCoDriverController() {
     return coDriverControllerForRumbleOnly;
+  }
+
+  /**
+   * Method to return current co driver mode
+   * @return the currently selected co-driver mode
+   */
+  public CoDriverMode getCoDriverMode() {
+    return this.currentCoDriverMode;
+  }
+
+  /**
+   * Method to return current feeder mode
+   * @return the currently selected feeder mode
+   */
+  public FeederMode getFeederMode() {
+    return this.currentFeederMode;
+  }
+
+  /**
+   * Method to return current shooter outfeed speed
+   * @return the currently selected outfeed speed
+   */
+  public ShooterOutfeedSpeed getShooterOutfeedSpeed() {
+    return this.currentDefaultOutfeedSpeedSelected;
   }
 
   /**
@@ -79,14 +113,23 @@ public class ManualInputInterfaces {
   }
 
   /**
-   * A method to get the arcade arm Z componet being input from humans
-   * @return - a double value associated with the magnitude of the Z componet
+   * A method to get the co driver y left
+   * @return - a double value associated with the magnitude of the y componet
    */
-  public double getInputClimberArmsZ()
+  public double getInputCoDriverLeftY()
   {
-    // use the co drivers right Z to represent the vertical movement
     // and multiply by -1.0 as xbox reports values flipped
     return -1.0 * coDriverController.getLeftY();
+  }
+
+  /**
+   * A method to get the co driver y right
+   * @return - a double value associated with the magnitude of the y componet
+   */
+  public double getInputCoDriverRightY()
+  {
+    // and multiply by -1.0 as xbox reports values flipped
+    return -1.0 * coDriverController.getRightY();
   }
 
   /**
@@ -123,6 +166,10 @@ public class ManualInputInterfaces {
       this.bindCommandsToCoDriverXboxButtons();
     }
   }
+
+  /*************************************************************************************
+   * PRIVATE METHODS
+   *************************************************************************************/
 
   /**
    * Will attach commands to the Driver XBox buttons 
@@ -302,84 +349,480 @@ public class ManualInputInterfaces {
           )
         );
 
-      if(this.subsystemCollection.isShooterOutfeedSubsystemAvailable() && this.subsystemCollection.isFeederSubsystemAvailable()) {
-        this.coDriverController.y().onTrue(
+      // first the climber dunk mode
+      if(this.subsystemCollection.isClimberSubsystemAvailable() &&
+         this.subsystemCollection.isShooterAngleSubsystemAvailable()) {
+        this.coDriverController.rightTrigger().onTrue(
           new ParallelCommandGroup(
-            // shoot at the current angle
-            new ShooterShootCommand(this.subsystemCollection.getShooterOutfeedSubsystem(), this.subsystemCollection.getFeederSubsystem()),
+            new InstantCommand(
+              () -> this.setCoDriverMode(CoDriverMode.ClimbDunk)
+            ),
+            new InstantCommand(
+              () -> this.setFeederMode(FeederMode.FeedToDunker)
+            ),
             new ButtonPressCommand(
-              "coDriverController.y()",
-                "shoots the shooter")
-            )
-        );
-      }
-
-      if(this.subsystemCollection.isIntakeSubsystemAvailable()) {
-        // remove the note
-        this.coDriverController.b().onTrue(
-          new ParallelCommandGroup(
-            new RemoveNoteCommand(this.subsystemCollection.getIntakeSubsystem()),
-            new ButtonPressCommand(
-              "coDriverController.b()",
-                "remove note")
-            )
-        );
-      }
-
-      if(this.subsystemCollection.isClimberSubsystemAvailable() && 
-        this.subsystemCollection.isDriveTrainPowerSubsystemAvailable()) {
-        // TODO - need to have more work here to:
-        // 1. square robot
-        // 2. drive robot forward
-        this.coDriverController.a().onTrue(
-          new SequentialCommandGroup(
-            new ButtonPressCommand(
-              "coDriverController.a()",
-                "[TEMPORARY FAKE] climb"),
-            // TODO - square robot
-            new ClimberArmToPosition(
-              this.subsystemCollection.getClimberSubsystem(),
-              ClimberArm.BothClimbers,
-              ClimberArmTargetPosition.FullDeploy),
-            // TODO - move robot forward
-            new ClimberArmToPosition(
-              this.subsystemCollection.getClimberSubsystem(),
-              ClimberArm.BothClimbers,
-              ClimberArmTargetPosition.HangRobot)
+            "coDriverController.rightTrigger()",
+            "SET Climb / Dunk Mode!")
           )
         );
       }
 
-      this.coDriverController.rightBumper().onTrue(
+      // second the speaker shoot mode
+      if(this.subsystemCollection.isShooterAngleSubsystemAvailable() &&
+         this.subsystemCollection.isShooterOutfeedSubsystemAvailable()) {
+        this.coDriverController.rightBumper().onTrue(
           new ParallelCommandGroup(
-            //TODO include an actual ShooterToLocation command here
+            new InstantCommand(
+              () -> this.setCoDriverMode(CoDriverMode.SpeakerScore)
+            ),
+            new InstantCommand(
+              () -> this.setFeederMode(FeederMode.FeedToShooter)
+            ),
             new ButtonPressCommand(
-              "coDriverController.rightBumper()",
-              "[TEMPORARY FAKE] stow")
+            "coDriverController.rightTrigger()",
+            "SET Climb / Dunk Mode!")
+          )
+        );
+      }
+
+      // third the amp shoot mode
+      if(this.subsystemCollection.isShooterAngleSubsystemAvailable() &&
+         this.subsystemCollection.isShooterOutfeedSubsystemAvailable()) {
+        this.coDriverController.rightBumper().onTrue(
+          new ParallelCommandGroup(
+            new InstantCommand(
+              () -> this.setCoDriverMode(CoDriverMode.AmpScore)
+            ),
+            new InstantCommand(
+              () -> this.setFeederMode(FeederMode.FeedToShooter)
+            ),
+            new ButtonPressCommand(
+            "coDriverController.rightTrigger()",
+            "SET Climb / Dunk Mode!")
+          )
+        );
+      }
+
+      // wire up the shooter idle / stopped default - only when the outfeed subsystem is available
+      if(this.subsystemCollection.isShooterOutfeedSubsystemAvailable()) {       
+        this.driverController.back().onTrue(
+          new ParallelCommandGroup(
+            new InstantCommand(
+              () -> this.setDefaultOutfeedSpeedToIdle() // this method will only have effect when the proper modes are selected
+            ),
+            new ButtonPressCommand(
+              "coDriverController.back()",
+              "SET default outfeed speed to idle")
             )
           );
-
-      if(this.subsystemCollection.isFeederSubsystemAvailable()) {
-          this.coDriverController.back().onTrue(
-              new ParallelCommandGroup(
-                new FeedNoteCommand(
-                  this.subsystemCollection.getFeederSubsystem(),
-                  FeederMode.FeedToShooter),
-                new ButtonPressCommand(
-                  "coDriverController.back()",
-                  "send note to shooter"))
-            );
-
-          this.coDriverController.start().onTrue(
-            new ParallelCommandGroup(
-                new FeedNoteCommand(
-                  this.subsystemCollection.getFeederSubsystem(),
-                  FeederMode.FeedToDunker),
-                new ButtonPressCommand(
-                "coDriverController.start()",
-                "send note to dunker"))
+        this.driverController.start().onTrue(
+          new ParallelCommandGroup(
+            new InstantCommand(
+              () -> this.setDefaultOutfeedSpeedToStopped() // this method will only have effect when the proper modes are selected
+            ),
+            new ButtonPressCommand(
+              "coDriverController.back()",
+              "set to stopped")
+            )
           );
       }
+
+      // do generic Y command - command to run determined at run time
+      this.coDriverController.y().onTrue(
+        new InstantCommand(() -> this.buildCoDriverYButtonCommands())
+      );
+
+      // do generic B command - command to run determined at run time
+      this.coDriverController.b().onTrue(
+        new InstantCommand(() -> this.buildCoDriverBButtonCommands())
+      );
+
+      // do generic A command - command to run determined at run time
+      this.coDriverController.a().onTrue(
+        new InstantCommand(() -> this.buildCoDriverAButtonCommands())
+      );
+
+      // do generic dpad down command - command to run determined at run time
+      this.driverController.povDown().onTrue(
+        new InstantCommand(() -> this.buildCoDriverPovDownButtonCommands())
+      );
+
+      // do generic dpad up command - command to run determined at run time
+      this.driverController.povUp().onTrue(
+        new InstantCommand(() -> this.buildCoDriverPovUpButtonCommands())
+      );
     }
   }
+
+  /**
+   * Update the current mode selected
+   * @param updatedMode - new mode to use
+   */
+  private void setCoDriverMode(CoDriverMode updatedMode) {
+    this.currentCoDriverMode = updatedMode;
+  }
+
+  /**
+   * Update the default outfeed speed to idle - only when proper modes are selected
+   */
+  private void setDefaultOutfeedSpeedToIdle() {
+    if(this.currentCoDriverMode == CoDriverMode.SpeakerScore) {
+      this.currentDefaultOutfeedSpeedSelected = ShooterOutfeedSpeed.SpeakerIdle;
+    }
+    else if(this.currentCoDriverMode == CoDriverMode.SpeakerScore) {
+      this.currentDefaultOutfeedSpeedSelected = ShooterOutfeedSpeed.AmpIdle;
+    }
+  }
+
+  /**
+   * Update the default outfeed speed to stopped - only when proper modes are selected
+   */
+  private void setDefaultOutfeedSpeedToStopped() {
+    if(this.currentCoDriverMode == CoDriverMode.SpeakerScore) {
+      this.currentDefaultOutfeedSpeedSelected = ShooterOutfeedSpeed.Stopped;
+    }
+    else if(this.currentCoDriverMode == CoDriverMode.SpeakerScore) {
+      this.currentDefaultOutfeedSpeedSelected = ShooterOutfeedSpeed.AmpIdle;
+    }
+  }
+
+  /**
+   * Update the current mode selected
+   * @param updatedMode - new mode to use
+   */
+  private void setFeederMode(FeederMode updatedMode) {
+    this.currentFeederMode = updatedMode;
+  }
+
+  /**
+   * A method that understands how to build the proper co-driver Y button commands
+   * based on the currently selected modes
+   * @return A parallel command on what will be done
+   */
+  private ParallelCommandGroup buildCoDriverYButtonCommands() {
+    CoDriverMode currentDriverMode = this.getCoDriverMode();
+    ParallelCommandGroup group = new ParallelCommandGroup();
+    if(currentDriverMode == CoDriverMode.AmpScore &&
+       this.subsystemCollection.isShooterOutfeedSubsystemAvailable() &&
+       this.subsystemCollection.isShooterAngleSubsystemAvailable() &&
+       this.subsystemCollection.isFeederSubsystemAvailable()) {
+      double desiredSpeed = ManualInputInterfaces.getOutfeedSpeedEnumInTargetMotorRpm(ShooterOutfeedSpeed.AmpHigh);
+      double desiredAngle = ShooterAngleSubsystem.positionToDegrees(ShooterPosition.AmpHigh);
+      group.addCommands(
+        new ShooterShootCommand(
+          desiredAngle,
+          desiredSpeed,
+          desiredSpeed,
+          this.subsystemCollection.getShooterOutfeedSubsystem(),
+          this.subsystemCollection.getShooterAngleSubsystem(),
+          this.subsystemCollection.getFeederSubsystem()),
+        new ButtonPressCommand(
+          "coDriverController.y()",
+            "AMP Shot High")
+      );
+    }
+    else if(currentDriverMode == CoDriverMode.ClimbDunk &&
+       this.subsystemCollection.isShooterAngleSubsystemAvailable() &&
+       this.subsystemCollection.isClimberSubsystemAvailable()) {
+      double desiredAngle = ShooterAngleSubsystem.positionToDegrees(ShooterPosition.ClimbStow);
+      group.addCommands(
+        new SequentialCommandGroup(
+          new ShooterSetAngleCommand(
+            desiredAngle,
+            this.subsystemCollection.getShooterAngleSubsystem()),
+          new ClimberArmToPosition(
+            this.subsystemCollection.getClimberSubsystem(),
+            ClimberArm.BothClimbers,
+            ClimberArmTargetPosition.FullDeploy)
+        ),
+        new ButtonPressCommand(
+          "coDriverController.y()",
+            "CLIMBER Extend")
+      );
+    }
+    else if(currentDriverMode == CoDriverMode.SpeakerScore &&
+       this.subsystemCollection.isShooterOutfeedSubsystemAvailable() &&
+       this.subsystemCollection.isShooterAngleSubsystemAvailable() &&
+       this.subsystemCollection.isFeederSubsystemAvailable()) {
+      double desiredSpeed = ManualInputInterfaces.getOutfeedSpeedEnumInTargetMotorRpm(ShooterOutfeedSpeed.SpeakerRedlineDistance);
+      double desiredAngle = ShooterAngleSubsystem.positionToDegrees(ShooterPosition.SpeakerRedlineDistance);
+      group.addCommands(
+        new ShooterShootCommand(
+          desiredAngle,
+          desiredSpeed,
+          desiredSpeed,
+          this.subsystemCollection.getShooterOutfeedSubsystem(),
+          this.subsystemCollection.getShooterAngleSubsystem(),
+          this.subsystemCollection.getFeederSubsystem()),
+        new ButtonPressCommand(
+          "coDriverController.y()",
+            "SPEAKER Shot Redline")
+      );
+    }
+    else {
+      group.addCommands(
+        new ButtonPressCommand(
+          "coDriverController.y()",
+          "<------------- NO OP!!! -------------->")
+      );
+    }
+    return group;
+  }
+
+  /**
+   * A method that understands how to build the proper co-driver B button commands
+   * based on the currently selected modes
+   * @return A parallel command on what will be done
+   */
+  private ParallelCommandGroup buildCoDriverBButtonCommands() {
+    CoDriverMode currentDriverMode = this.getCoDriverMode();
+    ParallelCommandGroup group = new ParallelCommandGroup();
+    if(currentDriverMode == CoDriverMode.AmpScore &&
+       this.subsystemCollection.isShooterOutfeedSubsystemAvailable() &&
+       this.subsystemCollection.isShooterAngleSubsystemAvailable() &&
+       this.subsystemCollection.isFeederSubsystemAvailable()) {
+      double desiredSpeed = ManualInputInterfaces.getOutfeedSpeedEnumInTargetMotorRpm(ShooterOutfeedSpeed.AmpMedium);
+      double desiredAngle = ShooterAngleSubsystem.positionToDegrees(ShooterPosition.AmpMedium);
+      group.addCommands(
+        new ShooterShootCommand(
+          desiredAngle,
+          desiredSpeed,
+          desiredSpeed,
+          this.subsystemCollection.getShooterOutfeedSubsystem(),
+          this.subsystemCollection.getShooterAngleSubsystem(),
+          this.subsystemCollection.getFeederSubsystem()),
+        new ButtonPressCommand(
+          "coDriverController.b()",
+            "AMP Shot Medium")
+      );
+    }
+    else if(currentDriverMode == CoDriverMode.ClimbDunk &&
+       this.subsystemCollection.isShooterAngleSubsystemAvailable() &&
+       this.subsystemCollection.isClimberSubsystemAvailable()) {
+      double desiredAngle = ShooterAngleSubsystem.positionToDegrees(ShooterPosition.ClimbStow);
+      group.addCommands(
+        new SequentialCommandGroup(
+          new ShooterSetAngleCommand(
+            desiredAngle,
+            this.subsystemCollection.getShooterAngleSubsystem()),
+          new ClimberArmToPosition(
+            this.subsystemCollection.getClimberSubsystem(),
+            ClimberArm.BothClimbers,
+            ClimberArmTargetPosition.FullDeploy),
+          // TODO move the robot forward
+          new ClimberArmToPosition(
+            this.subsystemCollection.getClimberSubsystem(),
+            ClimberArm.BothClimbers,
+            ClimberArmTargetPosition.HangRobot)
+        ),
+        new ButtonPressCommand(
+          "coDriverController.b()",
+            "CLIMBER Full Auto")
+      );
+    }
+    else if(currentDriverMode == CoDriverMode.SpeakerScore &&
+       this.subsystemCollection.isShooterOutfeedSubsystemAvailable() &&
+       this.subsystemCollection.isShooterAngleSubsystemAvailable() &&
+       this.subsystemCollection.isFeederSubsystemAvailable()) {
+      double desiredSpeed = ManualInputInterfaces.getOutfeedSpeedEnumInTargetMotorRpm(ShooterOutfeedSpeed.SpeakerPodiumDistance);
+      double desiredAngle = ShooterAngleSubsystem.positionToDegrees(ShooterPosition.SpeakerPodiumDistance);
+      group.addCommands(
+        new ShooterShootCommand(
+          desiredAngle,
+          desiredSpeed,
+          desiredSpeed,
+          this.subsystemCollection.getShooterOutfeedSubsystem(),
+          this.subsystemCollection.getShooterAngleSubsystem(),
+          this.subsystemCollection.getFeederSubsystem()),
+        new ButtonPressCommand(
+          "coDriverController.b()",
+            "SPEAKER Shot Podium")
+      );
+    }
+    else {
+      group.addCommands(
+        new ButtonPressCommand(
+          "coDriverController.b()",
+          "<------------- NO OP!!! -------------->")
+      );
+    }
+    return group;
+  }
+  
+  /**
+   * A method that understands how to build the proper co-driver A button commands
+   * based on the currently selected modes
+   * @return A parallel command on what will be done
+   */
+  private ParallelCommandGroup buildCoDriverAButtonCommands() {
+    CoDriverMode currentDriverMode = this.getCoDriverMode();
+    ParallelCommandGroup group = new ParallelCommandGroup();
+    if(currentDriverMode == CoDriverMode.AmpScore &&
+       this.subsystemCollection.isShooterOutfeedSubsystemAvailable() &&
+       this.subsystemCollection.isShooterAngleSubsystemAvailable() &&
+       this.subsystemCollection.isFeederSubsystemAvailable()) {
+      double desiredSpeed = ManualInputInterfaces.getOutfeedSpeedEnumInTargetMotorRpm(ShooterOutfeedSpeed.AmpLow);
+      double desiredAngle = ShooterAngleSubsystem.positionToDegrees(ShooterPosition.AmpLow);
+      group.addCommands(
+        new ShooterShootCommand(
+          desiredAngle,
+          desiredSpeed,
+          desiredSpeed,
+          this.subsystemCollection.getShooterOutfeedSubsystem(),
+          this.subsystemCollection.getShooterAngleSubsystem(),
+          this.subsystemCollection.getFeederSubsystem()),
+        new ButtonPressCommand(
+          "coDriverController.a()",
+            "AMP Shot Low")
+      );
+    }
+    else if(currentDriverMode == CoDriverMode.ClimbDunk &&
+       this.subsystemCollection.isShooterAngleSubsystemAvailable() &&
+       this.subsystemCollection.isClimberSubsystemAvailable()) {
+      double desiredAngle = ShooterAngleSubsystem.positionToDegrees(ShooterPosition.ClimbStow);
+      group.addCommands(
+        new SequentialCommandGroup(
+          // TODO - THIS COULD GO CRUNCH IF NOT FIRST PUT AT THIS ANGLE ... BUT IF ITS NOT AT THIS ANGLE IT WOULD GO CRUNCH ANYWAY!!!
+          new ShooterSetAngleCommand(
+            desiredAngle,
+            this.subsystemCollection.getShooterAngleSubsystem()),
+          new ClimberArmToPosition(
+            this.subsystemCollection.getClimberSubsystem(),
+            ClimberArm.BothClimbers,
+            ClimberArmTargetPosition.HangRobot)
+        ),
+        new ButtonPressCommand(
+          "coDriverController.a()",
+            "CLIMBER Retract")
+      );
+    }
+    else if(currentDriverMode == CoDriverMode.SpeakerScore &&
+       this.subsystemCollection.isShooterOutfeedSubsystemAvailable() &&
+       this.subsystemCollection.isShooterAngleSubsystemAvailable() &&
+       this.subsystemCollection.isFeederSubsystemAvailable()) {
+      double desiredSpeed = ManualInputInterfaces.getOutfeedSpeedEnumInTargetMotorRpm(ShooterOutfeedSpeed.SpeakerCloseDistance);
+      double desiredAngle = ShooterAngleSubsystem.positionToDegrees(ShooterPosition.SpeakerCloseDistance);
+      group.addCommands(
+        new ShooterShootCommand(
+          desiredAngle,
+          desiredSpeed,
+          desiredSpeed,
+          this.subsystemCollection.getShooterOutfeedSubsystem(),
+          this.subsystemCollection.getShooterAngleSubsystem(),
+          this.subsystemCollection.getFeederSubsystem()),
+        new ButtonPressCommand(
+          "coDriverController.a()",
+            "SPEAKER Shot Close")
+      );
+    }
+    else {
+      group.addCommands(
+        new ButtonPressCommand(
+          "coDriverController.a()",
+          "<------------- NO OP!!! -------------->")
+      );
+    }
+    return group;
+  }
+
+  /**
+   * A method that understands how to build the proper co-driver POV Down commands
+   * based on the currently selected modes
+   * @return A parallel command on what will be done
+   */
+  private ParallelCommandGroup buildCoDriverPovDownButtonCommands() {
+    CoDriverMode currentDriverMode = this.getCoDriverMode();
+    ParallelCommandGroup group = new ParallelCommandGroup();
+    if((currentDriverMode == CoDriverMode.AmpScore || currentDriverMode == CoDriverMode.SpeakerScore) &&
+       this.subsystemCollection.isShooterAngleSubsystemAvailable()) {
+      double desiredAngle = ShooterAngleSubsystem.positionToDegrees(ShooterPosition.Stow);
+      group.addCommands(
+        new ShooterSetAngleCommand(
+          desiredAngle,
+          this.subsystemCollection.getShooterAngleSubsystem()),
+        new ButtonPressCommand(
+          "coDriverController.povDown()",
+            "Stow Shooter")
+      );
+    }
+    else {
+      group.addCommands(
+        new ButtonPressCommand(
+          "coDriverController.povDown()",
+          "<------------- NO OP!!! -------------->")
+      );
+    }
+    return group;
+  }
+
+  /**
+   * A method that understands how to build the proper co-driver POV Up commands
+   * based on the currently selected modes
+   * @return A parallel command on what will be done
+   */
+  private ParallelCommandGroup buildCoDriverPovUpButtonCommands() {
+    CoDriverMode currentDriverMode = this.getCoDriverMode();
+    ParallelCommandGroup group = new ParallelCommandGroup();
+    if((currentDriverMode == CoDriverMode.ClimbDunk) &&
+       this.subsystemCollection.isShooterAngleSubsystemAvailable()) {
+      double desiredAngle = ShooterAngleSubsystem.positionToDegrees(ShooterPosition.ClimbStow);
+      group.addCommands(
+        new ShooterSetAngleCommand(
+          desiredAngle,
+          this.subsystemCollection.getShooterAngleSubsystem()),
+        new ButtonPressCommand(
+          "coDriverController.povUp()",
+            "Climb Shooter")
+      );
+    }
+    else {
+      group.addCommands(
+        new ButtonPressCommand(
+          "coDriverController.povUp()",
+          "<------------- NO OP!!! -------------->")
+      );
+    }
+    return group;
+  }
+
+  /**
+   * A method to translate shooter positions into degrees
+   * @param position
+   * @return speed of target motors
+   */
+  private static double getOutfeedSpeedEnumInTargetMotorRpm(ShooterOutfeedSpeed outfeedSpeed){
+    double speed = Constants.shooterSpeedRpmStopped;
+    switch (outfeedSpeed) {
+      case Stopped:
+        speed = Constants.shooterSpeedRpmStopped;
+        break;
+      case SpeakerIdle:
+        speed = Constants.shooterSpeedRpmSpeakerIdle;
+        break;
+      case SpeakerCloseDistance:
+        speed = Constants.shooterSpeedRpmSpeakerCloseDistance;
+        break;
+      case SpeakerPodiumDistance:
+        speed = Constants.shooterSpeedRpmSpeakerPodiumDistance;
+        break;
+      case SpeakerRedlineDistance:
+        speed = Constants.shooterSpeedRpmSpeakerRedlineDistance;
+        break;
+      case AmpLow:
+        speed = Constants.shooterSpeedRpmAmpLow;
+        break;
+      case AmpMedium:
+        speed = Constants.shooterSpeedRpmAmpMedium;
+        break;
+      case AmpHigh:
+        speed = Constants.shooterSpeedRpmAmpHigh;
+        break;
+      default:
+        speed = Constants.shooterSpeedRpmStopped;
+        break;
+    }
+    return speed;
+  }
+
+
 }

@@ -50,7 +50,7 @@ public class ShooterSetAngleDefaultCommand extends ShooterSetAngleCommand {
   @Override
   public void execute() {
     desiredAngleDegrees += desiredAngleDegreesSupplier.getAsDouble();
-    desiredAngleDegrees = MotorUtils.clamp(desiredAngleDegrees, Constants.shooterAngleMinDegrees, Constants.shooterAngleMaxDegrees);
+    desiredAngleDegrees = MotorUtils.clamp(desiredAngleDegrees, Constants.shooterAngleDegreesMinimum, Constants.shooterAngleDegreesMaximum);
     super.desiredAngleDegrees = desiredAngleDegrees;
     super.execute();
   }

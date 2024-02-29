@@ -71,6 +71,51 @@ public class ShooterAngleSubsystem extends SubsystemBase {
   }
 
   /**
+   * A method to translate shooter positions into degrees
+   * @param position
+   * @return degrees
+   */
+  public static double positionToDegrees(ShooterPosition position){
+    double angle = Constants.shooterAngleDegreesMinimum;
+    switch (position) {
+      case Stow:
+        angle = Constants.shooterAngleDegreesStow;
+        break;
+      case SpeakerCloseDistance:
+        angle = Constants.shooterAngleDegreesSpeakerCloseDistance;
+        break;
+      case SpeakerPodiumDistance:
+        angle = Constants.shooterAngleDegreesSpeakerPodiumDistance;
+        break;
+      case SpeakerRedlineDistance:
+        angle = Constants.shooterAngleDegreesSpeakerRedlineDistance;
+        break;
+      case AmpLow:
+        angle = Constants.shooterAngleDegreesAmpLow;
+        break;
+      case AmpMedium:
+        angle = Constants.shooterAngleDegreesAmpMedium;
+        break;
+      case AmpHigh:
+        angle = Constants.shooterAngleDegreesAmpHigh;
+        break;
+      case ClimbStow:
+        angle = Constants.shooterAngleDegreesClimbStow;
+        break;
+      case Minimum:
+        angle = Constants.shooterAngleDegreesMinimum;
+        break;
+      case Maximum:
+        angle = Constants.shooterAngleDegreesMaximum;
+        break;
+      default:
+        angle = Constants.shooterAngleDegreesStow;
+        break;
+    }
+    return angle;
+  }
+
+  /**
    * A method to get the shooter angle
    * @return angle in degrees
    */
@@ -108,42 +153,15 @@ public class ShooterAngleSubsystem extends SubsystemBase {
   }
 
   /**
-   * A method to translate shooter positions into degrees
-   * @param position
-   * @return degrees
-   */
-  public double positionToDegrees(ShooterPosition position){
-    double angle = Constants.shooterAngleMinDegrees;
-    switch (position) {
-      case Stow:
-        angle = Constants.shooterAngleStowDegrees;
-        break;
-      case Minimum:
-        angle = Constants.shooterAngleMinDegrees;
-        break;
-      case Medium:
-        angle = (Constants.shooterAngleMaxDegrees + Constants.shooterAngleMinDegrees) / 2;
-        break;
-      case Maximum:
-        angle = Constants.shooterAngleMaxDegrees;
-        break;
-      default:
-        angle = Constants.shooterAngleStowDegrees;
-        break;
-    }
-    return angle;
-  }
-
-  /**
    * A method to set the shooter angle
    * @param degrees
    */
   public void setAngleDegrees(double degrees){
     // System.out.println("Setting Shooter Angle to " + degrees + " degrees.");
-    double clampedDegrees = MotorUtils.clamp(degrees, Constants.shooterAngleMinDegrees, Constants.shooterAngleMaxDegrees);
+    double clampedDegrees = MotorUtils.clamp(degrees, Constants.shooterAngleDegreesMinimum, Constants.shooterAngleDegreesMaximum);
     if (clampedDegrees != degrees){
       System.out.println("Warning: Shooter Angle requested degrees of " + degrees + 
-      "exceeded bounds of [" + Constants.shooterAngleMinDegrees + " .. " + Constants.shooterAngleMaxDegrees +
+      "exceeded bounds of [" + Constants.shooterAngleDegreesMinimum + " .. " + Constants.shooterAngleDegreesMaximum +
       "]. Clamped to " + clampedDegrees + ".");
     }
     desiredAngleDegrees = clampedDegrees;
@@ -155,7 +173,7 @@ public class ShooterAngleSubsystem extends SubsystemBase {
    * @param position
    */
   public void setPosition(ShooterPosition position) {
-    double angle = positionToDegrees(position);
+    double angle = ShooterAngleSubsystem.positionToDegrees(position);
     setAngleDegrees(angle);
   }
 
