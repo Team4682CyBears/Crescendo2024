@@ -29,8 +29,8 @@ import frc.robot.commands.ButtonPressCommand;
 import frc.robot.commands.ClimberArmToHeight;
 import frc.robot.commands.ClimberArmToPosition;
 import frc.robot.commands.IntakeAndFeedNoteCommand;
-import frc.robot.commands.IntakeNoteCommand;
 import frc.robot.commands.RemoveNoteCommand;
+import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.ShooterIdleCommand;
 import frc.robot.commands.ShooterSetAngleCommand;
 import frc.robot.commands.ShooterShootCommand;
@@ -241,25 +241,31 @@ public class ManualInputInterfaces {
        this.subsystemCollection.isFeederSubsystemAvailable()) {
         // b button will intake a note
         this.driverController.b().onTrue(
-            new ParallelCommandGroup(
+            new SequentialCommandGroup(
+              new ButtonPressCommand(
+                "driverController.b()",
+                "intake note"),
               new IntakeAndFeedNoteCommand(
                 this.subsystemCollection.getIntakeSubsystem(),
                 this.subsystemCollection.getFeederSubsystem(),
-                FeederMode.FeedToShooter), 
-              new ButtonPressCommand(
-                "driverController.b()",
-                "intake note")
+                FeederMode.FeedToShooter),
+              new RumbleCommand(
+                this.coDriverControllerForRumbleOnly,
+                Constants.rumbleTimeSeconds)
               )
             );
         // y button will remove a note
         this.driverController.y().onTrue(
-            new ParallelCommandGroup(
+            new SequentialCommandGroup(
+              new ButtonPressCommand(
+                "driverController.y()",
+                "remove note"),
               new RemoveNoteCommand(
                 this.subsystemCollection.getIntakeSubsystem(),
                 this.subsystemCollection.getFeederSubsystem()), 
-              new ButtonPressCommand(
-                "driverController.y()",
-                "remove note")
+              new RumbleCommand(
+                this.coDriverControllerForRumbleOnly,
+                Constants.rumbleTimeSeconds)
               )
             );
       }
