@@ -68,6 +68,7 @@ public class CorrectableEncoderRevNeoPlusDigitalIoPort implements ICorrectableEn
             this.revNeoMotorEncoder.setPosition(this.encoderTicksAtStateChangeSetPoint);
             this.lastState = currentState;
             motorEncoderPositionReset = true;
+            System.out.println(">>>>>>> Climber Sensor triggered. Resetting motor encoder position");
         }
 
         return this.revNeoMotorEncoder.getPosition();

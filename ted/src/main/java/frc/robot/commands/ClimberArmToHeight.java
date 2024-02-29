@@ -57,12 +57,17 @@ public class ClimberArmToHeight extends Command {
     if(!this.updatedHeightSet) {
         if(requestedArm == ClimberArm.BothClimbers) {
             this.climber.setBothClimberHeightsInInches(this.requestedHeightInInches);
+            this.updatedHeightSet = true;
         }
         else if(requestedArm == ClimberArm.RightClimber) {
             this.climber.setRightClimberHeightInInches(this.requestedHeightInInches);
+            this.updatedHeightSet = true;
         }
         else if(requestedArm == ClimberArm.LeftClimber) {
-            this.climber.setRightClimberHeightInInches(this.requestedHeightInInches);
+            this.climber.setLeftClimberHeightInInches(this.requestedHeightInInches);
+            this.updatedHeightSet = true;
+            System.out.println(">>>>>>>Setting left climber target position to " + this.requestedHeightInInches);
+            System.out.println("Checking for done condition");
         }
         else {
             done = true;
@@ -77,6 +82,7 @@ public class ClimberArmToHeight extends Command {
         }
         else if(requestedArm == ClimberArm.LeftClimber) {
             done = this.climber.isLeftClimberWithinTolerance(Constants.climberStandardToleranceInches);
+            System.out.print(".");
         }
         else {
             done = true;
@@ -87,6 +93,7 @@ public class ClimberArmToHeight extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    System.out.println("Done setting climber to " + this.requestedHeightInInches);
     if(interrupted){
       done = true;
       System.out.println("interrupted end of ClimberArmToPosition ... ");

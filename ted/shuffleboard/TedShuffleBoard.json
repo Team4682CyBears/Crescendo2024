@@ -740,7 +740,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/ClimberArmsLeftArmMotionDescription",
-              "_title": "/SmartDashboard/ClimberArmsLeftArmMotionDescription",
+              "_title": "SmartDashboard/ClimberArmsLeftArmMotionDescription",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -753,7 +753,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/ClimberArmsLeftClimberHeightInInches",
-              "_title": "/SmartDashboard/ClimberArmsLeftClimberHeightInInches",
+              "_title": "SmartDashboard/ClimberArmsLeftClimberHeightInInches",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -766,7 +766,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/ClimberArmsLeftEncoderPosition",
-              "_title": "/SmartDashboard/ClimberArmsLeftEncoderPosition",
+              "_title": "SmartDashboard/ClimberArmsLeftEncoderPosition",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -779,7 +779,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/ClimberArmsLeftMotorSpeed",
-              "_title": "/SmartDashboard/ClimberArmsLeftMotorSpeed",
+              "_title": "SmartDashboard/ClimberArmsLeftMotorSpeed",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -792,7 +792,7 @@
             "content": {
               "_type": "Boolean Box",
               "_source0": "network_table:///SmartDashboard/ClimberArmsLeftSensorDetected",
-              "_title": "/SmartDashboard/ClimberArmsLeftSensorDetected",
+              "_title": "SmartDashboard/ClimberArmsLeftSensorDetected",
               "_glyph": 148,
               "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",
@@ -807,7 +807,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/ClimberArmsRightArmMotionDescription",
-              "_title": "/SmartDashboard/ClimberArmsRightArmMotionDescription",
+              "_title": "SmartDashboard/ClimberArmsRightArmMotionDescription",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -820,7 +820,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/ClimberArmsRightClimberHeightInInches",
-              "_title": "/SmartDashboard/ClimberArmsRightClimberHeightInInches",
+              "_title": "SmartDashboard/ClimberArmsRightClimberHeightInInches",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -833,7 +833,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/ClimberArmsRightEncoderPosition",
-              "_title": "/SmartDashboard/ClimberArmsRightEncoderPosition",
+              "_title": "SmartDashboard/ClimberArmsRightEncoderPosition",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -846,7 +846,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/ClimberArmsRightMotorSpeed",
-              "_title": "/SmartDashboard/ClimberArmsRightMotorSpeed",
+              "_title": "SmartDashboard/ClimberArmsRightMotorSpeed",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -859,7 +859,7 @@
             "content": {
               "_type": "Boolean Box",
               "_source0": "network_table:///SmartDashboard/ClimberArmsRightSensorDetected",
-              "_title": "/SmartDashboard/ClimberArmsRightSensorDetected",
+              "_title": "SmartDashboard/ClimberArmsRightSensorDetected",
               "_glyph": 148,
               "_showGlyph": false,
               "Colors/Color when true": "#7CFC00FF",

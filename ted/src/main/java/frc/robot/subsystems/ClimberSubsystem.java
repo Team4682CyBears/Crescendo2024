@@ -46,7 +46,7 @@ public class ClimberSubsystem extends SubsystemBase{
     private static final boolean spoolWindingIsPositiveSparkMaxNeoMotorOutput = true;
 
     // TODO change this to final speed when everyone is ready for it
-    private static final double neoMotorSpeedReductionFactor = 0.1;
+    private static final double neoMotorSpeedReductionFactor = 0.3;
 
     /* *********************************************************************
     MEMBERS
@@ -166,8 +166,9 @@ public class ClimberSubsystem extends SubsystemBase{
     public boolean isLeftClimberWithinTolerance(double toleranceInches) {
         double currentHeight = this.getLeftClimberHeightInInches();
         double currentTargetHeight = this.convertMotorEncoderPositionToClimberArmsHeight(this.targetLeftMotorEncoderTicks);
+        System.out.println("Left Climber isDone?  currentHeight: " + currentHeight + " current target height " + currentTargetHeight + "emcoder ticks " + targetLeftMotorEncoderTicks);
         boolean isDone =  (currentHeight >= currentTargetHeight - toleranceInches  && currentHeight <= currentTargetHeight + toleranceInches) ||
-            currentHeight >= ClimberSubsystem.maximumOverageArmHeightInches || currentHeight <= ClimberSubsystem.minimumOverageArmHeightInches;
+            currentHeight >= ClimberSubsystem.maximumOverageArmHeightInches; //TODO PUT THIS BACK!!! || currentHeight <= ClimberSubsystem.minimumOverageArmHeightInches;
         return isDone;
     }
 
@@ -199,7 +200,7 @@ public class ClimberSubsystem extends SubsystemBase{
         double currentLeftHeight = this.getLeftClimberHeightInInches();
         double currentRightHeight = this.getRightClimberHeightInInches();
         double targetLeftHeight = this.convertClimberArmsHeightToMotorEncoderPosition(this.targetLeftMotorEncoderTicks);
-        double targetRightHeight = this.convertClimberArmsHeightToMotorEncoderPosition(this.targetLeftMotorEncoderTicks);
+        double targetRightHeight = this.convertClimberArmsHeightToMotorEncoderPosition(this.targetRightMotorEncoderTicks);
         boolean isLeftWithinTolerance =  (Math.abs(currentLeftHeight - targetLeftHeight) <= Constants.climberStandardToleranceInches);
         boolean isRightWithinTolerance =  (Math.abs(currentRightHeight - targetRightHeight) <= Constants.climberStandardToleranceInches);
 
