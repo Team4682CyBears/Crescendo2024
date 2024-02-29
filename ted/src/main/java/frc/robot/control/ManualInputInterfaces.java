@@ -28,6 +28,7 @@ import frc.robot.commands.AllStopCommand;
 import frc.robot.commands.ButtonPressCommand;
 import frc.robot.commands.ClimberArmToHeight;
 import frc.robot.commands.ClimberArmToPosition;
+import frc.robot.commands.FeedNoteCommand;
 import frc.robot.commands.IntakeAndFeedNoteCommand;
 import frc.robot.commands.RemoveNoteCommand;
 import frc.robot.commands.RumbleCommand;
@@ -815,7 +816,18 @@ public class ManualInputInterfaces {
   private ParallelCommandGroup buildCoDriverPovUpButtonCommands() {
     CoDriverMode currentDriverMode = this.getCoDriverMode();
     ParallelCommandGroup group = new ParallelCommandGroup();
-    if((currentDriverMode == CoDriverMode.ClimbDunk) &&
+    if((currentDriverMode == CoDriverMode.AmpScore || currentDriverMode == CoDriverMode.SpeakerScore) &&
+       this.subsystemCollection.isFeederSubsystemAvailable()) {
+      group.addCommands(
+        new FeedNoteCommand(
+          this.subsystemCollection.getFeederSubsystem(),
+          this.getFeederMode()),
+        new ButtonPressCommand(
+          "coDriverController.povUp()",
+            "Feeder Manual Feed")
+      );
+    }
+    else if((currentDriverMode == CoDriverMode.ClimbDunk) &&
        this.subsystemCollection.isShooterAngleSubsystemAvailable()) {
       double desiredAngle = ShooterAngleSubsystem.positionToDegrees(ShooterPosition.ClimbStow);
       group.addCommands(

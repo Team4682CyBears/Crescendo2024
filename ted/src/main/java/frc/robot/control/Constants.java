@@ -162,21 +162,21 @@ public final class Constants {
     // speeds for different spots on field
     public static final double shooterSpeedRpmStopped = 0;
     public static final double shooterSpeedRpmSpeakerIdle = 3000;
-    public static final double shooterSpeedRpmSpeakerCloseDistance = 3000;
-    public static final double shooterSpeedRpmSpeakerPodiumDistance = 4000;
+    public static final double shooterSpeedRpmSpeakerCloseDistance = 4000;
+    public static final double shooterSpeedRpmSpeakerPodiumDistance = 5500;
     public static final double shooterSpeedRpmSpeakerRedlineDistance = 6250;
     public static final double shooterSpeedRpmAmpIdle = 200;
-    public static final double shooterSpeedRpmAmpLow = 300;
-    public static final double shooterSpeedRpmAmpMedium = 400;
-    public static final double shooterSpeedRpmAmpHigh = 500;
+    public static final double shooterSpeedRpmAmpLow = 350;
+    public static final double shooterSpeedRpmAmpMedium = 375;
+    public static final double shooterSpeedRpmAmpHigh = 400;
     // angles for different spots on field
     public static final double shooterAngleDegreesStow = 45; 
-    public static final double shooterAngleDegreesSpeakerCloseDistance = 45;
+    public static final double shooterAngleDegreesSpeakerCloseDistance = 55;
     public static final double shooterAngleDegreesSpeakerPodiumDistance = 40;
-    public static final double shooterAngleDegreesSpeakerRedlineDistance = 35;
-    public static final double shooterAngleDegreesAmpLow = 108;
-    public static final double shooterAngleDegreesAmpMedium = 109;
-    public static final double shooterAngleDegreesAmpHigh = 110;
+    public static final double shooterAngleDegreesSpeakerRedlineDistance = 24;
+    public static final double shooterAngleDegreesAmpLow = 109.0;
+    public static final double shooterAngleDegreesAmpMedium = 109.5;
+    public static final double shooterAngleDegreesAmpHigh = 110.0;
     public static final double shooterAngleDegreesClimbStow = 90; 
     public static final double shooterAngleDegreesMinimum = 20;
     public static final double shooterAngleDegreesMaximum = 110;
