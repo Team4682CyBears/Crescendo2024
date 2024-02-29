@@ -27,14 +27,11 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AllStopCommand;
 import frc.robot.commands.ButtonPressCommand;
 import frc.robot.commands.ClimberArmToPosition;
-import frc.robot.commands.FeedNoteCommand;
 import frc.robot.commands.IntakeAndFeedNoteCommand;
 import frc.robot.commands.IntakeNoteCommand;
 import frc.robot.commands.RemoveNoteCommand;
 import frc.robot.commands.ShooterSetAngleCommand;
-import frc.robot.commands.ShooterSetAngleDefaultCommand;
 import frc.robot.commands.ShooterShootCommand;
-import frc.robot.commands.ShooterSpinUpCommand;
 
 public class ManualInputInterfaces {
 
@@ -201,7 +198,18 @@ public class ManualInputInterfaces {
                 FeederMode.FeedToShooter), 
               new ButtonPressCommand(
                 "driverController.b()",
-                "intake")
+                "intake note")
+              )
+            );
+        // y button will remove a note
+        this.driverController.y().onTrue(
+            new ParallelCommandGroup(
+              new RemoveNoteCommand(
+                this.subsystemCollection.getIntakeSubsystem(),
+                this.subsystemCollection.getFeederSubsystem()), 
+              new ButtonPressCommand(
+                "driverController.y()",
+                "remove note")
               )
             );
       }
@@ -216,22 +224,6 @@ public class ManualInputInterfaces {
             "!!!!!!!!!!!!!!!!!!!! ALL STOP !!!!!!!!!!!!!!!!!!!!!")
           )
       );
-
-      if(this.subsystemCollection.isShooterOutfeedSubsystemAvailable() &&
-         this.subsystemCollection.isFeederSubsystemAvailable()) {
-        System.out.println("STARTING Registering this.driverController.a().whileTrue() ... ");
-        this.driverController.a().whileTrue(
-            new ParallelCommandGroup(
-              new ShooterShootCommand(
-                subsystemCollection.getShooterOutfeedSubsystem(), 
-                subsystemCollection.getFeederSubsystem()),
-              new ButtonPressCommand(
-                "driverController.a()",
-                "Shoot at speed!!")
-              )
-          );
-        System.out.println("FINISHED registering this.driverController.a().whileTrue() ... ");
-      }
 
       if(this.subsystemCollection.isDriveTrainPowerSubsystemAvailable() && 
          this.subsystemCollection.isDriveTrainSubsystemAvailable()){

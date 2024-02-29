@@ -12,6 +12,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.control.Constants;
+import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 
 /**
@@ -21,6 +22,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 public class RemoveNoteCommand extends Command
 {
   private IntakeSubsystem intake;
+  private FeederSubsystem feeder;
   private Timer timer = new Timer();
   private boolean done = false;
   
@@ -29,11 +31,12 @@ public class RemoveNoteCommand extends Command
   * 
   * @param intakeSubsystem - the intake subsystem
   */
-  public RemoveNoteCommand(IntakeSubsystem intakeSubsystem)
+  public RemoveNoteCommand(IntakeSubsystem intakeSubsystem, FeederSubsystem feederSubsystem)
   {
     this.intake = intakeSubsystem;
+    this.feeder = feederSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(intake);
+    addRequirements(intake, feeder);
   }
 
   // Called when the command is initially scheduled.
@@ -42,26 +45,23 @@ public class RemoveNoteCommand extends Command
   {
     // intentionally *not* setting intake speed to 0 here. 
     // If the intake is currently running, don't stop it. 
-    timer.reset();
-    timer.start();
-    done = false;
-    System.out.println("Starting IntakeNoteCommand");
+    this.timer.reset();
+    this.timer.start();
+    this.done = false;
+    System.out.println("Starting RemoveNoteCommand");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute()
   {
-    if (intake.isNoteDetected()){
-      intake.setAllStop();
-      done = true;
-    } else { // run intake
-      intake.setIntakeSpeed(Constants.removeSpeed);
-    }
-    if (timer.hasElapsed(Constants.intakeTimeoutSeconds))
+    this.intake.setIntakeSpeed(Constants.removeSpeed);
+    this.feeder.setFeederSpeed(Constants.feederReverseSpeed);
+    if (this.timer.hasElapsed(Constants.intakeTimeoutSeconds))
     {
-      intake.setAllStop();
-      done = true;
+      this.intake.setAllStop();
+      this.feeder.setAllStop();
+      this.done = true;
     }
   }
 
@@ -78,7 +78,7 @@ public class RemoveNoteCommand extends Command
     // other command is running. 
     if(interrupted)
     {
-    done = true;      
+      this.done = true;      
     }
   }
 
@@ -86,6 +86,6 @@ public class RemoveNoteCommand extends Command
   @Override
   public boolean isFinished()
   {
-    return done;
+    return this.done;
   }
 }
