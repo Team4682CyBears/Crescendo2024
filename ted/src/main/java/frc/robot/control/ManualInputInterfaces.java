@@ -30,6 +30,7 @@ import frc.robot.commands.ClimberArmToPosition;
 import frc.robot.commands.IntakeAndFeedNoteCommand;
 import frc.robot.commands.IntakeNoteCommand;
 import frc.robot.commands.RemoveNoteCommand;
+import frc.robot.commands.ShooterIdleCommand;
 import frc.robot.commands.ShooterSetAngleCommand;
 import frc.robot.commands.ShooterShootCommand;
 
@@ -352,6 +353,9 @@ public class ManualInputInterfaces {
             new InstantCommand(
               () -> this.setFeederMode(FeederMode.FeedToDunker)
             ),
+            new InstantCommand(
+              () -> this.setDefaultOutfeedSpeedToStopped()
+            ),
             new ButtonPressCommand(
             "coDriverController.rightTrigger()",
             "SET Climb / Dunk Mode!")
@@ -370,6 +374,9 @@ public class ManualInputInterfaces {
             new InstantCommand(
               () -> this.setFeederMode(FeederMode.FeedToShooter)
             ),
+            new InstantCommand(
+              () -> this.setDefaultOutfeedSpeedToStopped()
+            ),
             new ButtonPressCommand(
             "coDriverController.rightTrigger()",
             "SET Climb / Dunk Mode!")
@@ -387,6 +394,9 @@ public class ManualInputInterfaces {
             ),
             new InstantCommand(
               () -> this.setFeederMode(FeederMode.FeedToShooter)
+            ),
+            new InstantCommand(
+              () -> this.setDefaultOutfeedSpeedToStopped()
             ),
             new ButtonPressCommand(
             "coDriverController.rightTrigger()",
@@ -410,7 +420,7 @@ public class ManualInputInterfaces {
         this.driverController.start().onTrue(
           new ParallelCommandGroup(
             new InstantCommand(
-              () -> this.setDefaultOutfeedSpeedToStopped() // this method will only have effect when the proper modes are selected
+              () -> this.setDefaultOutfeedSpeedToStopped()
             ),
             new ButtonPressCommand(
               "coDriverController.back()",
@@ -470,12 +480,7 @@ public class ManualInputInterfaces {
    * Update the default outfeed speed to stopped - only when proper modes are selected
    */
   private void setDefaultOutfeedSpeedToStopped() {
-    if(this.currentCoDriverMode == CoDriverMode.SpeakerScore) {
-      this.currentDefaultOutfeedSpeedSelected = ShooterOutfeedSpeed.Stopped;
-    }
-    else if(this.currentCoDriverMode == CoDriverMode.SpeakerScore) {
-      this.currentDefaultOutfeedSpeedSelected = ShooterOutfeedSpeed.AmpIdle;
-    }
+    this.currentDefaultOutfeedSpeedSelected = ShooterOutfeedSpeed.Stopped;
   }
 
   /**
@@ -498,7 +503,7 @@ public class ManualInputInterfaces {
        this.subsystemCollection.isShooterOutfeedSubsystemAvailable() &&
        this.subsystemCollection.isShooterAngleSubsystemAvailable() &&
        this.subsystemCollection.isFeederSubsystemAvailable()) {
-      double desiredSpeed = ManualInputInterfaces.getOutfeedSpeedEnumInTargetMotorRpm(ShooterOutfeedSpeed.AmpHigh);
+      double desiredSpeed = ShooterIdleCommand.getOutfeedSpeedEnumInTargetMotorRpm(ShooterOutfeedSpeed.AmpHigh);
       double desiredAngle = ShooterAngleSubsystem.positionToDegrees(ShooterPosition.AmpHigh);
       group.addCommands(
         new ShooterShootCommand(
@@ -536,7 +541,7 @@ public class ManualInputInterfaces {
        this.subsystemCollection.isShooterOutfeedSubsystemAvailable() &&
        this.subsystemCollection.isShooterAngleSubsystemAvailable() &&
        this.subsystemCollection.isFeederSubsystemAvailable()) {
-      double desiredSpeed = ManualInputInterfaces.getOutfeedSpeedEnumInTargetMotorRpm(ShooterOutfeedSpeed.SpeakerRedlineDistance);
+      double desiredSpeed = ShooterIdleCommand.getOutfeedSpeedEnumInTargetMotorRpm(ShooterOutfeedSpeed.SpeakerRedlineDistance);
       double desiredAngle = ShooterAngleSubsystem.positionToDegrees(ShooterPosition.SpeakerRedlineDistance);
       group.addCommands(
         new ShooterShootCommand(
@@ -573,7 +578,7 @@ public class ManualInputInterfaces {
        this.subsystemCollection.isShooterOutfeedSubsystemAvailable() &&
        this.subsystemCollection.isShooterAngleSubsystemAvailable() &&
        this.subsystemCollection.isFeederSubsystemAvailable()) {
-      double desiredSpeed = ManualInputInterfaces.getOutfeedSpeedEnumInTargetMotorRpm(ShooterOutfeedSpeed.AmpMedium);
+      double desiredSpeed = ShooterIdleCommand.getOutfeedSpeedEnumInTargetMotorRpm(ShooterOutfeedSpeed.AmpMedium);
       double desiredAngle = ShooterAngleSubsystem.positionToDegrees(ShooterPosition.AmpMedium);
       group.addCommands(
         new ShooterShootCommand(
@@ -616,7 +621,7 @@ public class ManualInputInterfaces {
        this.subsystemCollection.isShooterOutfeedSubsystemAvailable() &&
        this.subsystemCollection.isShooterAngleSubsystemAvailable() &&
        this.subsystemCollection.isFeederSubsystemAvailable()) {
-      double desiredSpeed = ManualInputInterfaces.getOutfeedSpeedEnumInTargetMotorRpm(ShooterOutfeedSpeed.SpeakerPodiumDistance);
+      double desiredSpeed = ShooterIdleCommand.getOutfeedSpeedEnumInTargetMotorRpm(ShooterOutfeedSpeed.SpeakerPodiumDistance);
       double desiredAngle = ShooterAngleSubsystem.positionToDegrees(ShooterPosition.SpeakerPodiumDistance);
       group.addCommands(
         new ShooterShootCommand(
@@ -653,7 +658,7 @@ public class ManualInputInterfaces {
        this.subsystemCollection.isShooterOutfeedSubsystemAvailable() &&
        this.subsystemCollection.isShooterAngleSubsystemAvailable() &&
        this.subsystemCollection.isFeederSubsystemAvailable()) {
-      double desiredSpeed = ManualInputInterfaces.getOutfeedSpeedEnumInTargetMotorRpm(ShooterOutfeedSpeed.AmpLow);
+      double desiredSpeed = ShooterIdleCommand.getOutfeedSpeedEnumInTargetMotorRpm(ShooterOutfeedSpeed.AmpLow);
       double desiredAngle = ShooterAngleSubsystem.positionToDegrees(ShooterPosition.AmpLow);
       group.addCommands(
         new ShooterShootCommand(
@@ -692,7 +697,7 @@ public class ManualInputInterfaces {
        this.subsystemCollection.isShooterOutfeedSubsystemAvailable() &&
        this.subsystemCollection.isShooterAngleSubsystemAvailable() &&
        this.subsystemCollection.isFeederSubsystemAvailable()) {
-      double desiredSpeed = ManualInputInterfaces.getOutfeedSpeedEnumInTargetMotorRpm(ShooterOutfeedSpeed.SpeakerCloseDistance);
+      double desiredSpeed = ShooterIdleCommand.getOutfeedSpeedEnumInTargetMotorRpm(ShooterOutfeedSpeed.SpeakerCloseDistance);
       double desiredAngle = ShooterAngleSubsystem.positionToDegrees(ShooterPosition.SpeakerCloseDistance);
       group.addCommands(
         new ShooterShootCommand(
@@ -776,45 +781,4 @@ public class ManualInputInterfaces {
     }
     return group;
   }
-
-  /**
-   * A method to translate shooter positions into degrees
-   * @param position
-   * @return speed of target motors
-   */
-  private static double getOutfeedSpeedEnumInTargetMotorRpm(ShooterOutfeedSpeed outfeedSpeed){
-    double speed = Constants.shooterSpeedRpmStopped;
-    switch (outfeedSpeed) {
-      case Stopped:
-        speed = Constants.shooterSpeedRpmStopped;
-        break;
-      case SpeakerIdle:
-        speed = Constants.shooterSpeedRpmSpeakerIdle;
-        break;
-      case SpeakerCloseDistance:
-        speed = Constants.shooterSpeedRpmSpeakerCloseDistance;
-        break;
-      case SpeakerPodiumDistance:
-        speed = Constants.shooterSpeedRpmSpeakerPodiumDistance;
-        break;
-      case SpeakerRedlineDistance:
-        speed = Constants.shooterSpeedRpmSpeakerRedlineDistance;
-        break;
-      case AmpLow:
-        speed = Constants.shooterSpeedRpmAmpLow;
-        break;
-      case AmpMedium:
-        speed = Constants.shooterSpeedRpmAmpMedium;
-        break;
-      case AmpHigh:
-        speed = Constants.shooterSpeedRpmAmpHigh;
-        break;
-      default:
-        speed = Constants.shooterSpeedRpmStopped;
-        break;
-    }
-    return speed;
-  }
-
-
 }

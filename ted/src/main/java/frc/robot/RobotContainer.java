@@ -331,7 +331,9 @@ public class RobotContainer {
     this.subsystems.isManualInputInterfacesAvailable()) {
       // Set up the default command for the shooter.
       this.subsystems.getShooterOutfeedSubsystem().setDefaultCommand(
-        new ShootAllStopCommand(this.subsystems.getShooterOutfeedSubsystem()));
+        new ShooterIdleCommand(
+          this.subsystems.getShooterOutfeedSubsystem(),
+          this.subsystems.getManualInputInterfaces()));
     }
 
     if(this.subsystems.isShooterAngleSubsystemAvailable() && 
