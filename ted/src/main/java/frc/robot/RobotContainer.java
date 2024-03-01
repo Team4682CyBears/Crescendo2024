@@ -240,6 +240,13 @@ public class RobotContainer {
       InstalledHardware.navxInstalled) {
       // The robot's subsystems and commands are defined here...
       subsystems.setDriveTrainSubsystem(new DrivetrainSubsystem());
+      // Explicitly set the absolute encoder offsets. Sometimes they fail to get set
+      // in the constructor.
+      try {
+        subsystems.getDriveTrainSubsystem().setAbsoluteEncoderOffsets();
+      } catch(Exception e) {
+        System.out.println("ERROR: Setting swerve absolute encoder offsets failed!");
+      }
       subsystems.getDriveTrainSubsystem().zeroRobotPosition(); // can I add this?
       subsystems.setDriveTrainPowerSubsystem(new DrivetrainPowerSubsystem(subsystems.getDriveTrainSubsystem()));
       SmartDashboard.putData("Debug: DrivetrainSub", subsystems.getDriveTrainSubsystem());
