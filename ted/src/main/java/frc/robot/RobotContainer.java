@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.robot.common.ClimberArm;
 import frc.robot.common.FeederMode;
 import frc.robot.common.TestTrajectories;
 import frc.robot.control.InstalledHardware;
@@ -169,6 +170,19 @@ public class RobotContainer {
         new ChassisSpeeds(0.6, 0.0, 0.0),
         3.0));
     }
+
+    if (this.subsystems.isClimberSubsystemAvailable()) {
+      SmartDashboard.putData(
+        "Climber Left to 10",
+        new ClimberArmToHeight(this.subsystems.getClimberSubsystem(), ClimberArm.LeftClimber, 10.0)
+      );
+      SmartDashboard.putData(
+        "Climber Left to 0",
+        new ClimberArmToHeight(this.subsystems.getClimberSubsystem(), ClimberArm.LeftClimber, 0.0)
+      );
+
+    }
+
   }
 
   public Command getAutonomousCommand() {

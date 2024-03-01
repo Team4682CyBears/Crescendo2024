@@ -47,31 +47,31 @@ public class InstalledHardware
     public static final boolean rightRearDriveInstalled = true;
 
     // Intake Related Hardware
-    public static final boolean intakeInstalled = true;
+    public static final boolean intakeInstalled = false;
 
     // Feeder Related Hardware
-    public static final boolean feederInstalled = true;
+    public static final boolean feederInstalled = false;
 
     // TOF Sensor Hardware
     // Important! You must disable any TOF sensor that is not installed!! 
     // If you try to configure a TOF sensor that is not installed
     // the other TOF sensors that are installed will not work. 
     public static final boolean intakeTofInstalled = false;
-    public static final boolean feederToShooterTofInstalled = true;
+    public static final boolean feederToShooterTofInstalled = false;
     public static final boolean feederToDunkerTofInstalled = false;
 
     // Shooter Related Hardware
-    public static final boolean shooterOutfeedInstalled = true;
-    public static final boolean shooterAngleInstalled = true;
+    public static final boolean shooterOutfeedInstalled = false;
+    public static final boolean shooterAngleInstalled = false;
     // for testing, to decrease the power of the shooter angle mechanism, 
     // reduce the left motor gear box to 10x (instaed of 100x)
     // and disconnect the right motor from the chain. 
-    public static final boolean shooterRightAngleMotorInstalled = true;
+    public static final boolean shooterRightAngleMotorInstalled = false;
     public static final boolean shooterAngleCanCoderInstalled = false; 
 
     // Climber Sensor Related Hardware
-    public static final boolean leftClimberInstalled = false;
-    public static final boolean rightClimberInstalled = false;
-    public static final boolean leftClimberSensorInstalled = false;
-    public static final boolean rightClimberSensorInstalled = false;
+    public static final boolean leftClimberInstalled = true;
+    public static final boolean rightClimberInstalled = true;
+    public static final boolean leftClimberSensorInstalled = true;
+    public static final boolean rightClimberSensorInstalled = true;
 }
