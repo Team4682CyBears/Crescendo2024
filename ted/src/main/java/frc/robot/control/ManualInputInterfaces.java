@@ -56,36 +56,23 @@ public class ManualInputInterfaces {
   }
 
   /**
-   * A method that understands how to build the proper climber command group
-   * @return A parallel command on what will be done
+   * A method that understands how to find the requested shooter angle
+   * @return A double representing the next angle to request
    */
-  public ParallelCommandGroup buildDefaultShooterAngleCommand() {
-    CoDriverMode currentDriverMode = this.getCoDriverMode();
-    ParallelCommandGroup group = new ParallelCommandGroup();
-    if((currentDriverMode == CoDriverMode.AmpScore || currentDriverMode == CoDriverMode.SpeakerScore) &&
-       this.subsystemCollection.isShooterAngleSubsystemAvailable()) {
-
+  public double getRequestedShooterAngle() {
+    double updatedAngle = Constants.shooterAngleDegreesStow;
+    if(this.subsystemCollection.isShooterAngleSubsystemAvailable()) {
       // remember that the Y on xbox will be negative upward
       double stickInput = coDriverController.getRightY();
-      double updatedAngle = this.subsystemCollection.getShooterAngleSubsystem().getAngleDegrees(); 
-      boolean doAngleCommand = false;
+      updatedAngle = this.subsystemCollection.getShooterAngleSubsystem().getAngleDegrees(); 
       if(stickInput > Constants.shooterControllerInputPositiveStickAngleIncrement){
         updatedAngle -= Constants.shooterAngleStickIncrementMagnitude;
-        doAngleCommand = true;
       }
       else if (stickInput < Constants.shooterControllerInputNegativeStickAngleIncrement) {
         updatedAngle += Constants.shooterAngleStickIncrementMagnitude;
-        doAngleCommand = true;
-      }
-
-      if(doAngleCommand) {
-        group.addCommands(
-          new ShooterSetAngleCommand(
-            updatedAngle,
-            this.subsystemCollection.getShooterAngleSubsystem()));
       }
     }
-    return group;
+    return updatedAngle;
   }
 
   /**

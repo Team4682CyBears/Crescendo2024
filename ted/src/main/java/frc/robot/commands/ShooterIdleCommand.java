@@ -10,6 +10,7 @@
 
 package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.common.CoDriverMode;
 import frc.robot.common.ShooterOutfeedSpeed;
 import frc.robot.control.Constants;
 import frc.robot.control.ManualInputInterfaces;
@@ -85,8 +86,13 @@ public class ShooterIdleCommand extends Command
   @Override
   public void initialize()
   {
-    this.shotSpeed = 
-    ShooterIdleCommand.getOutfeedSpeedEnumInTargetMotorRpm(input.getShooterOutfeedSpeed());
+    CoDriverMode currentMode = this.input.getCoDriverMode();
+    if(currentMode == CoDriverMode.AmpScore || currentMode == CoDriverMode.SpeakerScore) {
+      this.shotSpeed = ShooterIdleCommand.getOutfeedSpeedEnumInTargetMotorRpm(input.getShooterOutfeedSpeed());
+    }
+    else{
+      this.shotSpeed = 0.0;
+    }    
   }
 
   // Called every time the scheduler runs while the command is scheduled.

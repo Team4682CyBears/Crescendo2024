@@ -21,7 +21,7 @@ public class ShooterSetAngleCommand extends Command {
 
   private ShooterAngleSubsystem shooterAngleSubsystem;
   protected double desiredAngleDegrees; 
-  private boolean done = false;
+  protected boolean done = false;
 
   /**
    * Constructor for ShooterShootCommand

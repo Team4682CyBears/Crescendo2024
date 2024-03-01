@@ -174,24 +174,20 @@ public class RobotContainer {
     }
 
     if (this.subsystems.isClimberSubsystemAvailable()) {
-      /*
       SmartDashboard.putData(
         "Climber Left to 10",
         new ClimberArmToHeight(
           this.subsystems.getClimberSubsystem(),
-          ClimberArm.LeftClimber, 
-          () -> (10.0),
-          () -> (10.0))
+          0.0,
+          0.0)
       );
       SmartDashboard.putData(
         "Climber Left to 0",
         new ClimberArmToHeight(
           this.subsystems.getClimberSubsystem(),
-          ClimberArm.LeftClimber, 
-          () -> (0.0),
-          () -> (0.0))
+          0.0,
+          0.0)
       );
-*/
     }
 
   }
@@ -365,12 +361,14 @@ public class RobotContainer {
       // shooter angle subsystem default command
       if(this.subsystems.isShooterAngleSubsystemAvailable()) {
         this.subsystems.getShooterAngleSubsystem().setDefaultCommand(
-            new InstantCommand(() -> RobotContainer.getShooterDefaultCommand(subsystems)));
+          new ShooterSetAngleDefaultCommand(
+            () -> RobotContainer.getCoDriverRequestedShooterAngle(subsystems),
+            this.subsystems.getShooterAngleSubsystem(),
+            this.subsystems.getManualInputInterfaces()));
       }
 
       // climber subsystem default command
-      if(this.subsystems.isClimberSubsystemAvailable() &&
-         this.subsystems.isManualInputInterfacesAvailable()) {
+      if(this.subsystems.isClimberSubsystemAvailable()) {
         this.subsystems.getClimberSubsystem().setDefaultCommand(
           new ClimberArmDefaultSpeed(
             this.subsystems.getClimberSubsystem(),
@@ -407,12 +405,12 @@ public class RobotContainer {
   }
 
   /**
-   * A wrapper method to build up the default command group for shooter
+   * A wrapper method to obtain the next shooter angle to try
    * @param collection the subsystems in effect here
-   * @return a parallel command group of commands to run
+   * @return a double representing the shooter angle
    */
-  private static ParallelCommandGroup getShooterDefaultCommand(SubsystemCollection collection) {
-      return collection.getManualInputInterfaces().buildDefaultShooterAngleCommand();
+  private static double getCoDriverRequestedShooterAngle(SubsystemCollection collection) {
+      return collection.getManualInputInterfaces().getRequestedShooterAngle();
   }
 
   /**
@@ -421,7 +419,7 @@ public class RobotContainer {
    * @return - a double representing the stick input
    */
   private static double getCoDriverLeftStickY(SubsystemCollection collection) {
-    return collection.getManualInputInterfaces().getCoDriverLeftStickY();
+    return collection.getManualInputInterfaces().getCoDriverLeftStickY() * -1.0; // make sure to invert xbox controller Y stick
   }
 
     /**
@@ -430,7 +428,7 @@ public class RobotContainer {
    * @return - a double representing the stick input
    */
   private static double getCoDriverRightStickY(SubsystemCollection collection) {
-    return collection.getManualInputInterfaces().getCoDriverRightStickY();
+    return collection.getManualInputInterfaces().getCoDriverRightStickY() * -1.0; // make sure to invert xbox controller Y stick
   }
 
 }
