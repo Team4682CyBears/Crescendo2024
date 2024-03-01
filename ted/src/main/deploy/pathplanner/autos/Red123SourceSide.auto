@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.35,
-      "y": 5.55
+      "x": 1.3499985088160098,
+      "y": 2.65
     },
     "rotation": 0
   },
@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "StraightBackToNote"
+            "pathName": "RedStraightBackToNote"
           }
         },
         {
@@ -44,7 +44,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "NoteToStage"
+            "pathName": "RedNoteToStage"
           }
         },
         {
@@ -68,7 +68,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "StageToMid"
+            "pathName": "RedStageToMid"
           }
         },
         {

@@ -3,9 +3,11 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
-    "123SourceSide",
+    "Blue123SourceSide",
+    "BlueSourceSideWing",
+    "RedSourceSideWing",
+    "Red123SourceSide",
     "Common",
-    "SourceSideWing",
     "Tests"
   ],
   "autoFolders": [],

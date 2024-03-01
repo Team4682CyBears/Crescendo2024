@@ -22,6 +22,7 @@ import frc.robot.common.TestTrajectories;
 import frc.robot.control.InstalledHardware;
 import frc.robot.control.ManualInputInterfaces;
 import frc.robot.control.SubsystemCollection;
+import frc.robot.control.AutonomousChooser;
 import com.pathplanner.lib.auto.AutoBuilder;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
@@ -38,6 +39,7 @@ import frc.robot.subsystems.ShooterAngleSubsystem;
 public class RobotContainer {
 
   private SubsystemCollection subsystems = new SubsystemCollection();
+  private final AutonomousChooser autonomousChooser = new AutonomousChooser(subsystems);
 
   public RobotContainer() {
 
@@ -89,14 +91,14 @@ public class RobotContainer {
     // commands to drive path planner test trajectories
     // Register Named Commands
 
-      Command shootPickShootAuto = AutoBuilder.buildAuto("ShootPickShoot");
-      SmartDashboard.putData("ShootPickShoot Auto", shootPickShootAuto);
+      //Command shootPickShootAuto = AutoBuilder.buildAuto("ShootPickShoot");
+      //SmartDashboard.putData("ShootPickShoot Auto", shootPickShootAuto);
 
-      Command sourceSideWingAuto = AutoBuilder.buildAuto("SourceSideWing");
-      SmartDashboard.putData("SourceSideWing Auto", sourceSideWingAuto);
+      //Command sourceSideWingAuto = AutoBuilder.buildAuto("SourceSideWing");
+      //SmartDashboard.putData("SourceSideWing Auto", sourceSideWingAuto);
 
-      Command oneTwoThreeSourceSideAuto = AutoBuilder.buildAuto("123SourceSide");
-      SmartDashboard.putData("123SourceSide Auto", oneTwoThreeSourceSideAuto);
+      //Command oneTwoThreeSourceSideAuto = AutoBuilder.buildAuto("123SourceSide");
+      //SmartDashboard.putData("123SourceSide Auto", oneTwoThreeSourceSideAuto);
 
     // Put command scheduler on dashboard
     SmartDashboard.putData(CommandScheduler.getInstance());
@@ -155,7 +157,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    return autonomousChooser.getCommand();
   }
 
   /**

@@ -35,8 +35,10 @@ public class AutonomousChooser {
     private Command redWing;
     private Command twoNote;
 
-    private AutonomousChooser(SubsystemCollection subsystems){
+    public AutonomousChooser(SubsystemCollection subsystems){
         this.subsystems = subsystems;
+        configureAutoBuilder();
+
         //TODO make so if we dont have shoot or intake etc we still get mobility
         if (subsystems.isDriveTrainPowerSubsystemAvailable() &&
         subsystems.isIntakeSubsystemAvailable() && subsystems.isFeederSubsystemAvailable() &&
