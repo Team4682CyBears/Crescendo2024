@@ -169,6 +169,7 @@ public class ClimberSubsystem extends SubsystemBase{
         System.out.println("Left Climber isDone?  currentHeight: " + currentHeight + " current target height " + currentTargetHeight + "emcoder ticks " + targetLeftMotorEncoderTicks);
         boolean isDone =  (currentHeight >= currentTargetHeight - toleranceInches  && currentHeight <= currentTargetHeight + toleranceInches) ||
             currentHeight >= ClimberSubsystem.maximumOverageArmHeightInches; //TODO PUT THIS BACK!!! || currentHeight <= ClimberSubsystem.minimumOverageArmHeightInches;
+            // previously, the climber starts at -.25 and immediately returns isDone = true
         return isDone;
     }
 
@@ -212,16 +213,21 @@ public class ClimberSubsystem extends SubsystemBase{
             leftTargetTicks = targetLeftMotorEncoderTicks;
         }
         if(targetLeftHeight > currentLeftHeight) {
+            // climber is moving up
             if(currentLeftHeight > targetLeftHeight - ClimberSubsystem.slowSpeedToleranceInches) {
+                // climber is within tol of the target
                 leftTargetTicks = (this.convertClimberArmsHeightToMotorEncoderPosition((currentLeftHeight+targetLeftHeight)/2.0));
             }
         }
         else if(targetLeftHeight < currentLeftHeight) {
+            // climber is moving down
             if(currentLeftHeight < targetLeftHeight + ClimberSubsystem.slowSpeedToleranceInches) {
+                // climber is within tol of the target
                 leftTargetTicks = (this.convertClimberArmsHeightToMotorEncoderPosition((currentLeftHeight+targetLeftHeight)/2.0));
             }
         }
         leftPidController.setReference(leftTargetTicks, ControlType.kSmartMotion);
+        System.out.println(">>Setting left PID to target (tickst) " + leftTargetTicks);
 
         // right side
         if(isRightWithinTolerance) {

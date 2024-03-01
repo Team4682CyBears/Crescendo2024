@@ -865,6 +865,32 @@
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
+          },
+          "8,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Climber Left to 0",
+              "_title": "/SmartDashboard/Climber Left to 0",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "8,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Climber Left to 10",
+              "_title": "/SmartDashboard/Climber Left to 10",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
           }
         }
       }
@@ -874,6 +900,6 @@
     "x": -10.0,
     "y": 0.0,
     "width": 1936.0,
-    "height": 855.0
+    "height": 848.0
   }
 }
