@@ -54,12 +54,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "StageRotate"
-          }
-        },
-        {
           "type": "wait",
           "data": {
             "waitTime": 0.5
@@ -68,7 +62,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootFromNote"
+            "name": "ShootFromStage"
           }
         },
         {
@@ -81,18 +75,6 @@
           "type": "named",
           "data": {
             "name": "IntakeNote"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "RightToShoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootFromSourceWing"
           }
         }
       ]

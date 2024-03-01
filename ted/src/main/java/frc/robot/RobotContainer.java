@@ -85,12 +85,17 @@ public class RobotContainer {
     NamedCommands.registerCommand("ShootFromSpeaker",
         new ParallelCommandGroup(
             new ButtonPressCommand("PathPlanner", "ShootFromSpeaker"),
-            new ShooterShootCommand(54.0, 4000.0, 4000.0, this.subsystems.getShooterOutfeedSubsystem(),
+            new ShooterShootCommand(55.0, 4000.0, 4000.0, this.subsystems.getShooterOutfeedSubsystem(),
                 this.subsystems.getShooterAngleSubsystem(), this.subsystems.getFeederSubsystem())));
     NamedCommands.registerCommand("ShootFromNote",
         new ParallelCommandGroup(
             new ButtonPressCommand("PathPlanner", "ShootFromNote"),
-            new ShooterShootCommand(37.0, 6000.0, 6000.0, this.subsystems.getShooterOutfeedSubsystem(),
+            new ShooterShootCommand(42.0, 6000.0, 6000.0, this.subsystems.getShooterOutfeedSubsystem(),
+                this.subsystems.getShooterAngleSubsystem(), this.subsystems.getFeederSubsystem())));
+    NamedCommands.registerCommand("ShootFromStage",
+        new ParallelCommandGroup(
+            new ButtonPressCommand("PathPlanner", "ShootFromStage"),
+            new ShooterShootCommand(39.0, 6000.0, 6000.0, this.subsystems.getShooterOutfeedSubsystem(),
                 this.subsystems.getShooterAngleSubsystem(), this.subsystems.getFeederSubsystem())));
     NamedCommands.registerCommand("ShootFromSourceWing",
         new ParallelCommandGroup(
