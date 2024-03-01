@@ -2,8 +2,8 @@
 // Bishop Blanchet Robotics
 // Home of the Cybears
 // FRC - Crescendo - 2024
-// File: AutonomousChooser.java
-// Intent: Allows auto mode routine to be selected from shuffleboard
+// File: RobotContainer.java
+// Intent: main robot body
 // ************************************************************
 
 // ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
