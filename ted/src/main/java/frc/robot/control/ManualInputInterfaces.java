@@ -26,7 +26,6 @@ import frc.robot.subsystems.ShooterAngleSubsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AllStopCommand;
 import frc.robot.commands.ButtonPressCommand;
-import frc.robot.commands.ClimberArmToHeight;
 import frc.robot.commands.ClimberArmToPosition;
 import frc.robot.commands.FeedNoteCommand;
 import frc.robot.commands.IntakeAndFeedNoteCommand;
@@ -39,7 +38,7 @@ import frc.robot.commands.ShooterShootCommand;
 public class ManualInputInterfaces {
 
   // sets joystick variables to joysticks
-  private CommandXboxController driverController = new CommandXboxController(Constants.portDriverController); 
+  private CommandXboxController driverController = new CommandXboxController(1); 
   private CommandXboxController coDriverController = new CommandXboxController(Constants.portCoDriverController);
   private XboxController coDriverControllerForRumbleOnly = new XboxController(Constants.portCoDriverController);
 
@@ -60,59 +59,6 @@ public class ManualInputInterfaces {
    * A method that understands how to build the proper climber command group
    * @return A parallel command on what will be done
    */
-  public ParallelCommandGroup buildDefaultClimberCommand() {
-    CoDriverMode currentDriverMode = this.getCoDriverMode();
-    ParallelCommandGroup group = new ParallelCommandGroup();
-    if((currentDriverMode == CoDriverMode.ClimbDunk) &&
-       this.subsystemCollection.isClimberSubsystemAvailable()) {
-
-      // remember that the Y on xbox will be negative upward
-      double leftStickInput = coDriverController.getLeftY();
-      double leftClimberHeight = this.subsystemCollection.getClimberSubsystem().getLeftClimberHeightInInches(); 
-      boolean doLeftClimberCommand = false;
-      if(leftStickInput > Constants.climberControllerInputPositiveStickAngleIncrement){
-        leftClimberHeight = -Constants.climberAngleStickIncrementMagnitude;
-        doLeftClimberCommand = true;
-      }
-      else if (leftStickInput < Constants.climberControllerInputNegativeStickAngleIncrement) {
-        leftClimberHeight = Constants.climberAngleStickIncrementMagnitude;
-        doLeftClimberCommand = true;
-      }
-
-      double rightStickInput = coDriverController.getRightY();
-      double rightClimberHeight = this.subsystemCollection.getClimberSubsystem().getRightClimberHeightInInches(); 
-      boolean doRightClimberCommand = false;
-      if(rightStickInput > Constants.climberControllerInputPositiveStickAngleIncrement){
-        rightClimberHeight = -Constants.climberAngleStickIncrementMagnitude;
-        doRightClimberCommand = true;
-      }
-      else if (rightStickInput < Constants.climberControllerInputNegativeStickAngleIncrement) {
-        rightClimberHeight = Constants.climberAngleStickIncrementMagnitude;
-        doRightClimberCommand = true;
-      }
-
-      if(doLeftClimberCommand) {
-        group.addCommands(
-          new ClimberArmToHeight(
-            this.subsystemCollection.getClimberSubsystem(), 
-            ClimberArm.LeftClimber, 
-            leftClimberHeight));
-      }
-      if(doRightClimberCommand) {
-        group.addCommands(
-          new ClimberArmToHeight(
-            this.subsystemCollection.getClimberSubsystem(), 
-            ClimberArm.RightClimber, 
-            rightClimberHeight));
-      }
-    }
-    return group;
-  }
-
-  /**
-   * A method that understands how to build the proper climber command group
-   * @return A parallel command on what will be done
-   */
   public ParallelCommandGroup buildDefaultShooterAngleCommand() {
     CoDriverMode currentDriverMode = this.getCoDriverMode();
     ParallelCommandGroup group = new ParallelCommandGroup();
@@ -121,14 +67,14 @@ public class ManualInputInterfaces {
 
       // remember that the Y on xbox will be negative upward
       double stickInput = coDriverController.getRightY();
-      double updatedAngle = 0.0; 
+      double updatedAngle = this.subsystemCollection.getShooterAngleSubsystem().getAngleDegrees(); 
       boolean doAngleCommand = false;
       if(stickInput > Constants.shooterControllerInputPositiveStickAngleIncrement){
-        updatedAngle = -Constants.shooterAngleStickIncrementMagnitude;
+        updatedAngle -= Constants.shooterAngleStickIncrementMagnitude;
         doAngleCommand = true;
       }
       else if (stickInput < Constants.shooterControllerInputNegativeStickAngleIncrement) {
-        updatedAngle = Constants.shooterAngleStickIncrementMagnitude;
+        updatedAngle += Constants.shooterAngleStickIncrementMagnitude;
         doAngleCommand = true;
       }
 
@@ -176,7 +122,7 @@ public class ManualInputInterfaces {
 
   /**
    * A method to get the arcade drive X componet being input from humans
-   * @return - a double value associated with the magnitude of the x componet
+   * @return - a double value associated with the magnitude of the X componet
    */
   public double getInputArcadeDriveX(){
     return driverController.getLeftX();
@@ -184,7 +130,7 @@ public class ManualInputInterfaces {
 
   /**
    * A method to get the arcade drive X componet being input from humans
-   * @return - a double value associated with the magnitude of the x componet
+   * @return - a double value associated with the magnitude of the Y componet
    */
   public double getInputArcadeDriveY(){
     return driverController.getLeftY();
@@ -192,10 +138,26 @@ public class ManualInputInterfaces {
 
   /**
    * A method to get the spin drive X componet being input from humans
-   * @return - a double value associated with the magnitude of the x componet
+   * @return - a double value associated with the magnitude of the X componet
    */
   public double getInputSpinDriveX(){
     return driverController.getRightX();
+  }
+
+  /**
+   * A method to get the left y stick input from the co driver controller
+   * @return - a double value associated with the Y componet
+   */
+  public double getCoDriverLeftStickY() {
+    return coDriverController.getLeftY();
+  }
+
+  /**
+   * A method to get the right y stick input from the co driver controller
+   * @return - a double value associated with the Y componet
+   */
+  public double getCoDriverRightStickY() {
+    return coDriverController.getRightY();
   }
 
   /**
@@ -399,8 +361,8 @@ public class ManualInputInterfaces {
         );
 
       // first the climber dunk mode
-      if(this.subsystemCollection.isClimberSubsystemAvailable() &&
-         this.subsystemCollection.isShooterAngleSubsystemAvailable()) {
+      if(this.subsystemCollection.isClimberSubsystemAvailable()) {//&&
+//         this.subsystemCollection.isShooterAngleSubsystemAvailable()) {
         this.coDriverController.rightTrigger().onTrue(
           new ParallelCommandGroup(
             new InstantCommand(
@@ -443,7 +405,7 @@ public class ManualInputInterfaces {
       // third the amp shoot mode
       if(this.subsystemCollection.isShooterAngleSubsystemAvailable() &&
          this.subsystemCollection.isShooterOutfeedSubsystemAvailable()) {
-        this.coDriverController.rightBumper().onTrue(
+        this.coDriverController.leftBumper().onTrue(
           new ParallelCommandGroup(
             new InstantCommand(
               () -> this.setCoDriverMode(CoDriverMode.AmpScore)

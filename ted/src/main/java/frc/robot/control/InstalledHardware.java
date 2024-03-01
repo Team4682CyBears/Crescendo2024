@@ -36,15 +36,15 @@ public class InstalledHardware
     public static final boolean limelightInstalled = true;
 
     // External Input Hardware
-    public static final boolean driverXboxControllerInstalled = true;
+    public static final boolean driverXboxControllerInstalled = false;
     public static final boolean coDriverXboxControllerInstalled = true;
 
     // DriveTrain Related Hardware
-    public static final boolean tedDrivetrainInstalled = true; // true is ted, false is babybear/minibear
-    public static final boolean leftFrontDriveInstalled = true;
-    public static final boolean leftRearDriveInstalled = true;
-    public static final boolean rightFrontDriveInstalled = true;
-    public static final boolean rightRearDriveInstalled = true;
+    public static final boolean tedDrivetrainInstalled = false; // true is ted, false is babybear/minibear
+    public static final boolean leftFrontDriveInstalled = false;
+    public static final boolean leftRearDriveInstalled = false;
+    public static final boolean rightFrontDriveInstalled = false;
+    public static final boolean rightRearDriveInstalled = false;
 
     // Intake Related Hardware
     public static final boolean intakeInstalled = false;

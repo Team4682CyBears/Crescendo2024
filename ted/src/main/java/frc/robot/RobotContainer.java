@@ -72,11 +72,13 @@ public class RobotContainer {
     // TODO For debugging. Can remove for final competition build. 
     this.initializeDebugDashboard();
 
-    TestTrajectories testtrajectories = new TestTrajectories(this.subsystems.getDriveTrainSubsystem().getTrajectoryConfig());
+    if(this.subsystems.isDriveTrainSubsystemAvailable()) {
+      TestTrajectories testtrajectories = new TestTrajectories(this.subsystems.getDriveTrainSubsystem().getTrajectoryConfig());
 
-    SmartDashboard.putData("Basic Forward", new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testtrajectories.traverseSimpleForward));
-    SmartDashboard.putData("Forward Arc", new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testtrajectories.traverseForwardArc));
-    SmartDashboard.putData("Turn 90", new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testtrajectories.turn90));
+      SmartDashboard.putData("Basic Forward", new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testtrajectories.traverseSimpleForward));
+      SmartDashboard.putData("Forward Arc", new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testtrajectories.traverseForwardArc));
+      SmartDashboard.putData("Turn 90", new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testtrajectories.turn90));
+    }
 
     // Path Planner Path Commands
     // commands to drive path planner test trajectories
@@ -111,7 +113,7 @@ public class RobotContainer {
 
       SmartDashboard.putData("Shoot from speaker",
         new ShooterShootCommand(45.0, this.subsystems.getShooterOutfeedSubsystem(), this.subsystems.getShooterAngleSubsystem(), this.subsystems.getFeederSubsystem()));
-      }
+    }
 
     if (this.subsystems.isShooterOutfeedSubsystemAvailable()) {
       SmartDashboard.putData(
@@ -172,15 +174,24 @@ public class RobotContainer {
     }
 
     if (this.subsystems.isClimberSubsystemAvailable()) {
+      /*
       SmartDashboard.putData(
         "Climber Left to 10",
-        new ClimberArmToHeight(this.subsystems.getClimberSubsystem(), ClimberArm.LeftClimber, 10.0)
+        new ClimberArmToHeight(
+          this.subsystems.getClimberSubsystem(),
+          ClimberArm.LeftClimber, 
+          () -> (10.0),
+          () -> (10.0))
       );
       SmartDashboard.putData(
         "Climber Left to 0",
-        new ClimberArmToHeight(this.subsystems.getClimberSubsystem(), ClimberArm.LeftClimber, 0.0)
+        new ClimberArmToHeight(
+          this.subsystems.getClimberSubsystem(),
+          ClimberArm.LeftClimber, 
+          () -> (0.0),
+          () -> (0.0))
       );
-
+*/
     }
 
   }
@@ -358,9 +369,15 @@ public class RobotContainer {
       }
 
       // climber subsystem default command
-      if(this.subsystems.isClimberSubsystemAvailable()) {
+      if(this.subsystems.isClimberSubsystemAvailable() &&
+         this.subsystems.isManualInputInterfacesAvailable()) {
         this.subsystems.getClimberSubsystem().setDefaultCommand(
-            new InstantCommand(() -> RobotContainer.getClimberDefaultCommand(subsystems), this.subsystems.getClimberSubsystem()));
+          new ClimberArmDefaultSpeed(
+            this.subsystems.getClimberSubsystem(),
+            this.subsystems.getManualInputInterfaces(),
+            () -> RobotContainer.getCoDriverLeftStickY(this.subsystems),
+            () -> RobotContainer.getCoDriverRightStickY(this.subsystems))
+        );
       }
     }
   }
@@ -399,11 +416,21 @@ public class RobotContainer {
   }
 
   /**
-   * A wrapper method to build up the default command group for climbers
+   * A method to get the left stick of co driver controller from manual input interfaces
    * @param collection the subsystems in effect here
-   * @return a parallel command group of commands to run
+   * @return - a double representing the stick input
    */
-  private static ParallelCommandGroup getClimberDefaultCommand(SubsystemCollection collection) {
-      return collection.getManualInputInterfaces().buildDefaultClimberCommand();
+  private static double getCoDriverLeftStickY(SubsystemCollection collection) {
+    return collection.getManualInputInterfaces().getCoDriverLeftStickY();
   }
+
+    /**
+   * A method to get the left stick of co driver controller from manual input interfaces
+   * @param collection the subsystems in effect here
+   * @return - a double representing the stick input
+   */
+  private static double getCoDriverRightStickY(SubsystemCollection collection) {
+    return collection.getManualInputInterfaces().getCoDriverRightStickY();
+  }
+
 }

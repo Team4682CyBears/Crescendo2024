@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxRelativeEncoder;
 import com.revrobotics.SparkRelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
@@ -24,56 +25,73 @@ public class ClimberSubsystem extends SubsystemBase{
     // expected to be < 1.0 due to encoder granularity being lower for Rev/Neo
     private static final double climberArmsMotorEncoderTicksPerDegree = Constants.RevNeoEncoderTicksPerRevolution / Constants.DegreesPerRevolution; 
     // Based on discussion with XXX on XXX - ~??:1
-    private static final double climberArmsMotorToArmEffectiveGearRatio = (50.0/1.0);
+    private static final double climberArmsMotorToArmEffectiveGearRatio = (60.0/1.0);
 
     // important - this should be the maximum extension of the arms' hook and it must also be the length of the cord on the spool - in inches!
-    private static final double minimumOverageArmHeightInches = -0.1;
     private static final double minimumArmHeightInches = 0.0;
     private static final double maximumArmHeightInches = 19.5;
-    private static final double maximumOverageArmHeightInches = 19.6;
-    private static final double slowSpeedToleranceInches = 1.5;
     private static final double maximumHeightFromStoredPositionInches = maximumArmHeightInches - minimumArmHeightInches;
     // measurements of spool diameter in 4 discrete ranges
     // intended to be an average measurement of wire/chord on the spool when the spool is 'fractionaly wound'
     // for example when 0-25% of the cord is wound on the spool we need the diameter of the average winding to be placed in climberArmsSpoolDiameterInches0to25
     // TODO remove this logic, since the sting does not overlap itself on Ted spool design. 
-    private static final double climberArmsSpoolDiameterInches0to25 = 1.50; 
-    private static final double climberArmsSpoolDiameterInches26to50 = 1.51; 
-    private static final double climberArmsSpoolDiameterInches51to75 = 1.52; 
-    private static final double climberArmsSpoolDiameterInches76to100 = 1.53;
+    private static final double climberArmsSpoolDiameterInches0to25 = 1.216; 
+    private static final double climberArmsSpoolDiameterInches26to50 = 1.216; 
+    private static final double climberArmsSpoolDiameterInches51to75 = 1.216; 
+    private static final double climberArmsSpoolDiameterInches76to100 = 1.216;
     
     // Based on discussion with XXX
     private static final boolean spoolWindingIsPositiveSparkMaxNeoMotorOutput = true;
 
     // TODO change this to final speed when everyone is ready for it
-    private static final double neoMotorSpeedReductionFactor = 0.3;
+    private static final double neoMotorSpeedReductionFactor = 0.5;
+
+    private static final double lengthClimberExtensionVeryCloseToEndInches = maximumArmHeightInches - 2.0; // max - 2.0 inches
+    private static final double lengthClimberExtensionVeryCloseToStopInches = 2.0; // 2.0 inches
+    private static final double neoMotorSpeedReductionFactorVeryCloseToStop = 0.25; 
+
+    private static final double leftClimberSensorResetRetractSpeed = -0.9;
+    private static final double leftClimberSensorResetExtendSpeed = 0.9;
+    private static final double rightClimberSensorResetRetractSpeed = -0.9;
+    private static final double rightClimberSensorResetExtendSpeed = 0.9;
 
     /* *********************************************************************
     MEMBERS
     ************************************************************************/
     // two matched motors - one for each climber side
-    private CANSparkMax leftMotor = new CANSparkMax(Constants.leftClimberMotorCanId, MotorType.kBrushless);
+    private CANSparkMax leftMotor;
     private SparkPIDController leftPidController;
     private RelativeEncoder leftEncoder;
-    private CANSparkMax rightMotor = new CANSparkMax(Constants.rightClimberMotorCanId, MotorType.kBrushless);
+    private double kPLeft, kILeft, kDLeft, kIzLeft, kFFLeft, kMaxOutputLeft, kMinOutputLeft, maxRPMLeft, maxVelLeft, minVelLeft, maxAccLeft, allowedErrLeft;
+    private boolean isLeftMotorInverted = false;
+    private DigitalInput leftMageneticSensor = null;
+    private CorrectableEncoderRevNeoPlusDigitalIoPort leftCorrectableCoupling = null;
+    private boolean leftClimberReady = InstalledHardware.leftClimberInstalled && InstalledHardware.leftClimberSensorInstalled;
+    private double targetLeftClimberInches = 0;
+    private double targetLeftMotorSpeed = 0;
+
+    private CANSparkMax rightMotor;
     private SparkPIDController rightPidController;
     private RelativeEncoder rightEncoder;
-    private double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc, allowedErr;
+    private double kPRight, kIRight, kDRight, kIzRight, kFFRight, kMaxOutputRight, kMinOutputRight, maxRPMRight, maxVelRight, minVelRight, maxAccRight, allowedErrRight;
+    private boolean isRightMotorInverted = true;
+    private DigitalInput rightMageneticSensor = null;
+    private CorrectableEncoderRevNeoPlusDigitalIoPort rightCorrectableCoupling = null;
+    private boolean rightClimberReady = InstalledHardware.rightClimberInstalled && InstalledHardware.rightClimberSensorInstalled;
+    private double targetRightClimberInches = 0;
+    private double targetRightMotorSpeed = 0;
+
     private double motorReferencePosition = 0.0;
+    private boolean motorsInitalizedForSmartMotion = false;
+    private boolean movementWithinTolerance = false;
 
     private double motorEncoderTicksAt100 = this.convertClimberArmsHeightToMotorEncoderPosition(maximumHeightFromStoredPositionInches * 1.00);
     private double motorEncoderTicksAt75 = this.convertClimberArmsHeightToMotorEncoderPosition(maximumHeightFromStoredPositionInches * 0.75);
     private double motorEncoderTicksAt50 = this.convertClimberArmsHeightToMotorEncoderPosition(maximumHeightFromStoredPositionInches * 0.50);
     private double motorEncoderTicksAt25 = this.convertClimberArmsHeightToMotorEncoderPosition(maximumHeightFromStoredPositionInches * 0.25);
 
-    private boolean motorsInitalizedForSmartMotion = false;
-    private double targetLeftMotorEncoderTicks = 0;
-    private double targetRightMotorEncoderTicks = 0;
-
-    private DigitalInput leftMageneticSensor = null;
-    private DigitalInput rightMageneticSensor = null;
-    private CorrectableEncoderRevNeoPlusDigitalIoPort leftCorrectableCoupling = null;
-    private CorrectableEncoderRevNeoPlusDigitalIoPort rightCorrectableCoupling = null;
+    private long counter = 0;
+    private boolean inSpeedMode = true;
 
     /**********************************************************************
     CONSTRUCTORS
@@ -83,10 +101,19 @@ public class ClimberSubsystem extends SubsystemBase{
     */
     public ClimberSubsystem() {
 
+        if(this.leftClimberReady) {
+            leftMotor = new CANSparkMax(Constants.leftClimberMotorCanId, MotorType.kBrushless);
+        }
+
+        if(this.rightClimberReady) {
+            rightMotor = new CANSparkMax(Constants.rightClimberMotorCanId, MotorType.kBrushless);
+        }
+
         // confirm that the smart motion is setup - no-op after it is setup first time
+        // and also do the sensor reset
         this.forceSensorReset();
 
-        if(InstalledHardware.leftClimberSensorInstalled) {
+        if(this.leftClimberReady) {
             leftMageneticSensor = new DigitalInput(Constants.leftClimberSensorDioId);
             leftCorrectableCoupling = new CorrectableEncoderRevNeoPlusDigitalIoPort(
                 leftEncoder,
@@ -97,7 +124,8 @@ public class ClimberSubsystem extends SubsystemBase{
                 );
         }
 
-        if(InstalledHardware.rightClimberSensorInstalled) {
+        if(this.rightClimberReady) {
+            rightMotor = new CANSparkMax(Constants.rightClimberMotorCanId, MotorType.kBrushless);
             rightMageneticSensor = new DigitalInput(Constants.rightClimberSensorDioId);
             rightCorrectableCoupling = new CorrectableEncoderRevNeoPlusDigitalIoPort(
                 rightEncoder,
@@ -107,6 +135,7 @@ public class ClimberSubsystem extends SubsystemBase{
                 this.convertClimberArmsHeightToMotorEncoderPosition(ClimberSubsystem.minimumArmHeightInches + 0.75) // assume above the reference zero point by 3/4 of an inch
                 );
         }
+
     }
 
     /* *********************************************************************
@@ -122,10 +151,6 @@ public class ClimberSubsystem extends SubsystemBase{
         return (this.isRightClimberWithinTolerance(toleranceInches) && this.isLeftClimberWithinTolerance(toleranceInches));
     }
    
-    public void cancelClimberMovement(){
-        this.targetLeftMotorEncoderTicks = this.getLeftMotorEncoderPosition();
-        this.targetRightMotorEncoderTicks = this.getRightMotorEncoderPosition();
-    }
     /**
      * Method to get the maximum height of the climber
      * @return maximumArmHeightInInches - height in inches
@@ -147,7 +172,10 @@ public class ClimberSubsystem extends SubsystemBase{
      * @return current height of climber in inches
      */
     public double getLeftClimberHeightInInches() {
-      return this.convertMotorEncoderPositionToClimberArmsHeight(this.getLeftMotorEncoderPosition());
+        if(this.leftClimberReady){
+            return this.convertMotorEncoderPositionToClimberArmsHeight(this.getLeftMotorEncoderPosition());
+        }
+        return Double.NaN;
     }
 
     /**
@@ -155,22 +183,28 @@ public class ClimberSubsystem extends SubsystemBase{
      * @return current height of climber in inches
      */
     public double getRightClimberHeightInInches() {
-      return this.convertMotorEncoderPositionToClimberArmsHeight(this.getRightMotorEncoderPosition());
+        if(this.rightClimberReady){
+            return this.convertMotorEncoderPositionToClimberArmsHeight(this.getRightMotorEncoderPosition());
+        }
+        return Double.NaN;
     }
 
+    /**
+     * Method to confirm both climbers have found their sensor reset positions
+     * @return true if both climbers have moved past their sensor reset positions
+     */
+    public boolean haveClimbersFoundSensorReset() {
+        return (this.leftClimberReady ? this.leftCorrectableCoupling.getMotorEncoderEverReset() : true) &&
+               (this.rightClimberReady ? this.rightCorrectableCoupling.getMotorEncoderEverReset() : true);
+    }
+    
     /**
      * Determine if the right climber is within a certain tolerance of the most recently set target height
      * @param toleranceInches - tolerance in inches from target height
      * @return true if the climber is within the tolerance specified
      */
     public boolean isLeftClimberWithinTolerance(double toleranceInches) {
-        double currentHeight = this.getLeftClimberHeightInInches();
-        double currentTargetHeight = this.convertMotorEncoderPositionToClimberArmsHeight(this.targetLeftMotorEncoderTicks);
-        System.out.println("Left Climber isDone?  currentHeight: " + currentHeight + " current target height " + currentTargetHeight + "emcoder ticks " + targetLeftMotorEncoderTicks);
-        boolean isDone =  (currentHeight >= currentTargetHeight - toleranceInches  && currentHeight <= currentTargetHeight + toleranceInches) ||
-            currentHeight >= ClimberSubsystem.maximumOverageArmHeightInches; //TODO PUT THIS BACK!!! || currentHeight <= ClimberSubsystem.minimumOverageArmHeightInches;
-            // previously, the climber starts at -.25 and immediately returns isDone = true
-        return isDone;
+        return Math.abs(this.getLeftClimberHeightInInches() - this.targetLeftClimberInches) < toleranceInches;
     }
 
     /**
@@ -179,11 +213,40 @@ public class ClimberSubsystem extends SubsystemBase{
      * @return true if the climber is within the tolerance specified
      */
     public boolean isRightClimberWithinTolerance(double toleranceInches) {
-        double currentHeight = this.getRightClimberHeightInInches();
-        double currentTargetHeight = this.convertMotorEncoderPositionToClimberArmsHeight(this.targetRightMotorEncoderTicks);
-        boolean isDone =  (currentHeight >= currentTargetHeight - toleranceInches  && currentHeight <= currentTargetHeight + toleranceInches) ||
-            currentHeight >= ClimberSubsystem.maximumOverageArmHeightInches || currentHeight <= ClimberSubsystem.minimumOverageArmHeightInches;
-        return isDone;
+        return Math.abs(this.getRightClimberHeightInInches() - this.targetRightClimberInches) < toleranceInches;
+    }
+
+    /**
+     * Method to move both arms toward the sensor reset positions of each arm
+     * will automatically stop the arm movements when sensor reset has occurred
+     */
+    public void moveClimbersToSensorReset() {
+        // get ready for the arm drive speeds
+        double leftSpeed = 0.0;
+        double rightSpeed = 0.0;
+  
+        // left arm
+        if(this.leftClimberReady && // the sensor must be present to ever get any left speed other than zero
+           this.leftCorrectableCoupling.getMotorEncoderEverReset() == false) { // when the motor encoder has been reset, no need to move the arm
+            // extend if the sensor is currently triggered
+            // retract if the sensor is NOT currently triggered
+            leftSpeed = 
+              (this.leftMageneticSensor.get() == false) ? // sensor light is illuminated when .get returns false
+              ClimberSubsystem.leftClimberSensorResetExtendSpeed :
+              ClimberSubsystem.leftClimberSensorResetRetractSpeed;
+        }
+  
+        // right arm
+        if(this.rightClimberReady && // sensor must be present to get any speed
+           this.rightCorrectableCoupling.getMotorEncoderEverReset() == false) { // when the motor encoder has been reset, no need to move the arm
+            // extend if the sensor is currently triggered
+            // retract if the sensor is NOT currently triggered
+            rightSpeed =
+              (this.rightMageneticSensor.get() == false) ? // sensor light is illuminated when .get returns false
+              ClimberSubsystem.rightClimberSensorResetExtendSpeed :
+              ClimberSubsystem.rightClimberSensorResetRetractSpeed;
+        }
+        this.setClimberSpeeds(leftSpeed, rightSpeed);
     }
 
     /**
@@ -191,88 +254,149 @@ public class ClimberSubsystem extends SubsystemBase{
     */
     @Override
     public void periodic() {
+        // incremenet the counter
+        ++counter;
+
         // confirm that the smart motion is setup - no-op after it is setup first time
-        this.forceSensorReset();
+        this.initializeMotorsSmartMotion();
         // send stuff to shuffleboard
         this.sendStatistics();
 
-        // implementation below attempts to mimmic kitchen drawyer soft close - 
-        // essentially as the robot climber nears the top (from below) or bottom (from above) the behavior will be that it slows down 
-        double currentLeftHeight = this.getLeftClimberHeightInInches();
-        double currentRightHeight = this.getRightClimberHeightInInches();
-        double targetLeftHeight = this.convertClimberArmsHeightToMotorEncoderPosition(this.targetLeftMotorEncoderTicks);
-        double targetRightHeight = this.convertClimberArmsHeightToMotorEncoderPosition(this.targetRightMotorEncoderTicks);
-        boolean isLeftWithinTolerance =  (Math.abs(currentLeftHeight - targetLeftHeight) <= Constants.climberStandardToleranceInches);
-        boolean isRightWithinTolerance =  (Math.abs(currentRightHeight - targetRightHeight) <= Constants.climberStandardToleranceInches);
+        // determine if the movement is in the stop range
+        // stop range implies any of the following:
+        // magnetic sensor triggered 
+        // arm deployed >= limit (e.g., maximumXXXArmExtensionMeters)
+        double currentLeftExtensionInInches = this.getLeftClimberHeightInInches();
+        boolean isLeftArmAtOrBelowLowStop = (currentLeftExtensionInInches <= 0.0);
+        boolean isLeftArmAtOrAboveHighStop = currentLeftExtensionInInches >= maximumArmHeightInches;
+        double currentRightExtensionInInches = this.getRightClimberHeightInInches();
+        boolean isRightArmAtOrBelowLowStop = (currentRightExtensionInInches <= 0.0);
+        boolean isRightArmAtOrAboveHighStop = currentRightExtensionInInches >= maximumArmHeightInches;
 
-        double leftTargetTicks = targetLeftMotorEncoderTicks;
-        double rightTargetTicks = targetRightMotorEncoderTicks;
+        // if we are in speed mode always set motor speeds using motor set
+        if(this.inSpeedMode) {
+            // Left
+            if(this.leftClimberReady) {
+                if(isLeftArmAtOrBelowLowStop && this.targetLeftMotorSpeed < 0.0) {
+                    this.leftMotor.set(0.0);
+                }
+                else if(isLeftArmAtOrAboveHighStop && this.targetLeftMotorSpeed > 0.0) {
+                    this.leftMotor.set(0.0);
+                }
+                else if(
+                    (currentLeftExtensionInInches < ClimberSubsystem.lengthClimberExtensionVeryCloseToStopInches && this.targetLeftMotorSpeed < 0.0 ) ||
+                    (currentLeftExtensionInInches > ClimberSubsystem.lengthClimberExtensionVeryCloseToEndInches && this.targetLeftMotorSpeed > 0.0 )) {
+                    this.leftMotor.set(this.targetLeftMotorSpeed * neoMotorSpeedReductionFactorVeryCloseToStop);
+                }
+                else {
+                    this.leftMotor.set(this.targetLeftMotorSpeed * neoMotorSpeedReductionFactor);
+                }
+            }
+            // Right
+            if(this.rightClimberReady) {
+                if(isRightArmAtOrBelowLowStop && this.targetRightMotorSpeed < 0.0) {
+                    this.rightMotor.set(0.0);
+                }
+                else if(isRightArmAtOrAboveHighStop && this.targetRightMotorSpeed > 0.0) {
+                    this.rightMotor.set(0.0);
+                }
+                else if(
+                    (currentRightExtensionInInches < ClimberSubsystem.lengthClimberExtensionVeryCloseToStopInches && this.targetRightMotorSpeed < 0.0 ) ||
+                    (currentRightExtensionInInches > ClimberSubsystem.lengthClimberExtensionVeryCloseToEndInches && this.targetRightMotorSpeed > 0.0 )) {
+                    this.rightMotor.set(this.targetRightMotorSpeed * neoMotorSpeedReductionFactorVeryCloseToStop);
+                }
+                else {
+                    this.rightMotor.set(this.targetRightMotorSpeed * neoMotorSpeedReductionFactor);
+                }
+            }
+        }
+        // if not in speed mode we assume the caller wants smart motion
+        else {
 
-        // left side
-        if(isLeftWithinTolerance) {
-            leftTargetTicks = targetLeftMotorEncoderTicks;
-        }
-        if(targetLeftHeight > currentLeftHeight) {
-            // climber is moving up
-            if(currentLeftHeight > targetLeftHeight - ClimberSubsystem.slowSpeedToleranceInches) {
-                // climber is within tol of the target
-                leftTargetTicks = (this.convertClimberArmsHeightToMotorEncoderPosition((currentLeftHeight+targetLeftHeight)/2.0));
-            }
-        }
-        else if(targetLeftHeight < currentLeftHeight) {
-            // climber is moving down
-            if(currentLeftHeight < targetLeftHeight + ClimberSubsystem.slowSpeedToleranceInches) {
-                // climber is within tol of the target
-                leftTargetTicks = (this.convertClimberArmsHeightToMotorEncoderPosition((currentLeftHeight+targetLeftHeight)/2.0));
-            }
-        }
-        leftPidController.setReference(leftTargetTicks, ControlType.kSmartMotion);
-        System.out.println(">>Setting left PID to target (tickst) " + leftTargetTicks);
+            boolean isLeftWithinTolerance =  this.isLeftClimberWithinTolerance(Constants.climberStandardToleranceInches);
+            boolean isRightWithinTolerance =  this.isRightClimberWithinTolerance(Constants.climberStandardToleranceInches);
+            movementWithinTolerance = isLeftWithinTolerance && isRightWithinTolerance;
 
-        // right side
-        if(isRightWithinTolerance) {
-            rightTargetTicks = targetRightMotorEncoderTicks;
-        }
-        if(targetRightHeight > currentRightHeight) {
-            if(currentRightHeight > targetRightHeight - ClimberSubsystem.slowSpeedToleranceInches) {
-                rightTargetTicks = (this.convertClimberArmsHeightToMotorEncoderPosition((currentRightHeight+targetRightHeight)/2.0));
+            // Left
+            if(this.leftClimberReady) {
+                if(isLeftArmAtOrBelowLowStop && this.targetLeftClimberInches <= 0.0) {
+                    this.leftMotor.set(0.0);
+                }
+                else if(isLeftArmAtOrAboveHighStop && this.targetLeftClimberInches >= ClimberSubsystem.maximumArmHeightInches) {
+                    this.leftMotor.set(0.0);
+                }
+                else if (isLeftWithinTolerance) {
+                    this.leftMotor.set(0.0);
+                }
+                else if(currentLeftExtensionInInches < ClimberSubsystem.lengthClimberExtensionVeryCloseToStopInches ) {
+                    double frogSpellExtensionDistance = 
+                        (currentLeftExtensionInInches + this.targetLeftClimberInches) / 2;
+                    leftPidController.setReference(
+                        this.convertClimberArmsHeightToMotorEncoderPosition(frogSpellExtensionDistance),
+                        ControlType.kSmartMotion);
+                }
+                else {
+                    leftPidController.setReference(
+                        this.convertClimberArmsHeightToMotorEncoderPosition(this.targetLeftClimberInches),
+                        ControlType.kSmartMotion);
+                }
+            }
+
+            // Right
+            if(this.rightClimberReady) {
+                if(isRightArmAtOrBelowLowStop && this.targetRightClimberInches <= 0.0) {
+                    this.rightMotor.set(0.0);
+                }
+                else if(isRightArmAtOrAboveHighStop && this.targetRightClimberInches >= ClimberSubsystem.maximumArmHeightInches) {
+                    this.rightMotor.set(0.0);
+                }
+                else if (isRightWithinTolerance) {
+                    this.rightMotor.set(0.0);
+                }
+                else if(currentRightExtensionInInches < ClimberSubsystem.lengthClimberExtensionVeryCloseToStopInches ) {
+                    double frogSpellExtensionDistance = 
+                        (currentRightExtensionInInches + this.targetRightClimberInches) / 2;
+                    rightPidController.setReference(
+                        this.convertClimberArmsHeightToMotorEncoderPosition(frogSpellExtensionDistance),
+                        ControlType.kSmartMotion);
+                }
+                else {
+                    rightPidController.setReference(
+                        this.convertClimberArmsHeightToMotorEncoderPosition(this.targetRightClimberInches),
+                        ControlType.kSmartMotion);
+                }
             }
         }
-        else if(targetRightHeight < currentRightHeight) {
-            if(currentRightHeight < targetRightHeight + ClimberSubsystem.slowSpeedToleranceInches) {
-                rightTargetTicks = (this.convertClimberArmsHeightToMotorEncoderPosition((currentRightHeight+targetRightHeight)/2.0));
-            }
-        }
-        rightPidController.setReference(rightTargetTicks, ControlType.kSmartMotion);
     }
 
     /**
-     * Method to update new target position of both climbers
-     * @param targetHeightInInches - height in inches
+     * Method to update the new target position for both climbers
+     * @param leftTargetHeightInInches - the left climber target set point in inches
+     * @param rightTargetHeightInInches - the right climber target set point in inches
      */
-    public void setBothClimberHeightsInInches(double targetHeightInInches) {
-        this.setLeftClimberHeightInInches(targetHeightInInches);
-        this.setRightClimberHeightInInches(targetHeightInInches);
+    public void setClimberHeightsInInches(
+        double leftTargetHeightInInches,
+        double rightTargetHeightInInches) {
+        this.inSpeedMode = false;
+        this.movementWithinTolerance = false;
+        this.targetLeftClimberInches = leftTargetHeightInInches;
+        this.targetRightClimberInches = rightTargetHeightInInches;
     }
 
     /**
-     * Method to update new target position of the left climber
-     * @param targetHeightInInches - height in inches
+     * A method to set requested the climber motor speeds
+     * @param leftClimberSpeed the speed to run the left climber motor at
+     * @param verticalArmSpeed the speed to run the right climber motor at
      */
-    public void setLeftClimberHeightInInches(double targetHeightInInches) {
-        targetLeftMotorEncoderTicks = this.convertClimberArmsHeightToMotorEncoderPosition(targetHeightInInches);
-    }
+    public void setClimberSpeeds(double leftClimberSpeed, double rightClimberSpeed) {
+        this.inSpeedMode = true;
+        this.movementWithinTolerance = false;
+        this.targetLeftMotorSpeed = MotorUtils.truncateValue(leftClimberSpeed, -1.0, 1.0);
+        this.targetRightMotorSpeed = MotorUtils.truncateValue(rightClimberSpeed, -1.0, 1.0);
+      }
 
-    /**
-     * Method to update new target position of the right climber
-     * @param targetHeightInInches - height in inches
-     */
-    public void setRightClimberHeightInInches(double targetHeightInInches) {
-        targetRightMotorEncoderTicks = this.convertClimberArmsHeightToMotorEncoderPosition(targetHeightInInches);
-    }
-
-    /* *********************************************************************
-    PRIVATE METHODS
+    /**********************************************************************
+    ************ PRIVATE METHODS
     ************************************************************************/
     // a method to convert a climber arms height into the motor encoder position for the existing setup
     // note this includes adding the originating motor reference position (which is hopefully 0.0)
@@ -384,32 +508,54 @@ public class ClimberSubsystem extends SubsystemBase{
      */
     private void forceSensorReset() {
         this.initializeMotorsSmartMotion();
-        leftEncoder.setPosition(0.0);
-        rightEncoder.setPosition(0.0);
+        if(this.leftClimberReady) {
+            leftEncoder.setPosition(0.0);
+        }
+        if(this.rightClimberReady) {
+            rightEncoder.setPosition(0.0);
+        }
     }
  
     private double getLeftMotorEncoderPosition() {
-        return leftCorrectableCoupling.getCurrentEncoderPosition();
+        if(this.leftClimberReady) {
+            return leftCorrectableCoupling.getCurrentEncoderPosition();
+        }
+        return Double.NaN;
     }
 
     private double getLeftMotorOutputSpeed() {
-        return leftMotor.getAppliedOutput();
+        if(this.leftClimberReady) {
+            return leftMotor.getAppliedOutput();
+        }
+        return Double.NaN;
     }
 
     private String getLeftArmMotionDescription() {
-        return this.getArmMotionDescription(this.getLeftMotorOutputSpeed());
+        if(this.leftClimberReady) {
+            return this.getArmMotionDescription(this.getLeftMotorOutputSpeed());
+        }
+        return "MISSING";
     }
 
     private double getRightMotorEncoderPosition() {
-        return rightCorrectableCoupling.getCurrentEncoderPosition();
+        if(this.rightClimberReady) {
+            return rightCorrectableCoupling.getCurrentEncoderPosition();
+        }
+        return Double.NaN;
     }
 
     private double getRightMotorOutputSpeed() {
-        return rightMotor.getAppliedOutput();
+        if(this.rightClimberReady) {
+            return rightMotor.getAppliedOutput();
+        }
+        return Double.NaN;
     }
 
     private String getRightArmMotionDescription() {
-        return this.getArmMotionDescription(this.getRightMotorOutputSpeed());
+        if(this.rightClimberReady) {
+            return this.getArmMotionDescription(this.getRightMotorOutputSpeed());
+        }
+        return "MISSING";
     }
 
     private String getArmMotionDescription(double motorAppliedOutput) {
@@ -432,63 +578,86 @@ public class ClimberSubsystem extends SubsystemBase{
         }
     }
 
-    // a method devoted to establishing proper startup of the jaws motors
+    // a method devoted to establishing proper startup of the climber motors
     // this method sets all of the key settings that will help in motion magic
     private void initializeMotorsSmartMotion() {
-      if(motorsInitalizedForSmartMotion == false)
-      {
-        // PID coefficients
-        kP = 5e-5; 
-        kI = 1e-6;
-        kD = 0; 
-        kIz = 0; 
-        kFF = 0.000156; 
-        kMaxOutput = 1; 
-        kMinOutput = -1;
-        maxRPM = Constants.neoMaximumRevolutionsPerMinute;
+
+      if(motorsInitalizedForSmartMotion == false) { 
         int smartMotionSlot = 0;
-    
-        // Smart Motion Coefficients
-        maxVel = maxRPM * neoMotorSpeedReductionFactor; // rpm
-        maxAcc = maxVel * 2; // 1/2 second to get up to full speed
 
-        leftMotor.restoreFactoryDefaults();
-        leftMotor.setIdleMode(IdleMode.kBrake);
-        leftPidController = leftMotor.getPIDController();
-        leftEncoder = leftMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, (int)Constants.RevNeoEncoderTicksPerRevolution);
-        leftEncoder.setPositionConversionFactor((double)Constants.RevNeoEncoderTicksPerRevolution);
-   
-        // set PID coefficients
-        leftPidController.setP(kP);
-        leftPidController.setI(kI);
-        leftPidController.setD(kD);
-        leftPidController.setIZone(kIz);
-        leftPidController.setFF(kFF);
-        leftPidController.setOutputRange(kMinOutput, kMaxOutput);
+        // left side
+        if(this.leftClimberReady) {
+            // PID coefficients
+            kPLeft = 2e-4; 
+            kILeft = 0;
+            kDLeft = 0;
+            kIzLeft = 0; 
+            kFFLeft = 0.00001; 
+            kMaxOutputLeft = 1; 
+            kMinOutputLeft = -1;
+            maxRPMLeft = Constants.neoMaximumRevolutionsPerMinute;
+        
+            // Smart Motion Coefficients
+            maxVelLeft = maxRPMLeft * neoMotorSpeedReductionFactor; // rpm
+            maxAccLeft = maxVelLeft * 2; // 1/2 second to get up to full speed
+        
+            leftMotor.restoreFactoryDefaults();
+            leftMotor.setIdleMode(IdleMode.kBrake);
+            leftMotor.setInverted(this.isLeftMotorInverted);
+            leftPidController = leftMotor.getPIDController();
+            leftEncoder = leftMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, (int)Constants.RevNeoEncoderTicksPerRevolution);
+            leftEncoder.setPositionConversionFactor((double)Constants.RevNeoEncoderTicksPerRevolution);
     
-        leftPidController.setSmartMotionMaxVelocity(maxVel, smartMotionSlot);
-        leftPidController.setSmartMotionMinOutputVelocity(minVel, smartMotionSlot);
-        leftPidController.setSmartMotionMaxAccel(maxAcc, smartMotionSlot);
-        leftPidController.setSmartMotionAllowedClosedLoopError(allowedErr, smartMotionSlot);
+            // set PID coefficients
+            leftPidController.setP(kPLeft);
+            leftPidController.setI(kILeft);
+            leftPidController.setD(kDLeft);
+            leftPidController.setIZone(kIzLeft);
+            leftPidController.setFF(kFFLeft);
+            leftPidController.setOutputRange(kMinOutputLeft, kMaxOutputLeft);
+        
+            leftPidController.setSmartMotionMaxVelocity(maxVelLeft, smartMotionSlot);
+            leftPidController.setSmartMotionMinOutputVelocity(minVelLeft, smartMotionSlot);
+            leftPidController.setSmartMotionMaxAccel(maxAccLeft, smartMotionSlot);
+            leftPidController.setSmartMotionAllowedClosedLoopError(allowedErrLeft, smartMotionSlot);
+        }
 
-        rightMotor.restoreFactoryDefaults();
-        rightMotor.setIdleMode(IdleMode.kBrake);
-        rightPidController = rightMotor.getPIDController();
-        rightEncoder = rightMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, (int)Constants.RevNeoEncoderTicksPerRevolution);
-        rightEncoder.setPositionConversionFactor((double)Constants.RevNeoEncoderTicksPerRevolution);
-   
-        // set PID coefficients
-        rightPidController.setP(kP);
-        rightPidController.setI(kI);
-        rightPidController.setD(kD);
-        rightPidController.setIZone(kIz);
-        rightPidController.setFF(kFF);
-        rightPidController.setOutputRange(kMinOutput, kMaxOutput);
+        // right side
+        if(this.rightClimberReady) {
+            // PID coefficients
+            kPRight = 2e-4; 
+            kIRight = 0;
+            kDRight = 0;
+            kIzRight = 0; 
+            kFFRight = 0.00001; 
+            kMaxOutputRight = 1; 
+            kMinOutputRight = -1;
+            maxRPMRight = Constants.neoMaximumRevolutionsPerMinute;
+        
+            // Smart Motion Coefficients
+            maxVelRight = maxRPMRight * neoMotorSpeedReductionFactor; // rpm
+            maxAccRight = maxVelRight * 2; // 1/2 second to get up to full speed
+
+            rightMotor.restoreFactoryDefaults();
+            rightMotor.setIdleMode(IdleMode.kBrake);
+            rightMotor.setInverted(this.isRightMotorInverted);
+            rightPidController = rightMotor.getPIDController();
+            rightEncoder = rightMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, (int)Constants.RevNeoEncoderTicksPerRevolution);
+            rightEncoder.setPositionConversionFactor((double)Constants.RevNeoEncoderTicksPerRevolution);
     
-        rightPidController.setSmartMotionMaxVelocity(maxVel, smartMotionSlot);
-        rightPidController.setSmartMotionMinOutputVelocity(minVel, smartMotionSlot);
-        rightPidController.setSmartMotionMaxAccel(maxAcc, smartMotionSlot);
-        rightPidController.setSmartMotionAllowedClosedLoopError(allowedErr, smartMotionSlot);
+            // set PID coefficients
+            rightPidController.setP(kPRight);
+            rightPidController.setI(kIRight);
+            rightPidController.setD(kDRight);
+            rightPidController.setIZone(kIzRight);
+            rightPidController.setFF(kFFRight);
+            rightPidController.setOutputRange(kMinOutputRight, kMaxOutputRight);
+        
+            rightPidController.setSmartMotionMaxVelocity(maxVelRight, smartMotionSlot);
+            rightPidController.setSmartMotionMinOutputVelocity(minVelRight, smartMotionSlot);
+            rightPidController.setSmartMotionMaxAccel(maxAccRight, smartMotionSlot);
+            rightPidController.setSmartMotionAllowedClosedLoopError(allowedErrRight, smartMotionSlot);
+        }
 
         this.motorsInitalizedForSmartMotion = true;
       }
@@ -498,17 +667,21 @@ public class ClimberSubsystem extends SubsystemBase{
      * Send some statistics to shuffleboard
      */
     public void sendStatistics() {
-        SmartDashboard.putNumber("ClimberArmsLeftMotorSpeed", this.getLeftMotorOutputSpeed());
-        SmartDashboard.putString("ClimberArmsLeftArmMotionDescription", this.getLeftArmMotionDescription());
-        SmartDashboard.putNumber("ClimberArmsLeftClimberHeightInInches", this.getLeftClimberHeightInInches());
-        SmartDashboard.putNumber("ClimberArmsLeftEncoderPosition", this.getLeftMotorEncoderPosition());
-        SmartDashboard.putNumber("ClimberArmsRightMotorSpeed", this.getRightMotorOutputSpeed());
-        SmartDashboard.putString("ClimberArmsRightArmMotionDescription", this.getRightArmMotionDescription());     
-        SmartDashboard.putNumber("ClimberArmsRightClimberHeightInInches", this.getRightClimberHeightInInches());
-        SmartDashboard.putNumber("ClimberArmsRightEncoderPosition", this.getRightMotorEncoderPosition());
-        SmartDashboard.putBoolean("ClimberArmsLeftSensorDetected", this.leftMageneticSensor.get());
-        SmartDashboard.putBoolean("ClimberArmsRightSensorDetected", this.rightMageneticSensor.get());
-        
+        if(counter % 10 == 0) {
+            if(this.leftClimberReady) {
+                SmartDashboard.putNumber("ClimberArmsLeftMotorSpeed", this.getLeftMotorOutputSpeed());
+                SmartDashboard.putString("ClimberArmsLeftArmMotionDescription", this.getLeftArmMotionDescription());
+                SmartDashboard.putNumber("ClimberArmsLeftClimberHeightInInches", this.getLeftClimberHeightInInches());
+                SmartDashboard.putNumber("ClimberArmsLeftEncoderPosition", this.getLeftMotorEncoderPosition());
+                SmartDashboard.putBoolean("ClimberArmsLeftSensorDetected", this.leftMageneticSensor.get());
+            }
+            if(this.rightClimberReady) {
+                SmartDashboard.putNumber("ClimberArmsRightMotorSpeed", this.getRightMotorOutputSpeed());
+                SmartDashboard.putString("ClimberArmsRightArmMotionDescription", this.getRightArmMotionDescription());     
+                SmartDashboard.putNumber("ClimberArmsRightClimberHeightInInches", this.getRightClimberHeightInInches());
+                SmartDashboard.putNumber("ClimberArmsRightEncoderPosition", this.getRightMotorEncoderPosition());
+                SmartDashboard.putBoolean("ClimberArmsRightSensorDetected", this.rightMageneticSensor.get());
+            }
+        }
     }
-
 }

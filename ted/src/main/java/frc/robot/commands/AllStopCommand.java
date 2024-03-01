@@ -70,7 +70,7 @@ public class AllStopCommand extends Command {
             this.subsystems.getShooterOutfeedSubsystem().setAllStop();
         }
         if(this.subsystems.isClimberSubsystemAvailable()) {
-            this.subsystems.getClimberSubsystem().cancelClimberMovement();
+            this.subsystems.getClimberSubsystem().setClimberSpeeds(0, 0);
         }
     }
 

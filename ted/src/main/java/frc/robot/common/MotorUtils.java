@@ -65,6 +65,22 @@ public class MotorUtils
     }
 
     /**
+    * A method to assume some middle region around 0.0 and should be set to 0.0 but values outside this range should be left alone
+    *
+    * @param  value - target value 
+    * @param  range - range
+    * @return the target or trimmed value
+    */
+    public static double simpleDeadband(double value, double deadband) {
+        if (Math.abs(value) > Math.abs(deadband)) {
+            return value;
+        }
+        else {
+            return 0.0;
+        }
+    }
+
+    /**
 	 * Clamps a value between a minimum and a maximum value.
 	 *
 	 * @param value The value to clamp.

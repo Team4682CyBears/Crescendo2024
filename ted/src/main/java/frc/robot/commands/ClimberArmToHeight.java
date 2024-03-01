@@ -10,9 +10,9 @@
 
 package frc.robot.commands;
 
-import frc.robot.common.ClimberArm;
 import frc.robot.control.Constants;
 import frc.robot.subsystems.ClimberSubsystem;
+
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -21,8 +21,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class ClimberArmToHeight extends Command {
 
   private ClimberSubsystem climber;
-  private double requestedHeightInInches = 0.0;
-  private ClimberArm requestedArm = ClimberArm.BothClimbers;
+  private double requestedHeightInInchesRight = 0.0;
+  private double requestedHeightInInchesLeft = 0.0;
   private boolean updatedHeightSet = false;
   private boolean done = false;
 
@@ -30,16 +30,18 @@ public class ClimberArmToHeight extends Command {
    * Constructor for ShooterShootCommand
    * Will set shooter to desired angle before shooting
    * @param climberSubsystem - the target climber subsystem
-   * @param desiredHeightInInches - the target updated height of the climber
+   * @param desiredHeightInInchesLeft - the target updated height of the climber left
+   * @param desiredHeightInInchesRight - the target updated height of the climber right
    * @param targetArm - the target climber arm
    */
   public ClimberArmToHeight(
     ClimberSubsystem climberSubsystem, 
-    ClimberArm targetArm,
-    double desiredHeightInInches) {
+    double desiredHeightInInchesLeft,
+    double desiredHeightInInchesRight ) {
+
     this.climber = climberSubsystem;
-    this.requestedArm = targetArm;
-    this.requestedHeightInInches = desiredHeightInInches;
+    this.requestedHeightInInchesLeft = desiredHeightInInchesLeft;
+    this.requestedHeightInInchesRight = desiredHeightInInchesRight;
     // Use addRequirements() here to declare subsystem dependencies.
     this.addRequirements(this.climber);
   }
@@ -55,48 +57,19 @@ public class ClimberArmToHeight extends Command {
   @Override
   public void execute() {
     if(!this.updatedHeightSet) {
-        if(requestedArm == ClimberArm.BothClimbers) {
-            this.climber.setBothClimberHeightsInInches(this.requestedHeightInInches);
-            this.updatedHeightSet = true;
-        }
-        else if(requestedArm == ClimberArm.RightClimber) {
-            this.climber.setRightClimberHeightInInches(this.requestedHeightInInches);
-            this.updatedHeightSet = true;
-        }
-        else if(requestedArm == ClimberArm.LeftClimber) {
-            this.climber.setLeftClimberHeightInInches(this.requestedHeightInInches);
-            this.updatedHeightSet = true;
-            System.out.println(">>>>>>>Setting left climber target position to " + this.requestedHeightInInches);
-            System.out.println("Checking for done condition");
-        }
-        else {
-            done = true;
-        }
+      this.climber.setClimberHeightsInInches(this.requestedHeightInInchesLeft, this.requestedHeightInInchesRight);
     }
     else {
-        if(requestedArm == ClimberArm.BothClimbers) {
-            done = this.climber.areClimbersWithinTolerance(Constants.climberStandardToleranceInches);
-        }
-        else if(requestedArm == ClimberArm.RightClimber) {
-            done = this.climber.isRightClimberWithinTolerance(Constants.climberStandardToleranceInches);
-        }
-        else if(requestedArm == ClimberArm.LeftClimber) {
-            done = this.climber.isLeftClimberWithinTolerance(Constants.climberStandardToleranceInches);
-            System.out.print(".");
-        }
-        else {
-            done = true;
-        }
+      done = this.climber.areClimbersWithinTolerance(Constants.climberStandardToleranceInches);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("Done setting climber to " + this.requestedHeightInInches);
     if(interrupted){
       done = true;
-      System.out.println("interrupted end of ClimberArmToPosition ... ");
+      System.out.println("interrupted end of ClimberArmToHeight ... ");
     }
   }
 

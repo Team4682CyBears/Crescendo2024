@@ -188,10 +188,7 @@ public final class Constants {
     public static final int leftClimberSensorDioId = 0;
     public static final int rightClimberSensorDioId= 1;
     public static final double climberStandardToleranceInches = 0.25;
-    // increment ranges of stick input (deadband range)
-    public static final double climberControllerInputPositiveStickAngleIncrement = shooterControllerInputPositiveStickAngleIncrement;
-    public static final double climberControllerInputNegativeStickAngleIncrement = shooterControllerInputNegativeStickAngleIncrement;
-    public static final double climberAngleStickIncrementMagnitude = shooterAngleStickIncrementMagnitude;
+    public static final double climberControllerStickDeadband = 0.2;
 
     // ******************************************************************
     // amp/dunker constants

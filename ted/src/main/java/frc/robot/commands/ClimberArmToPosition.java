@@ -30,7 +30,10 @@ public class ClimberArmToPosition extends ClimberArmToHeight {
     ClimberSubsystem climberSubsystem,
     ClimberArm targetArm,
     ClimberArmTargetPosition targetPosition) {
-        super(climberSubsystem, targetArm, ClimberArmToPosition.getHeightInInchesForNamedPosition(targetPosition));
+        super(
+            climberSubsystem,
+            ClimberArmToPosition.getHeightInInchesForNamedPosition(targetPosition),
+            ClimberArmToPosition.getHeightInInchesForNamedPosition(targetPosition));
   }
 
   private static double getHeightInInchesForNamedPosition(ClimberArmTargetPosition position) {
