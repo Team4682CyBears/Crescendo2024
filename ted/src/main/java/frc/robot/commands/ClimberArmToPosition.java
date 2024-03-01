@@ -12,6 +12,7 @@ package frc.robot.commands;
 
 import frc.robot.common.ClimberArm;
 import frc.robot.common.ClimberArmTargetPosition;
+import frc.robot.control.Constants;
 import frc.robot.subsystems.ClimberSubsystem;
 
 /**
@@ -39,19 +40,19 @@ public class ClimberArmToPosition extends ClimberArmToHeight {
   private static double getHeightInInchesForNamedPosition(ClimberArmTargetPosition position) {
     double targetHeight = 0.0;
     if(position == ClimberArmTargetPosition.FullDeploy) {
-        targetHeight = 19.5;
+        targetHeight = Constants.climberArmToPositionFullDeploy;
     }
     else if(position == ClimberArmTargetPosition.FullRetract) {
-        targetHeight = 0.0;
+        targetHeight = Constants.climberArmToPositionFullRetract;
     }
     else if(position == ClimberArmTargetPosition.HighChain) {
-        targetHeight = 18.0;
+        targetHeight = Constants.climberArmToPositionHighChain;
     }
     else if(position == ClimberArmTargetPosition.LowChain) {
-        targetHeight = 15.0;
+        targetHeight = Constants.climberArmToPositionLowChain;
     }
     else if(position == ClimberArmTargetPosition.HangRobot) {
-        targetHeight = 10.0;
+        targetHeight = Constants.climberArmToPositionHangRobot;
     }
     return targetHeight;
   }
