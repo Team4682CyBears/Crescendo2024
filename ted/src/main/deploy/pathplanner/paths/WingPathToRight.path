@@ -3,59 +3,59 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.538680984769377,
-        "y": 4.997492332947629
+        "x": 0.7071301441350655,
+        "y": 4.376333332273105
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.5986094808509277,
-        "y": 4.906345006719292
+        "x": 2.443087126307282,
+        "y": 2.6403763501008886
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.942559599404913,
-        "y": 4.997492332947629
+        "x": 5.597462357715413,
+        "y": 1.688853467152373
       },
       "prevControl": {
-        "x": 4.954106181378209,
-        "y": 5.452131596490988
+        "x": 3.5561525148095026,
+        "y": 1.3217114090757707
       },
       "nextControl": {
-        "x": 4.933065086256128,
-        "y": 4.623651963940591
+        "x": 7.185601766457564,
+        "y": 1.974490051458515
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.6264575631003115,
-        "y": 4.791250388056333
+        "x": 7.770943341528902,
+        "y": 2.437823265628643
       },
       "prevControl": {
-        "x": 4.297597918191873,
-        "y": 4.765347408594007
+        "x": 7.243517323510669,
+        "y": 2.437823265628643
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "ShootNoteF4"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.85,
-      "rotationDegrees": 147.02536003418967,
+      "waypointRelativePos": 0.45,
+      "rotationDegrees": 0,
       "rotateFast": false
     }
   ],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Indicator",
-      "waypointRelativePos": 0.45,
+      "name": "Intake Note",
+      "waypointRelativePos": 1.75,
       "command": {
         "type": "parallel",
         "data": {
@@ -63,7 +63,7 @@
             {
               "type": "named",
               "data": {
-                "name": "ShootNote"
+                "name": "IntakeNote"
               }
             }
           ]
@@ -72,18 +72,21 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 2.3251,
-    "maxAcceleration": 1.0,
-    "maxAngularVelocity": 431.7652343,
-    "maxAngularAcceleration": 572.9577951
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 167.05617663278753,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Tests",
-  "previewStartingState": null,
-  "useDefaultConstraints": false
+  "folder": "SourceSideWing",
+  "previewStartingState": {
+    "rotation": -60.94539590092287,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
 }

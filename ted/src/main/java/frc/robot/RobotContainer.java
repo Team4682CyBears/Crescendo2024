@@ -17,7 +17,13 @@ import frc.robot.control.InstalledHardware;
 import frc.robot.control.ManualInputInterfaces;
 import frc.robot.control.SubsystemCollection;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.ReplanningConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.control.Constants;
@@ -67,43 +73,84 @@ public class RobotContainer {
     // TODO For debugging. Can remove for final competition build. 
     this.initializeDebugDashboard();
 
-    TestTrajectories testtrajectories = new TestTrajectories(this.subsystems.getDriveTrainSubsystem().getTrajectoryConfig());
+    if (subsystems.isDriveTrainSubsystemAvailable()) {
+      TestTrajectories testtrajectories = new TestTrajectories(
+          this.subsystems.getDriveTrainSubsystem().getTrajectoryConfig());
 
-    SmartDashboard.putData("Basic Forward", new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testtrajectories.traverseSimpleForward));
-    SmartDashboard.putData("Forward Arc", new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testtrajectories.traverseForwardArc));
-    SmartDashboard.putData("Turn 90", new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testtrajectories.turn90));
+      SmartDashboard.putData("Basic Forward",
+          new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testtrajectories.traverseSimpleForward));
+      SmartDashboard.putData("Forward Arc",
+          new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testtrajectories.traverseForwardArc));
+      SmartDashboard.putData("Turn 90",
+          new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testtrajectories.turn90));
+    }
 
     // Path Planner Path Commands
     // commands to drive path planner test trajectories
     // Register Named Commands
-    NamedCommands.registerCommand("ShootFromSpeaker",
-        new ParallelCommandGroup(
-            new ButtonPressCommand("PathPlanner", "ShootFromSpeaker"),
-            new ShooterShootCommand(55.0, this.subsystems.getShooterOutfeedSubsystem(),
-                this.subsystems.getShooterAngleSubsystem(), this.subsystems.getFeederSubsystem())));
-    NamedCommands.registerCommand("ShootFromNote",
-        new ParallelCommandGroup(
-            new ButtonPressCommand("PathPlanner", "ShootFromNote"),
-            new ShooterShootCommand(40.0, this.subsystems.getShooterOutfeedSubsystem(),
-                this.subsystems.getShooterAngleSubsystem(), this.subsystems.getFeederSubsystem())));
-    NamedCommands.registerCommand("IntakeNote",
-        new ParallelCommandGroup(
-            new ButtonPressCommand("PathPlanner", "IntakeNote"),
-            new IntakeAndFeedNoteCommand(this.subsystems.getIntakeSubsystem(), this.subsystems.getFeederSubsystem(),
-                FeederMode.FeedToShooter)));
+    if (subsystems.isDriveTrainPowerSubsystemAvailable() &&
+        subsystems.isIntakeSubsystemAvailable() && subsystems.isFeederSubsystemAvailable() &&
+        subsystems.isShooterAngleSubsystemAvailable() && subsystems.isShooterOutfeedSubsystemAvailable()) {
+      NamedCommands.registerCommand("ShootFromSpeaker",
+          new ParallelCommandGroup(
+              new ButtonPressCommand("PathPlanner", "ShootFromSpeaker"),
+              new ShooterShootCommand(55.0, 4000.0, 4000.0, this.subsystems.getShooterOutfeedSubsystem(),
+                  this.subsystems.getShooterAngleSubsystem(), this.subsystems.getFeederSubsystem())));
+      NamedCommands.registerCommand("ShootFromNote",
+          new ParallelCommandGroup(
+              new ButtonPressCommand("PathPlanner", "ShootFromNote"),
+              new ShooterShootCommand(42.0, 6000.0, 6000.0, this.subsystems.getShooterOutfeedSubsystem(),
+                  this.subsystems.getShooterAngleSubsystem(), this.subsystems.getFeederSubsystem())));
+      NamedCommands.registerCommand("ShootFromStage",
+          new ParallelCommandGroup(
+              new ButtonPressCommand("PathPlanner", "ShootFromStage"),
+              new ShooterShootCommand(39.0, 6000.0, 6000.0, this.subsystems.getShooterOutfeedSubsystem(),
+                  this.subsystems.getShooterAngleSubsystem(), this.subsystems.getFeederSubsystem())));
+      NamedCommands.registerCommand("ShootFromSourceWing",
+          new ParallelCommandGroup(
+              new ButtonPressCommand("PathPlanner", "ShootFromSourceWing"),
+              new ShooterShootCommand(22.0, 6500.0, 6500.0, this.subsystems.getShooterOutfeedSubsystem(),
+                  this.subsystems.getShooterAngleSubsystem(), this.subsystems.getFeederSubsystem())));
+      NamedCommands.registerCommand("IntakeNote",
+          new ParallelCommandGroup(
+              new ButtonPressCommand("PathPlanner", "IntakeNote"),
+              new IntakeAndFeedNoteCommand(this.subsystems.getIntakeSubsystem(), this.subsystems.getFeederSubsystem(),
+                  FeederMode.FeedToShooter)));
 
-    PathPlannerPath shootAndMobility = PathPlannerPath.fromPathFile("ShootAndMobility");
-    SmartDashboard.putData("ShootAndMobility Path",
-        FollowTrajectoryCommandBuilder.build(shootAndMobility, this.subsystems.getDriveTrainSubsystem(), true));
+      HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
+          new PIDConstants(2.0, 0, 0), // Translation PID constants
+          new PIDConstants(4.5, 0.001, 0), // Rotation PID constants
+          1.8, // Max module speed, in m/s
+          0.43, // Drive base radius in meters. Distance from robot center to furthest module.
+          new ReplanningConfig() // Default path replanning config. See the API for the options here
+      );
 
-    PathPlannerPath shootPickShoot = PathPlannerPath.fromPathFile("ShootPickShoot");
-    SmartDashboard.putData("ShootPickShoot Path",
-    new SequentialCommandGroup(
-        FollowTrajectoryCommandBuilder.build(shootPickShoot, this.subsystems.getDriveTrainSubsystem(), true),
-        new IntakeAndFeedNoteCommand(this.subsystems.getIntakeSubsystem(), this.subsystems.getFeederSubsystem(), FeederMode.FeedToShooter)));
+      PathPlannerPath straightBackToNote = PathPlannerPath.fromPathFile("StraightBackToNote");
+      AutoBuilder.configureHolonomic(
+          subsystems.getDriveTrainSubsystem()::getRobotPosition, // Pose supplier
+          subsystems.getDriveTrainSubsystem()::setRobotPosition, // Position setter
+          subsystems.getDriveTrainSubsystem()::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+          subsystems.getDriveTrainSubsystem()::drive, // Method that will drive the robot given ROBOT RELATIVE
+                                                      // ChassisSpeeds
+          pathFollowerConfig,
+          () -> false,
+          subsystems.getDriveTrainSubsystem());
 
-    SmartDashboard.putData("Shoot from speaker",
-      new ShooterShootCommand(45.0, this.subsystems.getShooterOutfeedSubsystem(), this.subsystems.getShooterAngleSubsystem(), this.subsystems.getFeederSubsystem()));
+      Command shootPickShootAuto = AutoBuilder.buildAuto("ShootPickShoot");
+      SmartDashboard.putData("ShootPickShoot Auto", shootPickShootAuto);
+
+      Command sourceSideWingAuto = AutoBuilder.buildAuto("SourceSideWing");
+      SmartDashboard.putData("SourceSideWing Auto", sourceSideWingAuto);
+
+      Command oneTwoThreeSourceSideAuto = AutoBuilder.buildAuto("123SourceSide");
+      SmartDashboard.putData("123SourceSide Auto", oneTwoThreeSourceSideAuto);
+
+      SmartDashboard.putData("straightBackToNote Path",
+          FollowTrajectoryCommandBuilder.build(straightBackToNote, this.subsystems.getDriveTrainSubsystem(), true));
+    }
+
+    // Put command scheduler on dashboard
+    SmartDashboard.putData(CommandScheduler.getInstance());
 
     if (this.subsystems.isShooterOutfeedSubsystemAvailable()) {
       SmartDashboard.putData(
@@ -139,7 +186,7 @@ public class RobotContainer {
 
     if (this.subsystems.isIntakeSubsystemAvailable()) {
       SmartDashboard.putData(
-          "RunIntake",
+          "Run Intake",
           new IntakeNoteCommand(this.subsystems.getIntakeSubsystem()));
     }
 
@@ -147,12 +194,6 @@ public class RobotContainer {
       SmartDashboard.putData(
           "Run Feeder to Shooter",
           new FeedNoteCommand(this.subsystems.getFeederSubsystem(), FeederMode.FeedToShooter));
-    }
-
-    if (this.subsystems.isIntakeSubsystemAvailable() && this.subsystems.isFeederSubsystemAvailable()){
-      SmartDashboard.putData(
-        "Run Intake and Feeder",
-        new IntakeAndFeedNoteCommand(this.subsystems.getIntakeSubsystem(), this.subsystems.getFeederSubsystem(), FeederMode.FeedToShooter));
     }
 
     if(this.subsystems.isDriveTrainPowerSubsystemAvailable()) {
