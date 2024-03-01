@@ -300,6 +300,8 @@ public class MultiModeCommandBuilder {
             }
         }
 
+        System.out.println("buildCoDriverControllerLibraryCommand -> target button == " + targetButton.toString() + " count == " + multiModeCommandMap.size());
+
         // assemble the select command
         Command rtnVal = null;
         if(targetButton == MuitiModeOverloadedButtons.ButtonA) {

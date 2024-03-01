@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxRelativeEncoder;
 import com.revrobotics.SparkRelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
@@ -29,7 +28,7 @@ public class ClimberSubsystem extends SubsystemBase{
 
     // important - this should be the maximum extension of the arms' hook and it must also be the length of the cord on the spool - in inches!
     private static final double minimumArmHeightInches = 0.0;
-    private static final double maximumArmHeightInches = 19.5;
+    private static final double maximumArmHeightInches = Constants.climberArmToPositionFullDeploy;
     private static final double maximumHeightFromStoredPositionInches = maximumArmHeightInches - minimumArmHeightInches;
     // measurements of spool diameter in 4 discrete ranges
     // intended to be an average measurement of wire/chord on the spool when the spool is 'fractionaly wound'
@@ -44,10 +43,10 @@ public class ClimberSubsystem extends SubsystemBase{
     private static final boolean spoolWindingIsPositiveSparkMaxNeoMotorOutput = true;
 
     // TODO change this to final speed when everyone is ready for it
-    private static final double neoMotorSpeedReductionFactor = 0.5;
+    private static final double neoMotorSpeedReductionFactor = 1.0;
 
-    private static final double lengthClimberExtensionVeryCloseToEndInches = maximumArmHeightInches - 2.0; // max - 2.0 inches
-    private static final double lengthClimberExtensionVeryCloseToStopInches = 2.0; // 2.0 inches
+    private static final double lengthClimberExtensionVeryCloseToEndInches = maximumArmHeightInches - 1.5; // max - 2.0 inches
+    private static final double lengthClimberExtensionVeryCloseToStopInches = 1.5; // 2.0 inches
     private static final double neoMotorSpeedReductionFactorVeryCloseToStop = 0.25; 
 
     private static final double leftClimberSensorResetRetractSpeed = -0.9;
@@ -74,7 +73,7 @@ public class ClimberSubsystem extends SubsystemBase{
     private SparkPIDController rightPidController;
     private RelativeEncoder rightEncoder;
     private double kPRight, kIRight, kDRight, kIzRight, kFFRight, kMaxOutputRight, kMinOutputRight, maxRPMRight, maxVelRight, minVelRight, maxAccRight, allowedErrRight;
-    private boolean isRightMotorInverted = true;
+    private boolean isRightMotorInverted = false;
     private DigitalInput rightMageneticSensor = null;
     private CorrectableEncoderRevNeoPlusDigitalIoPort rightCorrectableCoupling = null;
     private boolean rightClimberReady = InstalledHardware.rightClimberInstalled && InstalledHardware.rightClimberSensorInstalled;
@@ -118,21 +117,20 @@ public class ClimberSubsystem extends SubsystemBase{
             leftCorrectableCoupling = new CorrectableEncoderRevNeoPlusDigitalIoPort(
                 leftEncoder,
                 leftMageneticSensor,
-                this.convertClimberArmsHeightToMotorEncoderPosition(ClimberSubsystem.minimumArmHeightInches),
-                this.convertClimberArmsHeightToMotorEncoderPosition(ClimberSubsystem.minimumArmHeightInches - 0.75), // assume below the reference zero point by 3/4 of an inch
-                this.convertClimberArmsHeightToMotorEncoderPosition(ClimberSubsystem.minimumArmHeightInches + 0.75) // assume above the reference zero point by 3/4 of an inch
+                this.convertClimberArmsHeightToMotorEncoderPosition(ClimberSubsystem.minimumArmHeightInches + Constants.climberArmSensorPosition),
+                this.convertClimberArmsHeightToMotorEncoderPosition(ClimberSubsystem.minimumArmHeightInches - Constants.climberArmSensorBlindFindDistance),
+                this.convertClimberArmsHeightToMotorEncoderPosition(ClimberSubsystem.minimumArmHeightInches + Constants.climberArmSensorBlindFindDistance)
                 );
         }
 
         if(this.rightClimberReady) {
-            rightMotor = new CANSparkMax(Constants.rightClimberMotorCanId, MotorType.kBrushless);
             rightMageneticSensor = new DigitalInput(Constants.rightClimberSensorDioId);
             rightCorrectableCoupling = new CorrectableEncoderRevNeoPlusDigitalIoPort(
                 rightEncoder,
                 rightMageneticSensor,
-                this.convertClimberArmsHeightToMotorEncoderPosition(ClimberSubsystem.minimumArmHeightInches),
-                this.convertClimberArmsHeightToMotorEncoderPosition(ClimberSubsystem.minimumArmHeightInches - 0.75), // assume below the reference zero point by 3/4 of an inch
-                this.convertClimberArmsHeightToMotorEncoderPosition(ClimberSubsystem.minimumArmHeightInches + 0.75) // assume above the reference zero point by 3/4 of an inch
+                this.convertClimberArmsHeightToMotorEncoderPosition(ClimberSubsystem.minimumArmHeightInches + Constants.climberArmSensorPosition),
+                this.convertClimberArmsHeightToMotorEncoderPosition(ClimberSubsystem.minimumArmHeightInches - Constants.climberArmSensorBlindFindDistance),
+                this.convertClimberArmsHeightToMotorEncoderPosition(ClimberSubsystem.minimumArmHeightInches + Constants.climberArmSensorBlindFindDistance)
                 );
         }
 

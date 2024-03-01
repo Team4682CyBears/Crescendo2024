@@ -200,7 +200,8 @@ public class RobotContainer {
    * A method to init the climbers
    */
   private void initializeClimberSubsystem() {
-    if(InstalledHardware.leftClimberInstalled && InstalledHardware.rightClimberInstalled) {
+    if((InstalledHardware.leftClimberInstalled && InstalledHardware.leftClimberSensorInstalled) || 
+    (InstalledHardware.rightClimberInstalled && InstalledHardware.rightClimberSensorInstalled)) {
       subsystems.setClimberSubsystem(new ClimberSubsystem());
       System.out.println("SUCCESS: ClimberSubsystem");
     }

@@ -30,44 +30,44 @@ public class InstalledHardware
     
     // Onboard Hardware - Orentation/Navigation Hardware
     public static final boolean wifiRadioInstalled = true;
-    public static final boolean navx2Installed = false;
-    public static final boolean navx1Installed = true;
+    public static final boolean navx2Installed = true;
+    public static final boolean navx1Installed = false;
     public static final boolean navxInstalled = navx1Installed || navx2Installed;
     public static final boolean limelightInstalled = true;
 
     // External Input Hardware
-    public static final boolean driverXboxControllerInstalled = false;
+    public static final boolean driverXboxControllerInstalled = true;
     public static final boolean coDriverXboxControllerInstalled = true;
 
     // DriveTrain Related Hardware
-    public static final boolean tedDrivetrainInstalled = false; // true is ted, false is babybear/minibear
-    public static final boolean leftFrontDriveInstalled = false;
-    public static final boolean leftRearDriveInstalled = false;
-    public static final boolean rightFrontDriveInstalled = false;
-    public static final boolean rightRearDriveInstalled = false;
+    public static final boolean tedDrivetrainInstalled = true; // true is ted, false is babybear/minibear
+    public static final boolean leftFrontDriveInstalled = true;
+    public static final boolean leftRearDriveInstalled = true;
+    public static final boolean rightFrontDriveInstalled = true;
+    public static final boolean rightRearDriveInstalled = true;
 
     // Intake Related Hardware
-    public static final boolean intakeInstalled = false;
+    public static final boolean intakeInstalled = true;
 
     // Feeder Related Hardware
-    public static final boolean feederInstalled = false;
+    public static final boolean feederInstalled = true;
 
     // TOF Sensor Hardware
     // Important! You must disable any TOF sensor that is not installed!! 
     // If you try to configure a TOF sensor that is not installed
     // the other TOF sensors that are installed will not work. 
     public static final boolean intakeTofInstalled = false;
-    public static final boolean feederToShooterTofInstalled = false;
+    public static final boolean feederToShooterTofInstalled = true;
     public static final boolean feederToDunkerTofInstalled = false;
 
     // Shooter Related Hardware
-    public static final boolean shooterOutfeedInstalled = false;
-    public static final boolean shooterAngleInstalled = false;
+    public static final boolean shooterOutfeedInstalled = true;
+    public static final boolean shooterAngleInstalled = true;
     // for testing, to decrease the power of the shooter angle mechanism, 
     // reduce the left motor gear box to 10x (instaed of 100x)
     // and disconnect the right motor from the chain. 
-    public static final boolean shooterRightAngleMotorInstalled = false;
-    public static final boolean shooterAngleCanCoderInstalled = false; 
+    public static final boolean shooterRightAngleMotorInstalled = true;
+    public static final boolean shooterAngleCanCoderInstalled = true; 
 
     // Climber Sensor Related Hardware
     public static final boolean leftClimberInstalled = true;

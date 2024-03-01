@@ -189,7 +189,9 @@ public final class Constants {
     public static final int rightClimberSensorDioId= 1;
     public static final double climberStandardToleranceInches = 0.25;
     public static final double climberControllerStickDeadband = 0.2;
-    public static final double climberArmToPositionFullDeploy = 19.5;
+    public static final double climberArmSensorPosition = 0.75;
+    public static final double climberArmSensorBlindFindDistance = 1.75;
+    public static final double climberArmToPositionFullDeploy = 17.75;
     public static final double climberArmToPositionFullRetract = 0.0;
     public static final double climberArmToPositionHighChain = 18.0;
     public static final double climberArmToPositionLowChain = 15.0;
