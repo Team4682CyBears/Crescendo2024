@@ -28,13 +28,6 @@ import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.control.Constants;
-import frc.robot.subsystems.DrivetrainPowerSubsystem;
-import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.FeederSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.PowerDistributionPanelWatcherSubsystem;
-import frc.robot.subsystems.ShooterOutfeedSubsystem;
-import frc.robot.subsystems.ShooterAngleSubsystem;
 
 public class RobotContainer {
 
@@ -58,6 +51,9 @@ public class RobotContainer {
 
     // init the various subsystems
     this.initializeDrivetrainSubsystem();
+
+    // init the climber subsystem
+    this.initializeClimberSubsystem();
 
     // init the input system 
     this.initializeManualInputInterfaces();
@@ -162,6 +158,25 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return autonomousChooser.getCommand();
+  }
+
+  /**
+   * A method to init the climbers
+   */
+  private void initializeClimberSubsystem() {
+    if((InstalledHardware.leftClimberInstalled && InstalledHardware.leftClimberSensorInstalled) || 
+    (InstalledHardware.rightClimberInstalled && InstalledHardware.rightClimberSensorInstalled)) {
+      subsystems.setClimberSubsystem(new ClimberSubsystem());
+      System.out.println("SUCCESS: ClimberSubsystem");
+      subsystems.getClimberSubsystem().setDefaultCommand(
+        new ClimberArmDefaultSpeed(
+          subsystems.getClimberSubsystem(),
+          () -> this.getLeftClimberStickInput(),
+          () -> this.getRightClimberStickInput()));
+    }
+    else {
+      System.out.println("FAIL: ClimberSubsystem");
+    }
   }
 
   /**
@@ -372,5 +387,35 @@ public class RobotContainer {
       System.out.println("FAIL: initializeArms");
     }
   }*/
+
+  private double getLeftClimberStickInput() {
+    double value = 0.0;
+    if(this.subsystems.isClimberSubsystemAvailable() && 
+       this.subsystems.isManualInputInterfacesAvailable()){
+      double nextValue = this.subsystems.getManualInputInterfaces().getInputLeftClimberArmZ();
+      if(nextValue > 0.2){
+        value = Constants.climberArmUpDefaultSpeed;
+      }
+      else if(nextValue < -0.2){
+        value = Constants.climberArmDownDefaultSpeed;
+      }
+    }
+    return value;
+  }
+
+  private double getRightClimberStickInput() {
+    double value = 0.0;
+    if(this.subsystems.isClimberSubsystemAvailable() && 
+       this.subsystems.isManualInputInterfacesAvailable()){
+      double nextValue = this.subsystems.getManualInputInterfaces().getRightClimberArmZ();
+      if(nextValue > 0.2){
+        value = Constants.climberArmUpDefaultSpeed;
+      }
+      else if(nextValue < -0.2){
+        value = Constants.climberArmDownDefaultSpeed;
+      }
+    }
+    return value;
+  }
 
 }
