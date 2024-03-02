@@ -397,7 +397,7 @@ public class RobotContainer {
         value = Constants.climberArmUpDefaultSpeed;
       }
       else if(nextValue < -0.2){
-        value = Constants.climberArmUpDefaultSpeed;
+        value = Constants.climberArmDownDefaultSpeed;
       }
     }
     return value;
@@ -412,7 +412,7 @@ public class RobotContainer {
         value = Constants.climberArmUpDefaultSpeed;
       }
       else if(nextValue < -0.2){
-        value = Constants.climberArmUpDefaultSpeed;
+        value = Constants.climberArmDownDefaultSpeed;
       }
     }
     return value;

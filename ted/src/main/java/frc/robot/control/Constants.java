@@ -43,7 +43,7 @@ public final class Constants {
         Units.inchesToMeters(17.179),
         WcpModuleConfigurations.BABYBEAR,
         Math.toRadians(281.8 + 3.8 + 173.5), // FRONT LEFT
-        Math.toRadians(327.9 + 3.6 - 0.3), // FRONT RIGHT
+        Math.toRadians(327.9 + 3.6 - 0.3 - 173.41), // FRONT RIGHT
         Math.toRadians(209.1 + 2.5 - 7.9), // BACK LEFT
         Math.toRadians(49.0 + 356.6 + 0.5)); // BACK RIGHT
 
