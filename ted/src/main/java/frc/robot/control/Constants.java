@@ -164,20 +164,20 @@ public final class Constants {
 
     // ******************************************************************
     // climber constants
-    public static final int leftClimberMotorCanId = 25;
-    public static final int rightClimberMotorCanId = 26;
+    public static final int leftClimberMotorCanId = 26;
+    public static final int rightClimberMotorCanId = 25;
     public static final int leftClimberSensorDioId = 0;
     public static final int rightClimberSensorDioId= 1;
     public static final double climberStandardToleranceInches = 0.25;
     public static final double climberControllerStickDeadband = 0.2;
     public static final double climberArmSensorPosition = 0.75;
     public static final double climberArmSensorBlindFindDistance = 1.75;
-    public static final double climberArmToPositionFullDeploy = 17.75;
-    public static final double climberArmToPositionFullRetract = 0.0;
+    public static final double climberArmToPositionFullDeploy = 22.75;
+    public static final double climberArmToPositionFullRetract = -2.0;
     public static final double climberArmToPositionHighChain = 18.0;
     public static final double climberArmToPositionLowChain = 15.0;
     public static final double climberArmToPositionHangRobot = 10.0;
-    public static final double climberArmUpDefaultSpeed = 0.5;
+    public static final double climberArmUpDefaultSpeed = 0.75;
     public static final double climberArmDownDefaultSpeed = -1.0 * climberArmUpDefaultSpeed;
 
     // ******************************************************************

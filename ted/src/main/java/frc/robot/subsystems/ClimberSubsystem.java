@@ -62,7 +62,7 @@ public class ClimberSubsystem extends SubsystemBase{
     private SparkPIDController leftPidController;
     private RelativeEncoder leftEncoder;
     private double kPLeft, kILeft, kDLeft, kIzLeft, kFFLeft, kMaxOutputLeft, kMinOutputLeft, maxRPMLeft, maxVelLeft, minVelLeft, maxAccLeft, allowedErrLeft;
-    private boolean isLeftMotorInverted = false;
+    private boolean isLeftMotorInverted = true;
     private DigitalInput leftMageneticSensor = null;
     private CorrectableEncoderRevNeoPlusDigitalIoPort leftCorrectableCoupling = null;
     private boolean leftClimberReady = InstalledHardware.leftClimberInstalled && InstalledHardware.leftClimberSensorInstalled;
