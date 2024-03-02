@@ -28,6 +28,18 @@
           "data": {
             "name": "IntakeNote"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MidNoteToSpeaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootFromSpeaker"
+          }
         }
       ]
     }
