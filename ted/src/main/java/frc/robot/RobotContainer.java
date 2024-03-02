@@ -39,7 +39,7 @@ import frc.robot.subsystems.ShooterAngleSubsystem;
 public class RobotContainer {
 
   private SubsystemCollection subsystems = new SubsystemCollection();
-  private final AutonomousChooser autonomousChooser = new AutonomousChooser(subsystems);
+  private final AutonomousChooser autonomousChooser;
 
   public RobotContainer() {
 
@@ -64,6 +64,10 @@ public class RobotContainer {
 
     // do late binding of default commands
     this.lateBindDefaultCommands();
+
+    AutonomousChooser.configureAutoBuilder(subsystems);
+    autonomousChooser  = new AutonomousChooser(subsystems);
+
 
     // Configure the button bindings
     if(this.subsystems.isManualInputInterfacesAvailable()) {
