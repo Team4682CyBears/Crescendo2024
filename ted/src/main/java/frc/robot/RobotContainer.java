@@ -1,6 +1,12 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+// ************************************************************
+// Bishop Blanchet Robotics
+// Home of the Cybears
+// FRC - Crescendo - 2024
+// File: RobotContainer.java
+// Intent: main robot body
+// ************************************************************
+
+// ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
 
 package frc.robot;
 
@@ -20,6 +26,9 @@ import frc.robot.control.SubsystemCollection;
 import frc.robot.subsystems.ClimberSubsystem;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.auto.NamedCommands;
+import frc.robot.control.AutonomousChooser;
+import com.pathplanner.lib.auto.AutoBuilder;
+import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.control.Constants;
@@ -34,6 +43,7 @@ import frc.robot.subsystems.ShooterAngleSubsystem;
 public class RobotContainer {
 
   private SubsystemCollection subsystems = new SubsystemCollection();
+  private final AutonomousChooser autonomousChooser;
 
   public RobotContainer() {
 
@@ -62,6 +72,10 @@ public class RobotContainer {
     // do late binding of default commands
     this.lateBindDefaultCommands();
 
+    AutonomousChooser.configureAutoBuilder(subsystems);
+    autonomousChooser  = new AutonomousChooser(subsystems);
+
+
     // Configure the button bindings
     if(this.subsystems.isManualInputInterfacesAvailable()) {
       System.out.println(">>>> Initializing button bindings.");
@@ -72,48 +86,33 @@ public class RobotContainer {
     // TODO For debugging. Can remove for final competition build. 
     this.initializeDebugDashboard();
 
-    if(this.subsystems.isDriveTrainSubsystemAvailable()) {
-      TestTrajectories testtrajectories = new TestTrajectories(this.subsystems.getDriveTrainSubsystem().getTrajectoryConfig());
+    if (subsystems.isDriveTrainSubsystemAvailable()) {
+      TestTrajectories testtrajectories = new TestTrajectories(
+          this.subsystems.getDriveTrainSubsystem().getTrajectoryConfig());
 
-      SmartDashboard.putData("Basic Forward", new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testtrajectories.traverseSimpleForward));
-      SmartDashboard.putData("Forward Arc", new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testtrajectories.traverseForwardArc));
-      SmartDashboard.putData("Turn 90", new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testtrajectories.turn90));
+      SmartDashboard.putData("Basic Forward",
+          new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testtrajectories.traverseSimpleForward));
+      SmartDashboard.putData("Forward Arc",
+          new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testtrajectories.traverseForwardArc));
+      SmartDashboard.putData("Turn 90",
+          new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testtrajectories.turn90));
     }
 
     // Path Planner Path Commands
     // commands to drive path planner test trajectories
     // Register Named Commands
-    if (this.subsystems.isShooterAngleSubsystemAvailable() && this.subsystems.isShooterAngleSubsystemAvailable() &&
-      this.subsystems.isIntakeSubsystemAvailable() && this.subsystems.isFeederSubsystemAvailable()){
-      NamedCommands.registerCommand("ShootFromSpeaker",
-          new ParallelCommandGroup(
-              new ButtonPressCommand("PathPlanner", "ShootFromSpeaker"),
-              new ShooterShootCommand(55.0, this.subsystems.getShooterOutfeedSubsystem(),
-                  this.subsystems.getShooterAngleSubsystem(), this.subsystems.getFeederSubsystem())));
-      NamedCommands.registerCommand("ShootFromNote",
-          new ParallelCommandGroup(
-              new ButtonPressCommand("PathPlanner", "ShootFromNote"),
-              new ShooterShootCommand(40.0, this.subsystems.getShooterOutfeedSubsystem(),
-                  this.subsystems.getShooterAngleSubsystem(), this.subsystems.getFeederSubsystem())));
-      NamedCommands.registerCommand("IntakeNote",
-          new ParallelCommandGroup(
-              new ButtonPressCommand("PathPlanner", "IntakeNote"),
-              new IntakeAndFeedNoteCommand(this.subsystems.getIntakeSubsystem(), this.subsystems.getFeederSubsystem(),
-                  FeederMode.FeedToShooter)));
 
-      PathPlannerPath shootAndMobility = PathPlannerPath.fromPathFile("ShootAndMobility");
-      SmartDashboard.putData("ShootAndMobility Path",
-          FollowTrajectoryCommandBuilder.build(shootAndMobility, this.subsystems.getDriveTrainSubsystem(), true));
+      //Command shootPickShootAuto = AutoBuilder.buildAuto("ShootPickShoot");
+      //SmartDashboard.putData("ShootPickShoot Auto", shootPickShootAuto);
 
-      PathPlannerPath shootPickShoot = PathPlannerPath.fromPathFile("ShootPickShoot");
-      SmartDashboard.putData("ShootPickShoot Path",
-      new SequentialCommandGroup(
-          FollowTrajectoryCommandBuilder.build(shootPickShoot, this.subsystems.getDriveTrainSubsystem(), true),
-          new IntakeAndFeedNoteCommand(this.subsystems.getIntakeSubsystem(), this.subsystems.getFeederSubsystem(), FeederMode.FeedToShooter)));
+      //Command sourceSideWingAuto = AutoBuilder.buildAuto("SourceSideWing");
+      //SmartDashboard.putData("SourceSideWing Auto", sourceSideWingAuto);
 
-      SmartDashboard.putData("Shoot from speaker",
-        new ShooterShootCommand(45.0, this.subsystems.getShooterOutfeedSubsystem(), this.subsystems.getShooterAngleSubsystem(), this.subsystems.getFeederSubsystem()));
-    }
+      //Command oneTwoThreeSourceSideAuto = AutoBuilder.buildAuto("123SourceSide");
+      //SmartDashboard.putData("123SourceSide Auto", oneTwoThreeSourceSideAuto);
+
+    // Put command scheduler on dashboard
+    SmartDashboard.putData(CommandScheduler.getInstance());
 
     if (this.subsystems.isShooterOutfeedSubsystemAvailable()) {
       SmartDashboard.putData(
@@ -149,7 +148,7 @@ public class RobotContainer {
 
     if (this.subsystems.isIntakeSubsystemAvailable()) {
       SmartDashboard.putData(
-          "RunIntake",
+          "Run Intake",
           new IntakeNoteCommand(this.subsystems.getIntakeSubsystem()));
     }
 
@@ -157,12 +156,6 @@ public class RobotContainer {
       SmartDashboard.putData(
           "Run Feeder to Shooter",
           new FeedNoteCommand(this.subsystems.getFeederSubsystem(), FeederMode.FeedToShooter));
-    }
-
-    if (this.subsystems.isIntakeSubsystemAvailable() && this.subsystems.isFeederSubsystemAvailable()){
-      SmartDashboard.putData(
-        "Run Intake and Feeder",
-        new IntakeAndFeedNoteCommand(this.subsystems.getIntakeSubsystem(), this.subsystems.getFeederSubsystem(), FeederMode.FeedToShooter));
     }
 
     if(this.subsystems.isDriveTrainPowerSubsystemAvailable()) {
@@ -193,7 +186,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    return autonomousChooser.getCommand();
   }
 
   /**

@@ -31,10 +31,11 @@ public final class Constants {
         Units.inchesToMeters(23.25), 
         Units.inchesToMeters(22.75), 
         WcpModuleConfigurations.TED,
-        Math.toRadians(-215.15), // FRONT LEFT
-        Math.toRadians(-180.61), // FRONT RIGHT 
-        Math.toRadians(-191.33), // BACK LEFT
-        Math.toRadians(-58.35)); // BACK RIGHT
+        // SUBTRACT the values you find in shuffleboard
+        Math.toRadians(-215.15 - 178.76 - 180.0 -358.7), // FRONT LEFT
+        Math.toRadians(-180.61 - 95.27 - 358.6 -169.8), // FRONT RIGHT 
+        Math.toRadians(-191.33 - 257.52 -357.3 ), // BACK LEFT
+        Math.toRadians(-58.35 - 177.27 - 180.0 - 2.0)); // BACK RIGHT
 
     //////////////////// BABYBEAR DRIVETRAIN ////////////////////
     public static final DrivetrainConfig babybearDrivetrainConfig = new DrivetrainConfig (
@@ -121,7 +122,7 @@ public final class Constants {
     // feederSpeed is [0.0 .. 1.0]
     // it runs in one direction for the shooter 
     // and the opposite direction for the dunker/amp
-    public static final double feederSpeed = 0.30;
+    public static final double feederSpeed = 0.20;
     public static final double feederReverseSpeed = 0.10;
     // feeder will run until note is detected or this timeout has expired
     public static final double feederTimeoutSeconds = 10.0;
@@ -133,11 +134,11 @@ public final class Constants {
     public static final int rightTalonShooterMotorCanId = 21; 
     public static InvertedValue rightTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;  
     private static double shooterBaseRpm = talonMaximumRevolutionsPerMinute;
-    public static final double shooterLeftDefaultSpeedRpm = shooterBaseRpm * 0.15;
-    public static final double shooterRightDefaultSpeedRpm = shooterBaseRpm * 0.15;
+    public static final double shooterLeftDefaultSpeedRpm = shooterBaseRpm * 0.65;
+    public static final double shooterRightDefaultSpeedRpm = shooterBaseRpm * 0.65;
     public static final double shooterSpinUpTimeoutSeconds = 5.0;
-    public static final double shooterShootDuration = 5.0;
-    public static final double shooterSpinUpDelay = 2.0;
+    public static final double shooterShootDuration = 2.5;
+    public static final double shooterSpinUpDelay = 1.0;
 
     // *******************************************************************
     // shooter angle constants  

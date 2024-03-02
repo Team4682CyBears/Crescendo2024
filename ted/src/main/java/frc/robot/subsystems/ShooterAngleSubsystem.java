@@ -52,7 +52,7 @@ public class ShooterAngleSubsystem extends SubsystemBase {
   private double internalAngleOffsetDegrees = 0; // used when running from intenral motor encoder, ignored when using CanCoder
 
   // Motor controller gains
-  private Slot0Configs angleMotorGains = new Slot0Configs().withKP(250).withKI(0).withKD(50.0).withKV(0);
+  private Slot0Configs angleMotorGains = new Slot0Configs().withKP(350).withKI(0).withKD(50.0).withKV(0);
 
   /**
    * Constructor for shooter subsystem
