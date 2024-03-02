@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.71,
-      "y": 4.38
+      "x": 1.3499985088160098,
+      "y": 5.5471471702718285
     },
-    "rotation": -60.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "WingPathToRight"
+            "pathName": "StraightBackToNote"
           }
         },
         {
@@ -30,21 +30,45 @@
           }
         },
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "RightToShoot"
+            "waitTime": 0.5
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ShootFromSourceWing"
+            "name": "ShootFromNote"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "RightToGrab"
+            "pathName": "BlueNoteToStage"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeNote"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootFromStage"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BlueStageToMid"
           }
         },
         {

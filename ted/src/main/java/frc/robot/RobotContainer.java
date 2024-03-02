@@ -1,6 +1,12 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+// ************************************************************
+// Bishop Blanchet Robotics
+// Home of the Cybears
+// FRC - Crescendo - 2024
+// File: RobotContainer.java
+// Intent: main robot body
+// ************************************************************
+
+// ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
 
 package frc.robot;
 
@@ -16,13 +22,8 @@ import frc.robot.common.TestTrajectories;
 import frc.robot.control.InstalledHardware;
 import frc.robot.control.ManualInputInterfaces;
 import frc.robot.control.SubsystemCollection;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.commands.PathPlannerAuto;
+import frc.robot.control.AutonomousChooser;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.ReplanningConfig;
-import com.pathplanner.lib.util.PIDConstants;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -38,6 +39,7 @@ import frc.robot.subsystems.ShooterAngleSubsystem;
 public class RobotContainer {
 
   private SubsystemCollection subsystems = new SubsystemCollection();
+  private final AutonomousChooser autonomousChooser;
 
   public RobotContainer() {
 
@@ -62,6 +64,10 @@ public class RobotContainer {
 
     // do late binding of default commands
     this.lateBindDefaultCommands();
+
+    AutonomousChooser.configureAutoBuilder(subsystems);
+    autonomousChooser  = new AutonomousChooser(subsystems);
+
 
     // Configure the button bindings
     if(this.subsystems.isManualInputInterfacesAvailable()) {
@@ -88,66 +94,15 @@ public class RobotContainer {
     // Path Planner Path Commands
     // commands to drive path planner test trajectories
     // Register Named Commands
-    if (subsystems.isDriveTrainPowerSubsystemAvailable() &&
-        subsystems.isIntakeSubsystemAvailable() && subsystems.isFeederSubsystemAvailable() &&
-        subsystems.isShooterAngleSubsystemAvailable() && subsystems.isShooterOutfeedSubsystemAvailable()) {
-      NamedCommands.registerCommand("ShootFromSpeaker",
-          new ParallelCommandGroup(
-              new ButtonPressCommand("PathPlanner", "ShootFromSpeaker"),
-              new ShooterShootCommand(55.0, 4000.0, 4000.0, this.subsystems.getShooterOutfeedSubsystem(),
-                  this.subsystems.getShooterAngleSubsystem(), this.subsystems.getFeederSubsystem())));
-      NamedCommands.registerCommand("ShootFromNote",
-          new ParallelCommandGroup(
-              new ButtonPressCommand("PathPlanner", "ShootFromNote"),
-              new ShooterShootCommand(42.0, 6000.0, 6000.0, this.subsystems.getShooterOutfeedSubsystem(),
-                  this.subsystems.getShooterAngleSubsystem(), this.subsystems.getFeederSubsystem())));
-      NamedCommands.registerCommand("ShootFromStage",
-          new ParallelCommandGroup(
-              new ButtonPressCommand("PathPlanner", "ShootFromStage"),
-              new ShooterShootCommand(39.0, 6000.0, 6000.0, this.subsystems.getShooterOutfeedSubsystem(),
-                  this.subsystems.getShooterAngleSubsystem(), this.subsystems.getFeederSubsystem())));
-      NamedCommands.registerCommand("ShootFromSourceWing",
-          new ParallelCommandGroup(
-              new ButtonPressCommand("PathPlanner", "ShootFromSourceWing"),
-              new ShooterShootCommand(22.0, 6500.0, 6500.0, this.subsystems.getShooterOutfeedSubsystem(),
-                  this.subsystems.getShooterAngleSubsystem(), this.subsystems.getFeederSubsystem())));
-      NamedCommands.registerCommand("IntakeNote",
-          new ParallelCommandGroup(
-              new ButtonPressCommand("PathPlanner", "IntakeNote"),
-              new IntakeAndFeedNoteCommand(this.subsystems.getIntakeSubsystem(), this.subsystems.getFeederSubsystem(),
-                  FeederMode.FeedToShooter)));
 
-      HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-          new PIDConstants(2.0, 0, 0), // Translation PID constants
-          new PIDConstants(4.5, 0.001, 0), // Rotation PID constants
-          1.8, // Max module speed, in m/s
-          0.43, // Drive base radius in meters. Distance from robot center to furthest module.
-          new ReplanningConfig() // Default path replanning config. See the API for the options here
-      );
+      //Command shootPickShootAuto = AutoBuilder.buildAuto("ShootPickShoot");
+      //SmartDashboard.putData("ShootPickShoot Auto", shootPickShootAuto);
 
-      PathPlannerPath straightBackToNote = PathPlannerPath.fromPathFile("StraightBackToNote");
-      AutoBuilder.configureHolonomic(
-          subsystems.getDriveTrainSubsystem()::getRobotPosition, // Pose supplier
-          subsystems.getDriveTrainSubsystem()::setRobotPosition, // Position setter
-          subsystems.getDriveTrainSubsystem()::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-          subsystems.getDriveTrainSubsystem()::drive, // Method that will drive the robot given ROBOT RELATIVE
-                                                      // ChassisSpeeds
-          pathFollowerConfig,
-          () -> false,
-          subsystems.getDriveTrainSubsystem());
+      //Command sourceSideWingAuto = AutoBuilder.buildAuto("SourceSideWing");
+      //SmartDashboard.putData("SourceSideWing Auto", sourceSideWingAuto);
 
-      Command shootPickShootAuto = AutoBuilder.buildAuto("ShootPickShoot");
-      SmartDashboard.putData("ShootPickShoot Auto", shootPickShootAuto);
-
-      Command sourceSideWingAuto = AutoBuilder.buildAuto("SourceSideWing");
-      SmartDashboard.putData("SourceSideWing Auto", sourceSideWingAuto);
-
-      Command oneTwoThreeSourceSideAuto = AutoBuilder.buildAuto("123SourceSide");
-      SmartDashboard.putData("123SourceSide Auto", oneTwoThreeSourceSideAuto);
-
-      SmartDashboard.putData("straightBackToNote Path",
-          FollowTrajectoryCommandBuilder.build(straightBackToNote, this.subsystems.getDriveTrainSubsystem(), true));
-    }
+      //Command oneTwoThreeSourceSideAuto = AutoBuilder.buildAuto("123SourceSide");
+      //SmartDashboard.putData("123SourceSide Auto", oneTwoThreeSourceSideAuto);
 
     // Put command scheduler on dashboard
     SmartDashboard.putData(CommandScheduler.getInstance());
@@ -206,7 +161,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    return autonomousChooser.getCommand();
   }
 
   /**

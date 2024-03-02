@@ -3,43 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.35,
-        "y": 5.55
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 1.5595252253357617,
-        "y": 5.623563175092452
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
         "x": 2.4987833875488867,
         "y": 4.332276285303912
       },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.9345033849148074,
+        "y": 2.629029782514612
+      },
+      "isLocked": false,
+      "linkedName": "BlueStage"
+    },
+    {
+      "anchor": {
+        "x": 7.71911012803507,
+        "y": 2.4214573984703534
+      },
       "prevControl": {
-        "x": 1.8966704123032583,
-        "y": 4.772846754995836
+        "x": 7.256944460221658,
+        "y": 0.27902796413821923
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.75,
-      "rotationDegrees": -30.0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
       "name": "Intake Note",
-      "waypointRelativePos": 0.75,
+      "waypointRelativePos": 0.85,
       "command": {
         "type": "parallel",
         "data": {
@@ -63,11 +57,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -29.124053494777442,
+    "rotation": 1.0936907395187756,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "123SourceSide",
+  "folder": "Blue123SourceSide",
   "previewStartingState": null,
   "useDefaultConstraints": false
 }
