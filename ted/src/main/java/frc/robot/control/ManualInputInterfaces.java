@@ -35,6 +35,7 @@ public class ManualInputInterfaces {
 
   // subsystems needed for inputs
   private SubsystemCollection subsystemCollection = null;
+  private double rightClimberSpeed = 0.0;
 
   /**
    * The constructor to build this 'manual input' conduit
@@ -79,11 +80,20 @@ public class ManualInputInterfaces {
    * A method to get the arcade arm Z componet being input from humans
    * @return - a double value associated with the magnitude of the Z componet
    */
-  public double getInputClimberArmsZ()
+  public double getInputLeftClimberArmZ()
   {
     // use the co drivers right Z to represent the vertical movement
     // and multiply by -1.0 as xbox reports values flipped
     return -1.0 * coDriverController.getLeftY();
+  }
+
+  /**
+   * A method to get the arcade arm Z componet being input from humans
+   * @return - a double value associated with the magnitude of the Z componet
+   */
+  public double getRightClimberArmZ()
+  {
+    return this.rightClimberSpeed;
   }
 
   /**
@@ -362,6 +372,29 @@ public class ManualInputInterfaces {
                 "send note to dunker"))
           );
       }
+
+      this.coDriverController.povUp().onTrue(
+          new InstantCommand(() -> this.setRightClimberSpeedPositive())
+      );
+      this.coDriverController.povUp().onFalse(
+          new InstantCommand(() -> this.setRightClimberSpeedZero())
+      );
+      this.coDriverController.povDown().onTrue(
+          new InstantCommand(() -> this.setRightClimberSpeedNegative())
+      );
+      this.coDriverController.povDown().onFalse(
+          new InstantCommand(() -> this.setRightClimberSpeedZero())
+      );
     }
+  }
+
+  private void setRightClimberSpeedPositive() {
+    this.rightClimberSpeed = Constants.climberArmUpDefaultSpeed;
+  }
+  private void setRightClimberSpeedNegative() {
+    this.rightClimberSpeed = Constants.climberArmDownDefaultSpeed;
+  }
+  private void setRightClimberSpeedZero() {
+    this.rightClimberSpeed = 0.0;
   }
 }
