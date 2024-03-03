@@ -47,7 +47,7 @@ public class ClimberSubsystem extends SubsystemBase{
 
     private static final double lengthClimberExtensionVeryCloseToEndInches = maximumArmHeightInches - 1.5; // max - 2.0 inches
     private static final double lengthClimberExtensionVeryCloseToStopInches = 1.5; // 2.0 inches
-    private static final double neoMotorSpeedReductionFactorVeryCloseToStop = 0.25; 
+    private static final double neoMotorSpeedReductionFactorVeryCloseToStop = 0.75; 
 
     private static final double leftClimberSensorResetRetractSpeed = -0.9;
     private static final double leftClimberSensorResetExtendSpeed = 0.9;
