@@ -275,7 +275,7 @@ public class ClimberSubsystem extends SubsystemBase{
         if(this.inSpeedMode) {
             // Left
             if(this.leftClimberReady) {
-                if(isLeftArmAtOrBelowLowStop && this.targetLeftMotorSpeed < 0.0) {
+                if(isLeftArmAtOrBelowLowStop && this.targetLeftMotorSpeed < 0.0 && this.leftCorrectableCoupling.getMotorEncoderEverReset()) {
                     this.leftMotor.set(0.0);
                 }
                 else if(isLeftArmAtOrAboveHighStop && this.targetLeftMotorSpeed > 0.0) {
@@ -292,7 +292,7 @@ public class ClimberSubsystem extends SubsystemBase{
             }
             // Right
             if(this.rightClimberReady) {
-                if(isRightArmAtOrBelowLowStop && this.targetRightMotorSpeed < 0.0) {
+                if(isRightArmAtOrBelowLowStop && this.targetRightMotorSpeed < 0.0 && this.rightCorrectableCoupling.getMotorEncoderEverReset()) {
                     this.rightMotor.set(0.0);
                 }
                 else if(isRightArmAtOrAboveHighStop && this.targetRightMotorSpeed > 0.0) {
@@ -317,7 +317,7 @@ public class ClimberSubsystem extends SubsystemBase{
 
             // Left
             if(this.leftClimberReady) {
-                if(isLeftArmAtOrBelowLowStop && this.targetLeftClimberInches <= 0.0) {
+                if(isLeftArmAtOrBelowLowStop && this.targetLeftClimberInches <= 0.0&& this.leftCorrectableCoupling.getMotorEncoderEverReset()) {
                     this.leftMotor.set(0.0);
                 }
                 else if(isLeftArmAtOrAboveHighStop && this.targetLeftClimberInches >= ClimberSubsystem.maximumArmHeightInches) {
@@ -342,7 +342,7 @@ public class ClimberSubsystem extends SubsystemBase{
 
             // Right
             if(this.rightClimberReady) {
-                if(isRightArmAtOrBelowLowStop && this.targetRightClimberInches <= 0.0) {
+                if(isRightArmAtOrBelowLowStop && this.targetRightClimberInches <= 0.0 && this.rightCorrectableCoupling.getMotorEncoderEverReset()) {
                     this.rightMotor.set(0.0);
                 }
                 else if(isRightArmAtOrAboveHighStop && this.targetRightClimberInches >= ClimberSubsystem.maximumArmHeightInches) {
