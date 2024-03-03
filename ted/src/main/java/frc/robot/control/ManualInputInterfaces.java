@@ -193,6 +193,18 @@ public class ManualInputInterfaces {
         System.out.println("FINISHED registering this.driverController.rightTrigger().onTrue() ... ");
       }
 
+      if(this.subsystemCollection.isIntakeSubsystemAvailable()) {
+          this.driverController.a().onTrue(
+            new ParallelCommandGroup(
+              new RemoveNoteCommand(
+                this.subsystemCollection.getIntakeSubsystem()),
+              new ButtonPressCommand(
+                "driverController.a()",
+                "Remove Note")
+              )
+          );
+      }
+
       if(this.subsystemCollection.isDriveTrainPowerSubsystemAvailable() && 
          this.subsystemCollection.isDriveTrainSubsystemAvailable()){
         // left bumper press will decrement power factor  
