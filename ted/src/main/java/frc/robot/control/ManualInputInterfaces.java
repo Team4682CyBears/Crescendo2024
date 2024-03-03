@@ -179,18 +179,18 @@ public class ManualInputInterfaces {
 
       if(this.subsystemCollection.isShooterOutfeedSubsystemAvailable() &&
          this.subsystemCollection.isFeederSubsystemAvailable()) {
-        System.out.println("STARTING Registering this.driverController.a().whileTrue() ... ");
-        this.driverController.a().whileTrue(
+        System.out.println("STARTING Registering this.driverController.rightTrigger().onTrue() ... ");
+        this.driverController.rightTrigger().onTrue(
             new ParallelCommandGroup(
               new ShooterShootCommand(
                 subsystemCollection.getShooterOutfeedSubsystem(), 
                 subsystemCollection.getFeederSubsystem()),
               new ButtonPressCommand(
-                "driverController.a()",
+                "driverController.rightTrigger()",
                 "Shoot at speed!!")
               )
           );
-        System.out.println("FINISHED registering this.driverController.a().whileTrue() ... ");
+        System.out.println("FINISHED registering this.driverController.rightTrigger().onTrue() ... ");
       }
 
       if(this.subsystemCollection.isDriveTrainPowerSubsystemAvailable() && 
