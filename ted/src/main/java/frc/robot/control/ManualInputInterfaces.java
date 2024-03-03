@@ -321,28 +321,39 @@ public class ManualInputInterfaces {
           )
         );
 
-      if(this.subsystemCollection.isShooterOutfeedSubsystemAvailable() && this.subsystemCollection.isFeederSubsystemAvailable()) {
+      if(this.subsystemCollection.isShooterOutfeedSubsystemAvailable() &&
+        this.subsystemCollection.isFeederSubsystemAvailable() &&
+        this.subsystemCollection.isShooterAngleSubsystemAvailable()) {
+
+        this.coDriverController.b().onTrue(
+          new ParallelCommandGroup(
+            // shoot at the current angle
+            new ShooterShootCommand(
+              56.0,
+              4000.0,
+              4000.0,
+              this.subsystemCollection.getShooterOutfeedSubsystem(),
+              this.subsystemCollection.getShooterAngleSubsystem(),
+              this.subsystemCollection.getFeederSubsystem()),
+            new ButtonPressCommand(
+              "coDriverController.b()",
+              "subwoffer shot")
+              ));
+
         this.coDriverController.y().onTrue(
           new ParallelCommandGroup(
             // shoot at the current angle
-            new ShooterShootCommand(this.subsystemCollection.getShooterOutfeedSubsystem(), this.subsystemCollection.getFeederSubsystem()),
+            new ShooterShootCommand(
+              42.0,
+              6000.0,
+              6000.0,
+              this.subsystemCollection.getShooterOutfeedSubsystem(),
+              this.subsystemCollection.getShooterAngleSubsystem(),
+              this.subsystemCollection.getFeederSubsystem()),
             new ButtonPressCommand(
               "coDriverController.y()",
-                "shoots the shooter")
-            )
-        );
-      }
-
-      if(this.subsystemCollection.isIntakeSubsystemAvailable()) {
-        // remove the note
-        this.coDriverController.b().onTrue(
-          new ParallelCommandGroup(
-            new RemoveNoteCommand(this.subsystemCollection.getIntakeSubsystem()),
-            new ButtonPressCommand(
-              "coDriverController.b()",
-                "remove note")
-            )
-        );
+              "note shot")
+              ));
       }
 
       this.coDriverController.a().onTrue(
