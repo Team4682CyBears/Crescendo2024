@@ -113,8 +113,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
           new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0)
   );
 
-  private double maximumAccelerationMultiplicationFactor = 1.0;
-  private double maximumAngularAccelerationMultiplicationFactor = 1.0;
+  private double maximumAccelerationMultiplicationFactor = 2.0;
+  private double maximumAngularAccelerationMultiplicationFactor = 7.5;
 
   // private byte navxSampleRate = InstalledHardware.navx2Installed? (byte) 50 : (byte) 200;
   private byte navxSampleRate = (byte) 50;

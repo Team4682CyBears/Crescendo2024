@@ -179,7 +179,7 @@ public final class Constants {
     public static final double climberArmToPositionHighChain = 18.0;
     public static final double climberArmToPositionLowChain = 15.0;
     public static final double climberArmToPositionHangRobot = 10.0;
-    public static final double climberArmUpDefaultSpeed = 0.75;
+    public static final double climberArmUpDefaultSpeed = 1.0;
     public static final double climberArmDownDefaultSpeed = -1.0 * climberArmUpDefaultSpeed;
 
     // ******************************************************************
