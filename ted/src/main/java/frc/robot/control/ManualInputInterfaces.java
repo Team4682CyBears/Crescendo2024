@@ -23,6 +23,7 @@ import frc.robot.commands.FeedNoteCommand;
 import frc.robot.commands.IntakeAndFeedNoteCommand;
 import frc.robot.commands.IntakeNoteCommand;
 import frc.robot.commands.RemoveNoteCommand;
+import frc.robot.commands.ShooterOutFeedWarmUpCommand;
 import frc.robot.commands.ShooterSetAngleCommand;
 import frc.robot.commands.ShooterShootCommand;
 import frc.robot.commands.ShooterSpinUpCommand;
@@ -231,28 +232,28 @@ public class ManualInputInterfaces {
             )
           );
 
-        // right trigger press will align robot on a target   
-        this.driverController.rightTrigger().onTrue(
+        // left trigger press will align robot on a target   
+        this.driverController.leftTrigger().onTrue(
           new ParallelCommandGroup(
             //TODO create and add target driving mode here
             new InstantCommand(
               /*() -> subsystemCollection.getDriveTrainSubsystem().setSwerveDriveMode(SwerveDriveMode.TARGET_DRIVING)*/
             ),
             new ButtonPressCommand(
-            "driverController.rightTrigger()",
+            "driverController.leftTrigger()",
             "align on target")
           )
         );
 
         // right trigger de-press will put drivetrain in normal drive mode  
-        this.driverController.rightTrigger().onFalse(
+        this.driverController.leftTrigger().onFalse(
           new ParallelCommandGroup(
             //
             new InstantCommand(
               /*() -> subsystemCollection.getDriveTrainSubsystem().setSwerveDriveMode(SwerveDriveMode.NORMAL_DRIVING)*/
             ),
             new ButtonPressCommand(
-            "driverController.rightTrigger()",
+            "driverController.leftTrigger()",
             "normal driving")
           )
         );
@@ -268,8 +269,8 @@ public class ManualInputInterfaces {
           )
         );
 
-        // right trigger de-press will ramp up drivetrain to max speed
-        this.driverController.rightTrigger().onFalse(
+        // left trigger de-press will ramp up drivetrain to max speed
+        this.driverController.leftTrigger().onFalse(
           new ParallelCommandGroup(
             new InstantCommand(subsystemCollection.getDriveTrainPowerSubsystem()::resetPowerReductionFactor,
             subsystemCollection.getDriveTrainPowerSubsystem()),
@@ -328,7 +329,7 @@ public class ManualInputInterfaces {
           new ParallelCommandGroup(
             // shoot at the current angle
             new ShooterSetAngleCommand(
-              56.0,
+              56.0, // TODO - magic number fix this!!!
               this.subsystemCollection.getShooterAngleSubsystem()),
             new ButtonPressCommand(
               "coDriverController.b()",
@@ -339,7 +340,7 @@ public class ManualInputInterfaces {
           new ParallelCommandGroup(
             // shoot at the current angle
             new ShooterSetAngleCommand(
-              42.0,
+              42.0, // TODO - magic number fix this!!!
               this.subsystemCollection.getShooterAngleSubsystem()),
             new ButtonPressCommand(
               "coDriverController.y()",
@@ -350,7 +351,7 @@ public class ManualInputInterfaces {
           new ParallelCommandGroup(
             // shoot at the current angle
             new ShooterSetAngleCommand(
-              20.0,
+              20.0, // TODO - magic number fix this!!!
               this.subsystemCollection.getShooterAngleSubsystem()),
             new ButtonPressCommand(
               "coDriverController.a()",
@@ -360,14 +361,19 @@ public class ManualInputInterfaces {
 
       }
 
-      this.coDriverController.rightBumper().onTrue(
-          new ParallelCommandGroup(
-            //TODO include an actual ShooterToLocation command here
-            new ButtonPressCommand(
-              "coDriverController.rightBumper()",
-              "[TEMPORARY FAKE] stow")
-            )
-          );
+      if(this.subsystemCollection.isShooterOutfeedSubsystemAvailable()) {
+        this.coDriverController.rightBumper().onTrue(
+            new ParallelCommandGroup(
+              new ShooterOutFeedWarmUpCommand(
+                this.subsystemCollection.getShooterOutfeedSubsystem(),
+                Constants.shooterLeftDefaultWarmUpSpeedRpm,
+                Constants.shooterRightDefaultWarmUpSpeedRpm),
+              new ButtonPressCommand(
+                "coDriverController.rightBumper()",
+                "shooter spin-up command")
+              )
+            );
+      }
 
       if(this.subsystemCollection.isFeederSubsystemAvailable()) {
           this.coDriverController.back().onTrue(
