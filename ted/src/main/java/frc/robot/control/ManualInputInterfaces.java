@@ -23,6 +23,7 @@ import frc.robot.commands.FeedNoteCommand;
 import frc.robot.commands.IntakeAndFeedNoteCommand;
 import frc.robot.commands.IntakeNoteCommand;
 import frc.robot.commands.RemoveNoteCommand;
+import frc.robot.commands.ShooterSetAngleCommand;
 import frc.robot.commands.ShooterShootCommand;
 import frc.robot.commands.ShooterSpinUpCommand;
 
@@ -321,20 +322,14 @@ public class ManualInputInterfaces {
           )
         );
 
-      if(this.subsystemCollection.isShooterOutfeedSubsystemAvailable() &&
-        this.subsystemCollection.isFeederSubsystemAvailable() &&
-        this.subsystemCollection.isShooterAngleSubsystemAvailable()) {
+      if(this.subsystemCollection.isShooterAngleSubsystemAvailable()) {
 
         this.coDriverController.b().onTrue(
           new ParallelCommandGroup(
             // shoot at the current angle
-            new ShooterShootCommand(
+            new ShooterSetAngleCommand(
               56.0,
-              4000.0,
-              4000.0,
-              this.subsystemCollection.getShooterOutfeedSubsystem(),
-              this.subsystemCollection.getShooterAngleSubsystem(),
-              this.subsystemCollection.getFeederSubsystem()),
+              this.subsystemCollection.getShooterAngleSubsystem()),
             new ButtonPressCommand(
               "coDriverController.b()",
               "subwoffer shot")
@@ -343,27 +338,27 @@ public class ManualInputInterfaces {
         this.coDriverController.y().onTrue(
           new ParallelCommandGroup(
             // shoot at the current angle
-            new ShooterShootCommand(
+            new ShooterSetAngleCommand(
               42.0,
-              6000.0,
-              6000.0,
-              this.subsystemCollection.getShooterOutfeedSubsystem(),
-              this.subsystemCollection.getShooterAngleSubsystem(),
-              this.subsystemCollection.getFeederSubsystem()),
+              this.subsystemCollection.getShooterAngleSubsystem()),
             new ButtonPressCommand(
               "coDriverController.y()",
               "note shot")
               ));
-      }
 
-      this.coDriverController.a().onTrue(
-        new ParallelCommandGroup(
-          //TODO include an actual Climb command here
-          new ButtonPressCommand(
-            "coDriverController.a()",
-              "[TEMPORARY FAKE] climb")
-          )
-      );
+        this.coDriverController.a().onTrue(
+          new ParallelCommandGroup(
+            // shoot at the current angle
+            new ShooterSetAngleCommand(
+              20.0,
+              this.subsystemCollection.getShooterAngleSubsystem()),
+            new ButtonPressCommand(
+              "coDriverController.a()",
+              "stow")
+              ));
+
+
+      }
 
       this.coDriverController.rightBumper().onTrue(
           new ParallelCommandGroup(
