@@ -232,51 +232,27 @@ public class ManualInputInterfaces {
             )
           );
 
-        // left trigger press will align robot on a target   
+        // left trigger press will put drivetrain in X stance
         this.driverController.leftTrigger().onTrue(
           new ParallelCommandGroup(
-            //TODO create and add target driving mode here
             new InstantCommand(
-              /*() -> subsystemCollection.getDriveTrainSubsystem().setSwerveDriveMode(SwerveDriveMode.TARGET_DRIVING)*/
+              () -> subsystemCollection.getDriveTrainSubsystem().setSwerveDriveMode(SwerveDriveMode.IMMOVABLE_STANCE)
             ),
             new ButtonPressCommand(
             "driverController.leftTrigger()",
-            "align on target")
+            "x-stance / immovable")
           )
         );
 
-        // right trigger de-press will put drivetrain in normal drive mode  
+        // left trigger release will put drivetrain in normal drive mode  
         this.driverController.leftTrigger().onFalse(
           new ParallelCommandGroup(
-            //
             new InstantCommand(
-              /*() -> subsystemCollection.getDriveTrainSubsystem().setSwerveDriveMode(SwerveDriveMode.NORMAL_DRIVING)*/
+              () -> subsystemCollection.getDriveTrainSubsystem().setSwerveDriveMode(SwerveDriveMode.NORMAL_DRIVING)
             ),
             new ButtonPressCommand(
             "driverController.leftTrigger()",
             "normal driving")
-          )
-        );
-
-        // left trigger press will ramp down drivetrain to reduced speed mode 
-        this.driverController.leftTrigger().onTrue(
-          new ParallelCommandGroup(
-            new InstantCommand(subsystemCollection.getDriveTrainPowerSubsystem()::setReducedPowerReductionFactor,
-            subsystemCollection.getDriveTrainPowerSubsystem()),
-            new ButtonPressCommand(
-            "driverController.leftTrigger()",
-            "ramp down to reduced speed")
-          )
-        );
-
-        // left trigger de-press will ramp up drivetrain to max speed
-        this.driverController.leftTrigger().onFalse(
-          new ParallelCommandGroup(
-            new InstantCommand(subsystemCollection.getDriveTrainPowerSubsystem()::resetPowerReductionFactor,
-            subsystemCollection.getDriveTrainPowerSubsystem()),
-            new ButtonPressCommand(
-            "driverController.rightTrigger()",
-            "ramp up to default speed")
           )
         );
 
