@@ -114,7 +114,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   );
 
   private double maximumAccelerationMultiplicationFactor = 2.0;
-  private double maximumAngularAccelerationMultiplicationFactor = 7.5;
+  private double maximumAngularAccelerationMultiplicationFactor = 7.0;
 
   // private byte navxSampleRate = InstalledHardware.navx2Installed? (byte) 50 : (byte) 200;
   private byte navxSampleRate = (byte) 50;

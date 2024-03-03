@@ -5,7 +5,7 @@
       "x": 0.7071301441350655,
       "y": 3.82
     },
-    "rotation": 30.0
+    "rotation": 58.29427028956585
   },
   "command": {
     "type": "sequential",
@@ -27,6 +27,18 @@
           "type": "named",
           "data": {
             "name": "IntakeNote"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RedMidNoteToSpeaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootFromSpeaker"
           }
         }
       ]

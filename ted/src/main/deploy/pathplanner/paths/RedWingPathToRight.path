@@ -3,41 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7071301441350655,
+        "x": 0.71,
         "y": 3.82
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.443087126307282,
-        "y": 5.555956982172216
+        "x": 1.2548504496090231,
+        "y": 7.696812392375458
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "RedSpeakerSide"
     },
     {
       "anchor": {
-        "x": 5.597462357715413,
-        "y": 6.51
+        "x": 5.6268337223615426,
+        "y": 7.42
       },
       "prevControl": {
-        "x": 3.5561782264737283,
-        "y": 6.877284986208469
+        "x": 4.598835959747055,
+        "y": 7.405314317676937
       },
       "nextControl": {
-        "x": 7.1855817627783765,
-        "y": 6.224252217582691
+        "x": 5.94074572258365,
+        "y": 7.42448445714603
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.770943341528902,
-        "y": 5.76
+        "x": 7.785629023851966,
+        "y": 7.42
       },
       "prevControl": {
-        "x": 7.240943341528902,
-        "y": 5.76
+        "x": 7.345058554160043,
+        "y": 7.42
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,7 +47,7 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.45,
-      "rotationDegrees": 0,
+      "rotationDegrees": 0.0,
       "rotateFast": false
     }
   ],
@@ -79,13 +79,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 0.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "RedSourceSideWing",
   "previewStartingState": {
-    "rotation": 28.125651526875455,
+    "rotation": 59.743562836470666,
     "velocity": 0
   },
   "useDefaultConstraints": true
