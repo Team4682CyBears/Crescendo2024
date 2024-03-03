@@ -16,6 +16,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.VoltageConfigs;
 import com.ctre.phoenix6.controls.VoltageOut;
 
 import frc.robot.swerveLib.ModuleConfiguration;
@@ -58,6 +59,7 @@ public final class Falcon500DriveControllerFactoryBuilder {
 
             TalonFXConfiguration motorConfiguration = new TalonFXConfiguration();
             CurrentLimitsConfigs currentConfigs = new CurrentLimitsConfigs();
+            VoltageConfigs voltageConfigs = new VoltageConfigs();
             VoltageOut voltageRequest = new VoltageOut(0);           
 
             double sensorPositionCoefficient = Math.PI * moduleConfiguration.getWheelDiameter() * moduleConfiguration.getDriveReduction();
@@ -70,13 +72,25 @@ public final class Falcon500DriveControllerFactoryBuilder {
             if (hasCurrentLimit()) {
                 currentConfigs.withSupplyCurrentLimit(currentLimit);
                 currentConfigs.withSupplyCurrentLimitEnable(true);
+                // TODO pipe this through the configuration in SwerveModuleConfiguration
+                // Added in Glacier Peak per converstion with Jack mentor Stephanie and Squirrels student
+                currentConfigs.withStatorCurrentLimit(100.0);
+                currentConfigs.withStatorCurrentLimitEnable(true);
                 motorConfiguration.withCurrentLimits(currentConfigs);
+
             }
 
             TalonFX motor = new TalonFX(driveConfiguration);
 
             motorConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
             motorConfiguration.MotorOutput.Inverted = (moduleConfiguration.isDriveInverted() ? InvertedValue.CounterClockwise_Positive : InvertedValue.Clockwise_Positive);
+
+            // TODO pipe this through the configuration in SwerveModuleConfiguration
+            // Added in Glacier Peak per converstion with Jack mentor Stephanie 
+            // 20ms voltage ramp is consistent with legacy falcons. Krakens default of 0
+            // causes high current spike on motor
+            voltageConfigs.withSupplyVoltageTimeConstant(0.02);
+            motorConfiguration.withVoltage(voltageConfigs);
 
             CtreUtils.checkCtreError(motor.getConfigurator().apply(motorConfiguration), "Failed to apply motor configuration!");
             CtreUtils.checkCtreError(motor.setControl(voltageRequest), "Failed to apply motor control!");
