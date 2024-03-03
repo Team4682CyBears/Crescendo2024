@@ -141,7 +141,7 @@ public class AutonomousChooser {
             NamedCommands.registerCommand("ShootFromStage",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "ShootFromStage"),
-                    new ShooterShootCommand(39.0, 6000.0, 6000.0, subsystems.getShooterOutfeedSubsystem(),
+                    new ShooterShootCommand(40.0, 6000.0, 6000.0, subsystems.getShooterOutfeedSubsystem(),
                         subsystems.getShooterAngleSubsystem(), subsystems.getFeederSubsystem())));
             NamedCommands.registerCommand("ShootFromSourceWing",
                 new ParallelCommandGroup(
