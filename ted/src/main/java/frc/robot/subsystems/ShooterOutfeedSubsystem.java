@@ -52,8 +52,8 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
   // private Gains leftMotorGains = new Gains(0.50, 0.001, 5, 1023/20660.0, 300, 1.00);
   // private Gains rightMotorGains = new Gains(0.50, 0.001, 5, 1023/20660.0, 300, 1.00);
   // new settings
-  private Slot0Configs leftMotorGains = new Slot0Configs().withKP(1.2012).withKI(2.4023).withKD(0.0120).withKV(0.1189);
-  private Slot0Configs rightMotorGains = new Slot0Configs().withKP(1.2012).withKI(2.4023).withKD(0.0120).withKV(0.1189);
+  private Slot0Configs leftMotorGains = new Slot0Configs().withKP(0.2012).withKI(2.4023).withKD(0.0120).withKV(0.1189);
+  private Slot0Configs rightMotorGains = new Slot0Configs().withKP(0.2012).withKI(2.4023).withKD(0.0120).withKV(0.1189);
 
   /**
    * Constructor for shooter subsystem
