@@ -1,0 +1,76 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.2783389436136514,
+        "y": 5.599841069618482
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.7764277340258965,
+        "y": 4.936479523928377
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.601484126217674,
+        "y": 4.261674423016092
+      },
+      "prevControl": {
+        "x": 2.26225550613717,
+        "y": 4.418834251586327
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Blue4NoteStage"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.35,
+      "rotationDegrees": -26.5,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "IntakeNote",
+      "waypointRelativePos": 0.6,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "IntakeNote"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 2.3251,
+    "maxAcceleration": 6.0,
+    "maxAngularVelocity": 431.7652343,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -26.372553660931768,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Blue4Note",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

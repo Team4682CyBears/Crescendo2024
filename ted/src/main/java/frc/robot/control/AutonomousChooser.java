@@ -19,10 +19,13 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import frc.robot.commands.AutoShooterSpinUpCommand;
 import frc.robot.commands.ButtonPressCommand;
+import frc.robot.commands.FeedNoteCommand;
 import frc.robot.commands.IntakeAndFeedNoteCommand;
 import frc.robot.commands.ShooterShootCommand;
 import frc.robot.commands.RemoveNoteCommand;
+import frc.robot.commands.ShooterSetAngleCommand;
 import frc.robot.common.FeederMode;
 import frc.robot.control.SubsystemCollection;
 
@@ -63,7 +66,7 @@ public class AutonomousChooser {
         }
     }
 
-    public Command getCommand() {
+    public Command getAutoPath() {
         switch (autonomousPathChooser.getSelected()) {
             case BLUE123 :
                 return this.blue123SourceSide;
@@ -77,6 +80,13 @@ public class AutonomousChooser {
                 return this.twoNote;
         }
         return new InstantCommand();
+    }
+
+    public Command getCommand(){
+        return new ParallelCommandGroup(
+            new AutoShooterSpinUpCommand(subsystems.getShooterOutfeedSubsystem()),
+            getAutoPath()
+        );
     }
 
     private Command getBlue123SourceSide(){
@@ -158,6 +168,26 @@ public class AutonomousChooser {
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "OuttakeNote"),
                     new RemoveNoteCommand(subsystems.getIntakeSubsystem())));
+            NamedCommands.registerCommand("SpingUpShooter",
+                new ParallelCommandGroup(
+                    new ButtonPressCommand("PathPlanner", "SpinUpShooter"),
+                    new AutoShooterSpinUpCommand(subsystems.getShooterOutfeedSubsystem())));
+            NamedCommands.registerCommand("FeedNote",
+                new ParallelCommandGroup(
+                    new ButtonPressCommand("PathPlanner", "FeedNote"),
+                    new FeedNoteCommand(subsystems.getFeederSubsystem(), FeederMode.FeedToShooter)));
+            NamedCommands.registerCommand("AngleFromNote",
+                new ParallelCommandGroup(
+                    new ButtonPressCommand("PathPlanner", "AngleFromNote"),
+                    new ShooterSetAngleCommand(42.0, subsystems.getShooterAngleSubsystem())));
+            NamedCommands.registerCommand("AngleFromSpeaker",
+                new ParallelCommandGroup(
+                    new ButtonPressCommand("PathPlanner", "AngleFromSpeaker"),
+                    new ShooterSetAngleCommand(56.0, subsystems.getShooterAngleSubsystem())));
+            NamedCommands.registerCommand("AngleFromStage",
+                new ParallelCommandGroup(
+                    new ButtonPressCommand("PathPlanner", "AngleFromNote"),
+                    new ShooterSetAngleCommand(40.0, subsystems.getShooterAngleSubsystem())));
         }
     }
 }

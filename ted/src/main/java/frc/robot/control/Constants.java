@@ -133,10 +133,11 @@ public final class Constants {
     public static InvertedValue leftTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;  
     public static final int rightTalonShooterMotorCanId = 21; 
     public static InvertedValue rightTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;  
-    private static double shooterBaseRpm = 6500;
+    public static double shooterBaseRpm = 6500;
     public static final double shooterLeftDefaultSpeedRpm = shooterBaseRpm * 0.615;
     public static final double shooterRightDefaultSpeedRpm = shooterBaseRpm * 0.615;
     public static final double shooterSpinUpTimeoutSeconds = 5.0;
+    public static final double autoShooterSpinUpTimeoutSeconds = 15.0;
     public static final double shooterShootDuration = 1.7;
     public static final double shooterSpinUpDelay = 0.8;
     public static final double shooterLeftDefaultWarmUpSpeedRpm = shooterLeftDefaultSpeedRpm * 0.80;

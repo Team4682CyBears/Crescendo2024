@@ -4,9 +4,10 @@
   "holonomicMode": true,
   "pathFolders": [
     "Blue123SourceSide",
+    "BlueRush",
     "BlueSourceSideWing",
     "Common",
-    "BlueRush",
+    "Blue4Note",
     "Red123SourceSide",
     "RedSourceSideWing",
     "Tests"
