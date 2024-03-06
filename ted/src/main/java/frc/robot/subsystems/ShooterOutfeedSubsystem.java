@@ -164,6 +164,11 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
     // do not config feedbacksource, since the default is the internal one.
     talonConfigs.Voltage.PeakForwardVoltage = 12;
     talonConfigs.Voltage.PeakReverseVoltage = -12;
+    // maximum current settign
+    talonConfigs.CurrentLimits.StatorCurrentLimit = Constants.shooterStatorCurrentMaximumAmps;
+    talonConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
+    talonConfigs.CurrentLimits.SupplyCurrentLimit = Constants.shooterSupplyCurrentMaximumAmps;
+    talonConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
     // left motor direction
     talonConfigs.MotorOutput.Inverted = Constants.leftTalonShooterMotorDefaultDirection;
     // apply configs
