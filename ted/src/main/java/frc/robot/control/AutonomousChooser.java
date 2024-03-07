@@ -22,7 +22,6 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import frc.robot.commands.ButtonPressCommand;
 import frc.robot.commands.IntakeAndFeedNoteCommand;
 import frc.robot.commands.ShooterShootCommand;
-import frc.robot.commands.RemoveNoteCommand;
 import frc.robot.common.FeederMode;
 import frc.robot.control.SubsystemCollection;
 
@@ -154,10 +153,6 @@ public class AutonomousChooser {
                     new ButtonPressCommand("PathPlanner", "IntakeNote"),
                     new IntakeAndFeedNoteCommand(subsystems.getIntakeSubsystem(), subsystems.getFeederSubsystem(),
                         FeederMode.FeedToShooter)));
-            NamedCommands.registerCommand("OutTakeNote",
-                new ParallelCommandGroup(
-                    new ButtonPressCommand("PathPlanner", "OuttakeNote"),
-                    new RemoveNoteCommand(subsystems.getIntakeSubsystem())));
         }
     }
 }
