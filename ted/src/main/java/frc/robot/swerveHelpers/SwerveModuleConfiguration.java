@@ -21,8 +21,16 @@ import java.util.Objects;
  */
 public class SwerveModuleConfiguration {
     private double nominalVoltage = 12.0;
-    private double driveCurrentLimit = 80.0;
+    private double driveCurrentLimit = 50.0;
     private double steerCurrentLimit = 20.0;
+    
+    // Added in Glacier Peak 2024 per converstion with Jack mentor Stephanie and Squirrels student
+    private double driveStatorCurrentLimit = 100.0;
+
+    // Added in Glacier Peak 2024 per converstion with Jack mentor Stephanie 
+    // 20ms voltage ramp is consistent with legacy falcons. Krakens default of 0
+    // causes high current spike on motor
+    private double driveSupplyVoltageTimeConstant = 0.02;
 
     public double getNominalVoltage() {
         return nominalVoltage;
@@ -38,6 +46,22 @@ public class SwerveModuleConfiguration {
 
     public void setDriveCurrentLimit(double driveCurrentLimit) {
         this.driveCurrentLimit = driveCurrentLimit;
+    }
+
+    public double getDriveStatorCurrentLimit() {
+        return this.driveStatorCurrentLimit;
+    }
+
+    public void setDriveStatorCurrentLimit(double driveStatorCurrentLimit) {
+        this.driveStatorCurrentLimit = driveStatorCurrentLimit;
+    }
+
+    public double getDriveSupplyVoltageTimeConstant() {
+        return this.driveSupplyVoltageTimeConstant;
+    }
+
+    public void setDriveSupplyVoltageTimeConstant(double driveSupplyVoltageTimeConstant) {
+        this.driveSupplyVoltageTimeConstant = driveSupplyVoltageTimeConstant;
     }
 
     public double getSteerCurrentLimit() {

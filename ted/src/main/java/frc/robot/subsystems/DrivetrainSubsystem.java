@@ -81,7 +81,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * Gear ratio: 7.85:1. Free speed of 14.19 ft/s = 4.3251 m/s
    */
   public static final double MAX_VELOCITY_METERS_PER_SECOND = 4.3251;
-  public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 6.0;
+  public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 12.0;
 
   public static final double MIN_VELOCITY_BOUNDARY_METERS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND * 0.14; // 0.14 a magic number based on testing
 
@@ -104,7 +104,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND /
           Math.hypot(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0);
   public static final double MIN_ANGULAR_VELOCITY_BOUNDARY_RADIANS_PER_SECOND = MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * 0.06; // 0.06 a magic number based on testing
-  private double MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED = 10.0;
+  private double MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED = 70.0;
 
   private static final int PositionHistoryWindowTimeMilliseconds = 5000;
   private static final int CommandSchedulerPeriodMilliseconds = 20;
@@ -124,9 +124,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
           // Back right
           new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0)
   );
-
-  private double maximumAccelerationMultiplicationFactor = 1.0;
-  private double maximumAngularAccelerationMultiplicationFactor = 1.0;
 
   // private byte navxSampleRate = InstalledHardware.navx2Installed? (byte) 50 : (byte) 200;
   private byte navxSampleRate = (byte) 50;
@@ -218,10 +215,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     // We assume the robot is level at startup.  Take out any bias the NavX is reading on Pitch/Roll.  
     removePitchRollBias(); 
-
-    // TODO - P1 remove this once the acceleration factors are dialed in
-    SmartDashboard.putNumber("maximumAccelerationMultiplicationFactor", this.maximumAccelerationMultiplicationFactor);
-    SmartDashboard.putNumber("maximumAngularAccelerationMultiplicationFactor", this.maximumAngularAccelerationMultiplicationFactor);
   }
 
   /**
@@ -520,10 +513,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     this.displayDiagnostics();
 
-    // TODO - P1 remove this once the acceleration factors are dialed in
-    this.maximumAccelerationMultiplicationFactor = SmartDashboard.getNumber("maximumAccelerationMultiplicationFactor", this.maximumAccelerationMultiplicationFactor);
-    this.maximumAngularAccelerationMultiplicationFactor = SmartDashboard.getNumber("maximumAngularAccelerationMultiplicationFactor", this.maximumAngularAccelerationMultiplicationFactor);
-
     SwerveModuleState[] states; 
     if (swerveDriveMode == SwerveDriveMode.IMMOVABLE_STANCE && chassisSpeedsAreZero()) {
       // only change to ImmovableStance if chassis is not moving.
@@ -779,9 +768,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @return
    */
   private ChassisSpeeds limitChassisSpeedsAccel(ChassisSpeeds speeds) {
-    double xVelocityLimited = limitAxisSpeed(speeds.vxMetersPerSecond, previousChassisSpeeds.vxMetersPerSecond, MAX_ACCELERATION_METERS_PER_SECOND_SQUARED * maximumAccelerationMultiplicationFactor);
-    double yVelocityLimited = limitAxisSpeed(speeds.vyMetersPerSecond, previousChassisSpeeds.vyMetersPerSecond, MAX_ACCELERATION_METERS_PER_SECOND_SQUARED * maximumAccelerationMultiplicationFactor);
-    double omegaVelocityLimited = limitAxisSpeed(speeds.omegaRadiansPerSecond, previousChassisSpeeds.omegaRadiansPerSecond, MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED * maximumAngularAccelerationMultiplicationFactor);
+    double xVelocityLimited = limitAxisSpeed(speeds.vxMetersPerSecond, previousChassisSpeeds.vxMetersPerSecond, MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
+    double yVelocityLimited = limitAxisSpeed(speeds.vyMetersPerSecond, previousChassisSpeeds.vyMetersPerSecond, MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
+    double omegaVelocityLimited = limitAxisSpeed(speeds.omegaRadiansPerSecond, previousChassisSpeeds.omegaRadiansPerSecond, MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED);
     return new ChassisSpeeds(xVelocityLimited, yVelocityLimited, omegaVelocityLimited);
   }
 

@@ -31,10 +31,11 @@ public final class Constants {
         Units.inchesToMeters(23.25), 
         Units.inchesToMeters(22.75), 
         WcpModuleConfigurations.TED,
-        Math.toRadians(-215.15), // FRONT LEFT
-        Math.toRadians(-180.61), // FRONT RIGHT 
-        Math.toRadians(-191.33), // BACK LEFT
-        Math.toRadians(-58.35)); // BACK RIGHT
+        // SUBTRACT the values you find in shuffleboard
+        Math.toRadians(-215.15 - 178.76 - 180.0 -358.7), // FRONT LEFT
+        Math.toRadians(-180.61 - 95.27 - 358.6 -169.8 - 150.59), // FRONT RIGHT 
+        Math.toRadians(-191.33 - 257.52 -357.3  - 3.6), // BACK LEFT
+        Math.toRadians(-58.35 - 177.27 - 180.0 - 2.0)); // BACK RIGHT
 
     //////////////////// BABYBEAR DRIVETRAIN ////////////////////
     public static final DrivetrainConfig babybearDrivetrainConfig = new DrivetrainConfig (
@@ -42,7 +43,7 @@ public final class Constants {
         Units.inchesToMeters(17.179),
         WcpModuleConfigurations.BABYBEAR,
         Math.toRadians(281.8 + 3.8 + 173.5), // FRONT LEFT
-        Math.toRadians(327.9 + 3.6 - 0.3), // FRONT RIGHT
+        Math.toRadians(327.9 + 3.6 - 0.3 - 173.41), // FRONT RIGHT
         Math.toRadians(209.1 + 2.5 - 7.9), // BACK LEFT
         Math.toRadians(49.0 + 356.6 + 0.5)); // BACK RIGHT
 
@@ -121,7 +122,7 @@ public final class Constants {
     // feederSpeed is [0.0 .. 1.0]
     // it runs in one direction for the shooter 
     // and the opposite direction for the dunker/amp
-    public static final double feederSpeed = 0.30;
+    public static final double feederSpeed = 0.20;
     public static final double feederReverseSpeed = 0.10;
     // feeder will run until note is detected or this timeout has expired
     public static final double feederTimeoutSeconds = 10.0;
@@ -131,13 +132,13 @@ public final class Constants {
     public static final int leftTalonShooterMotorCanId = 18; 
     public static InvertedValue leftTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;  
     public static final int rightTalonShooterMotorCanId = 21; 
-    public static InvertedValue rightTalonShooterMotorDefaultDirection = InvertedValue.Clockwise_Positive;  
+    public static InvertedValue rightTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;  
     private static double shooterBaseRpm = 6500;
-    public static final double shooterLeftDefaultSpeedRpm = shooterBaseRpm * 0.15;
-    public static final double shooterRightDefaultSpeedRpm = shooterBaseRpm * 0.15;
-    public static final double shooterSpinUpTimeoutSeconds = 5.0;
-    public static final double shooterShootDuration = 5.0;
-    public static final double shooterSpinUpDelay = 2.0;
+    public static final double shooterLeftDefaultSpeedRpm = shooterBaseRpm * 0.615;
+    public static final double shooterRightDefaultSpeedRpm = shooterBaseRpm * 0.615;
+    public static final double shooterSpinUpTimeoutSeconds = 15.0;
+    public static final double shooterShootDuration = 1.7;
+    public static final double shooterSpinUpDelay = 0.8;
 
     // *******************************************************************
     // shooter angle constants  
@@ -160,13 +161,33 @@ public final class Constants {
     public static final double shooterControllerInputPositiveStickAngleIncrement = 0.15;
     public static final double shooterControllerInputNegativeStickAngleIncrement = -0.15;
     public static final double shooterAngleStickIncrementMagnitude = 0.5;
+    // angles of shooter shots
+    public static final double shooterAngleShootFromSpeaker = 56.0;
+    // TODO - figure out what 'shoot from note' actually means??
+    public static final double shooterAngleShootFromNote = 42.0; 
+    public static final double shooterAngleShootFromStage = 40.0;
+    public static final double shooterAngleShootFromSourceWing = 22.0;
 
     // ******************************************************************
     // climber constants
-    public static final int leftClimberMotorCanId = 25;
-    public static final int rightClimberMotorCanId = 26;
-    public static final int leftClimberSensorDioId = 1;
-    public static final int rightClimberSensorDioId= 2;
+    public static final int leftClimberMotorCanId = 26;
+    public static final int rightClimberMotorCanId = 25;
+    public static final int leftClimberSensorDioId = 0;
+    public static final int rightClimberSensorDioId= 1;
+    public static final double climberStandardToleranceInches = 0.25;
+    public static final double climberControllerStickDeadband = 0.2;
+    public static final double climberArmSensorPosition = 0.75;
+    // the blind find distance represents the maximum distance the climber will retract
+    // in the sequence where it attempts to find its sensor zero before deciding the sensor
+    // is not present in the system and in place it creates an assumed zero position
+    public static final double climberArmSensorBlindFindDistance = 1.75;
+    public static final double climberArmToPositionFullDeploy = 22.75;
+    public static final double climberArmToPositionFullRetract = -2.0;
+    public static final double climberArmToPositionHighChain = 18.0;
+    public static final double climberArmToPositionLowChain = 15.0;
+    public static final double climberArmToPositionHangRobot = 10.0;
+    public static final double climberArmUpDefaultSpeed = 1.0;
+    public static final double climberArmDownDefaultSpeed = -1.0 * climberArmUpDefaultSpeed;
 
     // ******************************************************************
     // amp/dunker constants

@@ -3,51 +3,51 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4621939058692934,
-        "y": 3.1297348752104917
+        "x": 7.785629023851966,
+        "y": 7.42
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.522122401950843,
-        "y": 3.0385875489821546
+        "x": 6.18488965064284,
+        "y": 7.537485458581948
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.286665006826624,
-        "y": 4.101872890068312
+        "x": 4.114208443090801,
+        "y": 6.91
       },
       "prevControl": {
-        "x": 8.307609314292701,
-        "y": 4.804968179380803
+        "x": 5.34777194868325,
+        "y": 7.512182238661073
       },
       "nextControl": {
-        "x": 8.275530129715383,
-        "y": 3.728077783370848
+        "x": 2.8453879972088045,
+        "y": 6.290606565372407
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.9372746343608855,
-        "y": 3.3220385514554387
+        "x": 0.71,
+        "y": 3.82
       },
       "prevControl": {
-        "x": 3.6084149894524398,
-        "y": 3.296135571993113
+        "x": 1.6206098599524652,
+        "y": 4.980092334017821
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "RedSpeakerSide"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.85,
-      "rotationDegrees": 147.02536003418967,
+      "waypointRelativePos": 1.15,
+      "rotationDegrees": 52.56,
       "rotateFast": false
     }
   ],
@@ -55,17 +55,20 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 2.3251,
-    "maxAcceleration": 1.0,
+    "maxAcceleration": 6.0,
     "maxAngularVelocity": 431.7652343,
-    "maxAngularAcceleration": 572.9577951
+    "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 139.73202248324006,
+    "rotation": 58.85949538435998,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Tests",
-  "previewStartingState": null,
-  "useDefaultConstraints": false
+  "folder": "RedSourceSideWing",
+  "previewStartingState": {
+    "rotation": 1.1811889133266158,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
 }

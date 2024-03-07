@@ -69,4 +69,9 @@ public class InstalledHardware
     public static final boolean shooterRightAngleMotorrInstalled = true;
     public static final boolean shooterAngleCanCoderInstalled = false; 
 
+    // Climber Sensor Related Hardware
+    public static final boolean leftClimberInstalled = true;
+    public static final boolean rightClimberInstalled = true;
+    public static final boolean leftClimberSensorInstalled = true;
+    public static final boolean rightClimberSensorInstalled = true;
 }

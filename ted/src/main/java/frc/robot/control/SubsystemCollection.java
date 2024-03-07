@@ -9,6 +9,7 @@
 // ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
 
 package frc.robot.control;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DrivetrainPowerSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.FeederSubsystem;
@@ -24,6 +25,7 @@ public class SubsystemCollection
     private ManualInputInterfaces manualInput = null;
 
     // declaring and init subsystems  
+    private ClimberSubsystem climberSubsystem = null;
     private DrivetrainSubsystem driveTrainSubsystem = null;
     private CameraSubsystem cameraSubsystem = null;
     private DrivetrainPowerSubsystem driveTrainPowerSubsystem = null;
@@ -37,6 +39,10 @@ public class SubsystemCollection
      * Default constructor
      */
     public SubsystemCollection() {}
+
+    public ClimberSubsystem getClimberSubsystem() { return climberSubsystem; }
+    public void setClimberSubsystem(ClimberSubsystem value) { climberSubsystem = value; }
+    public boolean isClimberSubsystemAvailable() { return climberSubsystem != null; }
 
     public DrivetrainSubsystem getDriveTrainSubsystem() { return driveTrainSubsystem; }
     public void setDriveTrainSubsystem(DrivetrainSubsystem value) { driveTrainSubsystem = value; }

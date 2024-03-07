@@ -1,0 +1,73 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.35,
+        "y": 2.65
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.5595294027758588,
+        "y": 2.723608050064316
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.607707760870067,
+        "y": 3.9274020366222553
+      },
+      "prevControl": {
+        "x": 2.00557012429547,
+        "y": 3.4868652727261376
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "RedPodium"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.75,
+      "rotationDegrees": 30.0,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intake Note",
+      "waypointRelativePos": 0.75,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "IntakeNote"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 30.187096054885284,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Red123SourceSide",
+  "previewStartingState": null,
+  "useDefaultConstraints": false
+}

@@ -25,6 +25,8 @@ public final class SwerveModuleHelper {
         return new Falcon500DriveControllerFactoryBuilder()
                 .withVoltageCompensation(configuration.getNominalVoltage())
                 .withCurrentLimit(configuration.getDriveCurrentLimit())
+                .withStatorCurrentLimit(configuration.getDriveStatorCurrentLimit())
+                .withSupplyVoltageTimeConstant(configuration.getDriveSupplyVoltageTimeConstant())
                 .build();
     }
 
