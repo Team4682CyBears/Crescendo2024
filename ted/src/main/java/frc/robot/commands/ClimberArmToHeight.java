@@ -58,6 +58,7 @@ public class ClimberArmToHeight extends Command {
   public void execute() {
     if(!this.updatedHeightSet) {
       this.climber.setClimberHeightsInInches(this.requestedHeightInInchesLeft, this.requestedHeightInInchesRight);
+      this.updatedHeightSet = true;
     }
     else {
       done = this.climber.areClimbersWithinTolerance(Constants.climberStandardToleranceInches);
