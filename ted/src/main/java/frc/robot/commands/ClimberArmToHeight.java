@@ -16,7 +16,7 @@ import frc.robot.subsystems.ClimberSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
- * Forms a command to shoot the shooter
+ * Forms a command to move climber to a specific height
  */
 public class ClimberArmToHeight extends Command {
 

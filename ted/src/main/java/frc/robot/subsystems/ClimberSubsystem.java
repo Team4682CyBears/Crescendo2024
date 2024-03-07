@@ -158,7 +158,7 @@ public class ClimberSubsystem extends SubsystemBase{
     }
 
     /**
-     * Method to get the maximum height of the climber
+     * Method to get the minimum height of the climber
      * @return minimumArmHeightInInches - height in inches
      */
     public static double getClimberHeightMinimumInInches() {
@@ -257,8 +257,6 @@ public class ClimberSubsystem extends SubsystemBase{
 
         // confirm that the smart motion is setup - no-op after it is setup first time
         this.initializeMotorsSmartMotion();
-        // send stuff to shuffleboard
-        this.sendStatistics();
 
         // determine if the movement is in the stop range
         // stop range implies any of the following:
@@ -659,27 +657,5 @@ public class ClimberSubsystem extends SubsystemBase{
 
         this.motorsInitalizedForSmartMotion = true;
       }
-    }
-
-    /**
-     * Send some statistics to shuffleboard
-     */
-    public void sendStatistics() {
-        if(counter % 10 == 0) {
-            if(this.leftClimberReady) {
-                SmartDashboard.putNumber("ClimberArmsLeftMotorSpeed", this.getLeftMotorOutputSpeed());
-                SmartDashboard.putString("ClimberArmsLeftArmMotionDescription", this.getLeftArmMotionDescription());
-                SmartDashboard.putNumber("ClimberArmsLeftClimberHeightInInches", this.getLeftClimberHeightInInches());
-                SmartDashboard.putNumber("ClimberArmsLeftEncoderPosition", this.getLeftMotorEncoderPosition());
-                SmartDashboard.putBoolean("ClimberArmsLeftSensorDetected", this.leftMageneticSensor.get());
-            }
-            if(this.rightClimberReady) {
-                SmartDashboard.putNumber("ClimberArmsRightMotorSpeed", this.getRightMotorOutputSpeed());
-                SmartDashboard.putString("ClimberArmsRightArmMotionDescription", this.getRightArmMotionDescription());     
-                SmartDashboard.putNumber("ClimberArmsRightClimberHeightInInches", this.getRightClimberHeightInInches());
-                SmartDashboard.putNumber("ClimberArmsRightEncoderPosition", this.getRightMotorEncoderPosition());
-                SmartDashboard.putBoolean("ClimberArmsRightSensorDetected", this.rightMageneticSensor.get());
-            }
-        }
     }
 }

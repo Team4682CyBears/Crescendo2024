@@ -30,6 +30,8 @@ public final class Falcon500DriveControllerFactoryBuilder {
 
     private double nominalVoltage = Double.NaN;
     private double currentLimit = Double.NaN;
+    private double statorCurrentLimit = Double.NaN;
+    private double supplyVoltageTimeConstant = Double.NaN;
 
     public Falcon500DriveControllerFactoryBuilder withVoltageCompensation(double nominalVoltage) {
         this.nominalVoltage = nominalVoltage;
@@ -49,8 +51,26 @@ public final class Falcon500DriveControllerFactoryBuilder {
         return this;
     }
 
+    public Falcon500DriveControllerFactoryBuilder withStatorCurrentLimit(double statorCurrentLimit) {
+        this.statorCurrentLimit = statorCurrentLimit;
+        return this;
+    }
+
+    public Falcon500DriveControllerFactoryBuilder withSupplyVoltageTimeConstant(double supplyVoltageTimeConstant) {
+        this.supplyVoltageTimeConstant = supplyVoltageTimeConstant;
+        return this;
+    }
+
     public boolean hasCurrentLimit() {
         return Double.isFinite(currentLimit);
+    }
+
+    public boolean hasStatorCurrentLimit() {
+        return Double.isFinite(statorCurrentLimit);
+    }
+
+    public boolean hasSupplyVoltageTimeConstant() {
+        return Double.isFinite(supplyVoltageTimeConstant);
     }
 
     private class FactoryImplementation implements DriveControllerFactory<ControllerImplementation, Integer> {
@@ -69,15 +89,21 @@ public final class Falcon500DriveControllerFactoryBuilder {
                 voltageRequest.withOutput(nominalVoltage);
             }
 
+            boolean updateMotorConfigForCurrentLimit = false;
             if (hasCurrentLimit()) {
                 currentConfigs.withSupplyCurrentLimit(currentLimit);
                 currentConfigs.withSupplyCurrentLimitEnable(true);
-                // TODO pipe this through the configuration in SwerveModuleConfiguration
-                // Added in Glacier Peak per converstion with Jack mentor Stephanie and Squirrels student
-                currentConfigs.withStatorCurrentLimit(100.0);
-                currentConfigs.withStatorCurrentLimitEnable(true);
-                motorConfiguration.withCurrentLimits(currentConfigs);
+                updateMotorConfigForCurrentLimit = true;
+            }
 
+            if(hasStatorCurrentLimit()) {
+                currentConfigs.withStatorCurrentLimit(statorCurrentLimit);
+                currentConfigs.withStatorCurrentLimitEnable(true);
+                updateMotorConfigForCurrentLimit = true;
+            }
+
+            if(updateMotorConfigForCurrentLimit) {
+                motorConfiguration.withCurrentLimits(currentConfigs);
             }
 
             TalonFX motor = new TalonFX(driveConfiguration);
@@ -85,12 +111,10 @@ public final class Falcon500DriveControllerFactoryBuilder {
             motorConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
             motorConfiguration.MotorOutput.Inverted = (moduleConfiguration.isDriveInverted() ? InvertedValue.CounterClockwise_Positive : InvertedValue.Clockwise_Positive);
 
-            // TODO pipe this through the configuration in SwerveModuleConfiguration
-            // Added in Glacier Peak per converstion with Jack mentor Stephanie 
-            // 20ms voltage ramp is consistent with legacy falcons. Krakens default of 0
-            // causes high current spike on motor
-            voltageConfigs.withSupplyVoltageTimeConstant(0.02);
-            motorConfiguration.withVoltage(voltageConfigs);
+            if(hasSupplyVoltageTimeConstant()) {
+                voltageConfigs.withSupplyVoltageTimeConstant(supplyVoltageTimeConstant);
+                motorConfiguration.withVoltage(voltageConfigs);
+            }
 
             CtreUtils.checkCtreError(motor.getConfigurator().apply(motorConfiguration), "Failed to apply motor configuration!");
             CtreUtils.checkCtreError(motor.setControl(voltageRequest), "Failed to apply motor control!");

@@ -27,8 +27,8 @@ public class ClimberArmDefaultSpeed extends Command {
   private DoubleSupplier rightSpeed;
 
   /**
-   * Constructor for ShooterShootCommand
-   * Will set shooter to desired angle before shooting
+   * Constructor for ClimberArmDefaultSpeed
+   * will update climber speed double supplied values
    * @param climberSubsystem - the target climber subsystem
    * @param leftSpeedDoubleSupplier - the left climber motor speed supplier
    * @param rightSpeedDoubleSupplier - the left climber motor speed supplier
@@ -40,7 +40,6 @@ public class ClimberArmDefaultSpeed extends Command {
     this.climber = climberSubsystem;
     this.leftSpeed = leftSpeedDoubleSupplier;
     this.rightSpeed = rightSpeedDoubleSupplier;
-    // Use addRequirements() here to declare subsystem dependencies.
     this.addRequirements(this.climber);
   }
 
@@ -52,13 +51,13 @@ public class ClimberArmDefaultSpeed extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // with this being the default operation we need to make sure that the mode in effect allows us to do the operation
     this.climber.setClimberSpeeds(this.leftSpeed.getAsDouble(), this.rightSpeed.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    this.climber.setClimberSpeeds(0.0, 0.0);
   }
 
   // Returns true when the command should end.
