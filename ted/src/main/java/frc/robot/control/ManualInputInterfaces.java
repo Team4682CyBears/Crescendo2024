@@ -305,7 +305,7 @@ public class ManualInputInterfaces {
           new ParallelCommandGroup(
             // shoot at the current angle
             new ShooterSetAngleCommand(
-              56.0, // TODO - magic number fix this!!!
+              Constants.shooterAngleShootFromSpeaker,
               this.subsystemCollection.getShooterAngleSubsystem()),
             new ButtonPressCommand(
               "coDriverController.b()",
@@ -316,7 +316,7 @@ public class ManualInputInterfaces {
           new ParallelCommandGroup(
             // shoot at the current angle
             new ShooterSetAngleCommand(
-              42.0, // TODO - magic number fix this!!!
+              Constants.shooterAngleShootFromNote,
               this.subsystemCollection.getShooterAngleSubsystem()),
             new ButtonPressCommand(
               "coDriverController.y()",
@@ -327,7 +327,7 @@ public class ManualInputInterfaces {
           new ParallelCommandGroup(
             // shoot at the current angle
             new ShooterSetAngleCommand(
-              20.0, // TODO - magic number fix this!!!
+              Constants.shooterAngleStowDegrees,
               this.subsystemCollection.getShooterAngleSubsystem()),
             new ButtonPressCommand(
               "coDriverController.a()",
@@ -342,8 +342,8 @@ public class ManualInputInterfaces {
             new ParallelCommandGroup(
               new ShooterOutFeedWarmUpCommand(
                 this.subsystemCollection.getShooterOutfeedSubsystem(),
-                Constants.shooterLeftDefaultWarmUpSpeedRpm,
-                Constants.shooterRightDefaultWarmUpSpeedRpm),
+                Constants.shooterLeftDefaultSpeedRpm,
+                Constants.shooterRightDefaultSpeedRpm),
               new ButtonPressCommand(
                 "coDriverController.rightBumper()",
                 "shooter spin-up command")

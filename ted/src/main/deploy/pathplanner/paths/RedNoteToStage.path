@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 2.4987833875488867,
-        "y": 3.87
+        "x": 2.607707760870067,
+        "y": 3.9274020366222553
       },
       "prevControl": {
-        "x": 1.8966457509742898,
-        "y": 3.4294632361038824
+        "x": 2.00557012429547,
+        "y": 3.4868652727261376
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "RedPodium"
     }
   ],
   "rotationTargets": [
