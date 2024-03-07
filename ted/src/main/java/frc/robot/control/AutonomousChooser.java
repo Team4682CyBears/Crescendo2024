@@ -36,7 +36,8 @@ public class AutonomousChooser {
     private Command blue123SourceSide;
     private Command red123SourceSide;
     private Command blueWing;
-    private Command redWing;
+    private Command blueFourNote;
+    private Command blueRush;
     private Command twoNote;
 
     public AutonomousChooser(SubsystemCollection subsystems){
@@ -51,15 +52,17 @@ public class AutonomousChooser {
         autonomousPathChooser.addOption("BLUE 123 Source Side", AutonomousPath.BLUE123);
         autonomousPathChooser.addOption("RED 123 Source Side", AutonomousPath.RED123);
         autonomousPathChooser.addOption("BLUE Wing Source Side", AutonomousPath.BLUEWING);
-        autonomousPathChooser.addOption("RED Wing Source Side", AutonomousPath.REDWING);
+        autonomousPathChooser.addOption("BLUE Four Note", AutonomousPath.BLUEFOURNOTE);
+        autonomousPathChooser.addOption("BLUE Rush", AutonomousPath.BLUERUSH);
 
         SmartDashboard.putData(autonomousPathChooser);
 
         this.blue123SourceSide = getBlue123SourceSide();
         this.red123SourceSide = getRed123SourceSide();
         this.blueWing = getBlueWing();
-        this.redWing = getRedWing();
+        this.blueFourNote = getBlueFourNote();
         this.twoNote = getTwoNote();
+        this.blueRush = getBlueRush();
         }
         else{
             System.out.println(">>>>> NO auto routine becuase missing subsystems");
@@ -74,8 +77,10 @@ public class AutonomousChooser {
                 return this.red123SourceSide;
             case BLUEWING :
                 return this.blueWing;
-            case REDWING :
-                return this.redWing;
+            case BLUEFOURNOTE :
+                return this.blueFourNote;
+            case BLUERUSH :
+                return this.blueRush;
             case TWONOTE :
                 return this.twoNote;
         }
@@ -98,11 +103,15 @@ public class AutonomousChooser {
     }
 
     private Command getBlueWing(){
-        return AutoBuilder.buildAuto("BlueSourceSideWing");
+        return AutoBuilder.buildAuto("BlueWing");
     }
 
-    private Command getRedWing(){
-        return AutoBuilder.buildAuto("RedSourceSideWing");
+    private Command getBlueFourNote(){
+        return AutoBuilder.buildAuto("Blue4Note");
+    }
+
+    private Command getBlueRush(){
+        return AutoBuilder.buildAuto("BlueRush");
     }
 
     private Command getTwoNote(){
@@ -113,7 +122,8 @@ public class AutonomousChooser {
         BLUE123,
         RED123,
         BLUEWING,
-        REDWING,
+        BLUEFOURNOTE,
+        BLUERUSH,
         TWONOTE
     }
 

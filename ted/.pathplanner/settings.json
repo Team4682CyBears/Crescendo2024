@@ -1,21 +1,19 @@
 {
-  "robotWidth": 0.76,
-  "robotLength": 0.76,
+  "robotWidth": 0.914,
+  "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
     "Blue123SourceSide",
-    "BlueRush",
-    "BlueSourceSideWing",
-    "Common",
     "Blue4Note",
+    "BlueRush",
+    "Common",
     "Red123SourceSide",
-    "RedSourceSideWing",
     "Tests"
   ],
   "autoFolders": [],
-  "defaultMaxVel": 2.3251,
+  "defaultMaxVel": 5.5,
   "defaultMaxAccel": 6.0,
   "defaultMaxAngVel": 431.7652343,
   "defaultMaxAngAccel": 720.0,
-  "maxModuleSpeed": 4.5
+  "maxModuleSpeed": 5.5
 }
