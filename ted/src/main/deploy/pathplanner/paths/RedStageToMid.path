@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.5,
-        "y": 3.87
+        "x": 2.607707760870067,
+        "y": 3.9274020366222553
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.522831157121458,
-        "y": 6.889208472481391
+        "x": 1.6305389179915248,
+        "y": 6.946610509103646
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "RedPodium"
     },
     {
       "anchor": {

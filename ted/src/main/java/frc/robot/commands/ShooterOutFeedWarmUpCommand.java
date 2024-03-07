@@ -15,19 +15,19 @@ import frc.robot.control.Constants;
 import frc.robot.subsystems.ShooterOutfeedSubsystem;
 
 /**
- * Forms a command to intake the note
+ * Forms a command to warm up the shooter
  * Intake is run until note is detected or timer has expired
  */
 public class ShooterOutFeedWarmUpCommand extends Command
 {
   private ShooterOutfeedSubsystem shooterOutfeed;
-  private double leftWarmupSpeedRpm = 1000;
-  private double rightWarmupSpeedRpm = 1000;
+  private double leftWarmupSpeedRpm = 0.0;
+  private double rightWarmupSpeedRpm = 0.0;
   private Timer timer = new Timer();
   private boolean done = false;
   
   /** 
-  * Creates a new intake command 
+  * Creates a new warm up the shooter
   * 
   * @param shooterSubsystem - the shooter outfeed subsystem
   */
@@ -39,7 +39,6 @@ public class ShooterOutFeedWarmUpCommand extends Command
     this.shooterOutfeed = shooterSubsystem;
     this.leftWarmupSpeedRpm = leftTargetSpeedRpm;
     this.rightWarmupSpeedRpm = rightTargetSpeedRpm;
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooterOutfeed);
   }
 
@@ -52,7 +51,7 @@ public class ShooterOutFeedWarmUpCommand extends Command
     timer.reset();
     timer.start();
     done = false;
-    System.out.println("Starting ShooterFreeSpinUpCommand");
+    System.out.println("Starting ShooterOutFeedWarmUpCommand");
   }
 
   // Called every time the scheduler runs while the command is scheduled.

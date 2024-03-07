@@ -21,7 +21,7 @@ import frc.robot.subsystems.ClimberSubsystem;
 public class ClimberArmToPosition extends ClimberArmToHeight {
 
   /**
-   * Constructor for ShooterShootCommand
+   * Constructor for ClimberArmToPosition
    * Will set shooter to desired angle before shooting
    * @param climberSubsystem - the target climber subsystem
    * @param targetArm - the target climber arm

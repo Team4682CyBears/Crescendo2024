@@ -23,36 +23,32 @@ public class ClimberSubsystem extends SubsystemBase{
     ************************************************************************/
     // expected to be < 1.0 due to encoder granularity being lower for Rev/Neo
     private static final double climberArmsMotorEncoderTicksPerDegree = Constants.RevNeoEncoderTicksPerRevolution / Constants.DegreesPerRevolution; 
-    // Based on discussion with XXX on XXX - ~??:1
     private static final double climberArmsMotorToArmEffectiveGearRatio = (60.0/1.0);
 
-    // important - this should be the maximum extension of the arms' hook and it must also be the length of the cord on the spool - in inches!
     private static final double minimumArmHeightInches = 0.0;
     private static final double maximumArmHeightInches = Constants.climberArmToPositionFullDeploy;
     private static final double maximumHeightFromStoredPositionInches = maximumArmHeightInches - minimumArmHeightInches;
     // measurements of spool diameter in 4 discrete ranges
     // intended to be an average measurement of wire/chord on the spool when the spool is 'fractionaly wound'
     // for example when 0-25% of the cord is wound on the spool we need the diameter of the average winding to be placed in climberArmsSpoolDiameterInches0to25
-    // TODO remove this logic, since the sting does not overlap itself on Ted spool design. 
+    // TODO - remove this logic at some point, since the sting does not overlap itself on Ted spool design. 
     private static final double climberArmsSpoolDiameterInches0to25 = 1.216; 
     private static final double climberArmsSpoolDiameterInches26to50 = 1.216; 
     private static final double climberArmsSpoolDiameterInches51to75 = 1.216; 
     private static final double climberArmsSpoolDiameterInches76to100 = 1.216;
     
-    // Based on discussion with XXX
+    // Based on testing
     private static final boolean spoolWindingIsPositiveSparkMaxNeoMotorOutput = true;
-
-    // TODO change this to final speed when everyone is ready for it
     private static final double neoMotorSpeedReductionFactor = 1.0;
 
-    private static final double lengthClimberExtensionVeryCloseToEndInches = maximumArmHeightInches - 1.5; // max - 2.0 inches
-    private static final double lengthClimberExtensionVeryCloseToStopInches = 1.5; // 2.0 inches
+    private static final double lengthClimberExtensionVeryCloseToEndInches = maximumArmHeightInches - 1.5;
+    private static final double lengthClimberExtensionVeryCloseToStopInches = 1.5;
     private static final double neoMotorSpeedReductionFactorVeryCloseToStop = 0.75; 
 
-    private static final double leftClimberSensorResetRetractSpeed = -0.9;
     private static final double leftClimberSensorResetExtendSpeed = 0.9;
-    private static final double rightClimberSensorResetRetractSpeed = -0.9;
-    private static final double rightClimberSensorResetExtendSpeed = 0.9;
+    private static final double leftClimberSensorResetRetractSpeed = -1.0 * leftClimberSensorResetExtendSpeed;
+    private static final double rightClimberSensorResetExtendSpeed = leftClimberSensorResetExtendSpeed;
+    private static final double rightClimberSensorResetRetractSpeed = leftClimberSensorResetRetractSpeed;
 
     /* *********************************************************************
     MEMBERS
@@ -151,15 +147,15 @@ public class ClimberSubsystem extends SubsystemBase{
    
     /**
      * Method to get the maximum height of the climber
-     * @return maximumArmHeightInInches - height in inches
+     * @return maximumArmHeightInches - height in inches
      */
     public static double getClimberHeightMaximumInInches() {
         return ClimberSubsystem.maximumArmHeightInches;
     }
 
     /**
-     * Method to get the maximum height of the climber
-     * @return minimumArmHeightInInches - height in inches
+     * Method to get the minimum height of the climber
+     * @return minimumArmHeightInches - height in inches
      */
     public static double getClimberHeightMinimumInInches() {
         return ClimberSubsystem.minimumArmHeightInches;
@@ -257,8 +253,6 @@ public class ClimberSubsystem extends SubsystemBase{
 
         // confirm that the smart motion is setup - no-op after it is setup first time
         this.initializeMotorsSmartMotion();
-        // send stuff to shuffleboard
-        this.sendStatistics();
 
         // determine if the movement is in the stop range
         // stop range implies any of the following:
@@ -659,27 +653,5 @@ public class ClimberSubsystem extends SubsystemBase{
 
         this.motorsInitalizedForSmartMotion = true;
       }
-    }
-
-    /**
-     * Send some statistics to shuffleboard
-     */
-    public void sendStatistics() {
-        if(counter % 10 == 0) {
-            if(this.leftClimberReady) {
-                SmartDashboard.putNumber("ClimberArmsLeftMotorSpeed", this.getLeftMotorOutputSpeed());
-                SmartDashboard.putString("ClimberArmsLeftArmMotionDescription", this.getLeftArmMotionDescription());
-                SmartDashboard.putNumber("ClimberArmsLeftClimberHeightInInches", this.getLeftClimberHeightInInches());
-                SmartDashboard.putNumber("ClimberArmsLeftEncoderPosition", this.getLeftMotorEncoderPosition());
-                SmartDashboard.putBoolean("ClimberArmsLeftSensorDetected", this.leftMageneticSensor.get());
-            }
-            if(this.rightClimberReady) {
-                SmartDashboard.putNumber("ClimberArmsRightMotorSpeed", this.getRightMotorOutputSpeed());
-                SmartDashboard.putString("ClimberArmsRightArmMotionDescription", this.getRightArmMotionDescription());     
-                SmartDashboard.putNumber("ClimberArmsRightClimberHeightInInches", this.getRightClimberHeightInInches());
-                SmartDashboard.putNumber("ClimberArmsRightEncoderPosition", this.getRightMotorEncoderPosition());
-                SmartDashboard.putBoolean("ClimberArmsRightSensorDetected", this.rightMageneticSensor.get());
-            }
-        }
     }
 }
