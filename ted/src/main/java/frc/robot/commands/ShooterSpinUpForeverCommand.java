@@ -14,8 +14,9 @@ import frc.robot.control.Constants;
 import frc.robot.subsystems.ShooterOutfeedSubsystem;
 
 /**
- * Forms a command to intake the note
- * Intake is run until note is detected or timer has expired
+ * Forms a command to spin up shooter forever the command will run 
+ * until it is interrupted by another command that requires the shooter
+ * outfeed motor subsystem
  */
 public class ShooterSpinUpForeverCommand extends Command
 {
@@ -23,7 +24,8 @@ public class ShooterSpinUpForeverCommand extends Command
   private boolean done = false;
   
   /** 
-  * Creates a new intake command 
+  * Creates a new command that will run the shooter outfeed motors until it is
+  * interrupted by another command that requires the shooter outfeed motor subsystem
   * 
   * @param shooterSubsystem - the shooter outfeed subsystem
   */
