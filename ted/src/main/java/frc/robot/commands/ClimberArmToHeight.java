@@ -27,7 +27,7 @@ public class ClimberArmToHeight extends Command {
   private boolean done = false;
 
   /**
-   * Constructor for ShooterShootCommand
+   * Constructor for ClimberArmToHeight
    * Will set shooter to desired angle before shooting
    * @param climberSubsystem - the target climber subsystem
    * @param desiredHeightInInchesLeft - the target updated height of the climber left
@@ -67,6 +67,10 @@ public class ClimberArmToHeight extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    if(!done) {
+      // if not done stop the climbers with speed 0
+      this.climber.setClimberSpeeds(0.0, 0.0);
+    }
     if(interrupted){
       done = true;
       System.out.println("interrupted end of ClimberArmToHeight ... ");

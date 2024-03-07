@@ -139,8 +139,6 @@ public final class Constants {
     public static final double shooterSpinUpTimeoutSeconds = 15.0;
     public static final double shooterShootDuration = 1.7;
     public static final double shooterSpinUpDelay = 0.8;
-    public static final double shooterLeftDefaultWarmUpSpeedRpm = shooterLeftDefaultSpeedRpm * 0.80;
-    public static final double shooterRightDefaultWarmUpSpeedRpm = shooterRightDefaultSpeedRpm * 0.80;
 
     // *******************************************************************
     // shooter angle constants  
@@ -163,6 +161,12 @@ public final class Constants {
     public static final double shooterControllerInputPositiveStickAngleIncrement = 0.15;
     public static final double shooterControllerInputNegativeStickAngleIncrement = -0.15;
     public static final double shooterAngleStickIncrementMagnitude = 0.5;
+    // angles of shooter shots
+    public static final double shooterAngleShootFromSpeaker = 56.0;
+    // TODO - figure out what 'shoot from note' actually means??
+    public static final double shooterAngleShootFromNote = 42.0; 
+    public static final double shooterAngleShootFromStage = 40.0;
+    public static final double shooterAngleShootFromSourceWing = 22.0;
 
     // ******************************************************************
     // climber constants
@@ -173,6 +177,9 @@ public final class Constants {
     public static final double climberStandardToleranceInches = 0.25;
     public static final double climberControllerStickDeadband = 0.2;
     public static final double climberArmSensorPosition = 0.75;
+    // the blind find distance represents the maximum distance the climber will retract
+    // in the sequence where it attempts to find its sensor zero before deciding the sensor
+    // is not present in the system and in place it creates an assumed zero position
     public static final double climberArmSensorBlindFindDistance = 1.75;
     public static final double climberArmToPositionFullDeploy = 22.75;
     public static final double climberArmToPositionFullRetract = -2.0;
