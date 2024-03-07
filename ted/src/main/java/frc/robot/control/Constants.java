@@ -126,6 +126,7 @@ public final class Constants {
     public static final double feederReverseSpeed = 0.10;
     // feeder will run until note is detected or this timeout has expired
     public static final double feederTimeoutSeconds = 10.0;
+    public static final double feederLaunchTimeoutSeconds = .5;
 
     // *******************************************************************
     // shooter outfeed constants

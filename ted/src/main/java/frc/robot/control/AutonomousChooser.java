@@ -27,6 +27,7 @@ import frc.robot.commands.ShooterShootCommand;
 import frc.robot.commands.RemoveNoteCommand;
 import frc.robot.commands.ShooterSetAngleCommand;
 import frc.robot.common.FeederMode;
+import frc.robot.commands.FeederLaunchNote;
 import frc.robot.control.SubsystemCollection;
 
 public class AutonomousChooser {
@@ -185,7 +186,7 @@ public class AutonomousChooser {
             NamedCommands.registerCommand("FeedNote",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "FeedNote"),
-                    new FeedNoteCommand(subsystems.getFeederSubsystem(), FeederMode.FeedToShooter)));
+                    new FeederLaunchNote(subsystems.getFeederSubsystem(), FeederMode.FeedToShooter)));
             NamedCommands.registerCommand("AngleFromNote",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "AngleFromNote"),
