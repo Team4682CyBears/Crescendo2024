@@ -33,8 +33,8 @@ public final class Constants {
         WcpModuleConfigurations.TED,
         // SUBTRACT the values you find in shuffleboard
         Math.toRadians(-215.15 - 178.76 - 180.0 -358.7), // FRONT LEFT
-        Math.toRadians(-180.61 - 95.27 - 358.6 -169.8), // FRONT RIGHT 
-        Math.toRadians(-191.33 - 257.52 -357.3 ), // BACK LEFT
+        Math.toRadians(-180.61 - 95.27 - 358.6 -169.8 - 150.59), // FRONT RIGHT 
+        Math.toRadians(-191.33 - 257.52 -357.3  - 3.6), // BACK LEFT
         Math.toRadians(-58.35 - 177.27 - 180.0 - 2.0)); // BACK RIGHT
 
     //////////////////// BABYBEAR DRIVETRAIN ////////////////////
@@ -136,7 +136,7 @@ public final class Constants {
     private static double shooterBaseRpm = 6500;
     public static final double shooterLeftDefaultSpeedRpm = shooterBaseRpm * 0.615;
     public static final double shooterRightDefaultSpeedRpm = shooterBaseRpm * 0.615;
-    public static final double shooterSpinUpTimeoutSeconds = 5.0;
+    public static final double shooterSpinUpTimeoutSeconds = 15.0;
     public static final double shooterShootDuration = 1.7;
     public static final double shooterSpinUpDelay = 0.8;
     public static final double shooterLeftDefaultWarmUpSpeedRpm = shooterLeftDefaultSpeedRpm * 0.80;
