@@ -16,6 +16,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.VoltageConfigs;
 import com.ctre.phoenix6.controls.VoltageOut;
 
 import frc.robot.swerveLib.ModuleConfiguration;
@@ -29,6 +30,8 @@ public final class Falcon500DriveControllerFactoryBuilder {
 
     private double nominalVoltage = Double.NaN;
     private double currentLimit = Double.NaN;
+    private double statorCurrentLimit = Double.NaN;
+    private double supplyVoltageTimeConstant = Double.NaN;
 
     public Falcon500DriveControllerFactoryBuilder withVoltageCompensation(double nominalVoltage) {
         this.nominalVoltage = nominalVoltage;
@@ -48,8 +51,26 @@ public final class Falcon500DriveControllerFactoryBuilder {
         return this;
     }
 
+    public Falcon500DriveControllerFactoryBuilder withStatorCurrentLimit(double statorCurrentLimit) {
+        this.statorCurrentLimit = statorCurrentLimit;
+        return this;
+    }
+
+    public Falcon500DriveControllerFactoryBuilder withSupplyVoltageTimeConstant(double supplyVoltageTimeConstant) {
+        this.supplyVoltageTimeConstant = supplyVoltageTimeConstant;
+        return this;
+    }
+
     public boolean hasCurrentLimit() {
         return Double.isFinite(currentLimit);
+    }
+
+    public boolean hasStatorCurrentLimit() {
+        return Double.isFinite(statorCurrentLimit);
+    }
+
+    public boolean hasSupplyVoltageTimeConstant() {
+        return Double.isFinite(supplyVoltageTimeConstant);
     }
 
     private class FactoryImplementation implements DriveControllerFactory<ControllerImplementation, Integer> {
@@ -58,6 +79,7 @@ public final class Falcon500DriveControllerFactoryBuilder {
 
             TalonFXConfiguration motorConfiguration = new TalonFXConfiguration();
             CurrentLimitsConfigs currentConfigs = new CurrentLimitsConfigs();
+            VoltageConfigs voltageConfigs = new VoltageConfigs();
             VoltageOut voltageRequest = new VoltageOut(0);           
 
             double sensorPositionCoefficient = Math.PI * moduleConfiguration.getWheelDiameter() * moduleConfiguration.getDriveReduction();
@@ -67,9 +89,20 @@ public final class Falcon500DriveControllerFactoryBuilder {
                 voltageRequest.withOutput(nominalVoltage);
             }
 
+            boolean updateMotorConfigForCurrentLimit = false;
             if (hasCurrentLimit()) {
                 currentConfigs.withSupplyCurrentLimit(currentLimit);
                 currentConfigs.withSupplyCurrentLimitEnable(true);
+                updateMotorConfigForCurrentLimit = true;
+            }
+
+            if(hasStatorCurrentLimit()) {
+                currentConfigs.withStatorCurrentLimit(statorCurrentLimit);
+                currentConfigs.withStatorCurrentLimitEnable(true);
+                updateMotorConfigForCurrentLimit = true;
+            }
+
+            if(updateMotorConfigForCurrentLimit) {
                 motorConfiguration.withCurrentLimits(currentConfigs);
             }
 
@@ -77,6 +110,11 @@ public final class Falcon500DriveControllerFactoryBuilder {
 
             motorConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
             motorConfiguration.MotorOutput.Inverted = (moduleConfiguration.isDriveInverted() ? InvertedValue.CounterClockwise_Positive : InvertedValue.Clockwise_Positive);
+
+            if(hasSupplyVoltageTimeConstant()) {
+                voltageConfigs.withSupplyVoltageTimeConstant(supplyVoltageTimeConstant);
+                motorConfiguration.withVoltage(voltageConfigs);
+            }
 
             CtreUtils.checkCtreError(motor.getConfigurator().apply(motorConfiguration), "Failed to apply motor configuration!");
             CtreUtils.checkCtreError(motor.setControl(voltageRequest), "Failed to apply motor control!");

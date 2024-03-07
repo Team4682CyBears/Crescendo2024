@@ -23,6 +23,8 @@ import frc.robot.commands.FeedNoteCommand;
 import frc.robot.commands.IntakeAndFeedNoteCommand;
 import frc.robot.commands.IntakeNoteCommand;
 import frc.robot.commands.RemoveNoteCommand;
+import frc.robot.commands.ShooterOutFeedWarmUpCommand;
+import frc.robot.commands.ShooterSetAngleCommand;
 import frc.robot.commands.ShooterShootCommand;
 import frc.robot.commands.ShooterSpinUpCommand;
 
@@ -35,6 +37,7 @@ public class ManualInputInterfaces {
 
   // subsystems needed for inputs
   private SubsystemCollection subsystemCollection = null;
+  private double rightClimberSpeed = 0.0;
 
   /**
    * The constructor to build this 'manual input' conduit
@@ -79,11 +82,20 @@ public class ManualInputInterfaces {
    * A method to get the arcade arm Z componet being input from humans
    * @return - a double value associated with the magnitude of the Z componet
    */
-  public double getInputClimberArmsZ()
+  public double getInputLeftClimberArmZ()
   {
     // use the co drivers right Z to represent the vertical movement
     // and multiply by -1.0 as xbox reports values flipped
     return -1.0 * coDriverController.getLeftY();
+  }
+
+  /**
+   * A method to get the arcade arm Z componet being input from humans
+   * @return - a double value associated with the magnitude of the Z componet
+   */
+  public double getRightClimberArmZ()
+  {
+    return this.rightClimberSpeed;
   }
 
   /**
@@ -169,18 +181,30 @@ public class ManualInputInterfaces {
 
       if(this.subsystemCollection.isShooterOutfeedSubsystemAvailable() &&
          this.subsystemCollection.isFeederSubsystemAvailable()) {
-        System.out.println("STARTING Registering this.driverController.a().whileTrue() ... ");
-        this.driverController.a().whileTrue(
+        System.out.println("STARTING Registering this.driverController.rightTrigger().onTrue() ... ");
+        this.driverController.rightTrigger().onTrue(
             new ParallelCommandGroup(
               new ShooterShootCommand(
                 subsystemCollection.getShooterOutfeedSubsystem(), 
                 subsystemCollection.getFeederSubsystem()),
               new ButtonPressCommand(
-                "driverController.a()",
+                "driverController.rightTrigger()",
                 "Shoot at speed!!")
               )
           );
-        System.out.println("FINISHED registering this.driverController.a().whileTrue() ... ");
+        System.out.println("FINISHED registering this.driverController.rightTrigger().onTrue() ... ");
+      }
+
+      if(this.subsystemCollection.isIntakeSubsystemAvailable()) {
+          this.driverController.a().onTrue(
+            new ParallelCommandGroup(
+              new RemoveNoteCommand(
+                this.subsystemCollection.getIntakeSubsystem()),
+              new ButtonPressCommand(
+                "driverController.a()",
+                "Remove Note")
+              )
+          );
       }
 
       if(this.subsystemCollection.isDriveTrainPowerSubsystemAvailable() && 
@@ -208,51 +232,27 @@ public class ManualInputInterfaces {
             )
           );
 
-        // right trigger press will align robot on a target   
-        this.driverController.rightTrigger().onTrue(
-          new ParallelCommandGroup(
-            //TODO create and add target driving mode here
-            new InstantCommand(
-              /*() -> subsystemCollection.getDriveTrainSubsystem().setSwerveDriveMode(SwerveDriveMode.TARGET_DRIVING)*/
-            ),
-            new ButtonPressCommand(
-            "driverController.rightTrigger()",
-            "align on target")
-          )
-        );
-
-        // right trigger de-press will put drivetrain in normal drive mode  
-        this.driverController.rightTrigger().onFalse(
-          new ParallelCommandGroup(
-            //
-            new InstantCommand(
-              /*() -> subsystemCollection.getDriveTrainSubsystem().setSwerveDriveMode(SwerveDriveMode.NORMAL_DRIVING)*/
-            ),
-            new ButtonPressCommand(
-            "driverController.rightTrigger()",
-            "normal driving")
-          )
-        );
-
-        // left trigger press will ramp down drivetrain to reduced speed mode 
+        // left trigger press will put drivetrain in X stance
         this.driverController.leftTrigger().onTrue(
           new ParallelCommandGroup(
-            new InstantCommand(subsystemCollection.getDriveTrainPowerSubsystem()::setReducedPowerReductionFactor,
-            subsystemCollection.getDriveTrainPowerSubsystem()),
+            new InstantCommand(
+              () -> subsystemCollection.getDriveTrainSubsystem().setSwerveDriveMode(SwerveDriveMode.IMMOVABLE_STANCE)
+            ),
             new ButtonPressCommand(
             "driverController.leftTrigger()",
-            "ramp down to reduced speed")
+            "x-stance / immovable")
           )
         );
 
-        // right trigger de-press will ramp up drivetrain to max speed
-        this.driverController.rightTrigger().onFalse(
+        // left trigger release will put drivetrain in normal drive mode  
+        this.driverController.leftTrigger().onFalse(
           new ParallelCommandGroup(
-            new InstantCommand(subsystemCollection.getDriveTrainPowerSubsystem()::resetPowerReductionFactor,
-            subsystemCollection.getDriveTrainPowerSubsystem()),
+            new InstantCommand(
+              () -> subsystemCollection.getDriveTrainSubsystem().setSwerveDriveMode(SwerveDriveMode.NORMAL_DRIVING)
+            ),
             new ButtonPressCommand(
-            "driverController.rightTrigger()",
-            "ramp up to default speed")
+            "driverController.leftTrigger()",
+            "normal driving")
           )
         );
 
@@ -299,47 +299,57 @@ public class ManualInputInterfaces {
           )
         );
 
-      if(this.subsystemCollection.isShooterOutfeedSubsystemAvailable() && this.subsystemCollection.isFeederSubsystemAvailable()) {
+      if(this.subsystemCollection.isShooterAngleSubsystemAvailable()) {
+
+        this.coDriverController.b().onTrue(
+          new ParallelCommandGroup(
+            // shoot at the current angle
+            new ShooterSetAngleCommand(
+              Constants.shooterAngleShootFromSpeaker,
+              this.subsystemCollection.getShooterAngleSubsystem()),
+            new ButtonPressCommand(
+              "coDriverController.b()",
+              "subwoffer shot")
+              ));
+
         this.coDriverController.y().onTrue(
           new ParallelCommandGroup(
             // shoot at the current angle
-            new ShooterShootCommand(this.subsystemCollection.getShooterOutfeedSubsystem(), this.subsystemCollection.getFeederSubsystem()),
+            new ShooterSetAngleCommand(
+              Constants.shooterAngleShootFromNote,
+              this.subsystemCollection.getShooterAngleSubsystem()),
             new ButtonPressCommand(
               "coDriverController.y()",
-                "shoots the shooter")
-            )
-        );
+              "note shot")
+              ));
+
+        this.coDriverController.a().onTrue(
+          new ParallelCommandGroup(
+            // shoot at the current angle
+            new ShooterSetAngleCommand(
+              Constants.shooterAngleStowDegrees,
+              this.subsystemCollection.getShooterAngleSubsystem()),
+            new ButtonPressCommand(
+              "coDriverController.a()",
+              "stow")
+              ));
+
+
       }
 
-      if(this.subsystemCollection.isIntakeSubsystemAvailable()) {
-        // remove the note
-        this.coDriverController.b().onTrue(
-          new ParallelCommandGroup(
-            new RemoveNoteCommand(this.subsystemCollection.getIntakeSubsystem()),
-            new ButtonPressCommand(
-              "coDriverController.b()",
-                "remove note")
-            )
-        );
+      if(this.subsystemCollection.isShooterOutfeedSubsystemAvailable()) {
+        this.coDriverController.rightBumper().onTrue(
+            new ParallelCommandGroup(
+              new ShooterOutFeedWarmUpCommand(
+                this.subsystemCollection.getShooterOutfeedSubsystem(),
+                Constants.shooterLeftDefaultSpeedRpm,
+                Constants.shooterRightDefaultSpeedRpm),
+              new ButtonPressCommand(
+                "coDriverController.rightBumper()",
+                "shooter spin-up command")
+              )
+            );
       }
-
-      this.coDriverController.a().onTrue(
-        new ParallelCommandGroup(
-          //TODO include an actual Climb command here
-          new ButtonPressCommand(
-            "coDriverController.a()",
-              "[TEMPORARY FAKE] climb")
-          )
-      );
-
-      this.coDriverController.rightBumper().onTrue(
-          new ParallelCommandGroup(
-            //TODO include an actual ShooterToLocation command here
-            new ButtonPressCommand(
-              "coDriverController.rightBumper()",
-              "[TEMPORARY FAKE] stow")
-            )
-          );
 
       if(this.subsystemCollection.isFeederSubsystemAvailable()) {
           this.coDriverController.back().onTrue(
@@ -362,6 +372,29 @@ public class ManualInputInterfaces {
                 "send note to dunker"))
           );
       }
+
+      this.coDriverController.povUp().onTrue(
+          new InstantCommand(() -> this.setRightClimberSpeedPositive())
+      );
+      this.coDriverController.povUp().onFalse(
+          new InstantCommand(() -> this.setRightClimberSpeedZero())
+      );
+      this.coDriverController.povDown().onTrue(
+          new InstantCommand(() -> this.setRightClimberSpeedNegative())
+      );
+      this.coDriverController.povDown().onFalse(
+          new InstantCommand(() -> this.setRightClimberSpeedZero())
+      );
     }
+  }
+
+  private void setRightClimberSpeedPositive() {
+    this.rightClimberSpeed = Constants.climberArmUpDefaultSpeed;
+  }
+  private void setRightClimberSpeedNegative() {
+    this.rightClimberSpeed = Constants.climberArmDownDefaultSpeed;
+  }
+  private void setRightClimberSpeedZero() {
+    this.rightClimberSpeed = 0.0;
   }
 }
