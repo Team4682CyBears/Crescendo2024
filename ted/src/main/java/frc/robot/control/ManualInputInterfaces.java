@@ -17,16 +17,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.common.FeederMode;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.AllStopCommand;
-import frc.robot.commands.ButtonPressCommand;
-import frc.robot.commands.FeedNoteCommand;
-import frc.robot.commands.IntakeAndFeedNoteCommand;
-import frc.robot.commands.IntakeNoteCommand;
-import frc.robot.commands.RemoveNoteCommand;
-import frc.robot.commands.ShooterOutFeedWarmUpCommand;
-import frc.robot.commands.ShooterSetAngleCommand;
-import frc.robot.commands.ShooterShootCommand;
-import frc.robot.commands.ShooterSpinUpCommand;
+import frc.robot.commands.*;
 
 public class ManualInputInterfaces {
 
@@ -258,13 +249,9 @@ public class ManualInputInterfaces {
 
         // Dpad will control fine placement mode
         this.driverController.povRight().whileTrue(
-          //TODO replace InstantCommand with actual driveFinePlacement command once it exist. 
-            new InstantCommand()
-          /**
-          new DriveFinePlacementCommand(
-            localDrive, 
-            -1 * Constants.FinePlacementRotationalVelocity
-            )*/
+            new ShooterSetAngleWithVisionCommand(this.subsystemCollection.getCameraSubsystem(), 
+                                      this.subsystemCollection.getShooterAngleSubsystem())
+  
           ); 
         
         this.driverController.povLeft().whileTrue(
