@@ -142,6 +142,12 @@ public final class Constants {
     public static final double shooterStatorCurrentMaximumAmps = 100.0;
     public static final double shooterSupplyCurrentMaximumAmps = 50.0;
     public static final double shooterSupplyVoltageTimeConstant = 0.02;
+    // speeds for specific shooter shots
+    public static final double shooterOutfeedSpeedForAngleShootFromSpeaker = 4000.0;
+    public static final double shooterOutfeedSpeedForAngleShootFromNote = 6000.0; 
+    public static final double shooterOutfeedSpeedForAngleShootFromStage = 6000.0;
+    public static final double shooterOutfeedSpeedForAngleShootFromSourceWing = 6500.0;
+    public static final double shooterOutfeedSpeedForAngleShootFromAmp = 250.0;
 
     // *******************************************************************
     // shooter angle constants  
@@ -170,6 +176,7 @@ public final class Constants {
     public static final double shooterAngleShootFromNote = 42.0; 
     public static final double shooterAngleShootFromStage = 40.0;
     public static final double shooterAngleShootFromSourceWing = 22.0;
+    public static final double shooterAngleShootFromAmp = Constants.shooterAngleMaxDegrees;
 
     // ******************************************************************
     // climber constants
