@@ -114,6 +114,7 @@ public class CameraSubsystem extends SubsystemBase {
       putter = measurement.getDistanceMeters();
     }
     SmartDashboard.putNumber("distance from tag", putter);
+    SmartDashboard.putNumber("vison angle", -4.65*putter + 51.6);
 
   }
 }
