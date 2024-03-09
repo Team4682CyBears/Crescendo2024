@@ -359,18 +359,11 @@ public class ManualInputInterfaces {
         // Auto Ranging stuff
         this.coDriverController.leftTrigger().onTrue(
           new ParallelCommandGroup(
-            // TODO Add auto Ranging command here once its ready
+            new ShooterSetAngleWithVisionCommand(subsystemCollection.getCameraSubsystem(), subsystemCollection.getShooterAngleSubsystem()),
             new ButtonPressCommand(
               "coDriverController.leftTrigger()",
               "TODO auto ranging mode on")
-              ));        
-        this.coDriverController.leftTrigger().onFalse(
-          new ParallelCommandGroup(
-            // TODO Add auto Ranging command here once its ready
-            new ButtonPressCommand(
-              "coDriverController.leftTrigger().onFalse",
-              "TODO auto ranging mode off")
-              )); 
+              ));
 
         // angle change commands 
         // upward
