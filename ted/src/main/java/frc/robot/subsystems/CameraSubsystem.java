@@ -103,9 +103,10 @@ public class CameraSubsystem extends SubsystemBase {
    */
   @Override
   public void periodic() {
-    if(getVisionBotPoseInTargetSpace() != null){
-      SmartDashboard.putNumber("relative X", this.getVisionBotPoseInTargetSpace().getX());
-      SmartDashboard.putNumber("relative Y", this.getVisionBotPoseInTargetSpace().getY());
+    Pose2d dm = getVisionBotPoseInTargetSpace();
+    if(dm != null){
+      SmartDashboard.putNumber("relative X", dm.getX());
+      SmartDashboard.putNumber("relative Y", dm.getY());
     } 
 
     DistanceMeasurement measurement = this.getDistanceFromTag(7.0);

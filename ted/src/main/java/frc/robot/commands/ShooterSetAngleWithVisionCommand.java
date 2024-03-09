@@ -24,8 +24,11 @@ public class ShooterSetAngleWithVisionCommand extends ShooterSetAngleCommand {
   private double desiredAngleDegrees;
   private ShooterAngleSubsystem shooter;
   private CameraSubsystem cameraSubsystem;
-  private double slope = -4.65;
-  private double offset = 51.6;
+  private double farSlope = -4.65;
+  private double farOffset = 51.6;
+  private double closeSlope = -17.9;
+  private double closeOffset = 79.1;
+  private double nearFarBreakpoint = 2.0;
 
   /**
    * Constructor for ShooterSetAngleTesterCommand
@@ -53,7 +56,17 @@ public class ShooterSetAngleWithVisionCommand extends ShooterSetAngleCommand {
   @Override
   public void execute() {
     DistanceMeasurement distanceMeasurement = cameraSubsystem.getDistanceFromTag(7.0);
+    double slope = 0.0;
+    double offset = 0.0;
     if (distanceMeasurement.getIsValid()){
+      if(distanceMeasurement.getDistanceMeters() < nearFarBreakpoint){
+        slope = closeSlope;
+        offset = closeOffset;
+      }
+      else{
+        slope = farSlope;
+        offset = farOffset;
+      }
       desiredAngleDegrees = (slope*cameraSubsystem.getDistanceFromTag(7.0).getDistanceMeters()) + offset;
       desiredAngleDegrees = MotorUtils.clamp(desiredAngleDegrees, Constants.shooterAngleMinDegrees, Constants.shooterAngleMaxDegrees);
       super.desiredAngleDegrees = desiredAngleDegrees;
