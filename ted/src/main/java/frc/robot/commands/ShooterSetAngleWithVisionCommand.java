@@ -22,7 +22,7 @@ import frc.robot.subsystems.ShooterAngleSubsystem;
 public class ShooterSetAngleWithVisionCommand extends ShooterSetAngleCommand {
 
   private double desiredAngleDegrees;
-  private ShooterAngleSubsystem shooter;
+  private ShooterAngleSubsystem shooterAngleSubsystem;
   private CameraSubsystem cameraSubsystem;
   private double farSlope = -4.65;
   private double farOffset = 51.6;
@@ -31,24 +31,24 @@ public class ShooterSetAngleWithVisionCommand extends ShooterSetAngleCommand {
   private double nearFarBreakpoint = 2.0;
 
   /**
-   * Constructor for ShooterSetAngleTesterCommand
+   * Constructor for ShooterSetAngleWithVisionCommand
    * Will set shooter to desired angle before shooting
-   * @param desiredAngleDegreesSupplier
-   * @param shooter
+   * @param cameraSubsystem
+   * @param shooterSubsystem
    */
-  public ShooterSetAngleWithVisionCommand(CameraSubsystem cameraSubsystem, ShooterAngleSubsystem shooter) {
+  public ShooterSetAngleWithVisionCommand(CameraSubsystem cameraSubsystem, ShooterAngleSubsystem shooterAngleSubsystem) {
     // start out wanting current shooter angle
-    super(shooter.getAngleDegrees(), shooter);
-    this.shooter = shooter;
+    super(shooterAngleSubsystem.getAngleDegrees(), shooterAngleSubsystem);
+    this.shooterAngleSubsystem = shooterAngleSubsystem;
     this.cameraSubsystem = cameraSubsystem;
-    this.desiredAngleDegrees = this.shooter.getAngleDegrees();
+    this.desiredAngleDegrees = this.shooterAngleSubsystem.getAngleDegrees();
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     // start out wanting current shooter angle
-    desiredAngleDegrees = this.shooter.getAngleDegrees();
+    desiredAngleDegrees = this.shooterAngleSubsystem.getAngleDegrees();
     super.desiredAngleDegrees = desiredAngleDegrees;
     super.initialize();
   }
