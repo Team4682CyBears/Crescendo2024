@@ -109,7 +109,7 @@ public class CameraSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("relative Y", dm.getY());
     } 
 
-    DistanceMeasurement measurement = this.getDistanceFromTag(7.0);
+    DistanceMeasurement measurement = this.getDistanceFromTag(7.0, 4.0);
     double putter = 0.0;
     if(measurement.getIsValid()){
       putter = measurement.getDistanceMeters();
