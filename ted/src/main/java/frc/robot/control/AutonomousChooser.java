@@ -26,6 +26,7 @@ import frc.robot.commands.IntakeAndFeedNoteCommand;
 import frc.robot.commands.ShooterShootCommand;
 import frc.robot.commands.RemoveNoteCommand;
 import frc.robot.commands.ShooterSetAngleCommand;
+import frc.robot.commands.ShooterSetAngleWithVisionCommand;
 import frc.robot.common.FeederMode;
 import frc.robot.commands.FeederLaunchNote;
 import frc.robot.control.SubsystemCollection;
@@ -223,6 +224,10 @@ public class AutonomousChooser {
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "AngleFromWing"),
                     new ShooterSetAngleCommand(30.0, subsystems.getShooterAngleSubsystem())));
+            NamedCommands.registerCommand("AutoAngle",
+                new ParallelCommandGroup(
+                    new ButtonPressCommand("PathPlanner", "AutoAngle"),
+                    new ShooterSetAngleWithVisionCommand(subsystems.getCameraSubsystem(), subsystems.getShooterAngleSubsystem())));
         }
     }
 }

@@ -30,34 +30,15 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "BlueWing.1"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "AngleFromWing"
-                }
-              }
-            ]
+            "pathName": "BlueWing.1"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "FeedNote"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "BlueWing.2"
+            "name": "AutoAngle"
           }
         },
         {
