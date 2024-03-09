@@ -65,9 +65,9 @@ public class CameraSubsystem extends SubsystemBase {
     return table.getEntry("tid").getDouble(0);
   }
 
-  public DistanceMeasurement getDistanceFromTag(double tId){
+  public DistanceMeasurement getDistanceFromTag(double blueTId, double redTId){
     DistanceMeasurement measurement = new DistanceMeasurement(false, 0.0);
-    if(getTagId() == tId && getVisionBotPoseInTargetSpace() != null){
+    if((getTagId() == blueTId || getTagId() == redTId) && getVisionBotPoseInTargetSpace() != null){
       measurement.setIsValid(true);
 
       double xDistance = getVisionBotPoseInTargetSpace().getTranslation().getX();
