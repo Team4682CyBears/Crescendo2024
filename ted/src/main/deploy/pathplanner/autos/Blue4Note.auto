@@ -14,7 +14,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.2
           }
         },
         {
@@ -36,15 +36,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "IntakeNote"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AngleFromStage"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeNote"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AngleFromStage"
+                }
+              }
+            ]
           }
         },
         {
@@ -60,15 +67,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "IntakeNote"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AngleFromNote"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeNote"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AngleFromNote"
+                }
+              }
+            ]
           }
         },
         {
@@ -84,15 +98,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "IntakeNote"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AngleFromStage"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeNote"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AngleFromStage"
+                }
+              }
+            ]
           }
         },
         {

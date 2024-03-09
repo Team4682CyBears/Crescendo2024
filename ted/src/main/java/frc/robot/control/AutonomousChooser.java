@@ -130,8 +130,8 @@ public class AutonomousChooser {
 
     public static void configureAutoBuilder(SubsystemCollection subsystems){
         HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-          new PIDConstants(2.0, 0, 0), // Translation PID constants
-          new PIDConstants(4.5, 0.001, 0), // Rotation PID constants
+          new PIDConstants(1.5, 0.015, 0), // Translation PID constants
+          new PIDConstants(4.0, 0.005, 0), // Rotation PID constants
           1.8, // Max module speed, in m/s
           0.43, // Drive base radius in meters. Distance from robot center to furthest module.
           new ReplanningConfig() // Default path replanning config. See the API for the options here
@@ -190,7 +190,7 @@ public class AutonomousChooser {
             NamedCommands.registerCommand("AngleFromNote",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "AngleFromNote"),
-                    new ShooterSetAngleCommand(42.0, subsystems.getShooterAngleSubsystem())));
+                    new ShooterSetAngleCommand(40.0, subsystems.getShooterAngleSubsystem())));
             NamedCommands.registerCommand("AngleFromSpeaker",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "AngleFromSpeaker"),
@@ -198,7 +198,11 @@ public class AutonomousChooser {
             NamedCommands.registerCommand("AngleFromStage",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "AngleFromNote"),
-                    new ShooterSetAngleCommand(40.0, subsystems.getShooterAngleSubsystem())));
+                    new ShooterSetAngleCommand(38.0, subsystems.getShooterAngleSubsystem())));
+            NamedCommands.registerCommand("AngleFromWing",
+                new ParallelCommandGroup(
+                    new ButtonPressCommand("PathPlanner", "AngleFromWing"),
+                    new ShooterSetAngleCommand(30.0, subsystems.getShooterAngleSubsystem())));
         }
     }
 }

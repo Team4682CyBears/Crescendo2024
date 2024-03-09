@@ -122,11 +122,11 @@ public final class Constants {
     // feederSpeed is [0.0 .. 1.0]
     // it runs in one direction for the shooter 
     // and the opposite direction for the dunker/amp
-    public static final double feederSpeed = 0.20;
+    public static final double feederSpeed = 0.2;
     public static final double feederReverseSpeed = 0.10;
     // feeder will run until note is detected or this timeout has expired
     public static final double feederTimeoutSeconds = 10.0;
-    public static final double feederLaunchTimeoutSeconds = .5;
+    public static final double feederLaunchTimeoutSeconds = .75;
 
     // *******************************************************************
     // shooter outfeed constants

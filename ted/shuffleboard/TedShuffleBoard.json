@@ -827,8 +827,7 @@
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 10000.0,
               "Y-axis/Lower bound": 0.0,
-              "Y-axis/Unit": "ul",
-              "Visible data/SmartDashboard/RightOutfeedMotorSpeed": true
+              "Y-axis/Unit": "ul"
             }
           },
           "3,3": {
@@ -847,8 +846,7 @@
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 10000.0,
               "Y-axis/Lower bound": -10000.0,
-              "Y-axis/Unit": "ul",
-              "Visible data/SmartDashboard/LeftOutfeedMotorSpeed": true
+              "Y-axis/Unit": "ul"
             }
           }
         }
@@ -856,9 +854,9 @@
     }
   ],
   "windowGeometry": {
-    "x": -10.0,
-    "y": 0.0,
-    "width": 1936.0,
-    "height": 1039.0
+    "x": 22.0,
+    "y": 60.0,
+    "width": 1783.0,
+    "height": 480.0
   }
 }

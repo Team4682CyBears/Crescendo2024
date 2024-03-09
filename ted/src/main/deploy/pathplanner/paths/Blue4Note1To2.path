@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.601484126217674,
-        "y": 4.261674423016092
+        "x": 2.4253549759335664,
+        "y": 4.361647649950041
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3469009916897152,
-        "y": 4.7286147153312825
+        "x": 1.1707718414056074,
+        "y": 4.828587942265232
       },
       "isLocked": false,
       "linkedName": "Blue4NoteStage"
@@ -57,7 +57,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 5.5,
-    "maxAcceleration": 6.0,
+    "maxAcceleration": 4.5,
     "maxAngularVelocity": 431.7652343,
     "maxAngularAcceleration": 720.0
   },
