@@ -157,20 +157,6 @@ public class RobotContainer {
         new ChassisSpeeds(0.6, 0.0, 0.0),
         3.0));
     }
-
-    final TestTrajectories testTrajectories = new TestTrajectories(subsystems.getDriveTrainSubsystem().getTrajectoryConfig());
-    
-    SmartDashboard.putData("Allign relative to tag", 
-      new AllignRelativeToTagCommand(this.subsystems.getDriveTrainSubsystem(), this.subsystems.getCameraSubsystem(), new Pose2d(new Translation2d(1.0, 0.0), new Rotation2d(0.0)), 7.0));
-
-    SmartDashboard.putData("Drive Forward Trajectory",
-      new DriveTrajectoryCommand(subsystems.getDriveTrainSubsystem(), testTrajectories.traverseSimpleForward));
-
-    SmartDashboard.putData("Drive ZigZag Trajectory",
-      new DriveTrajectoryCommand(subsystems.getDriveTrainSubsystem(), testTrajectories.traverseZigZag));
-
-    SmartDashboard.putData("Drive Turn90 Trajectory",
-      new DriveTrajectoryCommand(subsystems.getDriveTrainSubsystem(), testTrajectories.turn90));
   }
 
   public Command getAutonomousCommand() {
