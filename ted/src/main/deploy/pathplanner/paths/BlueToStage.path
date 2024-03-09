@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.2783389436136514,
-        "y": 5.599841069618482
+        "x": 2.2480939968949847,
+        "y": 4.37749713016574
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7764277340258965,
-        "y": 4.936479523928377
+        "x": 2.3256684396982017,
+        "y": 4.34811794182682
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "InFrontStage"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 4.361647649950041
       },
       "prevControl": {
-        "x": 2.0861263558530623,
-        "y": 4.5188074785202765
+        "x": 2.219697319763554,
+        "y": 4.389556929428917
       },
       "nextControl": null,
       "isLocked": false,
@@ -69,7 +69,7 @@
   "reversed": false,
   "folder": "Blue4Note",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -24.274563531667038,
     "velocity": 0
   },
   "useDefaultConstraints": true

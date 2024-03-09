@@ -12,15 +12,15 @@
     "data": {
       "commands": [
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 0.2
+            "pathName": "BlueToInfront"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "AngleFromSpeaker"
+            "name": "AngleFromStage"
           }
         },
         {

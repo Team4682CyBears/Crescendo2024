@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.3412763391943208,
+        "y": 5.55134450818189
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.816973825387325,
+        "y": 5.023739369959441
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.2480939968949847,
+        "y": 4.37749713016574
+      },
+      "prevControl": {
+        "x": 1.87382126283592,
+        "y": 4.879465336039873
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "InFrontStage"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.5,
+    "maxAcceleration": 6.0,
+    "maxAngularVelocity": 431.7652343,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -23.5920179617815,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Blue4Note",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}
