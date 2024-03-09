@@ -22,6 +22,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
  */
 public class TestTrajectories {
     public Trajectory traverseSimpleForward;
+    public Trajectory traverseZigZag;
     public Trajectory traverseSimpleLeft;
     public Trajectory traverseTurn270;
     public Trajectory turn90;
@@ -36,6 +37,7 @@ public class TestTrajectories {
     public TestTrajectories(SwerveTrajectoryConfig config){
         this.config = config; 
         traverseSimpleForward = buildTraverseSimpleForward();
+        traverseZigZag = buildZigZag();
         traverseSimpleLeft = buildTraverseSimpleLeft();
         traverseTurn270 = buildTraverseTurn270();
         turn90 = buildTurn90();
@@ -46,11 +48,21 @@ public class TestTrajectories {
     private Trajectory buildTraverseSimpleForward(){
         ArrayList<Pose2d> waypoints = new ArrayList<Pose2d>();
         waypoints.add(new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0)));
-        waypoints.add(new Pose2d(2.0, 0.0, Rotation2d.fromDegrees(0)));
+        waypoints.add(new Pose2d(3.0, 0.0, Rotation2d.fromDegrees(0)));
     
         Trajectory t = SwerveTrajectoryGenerator.generateTrajectory(waypoints, config); 
         return t;
       }
+
+      private Trajectory buildZigZag(){
+        ArrayList<Pose2d> waypoints = new ArrayList<Pose2d>();
+        waypoints.add(new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0)));
+        waypoints.add(new Pose2d(1.5, 0.5, Rotation2d.fromDegrees(0)));
+        waypoints.add(new Pose2d(3.0, -0.5, Rotation2d.fromDegrees(0)));
+
+        Trajectory t = SwerveTrajectoryGenerator.generateTrajectory(waypoints, config); 
+        return t;
+    }
     
       private Trajectory buildTraverseSimpleLeft(){
         ArrayList<Pose2d> waypoints = new ArrayList<Pose2d>();

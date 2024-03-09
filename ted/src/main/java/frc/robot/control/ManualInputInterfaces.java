@@ -19,21 +19,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.common.FeederMode;
 import frc.robot.common.ShooterOutfeedSpeedProvider;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.AllStopCommand;
-import frc.robot.commands.ButtonPressCommand;
-import frc.robot.commands.DriveFinePlacementCommand;
-import frc.robot.commands.FeedNoteCommand;
-import frc.robot.commands.IntakeAndFeedNoteCommand;
-import frc.robot.commands.IntakeNoteCommand;
-import frc.robot.commands.RemoveNoteCommand;
-import frc.robot.commands.RumbleCommand;
-import frc.robot.commands.ShooterOutFeedWarmUpCommand;
-import frc.robot.commands.ShooterSetAngleCommand;
-import frc.robot.commands.ShooterSetAngleTesterCommand;
-import frc.robot.commands.ShooterShootCommand;
-import frc.robot.commands.ShooterSpinUpCommand;
-import frc.robot.commands.ShooterSpinUpForeverCommand;
-import frc.robot.commands.ShooterSpinUpReleaseCommand;
+import frc.robot.commands.*;
 
 public class ManualInputInterfaces {
 
