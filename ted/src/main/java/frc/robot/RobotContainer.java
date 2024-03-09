@@ -17,25 +17,15 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.common.TestTrajectories;
-import frc.robot.common.SwerveTrajectoryConfig;
 import frc.robot.common.FeederMode;
 import frc.robot.control.InstalledHardware;
 import frc.robot.control.ManualInputInterfaces;
 import frc.robot.control.SubsystemCollection;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.auto.NamedCommands;
 import frc.robot.control.AutonomousChooser;
-import com.pathplanner.lib.auto.AutoBuilder;
-import frc.robot.subsystems.*;
-import frc.robot.commands.*;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.control.Constants;
 
 public class RobotContainer {
