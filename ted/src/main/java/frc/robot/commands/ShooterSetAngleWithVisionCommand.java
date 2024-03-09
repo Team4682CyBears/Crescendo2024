@@ -2,8 +2,8 @@
 // Bishop Blanchet Robotics
 // Home of the Cybears
 // FRC - Crescendo - 2024
-// File: ShooterSetAngleTesterCommand.java
-// Intent: Wraps the ShooterSetAngleDefaultCommand to accept a controller axis
+// File: ShooterSetAngleWithVisionCommand.java
+// Intent: Wraps the ShooterSetAngleWithVision command to set angle with vision
 // ************************************************************
 
 // ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
