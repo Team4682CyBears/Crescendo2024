@@ -12,10 +12,12 @@ package frc.robot.control;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.common.FeederMode;
+import frc.robot.common.ShooterOutfeedSpeedProvider;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.*;
 
@@ -23,18 +25,23 @@ public class ManualInputInterfaces {
 
   // sets joystick variables to joysticks
   private CommandXboxController driverController = new CommandXboxController(Constants.portDriverController); 
+  private XboxController driverControllerForRumbleOnly = new XboxController(Constants.portDriverController);
   private CommandXboxController coDriverController = new CommandXboxController(Constants.portCoDriverController);
   private XboxController coDriverControllerForRumbleOnly = new XboxController(Constants.portCoDriverController);
+  private ShooterOutfeedSpeedProvider outfeedSpeedProvider = null;
 
   // subsystems needed for inputs
   private SubsystemCollection subsystemCollection = null;
-  private double rightClimberSpeed = 0.0;
 
   /**
    * The constructor to build this 'manual input' conduit
    */
   public ManualInputInterfaces(SubsystemCollection currentCollection){
     subsystemCollection = currentCollection;
+    if (this.subsystemCollection.isShooterAngleSubsystemAvailable()){
+      outfeedSpeedProvider = ShooterOutfeedSpeedProvider.getInstance(
+        this.subsystemCollection.getShooterAngleSubsystem());  
+    }
   }
 
   /**
@@ -70,7 +77,7 @@ public class ManualInputInterfaces {
   }
 
   /**
-   * A method to get the arcade arm Z componet being input from humans
+   * A method to get the arcade climber Z componet being input from humans
    * @return - a double value associated with the magnitude of the Z componet
    */
   public double getInputLeftClimberArmZ()
@@ -81,30 +88,14 @@ public class ManualInputInterfaces {
   }
 
   /**
-   * A method to get the arcade arm Z componet being input from humans
+   * A method to get the arcade climber Z componet being input from humans
    * @return - a double value associated with the magnitude of the Z componet
    */
-  public double getRightClimberArmZ()
+  public double getInputRightClimberArmZ()
   {
-    return this.rightClimberSpeed;
-  }
-
-  /**
-   * Get the angle increment
-   * @return incrementing or decrementing angle depending on positive or negative
-   */
-  public double getInputShooterAngleIncrement() 
-  {
-    // remember that the Y on xbox will be negative upward
-    double stickInput = coDriverController.getRightY();
-    double updatedAngle = 0.0; 
-    if(stickInput > Constants.shooterControllerInputPositiveStickAngleIncrement){
-      updatedAngle = -Constants.shooterAngleStickIncrementMagnitude;
-    }
-    else if (stickInput < Constants.shooterControllerInputNegativeStickAngleIncrement) {
-      updatedAngle = Constants.shooterAngleStickIncrementMagnitude;
-    }
-    return updatedAngle;
+    // use the co drivers right Z to represent the vertical movement
+    // and multiply by -1.0 as xbox reports values flipped
+    return -1.0 * coDriverController.getRightY();
   }
 
   /**
@@ -147,6 +138,8 @@ public class ManualInputInterfaces {
        this.subsystemCollection.isFeederSubsystemAvailable()) {
         // b button will intake a note
         this.driverController.b().onTrue(
+          // TODO convert to new intake sensor is availiable
+          new SequentialCommandGroup(
             new ParallelCommandGroup(
               new IntakeAndFeedNoteCommand(
                 this.subsystemCollection.getIntakeSubsystem(),
@@ -154,9 +147,9 @@ public class ManualInputInterfaces {
                 FeederMode.FeedToShooter), 
               new ButtonPressCommand(
                 "driverController.b()",
-                "intake")
-              )
-            );
+                "intake")),
+          new RumbleCommand(this.driverControllerForRumbleOnly, Constants.rumbleTimeSeconds))
+        );
       }
 
       // x button press will stop all      
@@ -176,6 +169,8 @@ public class ManualInputInterfaces {
         this.driverController.rightTrigger().onTrue(
             new ParallelCommandGroup(
               new ShooterShootCommand(
+                () -> this.outfeedSpeedProvider.getShotSpeedForCurrentAngle(),
+                () -> this.outfeedSpeedProvider.getShotSpeedForCurrentAngle(),
                 subsystemCollection.getShooterOutfeedSubsystem(), 
                 subsystemCollection.getFeederSubsystem()),
               new ButtonPressCommand(
@@ -183,16 +178,28 @@ public class ManualInputInterfaces {
                 "Shoot at speed!!")
               )
           );
+          this.driverController.rightTrigger().onFalse(
+            new ParallelCommandGroup(
+              new ShooterSpinUpForeverCommand(
+                subsystemCollection.getShooterOutfeedSubsystem(), 
+                subsystemCollection.getFeederSubsystem(),
+                () -> this.outfeedSpeedProvider.getSpinUpSpeedForCurrentAngle(),
+                true),
+              new ButtonPressCommand(
+                "driverController.rightTrigger().onFalse",
+                "Hold speed if note present!!")
+              )
+          );
         System.out.println("FINISHED registering this.driverController.rightTrigger().onTrue() ... ");
       }
 
       if(this.subsystemCollection.isIntakeSubsystemAvailable()) {
-          this.driverController.a().onTrue(
+          this.driverController.y().onTrue(
             new ParallelCommandGroup(
               new RemoveNoteCommand(
                 this.subsystemCollection.getIntakeSubsystem()),
               new ButtonPressCommand(
-                "driverController.a()",
+                "driverController.y()",
                 "Remove Note")
               )
           );
@@ -200,71 +207,88 @@ public class ManualInputInterfaces {
 
       if(this.subsystemCollection.isDriveTrainPowerSubsystemAvailable() && 
          this.subsystemCollection.isDriveTrainSubsystemAvailable()){
-        // left bumper press will decrement power factor  
+        // left bumper press will put drivetrain in X stance
         this.driverController.leftBumper().onTrue(
-          new ParallelCommandGroup(
-            new InstantCommand(
-              subsystemCollection.getDriveTrainPowerSubsystem()::decrementPowerReductionFactor,
-              subsystemCollection.getDriveTrainPowerSubsystem()),
-            new ButtonPressCommand(
-              "driverController.leftBumper()",
-              "decrement power factor")
-            )
-          );
-        // right bumper press will increment power factor  
-        this.driverController.rightBumper().onTrue(
-          new ParallelCommandGroup(
-            new InstantCommand(
-              subsystemCollection.getDriveTrainPowerSubsystem()::incrementPowerReductionFactor,
-              subsystemCollection.getDriveTrainPowerSubsystem()),
-            new ButtonPressCommand(
-              "driverController.rightBumper()",
-              "increment power factor")
-            )
-          );
-
-        // left trigger press will put drivetrain in X stance
-        this.driverController.leftTrigger().onTrue(
           new ParallelCommandGroup(
             new InstantCommand(
               () -> subsystemCollection.getDriveTrainSubsystem().setSwerveDriveMode(SwerveDriveMode.IMMOVABLE_STANCE)
             ),
             new ButtonPressCommand(
-            "driverController.leftTrigger()",
+            "driverController.leftBumper()",
             "x-stance / immovable")
           )
         );
-
-        // left trigger release will put drivetrain in normal drive mode  
-        this.driverController.leftTrigger().onFalse(
+        // left bumper release will put drivetrain in normal drive mode  
+        this.driverController.leftBumper().onFalse(
           new ParallelCommandGroup(
             new InstantCommand(
               () -> subsystemCollection.getDriveTrainSubsystem().setSwerveDriveMode(SwerveDriveMode.NORMAL_DRIVING)
             ),
             new ButtonPressCommand(
+            "driverController.leftBumper().onFalse()",
+            "back to normal driving")
+          )
+        );
+
+        // right bumper press will put drivetrain in X stance
+        this.driverController.rightBumper().onTrue(
+          new ParallelCommandGroup(
+            new InstantCommand(
+              () -> subsystemCollection.getDriveTrainSubsystem().setSwerveDriveMode(SwerveDriveMode.IMMOVABLE_STANCE)
+            ),
+            new ButtonPressCommand(
+            "driverController.rightBumper()",
+            "x-stance / immovable")
+          )
+        );
+        // right bumper release will put drivetrain in normal drive mode  
+        this.driverController.rightBumper().onFalse(
+          new ParallelCommandGroup(
+            new InstantCommand(
+              () -> subsystemCollection.getDriveTrainSubsystem().setSwerveDriveMode(SwerveDriveMode.NORMAL_DRIVING)
+            ),
+            new ButtonPressCommand(
+            "driverController.rightBumper().onFalse()",
+            "back to normal driving")
+          )
+        );
+
+        // left trigger press will ramp down drivetrain to reduced speed mode 
+        this.driverController.leftTrigger().onTrue(
+          new ParallelCommandGroup(
+            new InstantCommand(subsystemCollection.getDriveTrainPowerSubsystem()::setReducedPowerReductionFactor,
+            subsystemCollection.getDriveTrainPowerSubsystem()),
+            new ButtonPressCommand(
             "driverController.leftTrigger()",
-            "normal driving")
+            "ramp down to reduced speed")
+          )
+        );
+        // left trigger de-press will ramp up drivetrain to max speed
+        this.driverController.leftTrigger().onFalse(
+          new ParallelCommandGroup(
+            new InstantCommand(subsystemCollection.getDriveTrainPowerSubsystem()::resetPowerReductionFactor,
+            subsystemCollection.getDriveTrainPowerSubsystem()),
+            new ButtonPressCommand(
+            "driverController.leftTrigger()",
+            "ramp up to default speed")
           )
         );
 
         // Dpad will control fine placement mode
         this.driverController.povRight().whileTrue(
-            new ShooterSetAngleWithVisionCommand(this.subsystemCollection.getCameraSubsystem(), 
-                                      this.subsystemCollection.getShooterAngleSubsystem())
-  
+          new DriveFinePlacementCommand(
+            this.subsystemCollection.getDriveTrainSubsystem(), 
+            -1 * Constants.FinePlacementRotationalVelocity
+            )
           ); 
         
         this.driverController.povLeft().whileTrue(
-        //TODO replace InstantCommand with actual driveFinePlacement command once it exist. 
-            new InstantCommand()
-          /**  
-          new DriveFinePlacementCommand(
-            localDrive, 
+            new DriveFinePlacementCommand(
+            this.subsystemCollection.getDriveTrainSubsystem(), 
             Constants.FinePlacementRotationalVelocity
             )
-             */
           ); 
-      }      
+        }      
     }
   }
   
@@ -288,100 +312,144 @@ public class ManualInputInterfaces {
 
       if(this.subsystemCollection.isShooterAngleSubsystemAvailable()) {
 
-        this.coDriverController.b().onTrue(
+        this.coDriverController.y().onTrue(
           new ParallelCommandGroup(
             // shoot at the current angle
             new ShooterSetAngleCommand(
               Constants.shooterAngleShootFromSpeaker,
               this.subsystemCollection.getShooterAngleSubsystem()),
             new ButtonPressCommand(
-              "coDriverController.b()",
+              "coDriverController.y()",
               "subwoffer shot")
               ));
 
-        this.coDriverController.y().onTrue(
+        this.coDriverController.b().onTrue(
           new ParallelCommandGroup(
             // shoot at the current angle
             new ShooterSetAngleCommand(
               Constants.shooterAngleShootFromNote,
               this.subsystemCollection.getShooterAngleSubsystem()),
             new ButtonPressCommand(
-              "coDriverController.y()",
-              "note shot")
+              "coDriverController.b()",
+              "podium/note shot")
               ));
 
         this.coDriverController.a().onTrue(
           new ParallelCommandGroup(
             // shoot at the current angle
             new ShooterSetAngleCommand(
-              Constants.shooterAngleStowDegrees,
+              Constants.shooterAngleShootFromAmp,
               this.subsystemCollection.getShooterAngleSubsystem()),
             new ButtonPressCommand(
               "coDriverController.a()",
+              "amp shot")
+              ));
+
+        this.coDriverController.back().onTrue(
+          new ParallelCommandGroup(
+            // shoot at the current angle
+            new ShooterSetAngleCommand(
+              Constants.shooterAngleStowDegrees,
+              this.subsystemCollection.getShooterAngleSubsystem()),
+            new ButtonPressCommand(
+              "coDriverController.back()",
               "stow")
               ));
 
+        // Auto Ranging stuff
+        this.coDriverController.leftTrigger().onTrue(
+          new ParallelCommandGroup(
+            // TODO Add auto Ranging command here once its ready
+            new ButtonPressCommand(
+              "coDriverController.leftTrigger()",
+              "TODO auto ranging mode on")
+              ));        
+        this.coDriverController.leftTrigger().onFalse(
+          new ParallelCommandGroup(
+            // TODO Add auto Ranging command here once its ready
+            new ButtonPressCommand(
+              "coDriverController.leftTrigger().onFalse",
+              "TODO auto ranging mode off")
+              )); 
 
+        // angle change commands 
+        // upward
+        this.coDriverController.povUp().whileTrue(
+          new ParallelCommandGroup(
+            new RepeatCommand(
+              // shoot at the current angle
+              new ShooterSetAngleTesterCommand(
+                () -> this.incrementShooterAngle(),
+                this.subsystemCollection.getShooterAngleSubsystem())),
+            new ButtonPressCommand(
+              "coDriverController.povUp()",
+              "increment angle of shooter")
+              ));
+
+        // downward
+        this.coDriverController.povDown().whileTrue(
+          new ParallelCommandGroup(
+            new RepeatCommand(
+              // shoot at the current angle
+              new ShooterSetAngleTesterCommand(
+                () -> this.decrementShooterAngle(),
+                this.subsystemCollection.getShooterAngleSubsystem())),
+            new ButtonPressCommand(
+              "coDriverController.povDown()",
+              "deccrement angle of shooter")
+              ));
       }
 
-      if(this.subsystemCollection.isShooterOutfeedSubsystemAvailable()) {
-        this.coDriverController.rightBumper().onTrue(
+      if(this.subsystemCollection.isShooterOutfeedSubsystemAvailable() &&
+         this.subsystemCollection.isShooterAngleSubsystemAvailable() &&
+         this.subsystemCollection.isFeederSubsystemAvailable()) {
+        this.coDriverController.rightTrigger().onTrue(
             new ParallelCommandGroup(
-              new ShooterOutFeedWarmUpCommand(
-                this.subsystemCollection.getShooterOutfeedSubsystem(),
-                Constants.shooterLeftDefaultSpeedRpm,
-                Constants.shooterRightDefaultSpeedRpm),
+              new ShooterSpinUpForeverCommand(
+                subsystemCollection.getShooterOutfeedSubsystem(), 
+                subsystemCollection.getFeederSubsystem(),
+                () -> this.outfeedSpeedProvider.getSpinUpSpeedForCurrentAngle(),
+                false),
               new ButtonPressCommand(
-                "coDriverController.rightBumper()",
+                "coDriverController.rightTriggger()",
                 "shooter spin-up command")
               )
             );
-      }
-
-      if(this.subsystemCollection.isFeederSubsystemAvailable()) {
-          this.coDriverController.back().onTrue(
-              new ParallelCommandGroup(
-                new FeedNoteCommand(
-                  this.subsystemCollection.getFeederSubsystem(),
-                  FeederMode.FeedToShooter),
-                new ButtonPressCommand(
-                  "coDriverController.back()",
-                  "send note to shooter"))
-            );
-
-          this.coDriverController.start().onTrue(
+        this.coDriverController.rightTrigger().onFalse(
             new ParallelCommandGroup(
-                new FeedNoteCommand(
-                  this.subsystemCollection.getFeederSubsystem(),
-                  FeederMode.FeedToDunker),
-                new ButtonPressCommand(
-                "coDriverController.start()",
-                "send note to dunker"))
-          );
+              new ShooterSpinUpReleaseCommand(
+                subsystemCollection.getShooterOutfeedSubsystem()),
+              new ButtonPressCommand(
+                "coDriverController.rightTrigger().onFalse",
+                "stop spin-up command")
+              )
+            );
       }
-
-      this.coDriverController.povUp().onTrue(
-          new InstantCommand(() -> this.setRightClimberSpeedPositive())
-      );
-      this.coDriverController.povUp().onFalse(
-          new InstantCommand(() -> this.setRightClimberSpeedZero())
-      );
-      this.coDriverController.povDown().onTrue(
-          new InstantCommand(() -> this.setRightClimberSpeedNegative())
-      );
-      this.coDriverController.povDown().onFalse(
-          new InstantCommand(() -> this.setRightClimberSpeedZero())
-      );
     }
   }
 
-  private void setRightClimberSpeedPositive() {
-    this.rightClimberSpeed = Constants.climberArmUpDefaultSpeed;
+  /**
+   * Method to encapsulate increment for easy double supplier conversion
+   * @return current shooter angle incremented
+   */
+  private double incrementShooterAngle() {
+    double value = 0;
+    if(this.subsystemCollection.isShooterAngleSubsystemAvailable()) {
+      value = this.subsystemCollection.getShooterAngleSubsystem().getAngleDegrees() + Constants.shooterAngleStickIncrementMagnitude;
+    }
+    return value;
   }
-  private void setRightClimberSpeedNegative() {
-    this.rightClimberSpeed = Constants.climberArmDownDefaultSpeed;
+
+  /**
+   * Method to encapsulate increment for easy double supplier conversion
+   * @return current shooter angle incremented
+   */
+  private double decrementShooterAngle() {
+    double value = 0;
+    if(this.subsystemCollection.isShooterAngleSubsystemAvailable()) {
+      value = this.subsystemCollection.getShooterAngleSubsystem().getAngleDegrees() - Constants.shooterAngleStickIncrementMagnitude;
+    }
+    return value;
   }
-  private void setRightClimberSpeedZero() {
-    this.rightClimberSpeed = 0.0;
-  }
+
 }

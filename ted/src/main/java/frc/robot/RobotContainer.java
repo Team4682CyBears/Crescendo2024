@@ -370,11 +370,7 @@ public class RobotContainer {
 
     if(this.subsystems.isShooterAngleSubsystemAvailable() && 
     this.subsystems.isManualInputInterfacesAvailable()) {
-      // Set up the default command for the shooter.
-      this.subsystems.getShooterAngleSubsystem().setDefaultCommand(
-        new ShooterSetAngleDefaultCommand(
-          () -> getShooterAngleIncrement(subsystems),
-          this.subsystems.getShooterAngleSubsystem()));
+      // no default command
     }
   }
 
@@ -402,10 +398,6 @@ public class RobotContainer {
     return value;
   }
 
-  private static double getShooterAngleIncrement(SubsystemCollection collection) {
-    return collection.getManualInputInterfaces().getInputShooterAngleIncrement();
-  }
-
   private double getLeftClimberStickInput() {
     double value = 0.0;
     if(this.subsystems.isClimberSubsystemAvailable() && 
@@ -427,7 +419,7 @@ public class RobotContainer {
     double value = 0.0;
     if(this.subsystems.isClimberSubsystemAvailable() && 
        this.subsystems.isManualInputInterfacesAvailable()){
-      double nextValue = this.subsystems.getManualInputInterfaces().getRightClimberArmZ();
+      double nextValue = this.subsystems.getManualInputInterfaces().getInputRightClimberArmZ();
       if(Math.abs(nextValue) > Constants.climberControllerStickDeadband) {
         if(nextValue >= 0.0){
           value = Constants.climberArmUpDefaultSpeed;
