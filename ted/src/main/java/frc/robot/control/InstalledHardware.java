@@ -66,7 +66,7 @@ public class InstalledHardware
     // for testing, to decrease the power of the shooter angle mechanism, 
     // reduce the left motor gear box to 10x (instaed of 100x)
     // and disconnect the right motor from the chain. 
-    public static final boolean shooterRightAngleMotorrInstalled = true;
+    public static final boolean shooterRightAngleMotorrInstalled = false;
     public static final boolean shooterAngleCanCoderInstalled = false; 
 
     // Climber Sensor Related Hardware
