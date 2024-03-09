@@ -151,7 +151,7 @@ public class ManualInputInterfaces {
        this.subsystemCollection.isFeederSubsystemAvailable()) {
         // b button will intake a note
         this.driverController.b().onTrue(
-          // TODO convert to new intake sensor
+          // TODO convert to new intake sensor is availiable
           new SequentialCommandGroup(
             new ParallelCommandGroup(
               new IntakeAndFeedNoteCommand(
@@ -182,6 +182,8 @@ public class ManualInputInterfaces {
         this.driverController.rightTrigger().onTrue(
             new ParallelCommandGroup(
               new ShooterShootCommand(
+                () -> this.outfeedSpeedProvider.getShotSpeedForCurrentAngle(),
+                () -> this.outfeedSpeedProvider.getShotSpeedForCurrentAngle(),
                 subsystemCollection.getShooterOutfeedSubsystem(), 
                 subsystemCollection.getFeederSubsystem()),
               new ButtonPressCommand(
