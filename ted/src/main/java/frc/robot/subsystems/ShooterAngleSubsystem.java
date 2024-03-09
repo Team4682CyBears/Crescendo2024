@@ -37,8 +37,8 @@ import frc.robot.common.ShooterPosition;
 public class ShooterAngleSubsystem extends SubsystemBase {
 
   // Shooter gearing 
-  // private static final double angleMotorGearRatio = 450.0; // 450:1 (100:1 -> 72:16) 
-  private static final double angleMotorGearRatio = 45.0; // remove 1 10x gearbox stage for testing
+  private static final double angleMotorGearRatio = 450.0; // 450:1 (100:1 -> 72:16) 
+  //private static final double angleMotorGearRatio = 45.0; // remove 1 10x gearbox stage for testing
   private static final double angleEncoderGearRatio = 1.0; // angle encoder is mounted directly onto shaft
   private static final double shooterAngleLowVelocityTol = 10; // rotations per second (max 512)
 
