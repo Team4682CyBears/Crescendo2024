@@ -186,6 +186,11 @@ public class ShooterAngleSubsystem extends SubsystemBase {
     TalonFXConfiguration angleConfigs = new TalonFXConfiguration();
     angleConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     angleConfigs.MotorOutput.Inverted = Constants.angleLeftTalonShooterMotorDefaultDirection;
+    angleConfigs.CurrentLimits.StatorCurrentLimit = 100;
+    angleConfigs.CurrentLimits.StatorCurrentLimitEnable = true; 
+    angleConfigs.CurrentLimits.SupplyCurrentLimit = 50;
+    angleConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
+    angleConfigs.Voltage.SupplyVoltageTimeConstant = 0.02; 
     // FeedbackConfigs and offsets
     if (InstalledHardware.shooterAngleCanCoderInstalled) {
       System.out.println("Configuring Shooter Angle Motor with CanCoder Feedback.");
