@@ -163,7 +163,7 @@ public final class Constants {
     public static final double shooterAngleMaxDegrees = 110;
     public static final double shooterAngleMinDegrees = 20;  
     // stow angle should be low enough to drive under the stage
-    public static final double shooterAngleStowDegrees = 45; 
+    public static final double shooterAngleStowDegrees = 21; 
     public static final double shooterAngleToleranceDegrees = 0.5;
     public static final double shooterSetAngleDuration = 3.0;
     // angles increment ranges of stick input (deadband range)
