@@ -10,6 +10,7 @@
 
 package frc.robot.commands;
 
+import frc.robot.common.DistanceMeasurement;
 import frc.robot.common.MotorUtils;
 import frc.robot.control.Constants;
 import frc.robot.subsystems.CameraSubsystem;
@@ -51,9 +52,12 @@ public class ShooterSetAngleWithVisionCommand extends ShooterSetAngleCommand {
 
   @Override
   public void execute() {
-    desiredAngleDegrees = (slope*cameraSubsystem.getDistanceFromTag(7.0).getDistanceMeters()) + offset;
-    desiredAngleDegrees = MotorUtils.clamp(desiredAngleDegrees, Constants.shooterAngleMinDegrees, Constants.shooterAngleMaxDegrees);
-    super.desiredAngleDegrees = desiredAngleDegrees;
+    DistanceMeasurement distanceMeasurement = cameraSubsystem.getDistanceFromTag(7.0);
+    if (distanceMeasurement.getIsValid()){
+      desiredAngleDegrees = (slope*cameraSubsystem.getDistanceFromTag(7.0).getDistanceMeters()) + offset;
+      desiredAngleDegrees = MotorUtils.clamp(desiredAngleDegrees, Constants.shooterAngleMinDegrees, Constants.shooterAngleMaxDegrees);
+      super.desiredAngleDegrees = desiredAngleDegrees;
+    } // else stay at previous angle
     super.execute();
   }
 }
