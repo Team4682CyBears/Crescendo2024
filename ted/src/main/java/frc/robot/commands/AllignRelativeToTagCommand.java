@@ -10,14 +10,11 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.subsystems.CameraSubsystem;
-import frc.robot.common.VisionMeasurement;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.common.MotorUtils;
 import edu.wpi.first.math.geometry.Twist2d;
@@ -26,7 +23,7 @@ import edu.wpi.first.math.util.Units;
 /**
  * Implements a command.
  */
-public class AllignRelativeToTagCommand extends CommandBase{
+public class AllignRelativeToTagCommand extends Command{
   private boolean done = false;
   private double wantedTagId;
   private Pose2d targetPoseInVisionSpace;

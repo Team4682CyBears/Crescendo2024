@@ -237,7 +237,7 @@ public class RobotContainer {
   }
 
   /**
-   * A method to init the Limelight
+   * A method to init the CameraSubsystem
    */
   private void initializeCameraSubsystem(){
     if(InstalledHardware.limelightInstalled) {
