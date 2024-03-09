@@ -153,23 +153,43 @@ public class AutonomousChooser {
             NamedCommands.registerCommand("ShootFromSpeaker",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "ShootFromSpeaker"),
-                    new ShooterShootCommand(56.0, 4000.0, 4000.0, subsystems.getShooterOutfeedSubsystem(),
-                        subsystems.getShooterAngleSubsystem(), subsystems.getFeederSubsystem())));
+                    new ShooterShootCommand(
+                        Constants.shooterAngleShootFromSpeaker,
+                        Constants.shooterOutfeedSpeedForAngleShootFromSpeaker, 
+                        Constants.shooterOutfeedSpeedForAngleShootFromSpeaker,
+                        subsystems.getShooterOutfeedSubsystem(),
+                        subsystems.getShooterAngleSubsystem(),
+                        subsystems.getFeederSubsystem())));
             NamedCommands.registerCommand("ShootFromNote",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "ShootFromNote"),
-                    new ShooterShootCommand(42.0, 6000.0, 6000.0, subsystems.getShooterOutfeedSubsystem(),
-                        subsystems.getShooterAngleSubsystem(), subsystems.getFeederSubsystem())));
+                    new ShooterShootCommand(
+                        Constants.shooterAngleShootFromNote, 
+                        Constants.shooterOutfeedSpeedForAngleShootFromNote, 
+                        Constants.shooterOutfeedSpeedForAngleShootFromNote,
+                        subsystems.getShooterOutfeedSubsystem(),
+                        subsystems.getShooterAngleSubsystem(),
+                        subsystems.getFeederSubsystem())));
             NamedCommands.registerCommand("ShootFromStage",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "ShootFromStage"),
-                    new ShooterShootCommand(40.0, 6000.0, 6000.0, subsystems.getShooterOutfeedSubsystem(),
-                        subsystems.getShooterAngleSubsystem(), subsystems.getFeederSubsystem())));
+                    new ShooterShootCommand(
+                        Constants.shooterAngleShootFromStage, 
+                        Constants.shooterOutfeedSpeedForAngleShootFromStage, 
+                        Constants.shooterOutfeedSpeedForAngleShootFromStage,
+                        subsystems.getShooterOutfeedSubsystem(),
+                        subsystems.getShooterAngleSubsystem(),
+                        subsystems.getFeederSubsystem())));
             NamedCommands.registerCommand("ShootFromSourceWing",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "ShootFromSourceWing"),
-                    new ShooterShootCommand(22.0, 6500.0, 6500.0, subsystems.getShooterOutfeedSubsystem(),
-                        subsystems.getShooterAngleSubsystem(), subsystems.getFeederSubsystem())));
+                    new ShooterShootCommand(
+                        Constants.shooterAngleShootFromSourceWing, 
+                        Constants.shooterOutfeedSpeedForAngleShootFromSourceWing, 
+                        Constants.shooterOutfeedSpeedForAngleShootFromSourceWing,
+                        subsystems.getShooterOutfeedSubsystem(),
+                        subsystems.getShooterAngleSubsystem(),
+                        subsystems.getFeederSubsystem())));
             NamedCommands.registerCommand("IntakeNote",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "IntakeNote"),
