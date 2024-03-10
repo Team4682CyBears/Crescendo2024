@@ -215,4 +215,8 @@ public final class Constants {
     public static final int EveryBotMotorPdpPortId = 8;
     public static final double EveryBotMotorMaximuCurrentAmps = 45.5;
 
+    // ********************************************************************
+    // CAN Optimization Constants
+    public static final double ctreMotorStatusFramePeriodFrequencyHertz = 1000/15; // 15ms refresh rate
+    public static final double ctreSensorStatusFramePeriodFrequencyHertz = 1000/30; // 30ms refresh rate
 }
