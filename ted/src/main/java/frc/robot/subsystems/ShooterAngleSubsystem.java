@@ -53,7 +53,8 @@ public class ShooterAngleSubsystem extends SubsystemBase {
   private double internalAngleOffsetDegrees = 0; // used when running from intenral motor encoder, ignored when using CanCoder
 
   // Motor controller gains
-  private Slot0Configs angleMotorGains = new Slot0Configs().withKP(350).withKI(0).withKD(50.0).withKV(0);
+  private Slot0Configs angleMotorGainsForInternalEncoder = new Slot0Configs().withKP(350).withKI(0).withKD(50.0).withKV(0);
+  private Slot0Configs angleMotorGainsForAbsoluteEncoder = new Slot0Configs().withKP(150).withKI(0.125).withKD(0.05).withKV(0);
 
   /**
    * Constructor for shooter subsystem
@@ -189,9 +190,9 @@ public class ShooterAngleSubsystem extends SubsystemBase {
     angleConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     angleConfigs.MotorOutput.Inverted = Constants.angleLeftTalonShooterMotorDefaultDirection;
     // FeedbackConfigs and offsets
-    angleConfigs.Slot0 = angleMotorGains;
     if (InstalledHardware.shooterAngleCanCoderInstalled) {
       System.out.println("Configuring Shooter Angle Motor with CanCoder Feedback.");
+      angleConfigs.Slot0 = angleMotorGainsForAbsoluteEncoder;
       angleConfigs.Feedback.SensorToMechanismRatio = angleEncoderGearRatio;
       angleConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
       angleConfigs.Feedback.FeedbackRemoteSensorID = Constants.shooterLeftAngleEncoderCanId;
@@ -199,6 +200,7 @@ public class ShooterAngleSubsystem extends SubsystemBase {
     } 
     else {
       System.out.println("Configuring Shooter Angle Motor with Internal Encoder Feedback.");
+      angleConfigs.Slot0 = angleMotorGainsForInternalEncoder;
       angleConfigs.Feedback.SensorToMechanismRatio = angleMotorGearRatio;
       angleConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; // the internal encoder
     }
