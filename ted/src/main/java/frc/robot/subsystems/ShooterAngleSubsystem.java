@@ -25,6 +25,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.control.Constants;
+import frc.robot.control.HardwareConstants;
 import frc.robot.control.InstalledHardware;
 import frc.robot.common.MotorUtils;
 import frc.robot.common.ShooterPosition;
@@ -186,11 +187,11 @@ public class ShooterAngleSubsystem extends SubsystemBase {
     TalonFXConfiguration angleConfigs = new TalonFXConfiguration();
     angleConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     angleConfigs.MotorOutput.Inverted = Constants.angleLeftTalonShooterMotorDefaultDirection;
-    angleConfigs.CurrentLimits.StatorCurrentLimit = 100;
+    angleConfigs.CurrentLimits.StatorCurrentLimit = HardwareConstants.shooterAngleStatorCurrentMaximumAmps;
     angleConfigs.CurrentLimits.StatorCurrentLimitEnable = true; 
-    angleConfigs.CurrentLimits.SupplyCurrentLimit = 50;
+    angleConfigs.CurrentLimits.SupplyCurrentLimit = HardwareConstants.shooterAngleSupplyCurrentMaximumAmps;
     angleConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
-    angleConfigs.Voltage.SupplyVoltageTimeConstant = 0.02; 
+    angleConfigs.Voltage.SupplyVoltageTimeConstant = HardwareConstants.shooterAngleSupplyVoltageTimeConstant;
     // FeedbackConfigs and offsets
     if (InstalledHardware.shooterAngleCanCoderInstalled) {
       System.out.println("Configuring Shooter Angle Motor with CanCoder Feedback.");

@@ -21,6 +21,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.control.Constants;
+import frc.robot.control.HardwareConstants;
 import frc.robot.common.MotorUtils;
 
 /**
@@ -164,11 +165,11 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
     // do not config feedbacksource, since the default is the internal one.
     talonConfigs.Voltage.PeakForwardVoltage = 12;
     talonConfigs.Voltage.PeakReverseVoltage = -12;
-    talonConfigs.Voltage.SupplyVoltageTimeConstant = Constants.shooterSupplyVoltageTimeConstant;
+    talonConfigs.Voltage.SupplyVoltageTimeConstant = HardwareConstants.shooterOutfeedSupplyVoltageTimeConstant;
     // maximum current settings
-    talonConfigs.CurrentLimits.StatorCurrentLimit = Constants.shooterStatorCurrentMaximumAmps;
+    talonConfigs.CurrentLimits.StatorCurrentLimit = HardwareConstants.shooterOutfeedStatorCurrentMaximumAmps;
     talonConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
-    talonConfigs.CurrentLimits.SupplyCurrentLimit = Constants.shooterSupplyCurrentMaximumAmps;
+    talonConfigs.CurrentLimits.SupplyCurrentLimit = HardwareConstants.shooterOutfeedSupplyCurrentMaximumAmps;
     talonConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
     // left motor direction
     talonConfigs.MotorOutput.Inverted = Constants.leftTalonShooterMotorDefaultDirection;

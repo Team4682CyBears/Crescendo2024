@@ -139,9 +139,7 @@ public final class Constants {
     public static final double shooterSpinUpTimeoutSeconds = 15.0;
     public static final double shooterShootDuration = 1.7;
     public static final double shooterSpinUpDelay = 0.8;
-    public static final double shooterStatorCurrentMaximumAmps = 100.0;
-    public static final double shooterSupplyCurrentMaximumAmps = 50.0;
-    public static final double shooterSupplyVoltageTimeConstant = 0.02;
+
     // speeds for specific shooter shots
     public static final double shooterOutfeedSpeedForAngleShootFromSpeaker = 4000.0;
     public static final double shooterOutfeedSpeedForAngleShootFromNote = 6000.0; 
