@@ -6,8 +6,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.playingwithfusion.TimeOfFlight;
 import com.playingwithfusion.TimeOfFlight.RangingMode;
-
-import frc.robot.control.Constants;
+import frc.robot.control.HardwareConstants;
 
 /**
  * A class intending to help keep CAN usage tidy
@@ -20,13 +19,13 @@ public class CanUtils {
      */
     public static void UpdateCtreFrequency(TalonFX motor) {
         double currentFrequency = motor.getPosition().getAppliedUpdateFrequency();
-        if(currentFrequency < Constants.ctreMotorStatusFramePeriodFrequencyHertz) {
-            motor.getPosition().setUpdateFrequency(Constants.ctreMotorStatusFramePeriodFrequencyHertz);
+        if(currentFrequency < HardwareConstants.ctreMotorStatusFramePeriodFrequencyHertz) {
+            motor.getPosition().setUpdateFrequency(HardwareConstants.ctreMotorStatusFramePeriodFrequencyHertz);
             System.out.println(
                 "Updating frequency for TalonFX # " +
                 motor.getDeviceID() +
                 " from " + currentFrequency +
-                " to " + Constants.ctreMotorStatusFramePeriodFrequencyHertz);
+                " to " + HardwareConstants.ctreMotorStatusFramePeriodFrequencyHertz);
         }
         else {
             System.out.println(
@@ -41,22 +40,20 @@ public class CanUtils {
      * @param motor - the TalonFX motor (usually not a follower motor)
      */
     public static void UpdateCtreFrequency(TalonSRX motor) {
-        int currentPeriod = motor.getStatusFramePeriod(StatusFrameEnhanced.Status_1_General);
-        double currentFrequency = 1000.0/(double)currentPeriod;
-        if(currentFrequency < Constants.ctreMotorStatusFramePeriodFrequencyHertz) {
-            int targetPeriod = (int)(1000.0/Constants.ctreMotorStatusFramePeriodFrequencyHertz);
-            motor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, targetPeriod);
+        int currentPeriodMilliseconds = motor.getStatusFramePeriod(StatusFrameEnhanced.Status_1_General);
+        if(currentPeriodMilliseconds < HardwareConstants.ctreMotorStatusFramePeriodMilliseconds) {
+            motor.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, HardwareConstants.ctreMotorStatusFramePeriodMilliseconds);
             System.out.println(
-                "Updating period for TalonSRX # " +
+                "Updating period (in milliseconds) for TalonSRX # " +
                 motor.getDeviceID() +
-                " from " + currentPeriod +
-                " to " + targetPeriod);
+                " from " + currentPeriodMilliseconds +
+                " to " + HardwareConstants.ctreMotorStatusFramePeriodMilliseconds);
         }
         else {
             System.out.println(
                 "No period change for TalonSRX # " +
                 motor.getDeviceID() +
-                " existing period == " + currentPeriod);
+                " existing period == " + currentPeriodMilliseconds);
         }
     }
 
@@ -66,13 +63,13 @@ public class CanUtils {
      */
     public static void UpdateCtreFrequency(CANcoder canCoder) {
         double currentFrequency = canCoder.getPosition().getAppliedUpdateFrequency();
-        if(currentFrequency < Constants.ctreSensorStatusFramePeriodFrequencyHertz) {
-            canCoder.getPosition().setUpdateFrequency(Constants.ctreSensorStatusFramePeriodFrequencyHertz);
+        if(currentFrequency < HardwareConstants.ctreSensorStatusFramePeriodFrequencyHertz) {
+            canCoder.getPosition().setUpdateFrequency(HardwareConstants.ctreSensorStatusFramePeriodFrequencyHertz);
             System.out.println(
                 "Updating frequency for CANCoder # " +
                 canCoder.getDeviceID() +
                 " from " + currentFrequency +
-                " to " + Constants.ctreMotorStatusFramePeriodFrequencyHertz);
+                " to " + HardwareConstants.ctreMotorStatusFramePeriodFrequencyHertz);
         }
         else {
             System.out.println(
@@ -88,22 +85,20 @@ public class CanUtils {
      */
     public static void UpdateTofFrequency(TimeOfFlight sensor) {
         RangingMode currentMode = sensor.getRangingMode(); 
-        double currentPeriod = sensor.getSampleTime();
-        double currentFrequency = 1000.0/currentPeriod;
-        if(currentFrequency < Constants.ctreSensorStatusFramePeriodFrequencyHertz) {
-            int targetPeriod = (int)(1000.0/Constants.ctreSensorStatusFramePeriodFrequencyHertz);
-            sensor.setRangingMode(currentMode, targetPeriod);
+        double currentPeriodMilliseconds = sensor.getSampleTime();
+        if(currentPeriodMilliseconds < HardwareConstants.playingWithFusionSensorPeriodMilliseconds) {
+            sensor.setRangingMode(currentMode, HardwareConstants.playingWithFusionSensorPeriodMilliseconds);
             System.out.println(
                 "Updating period for TimeOfFlight serial # " +
                 sensor.getSerialNumber() +
-                " from " + currentPeriod +
-                " to " + targetPeriod);
+                " from " + currentPeriodMilliseconds +
+                " to " + HardwareConstants.playingWithFusionSensorPeriodMilliseconds);
         }
         else {
             System.out.println(
                 "No period change for TimeOfFlight serial # " +
                 sensor.getSerialNumber() +
-                " existing period == " + currentPeriod);
+                " existing period == " + currentPeriodMilliseconds);
         }
     }
 }

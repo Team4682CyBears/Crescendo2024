@@ -26,7 +26,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.control.Constants;
 import frc.robot.control.InstalledHardware;
-import frc.robot.common.CanUtils;
 import frc.robot.common.MotorUtils;
 import frc.robot.common.ShooterPosition;
 
@@ -180,8 +179,6 @@ public class ShooterAngleSubsystem extends SubsystemBase {
       System.out.println(
         "CANcoder ID " + angleEncoder.getDeviceID() + " failed config with error " + response.toString());
     }
-
-    CanUtils.UpdateCtreFrequency(this.angleEncoder);
   }
 
   private void configureAngleMotors() {
@@ -221,10 +218,6 @@ public class ShooterAngleSubsystem extends SubsystemBase {
       System.out.println(
           "TalonFX ID " + angleRightMotor.getDeviceID() + " failed config with error " + response.toString());
     }
-
-    // update can settings
-    CanUtils.UpdateCtreFrequency(this.angleLeftMotor);
-    CanUtils.UpdateCtreFrequency(this.angleRightMotor);
   }
 
   private double getOffset(){

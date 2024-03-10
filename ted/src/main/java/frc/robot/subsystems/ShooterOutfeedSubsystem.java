@@ -21,7 +21,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.control.Constants;
-import frc.robot.common.CanUtils;
 import frc.robot.common.MotorUtils;
 
 /**
@@ -191,10 +190,6 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
       System.out.println(
           "TalonFX ID " + rightMotor.getDeviceID() + " failed config with error " + response.toString());
     }
-
-    // update can settings
-    CanUtils.UpdateCtreFrequency(this.leftMotor);
-    CanUtils.UpdateCtreFrequency(this.rightMotor);
   }
 
   // V6 lib needs revolutions per second
