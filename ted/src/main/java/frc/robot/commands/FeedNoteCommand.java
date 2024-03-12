@@ -58,7 +58,7 @@ public class FeedNoteCommand extends Command
   @Override
   public void execute()
   {
-    if (feeder.isShooterNoteDetected() || feeder.isDunkerNoteDetected()){
+    if (feeder.isShooterNoteDetected()){
       feeder.setAllStop();
       done = true;
     } else { // run feeder
