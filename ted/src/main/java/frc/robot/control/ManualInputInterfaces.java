@@ -364,13 +364,6 @@ public class ManualInputInterfaces {
               "coDriverController.leftTrigger()",
               "TODO auto ranging mode on")
               ));        
-        this.coDriverController.leftTrigger().onFalse(
-          new ParallelCommandGroup(
-            // TODO Add auto Ranging command here once its ready
-            new ButtonPressCommand(
-              "coDriverController.leftTrigger().onFalse",
-              "TODO auto ranging mode off")
-              )); 
 
         // angle change commands 
         // upward

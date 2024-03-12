@@ -11,26 +11,21 @@
 package frc.robot.commands;
 
 import frc.robot.common.DistanceMeasurement;
-import frc.robot.common.MotorUtils;
+import frc.robot.common.ShooterAngleHelpers;
 import frc.robot.control.Constants;
 import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.subsystems.ShooterAngleSubsystem;
 
 /**
- * Forms a command to shoot the shooter
+ * Forms a command to set the angle of the shooter from the caemra. 
+ * It keeps running until canceled
+ * Appropriate to be used for binding to a UI button that is triggered onTrue, for example
  */
-public class ShooterSetAngleWithVisionCommand extends ShooterSetAngleCommand {
+public class ShooterSetAngleWithVisionContinuousCommand extends ShooterSetAngleCommand {
 
   private double desiredAngleDegrees;
   private ShooterAngleSubsystem shooterAngleSubsystem;
   private CameraSubsystem cameraSubsystem;
-  //We use these linear functions to determine which angle the shooter should be at, given distance
-  //There are two functions becuase it is a piecewise function
-  private double farSlope = -4.65;
-  private double farOffset = 51.6;
-  private double closeSlope = -17.9;
-  private double closeOffset = 79.1;
-  private double nearFarBreakpoint = 2.0;
 
   /**
    * Constructor for ShooterSetAngleWithVisionCommand
@@ -38,7 +33,7 @@ public class ShooterSetAngleWithVisionCommand extends ShooterSetAngleCommand {
    * @param cameraSubsystem
    * @param shooterSubsystem
    */
-  public ShooterSetAngleWithVisionCommand(CameraSubsystem cameraSubsystem, ShooterAngleSubsystem shooterAngleSubsystem) {
+  public ShooterSetAngleWithVisionContinuousCommand(CameraSubsystem cameraSubsystem, ShooterAngleSubsystem shooterAngleSubsystem) {
     // start out wanting current shooter angle
     super(shooterAngleSubsystem.getAngleDegrees(), shooterAngleSubsystem);
     this.shooterAngleSubsystem = shooterAngleSubsystem;
@@ -57,22 +52,18 @@ public class ShooterSetAngleWithVisionCommand extends ShooterSetAngleCommand {
 
   @Override
   public void execute() {
-    DistanceMeasurement distanceMeasurement = cameraSubsystem.getDistanceFromTag(7.0, 4.0);
-    double slope = 0.0;
-    double offset = 0.0;
+    DistanceMeasurement distanceMeasurement = cameraSubsystem.getDistanceFromTag(Constants.speakerBlueTagID, Constants.spekaerRedTagID);
     if (distanceMeasurement.getIsValid()){
-      if(distanceMeasurement.getDistanceMeters() < nearFarBreakpoint){
-        slope = closeSlope;
-        offset = closeOffset;
-      }
-      else{
-        slope = farSlope;
-        offset = farOffset;
-      }
-      desiredAngleDegrees = (slope*distanceMeasurement.getDistanceMeters()) + offset;
-      desiredAngleDegrees = MotorUtils.clamp(desiredAngleDegrees, Constants.shooterAngleMinDegrees, Constants.shooterAngleMaxDegrees);
+      desiredAngleDegrees = ShooterAngleHelpers.shooterAngleFromDistance(distanceMeasurement.getDistanceMeters());
       super.desiredAngleDegrees = desiredAngleDegrees;
     } // else stay at previous angle
     super.execute();
   }
+
+  @Override
+  public boolean isFinished() {
+    // this command keeps running until canceled
+    return false;
+  }
+
 }
