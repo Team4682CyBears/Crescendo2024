@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.69,
-      "y": 4.39
+      "x": 0.7205387949943542,
+      "y": 4.391223430633545
     },
-    "rotation": -60.6653371504826
+    "rotation": -60.422164677223435
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.2
+            "waitTime": 0.5
           }
         },
         {
@@ -32,7 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "New Path"
+            "pathName": "BlueWing.1"
           }
         },
         {
@@ -57,5 +57,5 @@
     }
   },
   "folder": null,
-  "choreoAuto": false
+  "choreoAuto": true
 }

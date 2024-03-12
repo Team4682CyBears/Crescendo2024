@@ -131,8 +131,8 @@ public class AutonomousChooser {
 
     public static void configureAutoBuilder(SubsystemCollection subsystems){
         HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-          new PIDConstants(1.5, 0.015, 0), // Translation PID constants
-          new PIDConstants(4.0, 0.005, 0), // Rotation PID constants
+          new PIDConstants(1.5, 0.025, 0), // Translation PID constants
+          new PIDConstants(4.0, 0.02, 0), // Rotation PID constants
           1.8, // Max module speed, in m/s
           0.43, // Drive base radius in meters. Distance from robot center to furthest module.
           new ReplanningConfig() // Default path replanning config. See the API for the options here
@@ -224,6 +224,10 @@ public class AutonomousChooser {
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "AngleFromWing"),
                     new ShooterSetAngleCommand(30.0, subsystems.getShooterAngleSubsystem())));
+            NamedCommands.registerCommand("AngleFromFront",
+                new ParallelCommandGroup(
+                    new ButtonPressCommand("PathPlanner", "AngleFromFront"),
+                    new ShooterSetAngleCommand(40.0, subsystems.getShooterAngleSubsystem())));
             NamedCommands.registerCommand("AutoAngle",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "AutoAngle"),
