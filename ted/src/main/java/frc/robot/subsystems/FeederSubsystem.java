@@ -63,25 +63,20 @@ public class FeederSubsystem extends SubsystemBase {
   public FeederMode getFeederMode() {
     return feederMode;
   }
-
-  /**
-   * A method to detect the presence of a note at the dunker
-   * @return true if the note is detected
-   */
-  public boolean isDunkerNoteDetected(){
-    if (secondShooterBeamBreakSensor != null){
-      return secondShooterBeamBreakSensor.isNoteDetected();
-    }
-    return false;
-  }
   
   /**
    * A method to detect the presence of a note at the shooter
    * @return true if the note is detected
    */
   public boolean isShooterNoteDetected(){
-    if (firstShooterBeambreakSensor != null){
+    if (firstShooterBeambreakSensor != null && secondShooterBeamBreakSensor != null){
+      return firstShooterBeambreakSensor.isNoteDetected() || secondShooterBeamBreakSensor.isNoteDetected();
+    }
+    else if (firstShooterBeambreakSensor != null){
       return firstShooterBeambreakSensor.isNoteDetected();
+    }
+    if (secondShooterBeamBreakSensor != null){
+      return secondShooterBeamBreakSensor.isNoteDetected();
     }
     return false;
   }
