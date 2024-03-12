@@ -54,11 +54,10 @@ public class ShooterSpinUpCommand extends Command
   {
     shooterOutfeed.setShooterVelocityLeft(Constants.shooterLeftDefaultSpeedRpm);
     shooterOutfeed.setShooterVelocityRight(Constants.shooterRightDefaultSpeedRpm);
-  if (timer.hasElapsed(Constants.shooterSpinUpTimeoutSeconds))
-  {
-    shooterOutfeed.setAllStop();
-    done = true;
-  }
+    if (timer.hasElapsed(Constants.shooterSpinUpTimeoutSeconds))
+    {
+      done = true;
+    }
   }
 
   // Called once the command ends or is interrupted.

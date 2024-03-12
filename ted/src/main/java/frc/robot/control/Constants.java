@@ -139,6 +139,15 @@ public final class Constants {
     public static final double shooterSpinUpTimeoutSeconds = 15.0;
     public static final double shooterShootDuration = 1.7;
     public static final double shooterSpinUpDelay = 0.8;
+    public static final double shooterStatorCurrentMaximumAmps = 100.0;
+    public static final double shooterSupplyCurrentMaximumAmps = 50.0;
+    public static final double shooterSupplyVoltageTimeConstant = 0.02;
+    // speeds for specific shooter shots
+    public static final double shooterOutfeedSpeedForAngleShootFromSpeaker = 4000.0;
+    public static final double shooterOutfeedSpeedForAngleShootFromNote = 6000.0; 
+    public static final double shooterOutfeedSpeedForAngleShootFromStage = 6000.0;
+    public static final double shooterOutfeedSpeedForAngleShootFromSourceWing = 6500.0;
+    public static final double shooterOutfeedSpeedForAngleShootFromAmp = 250.0;
 
     // *******************************************************************
     // shooter angle constants  
@@ -148,25 +157,24 @@ public final class Constants {
     // TODO depending on which side the motor is mounted, may need to invert these.
     public static InvertedValue angleLeftTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;
     public static InvertedValue angleRightTalonShooterMotorDefaultDirection = InvertedValue.Clockwise_Positive;
-    public static final double shooterAbsoluteAngleOffsetDegrees = 58.5;
+    public static final double shooterAbsoluteAngleOffsetDegrees = 59.445;
     public static final double shooterStartingAngleOffsetDegrees = 20.0; 
     public static SensorDirectionValue shooterAngleSensorDirection = SensorDirectionValue.CounterClockwise_Positive;
     public static final double shooterAngleMaxDegrees = 110;
     public static final double shooterAngleMinDegrees = 20;  
     // stow angle should be low enough to drive under the stage
-    public static final double shooterAngleStowDegrees = 45; 
+    public static final double shooterAngleStowDegrees = 21; 
     public static final double shooterAngleToleranceDegrees = 0.5;
     public static final double shooterSetAngleDuration = 3.0;
-    // angles increment ranges of stick input (deadband range)
-    public static final double shooterControllerInputPositiveStickAngleIncrement = 0.15;
-    public static final double shooterControllerInputNegativeStickAngleIncrement = -0.15;
-    public static final double shooterAngleStickIncrementMagnitude = 0.5;
+    // angles increment ranges of stick input
+    public static final double shooterAngleStickIncrementMagnitude = Constants.shooterAngleToleranceDegrees + 0.1;
     // angles of shooter shots
     public static final double shooterAngleShootFromSpeaker = 56.0;
     // TODO - figure out what 'shoot from note' actually means??
     public static final double shooterAngleShootFromNote = 42.0; 
     public static final double shooterAngleShootFromStage = 40.0;
     public static final double shooterAngleShootFromSourceWing = 22.0;
+    public static final double shooterAngleShootFromAmp = Constants.shooterAngleMaxDegrees;
 
     // ******************************************************************
     // climber constants
