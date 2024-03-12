@@ -204,6 +204,11 @@ public final class Constants {
     // amp/dunker constants
     public static final int ampShoulderMotorCanId = 27;
     public static final int ampOuttakeMotorCanId = 28;
+
+    // ******************************************************************
+    // camera constants
+    public static final int speakerBlueTagID = 7;
+    public static final int spekaerRedTagID = 4;
   
     // ********************************************************************
     // Controller Constants
