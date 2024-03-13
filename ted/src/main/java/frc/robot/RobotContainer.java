@@ -171,8 +171,8 @@ public class RobotContainer {
       subsystems.getClimberSubsystem().setDefaultCommand(
         new ClimberArmDefaultSpeed(
           subsystems.getClimberSubsystem(),
-          () -> this.getLeftClimberStickInput(),
-          () -> this.getRightClimberStickInput()));
+          () -> RobotContainer.deadband(this.subsystems.getManualInputInterfaces().getInputLeftClimberArmZ(), Constants.climberControllerStickDeadband),
+          () -> RobotContainer.deadband(this.subsystems.getManualInputInterfaces().getInputRightClimberArmZ(), Constants.climberControllerStickDeadband)));
     }
     else {
       System.out.println("FAIL: ClimberSubsystem");
@@ -357,39 +357,4 @@ public class RobotContainer {
 
     return value;
   }
-
-  private double getLeftClimberStickInput() {
-    double value = 0.0;
-    if(this.subsystems.isClimberSubsystemAvailable() && 
-       this.subsystems.isManualInputInterfacesAvailable()){
-      double nextValue = this.subsystems.getManualInputInterfaces().getInputLeftClimberArmZ();
-      if(Math.abs(nextValue) > Constants.climberControllerStickDeadband) {
-        if(nextValue >= 0.0){
-          value = Constants.climberArmUpDefaultSpeed;
-        }
-        else {
-          value = Constants.climberArmDownDefaultSpeed;
-        }
-      }
-    }
-    return value;
-  }
-
-  private double getRightClimberStickInput() {
-    double value = 0.0;
-    if(this.subsystems.isClimberSubsystemAvailable() && 
-       this.subsystems.isManualInputInterfacesAvailable()){
-      double nextValue = this.subsystems.getManualInputInterfaces().getInputRightClimberArmZ();
-      if(Math.abs(nextValue) > Constants.climberControllerStickDeadband) {
-        if(nextValue >= 0.0){
-          value = Constants.climberArmUpDefaultSpeed;
-        }
-        else {
-          value = Constants.climberArmDownDefaultSpeed;
-        }
-      }
-    }
-    return value;
-  }
-
 }
