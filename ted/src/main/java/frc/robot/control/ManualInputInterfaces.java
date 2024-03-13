@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.common.FeederMode;
 import frc.robot.common.ShooterOutfeedSpeedProvider;
+import frc.robot.subsystems.CameraSubsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.*;
 
@@ -359,11 +360,11 @@ public class ManualInputInterfaces {
         // Auto Ranging stuff
         this.coDriverController.leftTrigger().onTrue(
           new ParallelCommandGroup(
-            new ShooterSetAngleWithVisionCommand(subsystemCollection.getCameraSubsystem(), subsystemCollection.getShooterAngleSubsystem()),
+            new ShooterSetAngleWithVisionContinuousCommand(this.subsystemCollection.getCameraSubsystem(), this.subsystemCollection.getShooterAngleSubsystem()),
             new ButtonPressCommand(
               "coDriverController.leftTrigger()",
               "TODO auto ranging mode on")
-              ));
+              ));        
 
         // angle change commands 
         // upward
