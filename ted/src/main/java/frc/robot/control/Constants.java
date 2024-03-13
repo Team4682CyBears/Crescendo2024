@@ -161,11 +161,11 @@ public final class Constants {
     public static final double shooterAngleMaxDegrees = 110;
     public static final double shooterAngleMinDegrees = 20;  
     // stow angle should be low enough to drive under the stage
-    public static final double shooterAngleStowDegrees = 21; 
+    public static final double shooterAngleStowDegrees = 25; 
     public static final double shooterAngleToleranceDegrees = 0.5;
     public static final double shooterSetAngleDuration = 3.0;
     // angles increment ranges of stick input
-    public static final double shooterAngleStickIncrementMagnitude = Constants.shooterAngleToleranceDegrees + 0.1;
+    public static final double shooterAngleStickIncrementMagnitude = Constants.shooterAngleToleranceDegrees + 1;
     // angles of shooter shots
     public static final double shooterAngleShootFromSpeaker = 56.0;
     // TODO - figure out what 'shoot from note' actually means??
