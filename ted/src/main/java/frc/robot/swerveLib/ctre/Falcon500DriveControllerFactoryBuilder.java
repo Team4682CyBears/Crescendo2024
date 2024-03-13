@@ -19,6 +19,7 @@ import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VoltageOut;
 
+import frc.robot.control.HardwareConstants;
 import frc.robot.swerveLib.DriveController;
 import frc.robot.swerveLib.DriveControllerFactory;
 import frc.robot.swerveLib.ModuleConfiguration;
@@ -84,7 +85,7 @@ public final class Falcon500DriveControllerFactoryBuilder {
             motorConfiguration.MotorOutput.Inverted = (moduleConfiguration.isDriveInverted() ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive);
             // See: https://v6.docs.ctr-electronics.com/en/2023-v6/docs/migration/migration-guide/status-signals-guide.html#changing-update-frequency-status-frame-period for frame period update
             CtreUtils.checkCtreError(
-                motor.getPosition().setUpdateFrequency(STATUS_FRAME_GENERAL_PERIOD_MS, CAN_TIMEOUT_MS),
+                motor.getPosition().setUpdateFrequency(HardwareConstants.ctreMotorStatusFramePeriodFrequencyHertz, CAN_TIMEOUT_MS),
                 "Failed to configure Falcon status frame period"
             );
 
