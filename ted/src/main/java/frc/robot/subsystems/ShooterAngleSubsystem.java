@@ -22,7 +22,7 @@ import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.control.Constants;
 import frc.robot.control.HardwareConstants;
@@ -80,6 +80,14 @@ public class ShooterAngleSubsystem extends SubsystemBase {
     return rotationsToDegrees(angleLeftMotor.getPosition().getValue()) + getOffset();
   }
 
+  @Override
+  public void initSendable(SendableBuilder builder) {
+    builder.addDoubleProperty("Shooter Absolute Angle Degrees", () -> rotationsToDegrees(angleEncoder.getPosition().getValue()), null);
+    builder.addDoubleProperty("Shooter Motor Encoder Degrees", this::getAngleDegrees, null);
+    builder.addDoubleProperty("Shooter Angle Motor Rotations ", () -> angleLeftMotor.getPosition().getValue(), null);
+  }
+
+
   /**
    * A method to test whether the angle is within tolerance of the target angle
    * @param targetAngleDegrees
@@ -104,9 +112,6 @@ public class ShooterAngleSubsystem extends SubsystemBase {
         // keep moving until it reaches target angle
         shooterIsAtDesiredAngle = isAngleWithinTolerance(desiredAngleDegrees);
     }
-    SmartDashboard.putNumber("Shooter Absolute Angle Degrees", rotationsToDegrees(angleEncoder.getPosition().getValue()));
-    SmartDashboard.putNumber("Shooter Motor Encoder Degrees", getAngleDegrees());
-    SmartDashboard.putNumber("Shooter Angle Motor Rotations ", angleLeftMotor.getPosition().getValue());
   }
 
   /**

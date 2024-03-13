@@ -77,6 +77,7 @@ public class PowerDistributionPanelWatcherSubsystem extends SubsystemBase {
                 // lanunch the command
                 CommandScheduler.getInstance().schedule(nextSpy.getAction());
             }
+            // TODO figure out how to convert this to initSendable
             SmartDashboard.putNumber(nextSpy.getActionDescription(), current);
         }
     }

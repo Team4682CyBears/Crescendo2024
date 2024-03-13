@@ -99,9 +99,6 @@ public class IntakeSubsystem extends SubsystemBase {
    */
   @Override
   public void periodic() {
-    if(this.beambreakSensor != null) {
-      this.beambreakSensor.publishTelemetery();
-    }
   }
 
   /**

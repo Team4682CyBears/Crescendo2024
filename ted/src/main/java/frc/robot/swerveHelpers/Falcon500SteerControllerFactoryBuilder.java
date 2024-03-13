@@ -321,6 +321,7 @@ public final class Falcon500SteerControllerFactoryBuilder {
             absoluteEncoder.setOffset();
         }
 
+        // TODO this should be converted to initSendable
         /**
          * This method used to help debugging by shoving key logic calculations out to shuffleboard
          * calculations here are focused on new commanded position logic
@@ -345,6 +346,7 @@ public final class Falcon500SteerControllerFactoryBuilder {
             SmartDashboard.putNumber(qualifier + "/nextPosition", nextPosition);
         }
 
+        // TODO this should be converted to initSendable
         /**
          * This method used to help debugging by shoving key logic calculations out to shuffleboard
          * calculations here are focused on updates being caluclated for steer motor drift from absolute encoder

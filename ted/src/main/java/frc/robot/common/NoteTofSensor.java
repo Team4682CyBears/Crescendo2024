@@ -14,14 +14,13 @@ import com.playingwithfusion.TimeOfFlight;
 import com.playingwithfusion.TimeOfFlight.RangingMode;
 
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 
 /**
  * Forms a class for the TofSubsystem that detects when a note is present. 
  */
-public class NoteTofSensor {
+public class NoteTofSensor implements Sendable{
 
   private static final double noteDetectedThreshold = 8.0;
   private TimeOfFlight tofSensor;
@@ -92,11 +91,12 @@ public class NoteTofSensor {
   /**
    * A method that will publish the telemetry associated with this TOF sensor to Shuffleboard
    */
-  public void publishTelemetery(){
-    SmartDashboard.putNumber(displayName + " Range Inches" , this.getRangeInches());
-    SmartDashboard.putBoolean(displayName + " Note Detected", this.isNoteDetected());
-    SmartDashboard.putBoolean(displayName + " Range Is Valid", this.isRangeValid());
-    SmartDashboard.putString(displayName + " TOF Status", this.tofSensor.getStatus().toString());
+  @Override
+  public void initSendable(SendableBuilder builder) {
+    builder.addDoubleProperty(displayName + " Range Inches" , this::getRangeInches, null);
+    builder.addBooleanProperty(displayName + " Note Detected", this::isNoteDetected, null);
+    builder.addBooleanProperty(displayName + " Range Is Valid", this::isRangeValid, null);
+    builder.addStringProperty(displayName + " TOF Status", () -> this.tofSensor.getStatus().toString(), null);
   } 
 
   /**

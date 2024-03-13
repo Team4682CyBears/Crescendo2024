@@ -45,7 +45,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -469,6 +469,28 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return config;
   }
 
+  @Override
+  public void initSendable(SendableBuilder builder) {
+    builder.addDoubleProperty("RobotFieldHeadingDegrees", () -> currentPosition.getRotation().getDegrees(), null);
+    builder.addDoubleProperty("RobotFieldXCoordinateMeters", () -> currentPosition.getX(), null);
+    builder.addDoubleProperty("RobotFieldYCoordinateMeters", () -> currentPosition.getY(), null);
+    builder.addDoubleProperty("RobotPitchDegrees", () -> this.getEulerAngle().getPitch(), null);
+    builder.addDoubleProperty("RobotRollDegrees", () -> this.getEulerAngle().getRoll(), null);
+
+    SwerveModulePosition[] positions = this.getSwerveModulePositions();
+    builder.addDoubleProperty("FrontLeftAngleDegrees", () -> positions[0].angle.getDegrees(), null);
+    builder.addDoubleProperty("FrontLeftDistanceMeters", () -> positions[0].distanceMeters, null);
+    builder.addDoubleProperty("FrontRightAngleDegrees", () -> positions[1].angle.getDegrees(), null);
+    builder.addDoubleProperty("FrontRightDistanceMeters", () -> positions[1].distanceMeters, null);
+    builder.addDoubleProperty("BackLeftAngleDegrees", () -> positions[2].angle.getDegrees(), null);
+    builder.addDoubleProperty("BackLeftDistanceMeters", () -> positions[2].distanceMeters, null);
+    builder.addDoubleProperty("BackRightAngleDegrees", () -> positions[3].angle.getDegrees(), null);
+    builder.addDoubleProperty("BackRightDistanceMeters", () -> positions[3].distanceMeters, null);
+
+    builder.addBooleanProperty("NavX is calibrating", swerveNavx::isCalibrating, null);
+    builder.addBooleanProperty("NavX is calibrated", swerveNavx::isMagnetometerCalibrated, null);
+  }
+
   /**
    * Determines if the navx is level.  
    * @return true if level, false otherwise
@@ -490,8 +512,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // store navx info
     this.storePitch();
     this.storeRoll();    
-
-    this.displayDiagnostics();
 
     SwerveModuleState[] states; 
     if (swerveDriveMode == SwerveDriveMode.IMMOVABLE_STANCE && chassisSpeedsAreZero()) {
@@ -787,11 +807,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
       RecentPitches.remove(0);
     }
   }
-
-  private void displayDiagnostics(){
-    SmartDashboard.putBoolean("NavX is calibrating", swerveNavx.isCalibrating());
-    SmartDashboard.putBoolean("NavX is calibrated", swerveNavx.isMagnetometerCalibrated());
-  }
  
   /**
    * Method used to initialize the Odometry for the robot 
@@ -809,6 +824,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
         this.getSwerveModulePositions(),
         currentRobotPosition); 
   }
+
+
 
   /**
    * Helper method to obtain the SwerveModulePostion array from an existing SwerveModules in this class
@@ -850,22 +867,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
     finally {
       theLock.unlock();
-    }
-
-    SmartDashboard.putNumber("RobotFieldHeadingDegrees", currentPosition.getRotation().getDegrees());
-    SmartDashboard.putNumber("RobotFieldXCoordinateMeters", currentPosition.getX());
-    SmartDashboard.putNumber("RobotFieldYCoordinateMeters", currentPosition.getY());
-    SmartDashboard.putNumber("RobotPitchDegrees", this.getEulerAngle().getPitch());
-    SmartDashboard.putNumber("RobotRollDegrees", this.getEulerAngle().getRoll());
-    if(positions != null){
-      SmartDashboard.putNumber("FrontLeftAngleDegrees", positions[0].angle.getDegrees());
-      SmartDashboard.putNumber("FrontLeftDistanceMeters", positions[0].distanceMeters);
-      SmartDashboard.putNumber("FrontRightAngleDegrees", positions[1].angle.getDegrees());
-      SmartDashboard.putNumber("FrontRightDistanceMeters", positions[1].distanceMeters);
-      SmartDashboard.putNumber("BackLeftAngleDegrees", positions[2].angle.getDegrees());
-      SmartDashboard.putNumber("BackLeftDistanceMeters", positions[2].distanceMeters);
-      SmartDashboard.putNumber("BackRightAngleDegrees", positions[3].angle.getDegrees());
-      SmartDashboard.putNumber("BackRightDistanceMeters", positions[3].distanceMeters);
     }
   }
 

@@ -86,12 +86,6 @@ public class FeederSubsystem extends SubsystemBase {
    */
   @Override
   public void periodic() {
-    if(this.secondShooterBeamBreakSensor != null) {
-      this.secondShooterBeamBreakSensor.publishTelemetery();
-    }
-    if(this.firstShooterBeambreakSensor != null) {
-      this.firstShooterBeambreakSensor.publishTelemetery();
-    }
   }
 
   /**
