@@ -119,7 +119,7 @@ public class SwerveTrajectoryGenerator {
      */
     public static void printTrajectory(Trajectory t){
         for (int i = 0; i < t.getStates().size(); i++) {
-            System.out.println(t.getStates().get(i));
+            System.out.println(t.getStates().get(i).toString());
         }
     }
 
@@ -133,7 +133,7 @@ public class SwerveTrajectoryGenerator {
     public static void printSampledTrajectory(Trajectory trajectory, int numSamples){
         double smallScaleUpFactor = 1.0001;
         for (double t = 0; t <= trajectory.getTotalTimeSeconds() * smallScaleUpFactor; t += trajectory.getTotalTimeSeconds()/(numSamples-1)){
-            System.out.println(trajectory.sample(t));
+            System.out.println(trajectory.sample(t).toString());
         }
     }
 

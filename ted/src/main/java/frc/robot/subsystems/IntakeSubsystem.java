@@ -48,7 +48,7 @@ public class IntakeSubsystem extends SubsystemBase {
     /* 
     // move the motor creation to the constructor, since it was erroring when done as a class variable. 
     for(int inx = 0; inx < this.maximumInitTries && intakeMotor == null; ++inx) {
-      System.out.println("Initializing Intake Motor try# " + inx+1 + " ...");
+      System.out.printf("Initializing Intake Motor try# %d ...\n", inx+1);
       boolean allIsWell = true;
       try {
         CANSparkMax assembledMotor = new CANSparkMax(Constants.intakeMotorCanId, MotorType.kBrushless);
@@ -135,7 +135,7 @@ public class IntakeSubsystem extends SubsystemBase {
     REVLibError error = motor.getLastError();
     boolean result = (error == REVLibError.kOk);
     if(!result){
-      System.out.println("Not OK motor last error == " + motor.getLastError());    
+      System.out.printf("Not OK motor last error == %s \n", motor.getLastError().toString());    
     }
     return result;
   }

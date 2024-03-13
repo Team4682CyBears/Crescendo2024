@@ -35,7 +35,7 @@ public class CanCoderFactoryBuilder {
             canCoderConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
             canCoderConfig.MagnetSensor.MagnetOffset = CtreUtils.convertFromRadiansToNormalizedDecmil(configuration.getOffset());
             canCoderConfig.MagnetSensor.SensorDirection = (direction == Direction.CLOCKWISE ? SensorDirectionValue.Clockwise_Positive : SensorDirectionValue.CounterClockwise_Positive);
-            System.out.println("Using sensor direction of: " + canCoderConfig.MagnetSensor.SensorDirection.toString());
+            System.out.printf("Using sensor direction of: %s \n", canCoderConfig.MagnetSensor.SensorDirection.toString());
 
             CANcoder encoder = new CANcoder(configuration.getId());
             CtreUtils.checkCtreError(encoder.getConfigurator().apply(canCoderConfig, 250), "Failed to configure CANCoder");

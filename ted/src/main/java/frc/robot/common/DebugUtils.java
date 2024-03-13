@@ -65,11 +65,11 @@ public class DebugUtils {
                 double nextMeasurement = measurements.get(inx);
                 if(nextMeasurement < lowerFence)
                 {
-                    System.out.println(nextMeasurement + " <- LOW OUTLIER");
+                    System.out.printf("%f <- LOW OUTLIER \n", nextMeasurement);
                 }
                 else if(nextMeasurement > upperFence)
                 {
-                    System.out.println(nextMeasurement + " <- HIGH OUTLIER");
+                    System.out.printf("%f <- HIGH OUTLIER \n", nextMeasurement);
                 }
                 else
                 {

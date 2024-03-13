@@ -71,11 +71,9 @@ public class PowerDistributionPanelWatcherSubsystem extends SubsystemBase {
 
             if(nextSpy.getEnabled() && current > nextSpy.getCurrentLimit())
             {
-                System.out.println(
-                    "Overcurrent detected for port " + nextSpy.getPort() +
-                    " with maximum of " + nextSpy.getCurrentLimit() + 
-                    " and actual of " + current + 
-                    ". -> " + nextSpy.getActionDescription());
+                System.out.printf(
+                    "Overcurrent detected for port %1$d with maximum of %2$f and actual of %3$f. -> %4$s\n", 
+                    nextSpy.getPort(), nextSpy.getCurrentLimit(), current, nextSpy.getActionDescription());
                 // lanunch the command
                 CommandScheduler.getInstance().schedule(nextSpy.getAction());
             }

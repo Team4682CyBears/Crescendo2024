@@ -132,7 +132,7 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
     double revsPerS = this.convertShooterRpmToMotorUnitsPerS(revolutionsPerMinute,
     ShooterOutfeedSubsystem.outfeedShooterGearRatio);
 
-    // System.out.println("attempting left shooter velocity at " + revsPerS + " revs/s.");
+    // System.out.printf("attempting left shooter velocity at %f revs/s.\n", revsPerS);
     leftMotor.setControl(velocityController.withVelocity(revsPerS));
   }
 
@@ -176,8 +176,8 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
     // apply configs
     StatusCode response = leftMotor.getConfigurator().apply(talonConfigs);
     if (!response.isOK()) {
-      System.out.println(
-          "TalonFX ID " + leftMotor.getDeviceID() + " failed config with error " + response.toString());
+      System.out.printf(
+          "TalonFX ID %1$d failed config with error %2$s.\n", leftMotor.getDeviceID(), response.toString());
     }
 
     // Config right motor
@@ -188,8 +188,8 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
     // apply configs
     response = rightMotor.getConfigurator().apply(talonConfigs);
     if (!response.isOK()) {
-      System.out.println(
-          "TalonFX ID " + rightMotor.getDeviceID() + " failed config with error " + response.toString());
+      System.out.printf(
+          "TalonFX ID %d failed config with error %s\n", rightMotor.getDeviceID(), response.toString());
     }
   }
 

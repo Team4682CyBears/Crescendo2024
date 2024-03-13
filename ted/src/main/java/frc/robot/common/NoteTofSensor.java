@@ -35,7 +35,7 @@ public class NoteTofSensor {
     // short mode is accurate to 1.3m 
     // 20ms sample time matches robot update rate
     tofSensor.setRangingMode(RangingMode.Short, 20);
-    System.out.println("==== DONE CONFIG of TOF SENSOR at CanID " + canID);
+    System.out.printf("==== DONE CONFIG of TOF SENSOR at CanID %d \n", canID);
   }
   
   /**

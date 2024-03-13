@@ -241,8 +241,8 @@ public final class Falcon500SteerControllerFactoryBuilder {
 
                         double deltaAngle = Math.abs(MathUtil.angleModulus(absoluteAngle - currentAngleRadians));
                         if (deltaAngle > absAngleTolRadians){
-                            System.out.println("WARNING: Large error encountered when syncing absolute encoder from " + 
-                                currentAngleRadians + " to " + absoluteAngle + ". " + specificMotorInfo);
+                            System.out.printf("WARNING: Large error encountered when syncing absolute encoder from %1$f to %2$f %s.\n ", 
+                                currentAngleRadians, absoluteAngle, specificMotorInfo.toString());
                         }
 
                         // update the MOTOR encoder to align with the absolute encoders current position - scaled according to gearing ratio between the motor encoder and absolute encoder
@@ -266,7 +266,7 @@ public final class Falcon500SteerControllerFactoryBuilder {
                         */
 
                     } else {
-                        System.out.println("WARNING: Syncing absolute encoder position failed. " + specificMotorInfo);
+                        System.out.printf("WARNING: Syncing absolute encoder position failed. %s \n", specificMotorInfo.toString());
                     }
                 }
             } else {

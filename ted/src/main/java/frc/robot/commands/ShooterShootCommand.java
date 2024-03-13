@@ -144,7 +144,7 @@ public class ShooterShootCommand extends Command {
   public void initialize() {
     this.isAtDesiredAngle = this.isAtDesiredAngleBaseline;
     if (!isAtDesiredAngle) {
-      System.out.println("Setting Angle to " + desiredAngleDegrees + " degrees");
+      System.out.printf("Setting Angle to %.2f degrees \n", desiredAngleDegrees);
     }
 
     if (setSpeedsFromSupplier) {
@@ -161,7 +161,7 @@ public class ShooterShootCommand extends Command {
     }
 
     System.out.println("Spinning up shooter...");
-    System.out.println("Target RPM: Left " + desiredLeftSpeedRpm + ". Right RPM: " + desiredRightSpeedRpm);
+    System.out.printf("Target RPM: Left %1$.0f. Right RPM: %2$.0f \n", desiredLeftSpeedRpm, desiredRightSpeedRpm);
     shooterOutfeed.setShooterVelocityLeft(desiredLeftSpeedRpm);
     shooterOutfeed.setShooterVelocityRight(desiredRightSpeedRpm);
 

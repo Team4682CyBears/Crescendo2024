@@ -84,7 +84,8 @@ public class DriveTrajectoryCommand extends Command{
     Pose2d targetPose = movementPlan.sample(0.0).poseMeters;
     Translation2d deltaLocation = currentLocation.getTranslation().minus(targetPose.getTranslation());
     if (abs(deltaLocation.getNorm())>0.5){
-      System.out.println("ERROR: ABORTING TRAJECTORY: Current position " + currentLocation + " is too far from trajectory starting position " + targetPose);
+      System.out.printf("ERROR: ABORTING TRAJECTORY: Current position %1$s is too far from trajectory starting position %2$s \n", 
+      currentLocation.toString(), targetPose.toString());
       done = true;
     }
     
@@ -120,7 +121,8 @@ public class DriveTrajectoryCommand extends Command{
     if(interrupted) {
       done = true;      
     }
-    System.out.println("Movement Complete: expected duration (seconds) == " + this.expectedDuration + " actual duration (seconds) == " + timer.get());
+    System.out.printf("Movement Complete: expected duration (seconds) == %1$.1f actual duration (seconds) == %2$.1f \n", 
+    this.expectedDuration, timer.get());
   }
 
   // Returns true when the command should end.

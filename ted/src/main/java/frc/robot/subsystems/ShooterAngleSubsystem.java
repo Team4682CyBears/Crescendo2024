@@ -141,12 +141,12 @@ public class ShooterAngleSubsystem extends SubsystemBase {
    * @param degrees
    */
   public void setAngleDegrees(double degrees){
-    // System.out.println("Setting Shooter Angle to " + degrees + " degrees.");
+    // System.out.printf("Setting Shooter Angle to %.2f degrees. \n", degrees);
     double clampedDegrees = MotorUtils.clamp(degrees, Constants.shooterAngleMinDegrees, Constants.shooterAngleMaxDegrees);
     if (clampedDegrees != degrees){
-      System.out.println("Warning: Shooter Angle requested degrees of " + degrees + 
-      "exceeded bounds of [" + Constants.shooterAngleMinDegrees + " .. " + Constants.shooterAngleMaxDegrees +
-      "]. Clamped to " + clampedDegrees + ".");
+      System.out.printf(
+        "Warning: Shooter Angle requested degrees of %1$.2f exceeded bounds of [%2$.2f ..%3$.2f]. Clamped to %4$.2f.\n",  
+        degrees, Constants.shooterAngleMinDegrees, Constants.shooterAngleMaxDegrees, clampedDegrees);
     }
     desiredAngleDegrees = clampedDegrees;
     shooterIsAtDesiredAngle = isAngleWithinTolerance(desiredAngleDegrees);
@@ -177,8 +177,8 @@ public class ShooterAngleSubsystem extends SubsystemBase {
     // apply configs
     StatusCode response = angleEncoder.getConfigurator().apply(encoderConfigs);
     if (!response.isOK()) {
-      System.out.println(
-        "CANcoder ID " + angleEncoder.getDeviceID() + " failed config with error " + response.toString());
+      System.out.printf(
+        "CANcoder ID %d failed config with error %s\n", angleEncoder.getDeviceID(), response.toString());
     }
   }
 
@@ -213,16 +213,16 @@ public class ShooterAngleSubsystem extends SubsystemBase {
     // apply configs
     StatusCode response = angleLeftMotor.getConfigurator().apply(angleConfigs);
     if (!response.isOK()) {
-      System.out.println(
-          "TalonFX ID " + angleLeftMotor.getDeviceID() + " failed config with error " + response.toString());
+      System.out.printf(
+          "TalonFX ID %1$d failed config with error %2$s \n", angleLeftMotor.getDeviceID(), response.toString());
     }
     // change invert for angleRightMotor
     angleConfigs.MotorOutput.Inverted = Constants.angleRightTalonShooterMotorDefaultDirection;
     // apply configs
     response = angleRightMotor.getConfigurator().apply(angleConfigs);
     if (!response.isOK()) {
-      System.out.println(
-          "TalonFX ID " + angleRightMotor.getDeviceID() + " failed config with error " + response.toString());
+      System.out.printf(
+          "TalonFX ID %1$d failed config with error %2$s \n", angleRightMotor.getDeviceID(), response.toString());
     }
   }
 

@@ -45,14 +45,14 @@ public class CtreSettings {
     {
         // NOTE: see: https://v6.docs.ctr-electronics.com/en/2023-v6/docs/migration/migration-guide/feature-replacements-guide.html#sensor-initialization-strategy
         // "The Talon FX and CANcoder sensors are always initialized to their absolute position in Phoenix 6."
-        System.out.println("Get side, has angle: " + canCoder.getAbsolutePosition());
+        System.out.printf("Get side, has angle: %f \n", canCoder.getAbsolutePosition());
     }
     
     private static void UpdateSingleCanEncoderDefaultSettings(CANcoder canCoder)
     {
         CANcoderConfiguration config = new CANcoderConfiguration();
         StatusCode returnVal = canCoder.getConfigurator().apply(config);
-        System.out.println("Set side, getDeviceID == " + canCoder.getDeviceID() + " Error Code: " + returnVal);
+        System.out.printf("Set side, getDeviceID == %1$d Error Code: %s \n", canCoder.getDeviceID(), returnVal.toString());
         CtreSettings.PrintCanEncoderCurrentSettings(canCoder);
     }
 }

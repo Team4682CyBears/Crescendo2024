@@ -529,10 +529,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
    */
   public void printState(){
     System.out.println("**** NavX State ****");
-    System.out.println("Quaternion ------>" + this.getQuaterion());
-    System.out.println("Roll, Pitch, Yaw ------>" + this.getEulerAngle());
-    System.out.println("Is the robot level? -------->" + this.isLevel());
-    System.out.println("SteepestAscent --->" + VectorUtils.getAngleOfSteepestAscent(getEulerAngle()));
+    System.out.printf("Quaternion ------> %s \n", this.getQuaterion().toString());
+    System.out.printf("Roll, Pitch, Yaw ------> %s \n", this.getEulerAngle().toString());
+    System.out.printf("Is the robot level? --------> %b \n", this.isLevel());
+    System.out.printf("SteepestAscent ---> %s \n", VectorUtils.getAngleOfSteepestAscent(getEulerAngle()).toString());
   }
 
   /**
@@ -540,7 +540,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @param updatedPosition
    */
   public void printAbsoluteEncoderOrrsets(){
-    System.out.println("AbsoluteEncoderOffsets -----> " + this.getAbsoluteEncoderOffsets());
+    System.out.printf("AbsoluteEncoderOffsets -----> %s \n", this.getAbsoluteEncoderOffsets().toString());
   }
 
   /**
@@ -646,7 +646,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         levelChecker = false;
       }
     }
-    System.out.println("Is Level? " + levelChecker);
+    System.out.printf("Is Level? %b \n", levelChecker);
     return levelChecker;
   }
 

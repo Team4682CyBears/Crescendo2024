@@ -206,7 +206,8 @@ public class DriveToPointCommand extends Command
         done = true;      
         timer.stop();
     }
-    System.out.println("Target operation duration (seconds) = " + this.targetOperationDurationSeconds + " Actual operation duration (seconds) = " + timer.get());
+    System.out.printf("Target operation duration (seconds) = %1$.2f Actual operation duration (seconds) = %2$.2f \n", 
+    this.targetOperationDurationSeconds, timer.get());
   }
 
   // Returns true when the command should end.
