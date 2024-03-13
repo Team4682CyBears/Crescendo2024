@@ -20,6 +20,7 @@ import frc.robot.common.FeederMode;
 import frc.robot.common.MotorUtils;
 import frc.robot.common.ShooterOutfeedSpeedProvider;
 import frc.robot.subsystems.CameraSubsystem;
+import frc.robot.subsystems.ShooterAngleSubsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.*;
 
