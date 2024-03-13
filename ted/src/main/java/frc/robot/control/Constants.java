@@ -16,7 +16,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
-import frc.robot.common.DrivetrainConfig;
+import frc.robot.common.DrivetrainSwerveConfig;
 import frc.robot.swerveHelpers.WcpModuleConfigurations;
 
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -27,7 +27,7 @@ public final class Constants {
     public final static double DriveVoltageScalar = 1.0;
 
     //////////////////// TED DRIVETRAIN ////////////////////
-    public static final DrivetrainConfig tedDrivertainConfig = new DrivetrainConfig(
+    public static final DrivetrainSwerveConfig tedDrivertainConfig = new DrivetrainSwerveConfig(
         Units.inchesToMeters(23.25), 
         Units.inchesToMeters(22.75), 
         WcpModuleConfigurations.TED,
@@ -38,7 +38,7 @@ public final class Constants {
         Math.toRadians(-58.35 - 177.27 - 180.0 - 2.0)); // BACK RIGHT
 
     //////////////////// BABYBEAR DRIVETRAIN ////////////////////
-    public static final DrivetrainConfig babybearDrivetrainConfig = new DrivetrainConfig (
+    public static final DrivetrainSwerveConfig babybearDrivetrainConfig = new DrivetrainSwerveConfig (
         Units.inchesToMeters(17.179), 
         Units.inchesToMeters(17.179),
         WcpModuleConfigurations.BABYBEAR,
@@ -199,6 +199,11 @@ public final class Constants {
     // amp/dunker constants
     public static final int ampShoulderMotorCanId = 27;
     public static final int ampOuttakeMotorCanId = 28;
+
+    // ******************************************************************
+    // camera constants
+    public static final int speakerBlueTagID = 7;
+    public static final int spekaerRedTagID = 4;
   
     // ********************************************************************
     // Controller Constants

@@ -15,7 +15,7 @@ import frc.robot.swerveLib.ModuleConfiguration;
 /**
  * Forms a type to hold drivetrian config
  */
-public class DrivetrainConfig {
+public class DrivetrainSwerveConfig {
     /**
      * The left-to-right distance between the drivetrain wheels
      * Should be measured from center to center.
@@ -33,7 +33,7 @@ public class DrivetrainConfig {
     private double backLeftModuleSteerOffset;
     private double backRightModuleSteerOffset;
 
-    public DrivetrainConfig(
+    public DrivetrainSwerveConfig(
             double trackWidthMeters,
             double wheelbaseMeters,
             ModuleConfiguration swerveModuleConfiguration,
