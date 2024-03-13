@@ -62,7 +62,7 @@ import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.MatBuilder;
 
 public class DrivetrainSubsystem extends SubsystemBase {
-  CameraSubsystem cameraSubsystem;
+  private CameraSubsystem cameraSubsystem;
 
   private boolean useVision = false;
 
@@ -158,7 +158,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * Constructor for this DrivetrainSubsystem
    */
   public DrivetrainSubsystem(SubsystemCollection subsystems) {
-    cameraSubsystem = subsystems.getCameraSubsystem();
+    if(InstalledHardware.limelightInstalled){
+      cameraSubsystem = subsystems.getCameraSubsystem();
+    }
 
     ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
 
@@ -272,8 +274,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return swerveKinematics;
   }
 
-  public void setUseVision(boolean b){
-    this.useVision = b;
+  /**
+   * a method that makes the odometry update with vision updates
+   * @param shouldUseVision true to use vision, false to not
+   */
+  public void setUseVision(boolean shouldUseVision){
+    this.useVision = shouldUseVision;
   }
 
   /**
@@ -504,7 +510,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // refresh the position of the robot
     this.refreshRobotPosition();
     // update robot position with vision
-    this.addVisionMeasurement(cameraSubsystem.getVisionBotPose());
+    if(InstalledHardware.limelightInstalled){
+      this.addVisionMeasurement(cameraSubsystem.getVisionBotPose());
+    }
     // store the recalculated position
     this.storeUpdatedPosition();
     // store navx info
@@ -661,12 +669,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private void addVisionMeasurement(VisionMeasurement visionMeasurement){
     // The wpilib matrix constructor requires sizes specified as Nat types. 
     // trying to update the matrix dynamicaly leads to issues
-    Matrix<N3,N1> visionStdDev = (new MatBuilder<N3,N1>(Nat.N3(), Nat.N1())).fill(new double[]{0.9, 0.9, 0.9});
+    Matrix<N3,N1> visionStdDev = MatBuilder.fill(Nat.N3(), Nat.N1(), new double[]{0.9, 0.9, 0.9});
     // for now ignore all vision measurements that are null or contained robot position is null
-    if (visionMeasurement != null && visionMeasurement.getRobotPosition() != null && useVision){
-      swervePoseEstimator.addVisionMeasurement(visionMeasurement.getRobotPosition(), visionMeasurement.getTimestamp(), visionStdDev);
+    // for now ignore all vision measurements that are null or contained robot position is null
+    if (visionMeasurement != null && useVision){
+      Pose2d visionComputedMeasurement = visionMeasurement.getRobotPosition();
+      if(visionComputedMeasurement != null) {
+          swervePoseEstimator.addVisionMeasurement(visionComputedMeasurement, visionMeasurement.getTimestamp(), visionStdDev);
+      }
     }
-  }
+}
+
 
   /**
    * Determine if recent navx is all level

@@ -25,9 +25,9 @@ public class SubsystemCollection
     private ManualInputInterfaces manualInput = null;
 
     // declaring and init subsystems  
+    private CameraSubsystem cameraSubsystem = null;
     private ClimberSubsystem climberSubsystem = null;
     private DrivetrainSubsystem driveTrainSubsystem = null;
-    private CameraSubsystem cameraSubsystem = null;
     private DrivetrainPowerSubsystem driveTrainPowerSubsystem = null;
     private PowerDistributionPanelWatcherSubsystem powerDistributionPanelWatcherSubsystem = null; 
     private ShooterOutfeedSubsystem shooterOutfeedSubsystem = null;
