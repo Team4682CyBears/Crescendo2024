@@ -21,7 +21,7 @@ import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
 /**
- * Implements a command.
+ * Implements a command that will allign the robot relativly to a given tag, offset with a given pose
  */
 public class AllignRelativeToTagCommand extends Command{
   private boolean done = false;
@@ -40,7 +40,11 @@ public class AllignRelativeToTagCommand extends Command{
   private CameraSubsystem camerasubsystem = null;;
 
   /**
-   * Constructor for command.
+   * Constructor for command that alligns relative to a given tag with given offsets
+   * @param drivetrainSubsystem the drivetrain subsystem
+   * @param camerasubsystem the camera subystem
+   * @param targetPoseInVisionSpace the pose that you want the robot to be relative to the tag
+   * @param tagId which tag you want to be relative to
    */
   public AllignRelativeToTagCommand(DrivetrainSubsystem drivetrainSubsystem, CameraSubsystem camerasubsystem, Pose2d targetPoseInVisionSpace, double tagId) {
     this.drivetrainsubsystem = drivetrainSubsystem;
@@ -49,10 +53,6 @@ public class AllignRelativeToTagCommand extends Command{
     this.targetPoseInVisionSpace = targetPoseInVisionSpace;
 
     rotationPID.enableContinuousInput(-180, 180);
-
-    //TODO for the rotationPID, you need to enable continuous input so that it wraps at -180/180 (if using degrees)
-    // or -pi,+pi if using radians. Like below.. 
-    // rotationPID.enableContinuousInput(min, max);
 
     addRequirements(drivetrainSubsystem);
   }
@@ -100,12 +100,8 @@ public class AllignRelativeToTagCommand extends Command{
         rotVelocity = -1 * MotorUtils.clamp(rotVelocity, -velocityFactor, velocityFactor);
       }
 
-      System.out.println("xVelocity: " + xVelocity);
-      System.out.println("yVelocity: " + yVelocity);
-      System.out.println("rotVelocity: " + rotVelocity);
       drivetrainsubsystem.drive(new ChassisSpeeds(xVelocity, yVelocity, rotVelocity));
     }
-
 
   // Called once the command ends or is interrupted.
   @Override
@@ -118,9 +114,6 @@ public class AllignRelativeToTagCommand extends Command{
   @Override
   public boolean isFinished(){
     startingPositionInRobotSpace = drivetrainsubsystem.getRobotPosition();
-    //todo
-    // for the rotation, you need to wrap the angle around using angleModulus. angleModulus operates in radians, 
-    // so you will need to wrap the angle in radians and then convert to degrees.
     done = Units.radiansToDegrees(Math.abs(MathUtil.angleModulus((targetPositionInRobotSpace.getRotation().getRadians() - startingPositionInRobotSpace.getRotation().getDegrees())))) <= rotationTolerance
       && Math.abs(targetPositionInRobotSpace.getX() - startingPositionInRobotSpace.getX()) <= transformTolerance
       && Math.abs(targetPositionInRobotSpace.getY() - startingPositionInRobotSpace.getY()) <= transformTolerance;

@@ -10,14 +10,14 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
 /**
  * Implements a command
  */
-public class UseVisionForPositionCommand extends CommandBase{
+public class UseVisionForPositionCommand extends Command{
 
   private boolean done = false;
 

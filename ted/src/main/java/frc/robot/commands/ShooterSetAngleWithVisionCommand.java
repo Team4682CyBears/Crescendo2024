@@ -24,6 +24,8 @@ public class ShooterSetAngleWithVisionCommand extends ShooterSetAngleCommand {
   private double desiredAngleDegrees;
   private ShooterAngleSubsystem shooterAngleSubsystem;
   private CameraSubsystem cameraSubsystem;
+  //We use these linear functions to determine which angle the shooter should be at, given distance
+  //There are two functions becuase it is a piecewise function
   private double farSlope = -4.65;
   private double farOffset = 51.6;
   private double closeSlope = -17.9;
@@ -67,7 +69,7 @@ public class ShooterSetAngleWithVisionCommand extends ShooterSetAngleCommand {
         slope = farSlope;
         offset = farOffset;
       }
-      desiredAngleDegrees = (slope*cameraSubsystem.getDistanceFromTag(7.0, 4.0).getDistanceMeters()) + offset;
+      desiredAngleDegrees = (slope*distanceMeasurement.getDistanceMeters()) + offset;
       desiredAngleDegrees = MotorUtils.clamp(desiredAngleDegrees, Constants.shooterAngleMinDegrees, Constants.shooterAngleMaxDegrees);
       super.desiredAngleDegrees = desiredAngleDegrees;
     } // else stay at previous angle
