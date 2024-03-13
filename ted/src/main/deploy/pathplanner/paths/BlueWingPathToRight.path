@@ -83,7 +83,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "BlueSourceSideWing",
+  "folder": null,
   "previewStartingState": {
     "rotation": -59.42077312751099,
     "velocity": 0

@@ -17,6 +17,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PowerDistributionPanelWatcherSubsystem;
 import frc.robot.subsystems.ShooterAngleSubsystem;
 import frc.robot.subsystems.ShooterOutfeedSubsystem;
+import frc.robot.subsystems.CameraSubsystem;
 
 public class SubsystemCollection
 {
@@ -24,6 +25,7 @@ public class SubsystemCollection
     private ManualInputInterfaces manualInput = null;
 
     // declaring and init subsystems  
+    private CameraSubsystem cameraSubsystem = null;
     private ClimberSubsystem climberSubsystem = null;
     private DrivetrainSubsystem driveTrainSubsystem = null;
     private DrivetrainPowerSubsystem driveTrainPowerSubsystem = null;
@@ -45,6 +47,10 @@ public class SubsystemCollection
     public DrivetrainSubsystem getDriveTrainSubsystem() { return driveTrainSubsystem; }
     public void setDriveTrainSubsystem(DrivetrainSubsystem value) { driveTrainSubsystem = value; }
     public boolean isDriveTrainSubsystemAvailable() { return driveTrainSubsystem != null; }
+
+    public CameraSubsystem getCameraSubsystem() { return cameraSubsystem; }
+    public void setCameraSubsystem(CameraSubsystem value) { cameraSubsystem = value; }
+    public boolean isCameraSubsystemAvailable() { return cameraSubsystem != null; }
 
     public DrivetrainPowerSubsystem getDriveTrainPowerSubsystem() { return driveTrainPowerSubsystem; }
     public void setDriveTrainPowerSubsystem(DrivetrainPowerSubsystem value) { driveTrainPowerSubsystem = value; }
