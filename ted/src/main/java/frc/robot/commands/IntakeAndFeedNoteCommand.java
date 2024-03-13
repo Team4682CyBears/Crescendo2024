@@ -62,7 +62,7 @@ public class IntakeAndFeedNoteCommand extends Command
   @Override
   public void execute()
   {
-    if (feeder.isShooterNoteDetected() || feeder.isDunkerNoteDetected()){
+    if (feeder.isShooterNoteDetected()){
       intake.setAllStop();
       feeder.setAllStop();
       done = true;

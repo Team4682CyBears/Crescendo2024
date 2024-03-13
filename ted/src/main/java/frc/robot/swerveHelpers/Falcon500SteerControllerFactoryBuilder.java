@@ -18,6 +18,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.StatusCode;
 
+import frc.robot.control.HardwareConstants;
 import frc.robot.swerveLib.*;
 import frc.robot.swerveLib.ctre.CtreUtils;
 import frc.robot.swerveLib.ctre.Falcon500SteerConfiguration;
@@ -173,7 +174,7 @@ public final class Falcon500SteerControllerFactoryBuilder {
 
             // Reduce CAN status frame rates
             CtreUtils.checkCtreError(
-                motor.getPosition().setUpdateFrequency(STATUS_FRAME_GENERAL_PERIOD_MS, CAN_TIMEOUT_MS),
+                motor.getPosition().setUpdateFrequency(HardwareConstants.ctreMotorStatusFramePeriodFrequencyHertz, CAN_TIMEOUT_MS),
                 "Failed to configure Falcon status frame period"
             );
 
