@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.control.Constants;
 import frc.robot.control.HardwareConstants;
 import frc.robot.control.InstalledHardware;
+import frc.robot.control.ManualInputInterfaces;
 import frc.robot.common.MotorUtils;
 import frc.robot.common.ShooterPosition;
 
@@ -42,6 +43,8 @@ public class ShooterAngleSubsystem extends SubsystemBase {
   //private static final double angleMotorGearRatio = 45.0; // remove 1 10x gearbox stage for testing
   private static final double angleEncoderGearRatio = 1.0; // angle encoder is mounted directly onto shaft
   private static final double shooterAngleLowVelocityTol = 10; // rotations per second (max 512)
+  // the angle increment to use for when requested to increase shooter angle
+  private static double shooterAngleIncrement = Constants.shooterAngleStickIncrementMagnitude;
 
   private TalonFX angleLeftMotor = new TalonFX(Constants.shooterLeftAngleMotorCanId);
   private TalonFX angleRightMotor = new TalonFX(Constants.shooterRightAngleMotorCanId);
@@ -55,6 +58,32 @@ public class ShooterAngleSubsystem extends SubsystemBase {
   // Motor controller gains
   private Slot0Configs angleMotorGainsForInternalEncoder = new Slot0Configs().withKP(350).withKI(0).withKD(50.0).withKV(0);
   private Slot0Configs angleMotorGainsForAbsoluteEncoder = new Slot0Configs().withKP(150).withKI(0.125).withKD(0.05).withKV(0);
+
+  /**
+   * A method to get the current angle increment value
+   * @return a double which represents the angle increment in degrees
+   */
+  public static double getAngleIncrement() {
+    return ShooterAngleSubsystem.shooterAngleIncrement;
+  }
+
+  /**
+   * A method to reset the angle increment back to its starting value
+   */
+  public static void resetAngleIncrement() {
+    ShooterAngleSubsystem.shooterAngleIncrement = Constants.shooterAngleStickIncrementMagnitude;
+  }
+
+  /**
+   * A method to increase the angle increment up to a maximum value
+   */
+  public static void rampAngleIncrement() {
+    ShooterAngleSubsystem.shooterAngleIncrement = 
+      MotorUtils.clamp(
+        ShooterAngleSubsystem.shooterAngleIncrement * 2.0,
+        Constants.shooterAngleStickIncrementMagnitude,
+        Constants.shooterAngleStickIncrementMagnitudeMaximum);
+  }
 
   /**
    * Constructor for shooter subsystem

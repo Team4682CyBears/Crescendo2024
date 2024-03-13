@@ -17,21 +17,19 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.common.FeederMode;
+import frc.robot.common.MotorUtils;
 import frc.robot.common.ShooterOutfeedSpeedProvider;
+import frc.robot.subsystems.ShooterAngleSubsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AllStopCommand;
 import frc.robot.commands.ButtonPressCommand;
 import frc.robot.commands.DriveFinePlacementCommand;
-import frc.robot.commands.FeedNoteCommand;
 import frc.robot.commands.IntakeAndFeedNoteCommand;
-import frc.robot.commands.IntakeNoteCommand;
 import frc.robot.commands.RemoveNoteCommand;
 import frc.robot.commands.RumbleCommand;
-import frc.robot.commands.ShooterOutFeedWarmUpCommand;
 import frc.robot.commands.ShooterSetAngleCommand;
 import frc.robot.commands.ShooterSetAngleTesterCommand;
 import frc.robot.commands.ShooterShootCommand;
-import frc.robot.commands.ShooterSpinUpCommand;
 import frc.robot.commands.ShooterSpinUpForeverCommand;
 import frc.robot.commands.ShooterSpinUpReleaseCommand;
 
@@ -391,27 +389,51 @@ public class ManualInputInterfaces {
         this.coDriverController.povUp().whileTrue(
           new ParallelCommandGroup(
             new RepeatCommand(
-              // shoot at the current angle
-              new ShooterSetAngleTesterCommand(
-                () -> this.incrementShooterAngle(),
-                this.subsystemCollection.getShooterAngleSubsystem())),
+              new SequentialCommandGroup(
+                // adjust the current angle
+                new ShooterSetAngleTesterCommand(
+                  () -> this.incrementShooterAngle(),
+                  this.subsystemCollection.getShooterAngleSubsystem()),
+                new InstantCommand(
+                  ShooterAngleSubsystem::rampAngleIncrement))),
             new ButtonPressCommand(
               "coDriverController.povUp()",
-              "increment angle of shooter")
-              ));
+              "increment angle of shooter")));
+
+        // when released reset the angle increment feature back to original speed
+        this.coDriverController.povUp().onFalse(
+          new ParallelCommandGroup(
+            // reset the angle increment
+            new InstantCommand(
+                  ShooterAngleSubsystem::resetAngleIncrement),
+            new ButtonPressCommand(
+              "coDriverController.povUp().onFalse",
+              "resetAngleIncrement")));
 
         // downward
         this.coDriverController.povDown().whileTrue(
           new ParallelCommandGroup(
             new RepeatCommand(
-              // shoot at the current angle
-              new ShooterSetAngleTesterCommand(
-                () -> this.decrementShooterAngle(),
-                this.subsystemCollection.getShooterAngleSubsystem())),
+              new SequentialCommandGroup(
+                // adjust the current angle
+                new ShooterSetAngleTesterCommand(
+                  () -> this.decrementShooterAngle(),
+                  this.subsystemCollection.getShooterAngleSubsystem()),
+                new InstantCommand(
+                  ShooterAngleSubsystem::rampAngleIncrement))),
             new ButtonPressCommand(
               "coDriverController.povDown()",
-              "deccrement angle of shooter")
-              ));
+              "deccrement angle of shooter")));
+
+        // when released reset the angle increment feature back to original speed
+        this.coDriverController.povDown().onFalse(
+          new ParallelCommandGroup(
+            // reset the angle increment
+            new InstantCommand(
+                  ShooterAngleSubsystem::resetAngleIncrement),
+            new ButtonPressCommand(
+              "coDriverController.povDown().onFalse",
+              "resetAngleIncrement")));
       }
 
       if(this.subsystemCollection.isShooterOutfeedSubsystemAvailable() &&
@@ -449,7 +471,7 @@ public class ManualInputInterfaces {
   private double incrementShooterAngle() {
     double value = 0;
     if(this.subsystemCollection.isShooterAngleSubsystemAvailable()) {
-      value = this.subsystemCollection.getShooterAngleSubsystem().getAngleDegrees() + Constants.shooterAngleStickIncrementMagnitude;
+      value = this.subsystemCollection.getShooterAngleSubsystem().getAngleDegrees() + ShooterAngleSubsystem.getAngleIncrement();
     }
     return value;
   }
@@ -461,9 +483,8 @@ public class ManualInputInterfaces {
   private double decrementShooterAngle() {
     double value = 0;
     if(this.subsystemCollection.isShooterAngleSubsystemAvailable()) {
-      value = this.subsystemCollection.getShooterAngleSubsystem().getAngleDegrees() - Constants.shooterAngleStickIncrementMagnitude;
+      value = this.subsystemCollection.getShooterAngleSubsystem().getAngleDegrees() - ShooterAngleSubsystem.getAngleIncrement();
     }
     return value;
   }
-
 }

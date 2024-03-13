@@ -165,7 +165,8 @@ public final class Constants {
     public static final double shooterAngleToleranceDegrees = 0.5;
     public static final double shooterSetAngleDuration = 3.0;
     // angles increment ranges of stick input
-    public static final double shooterAngleStickIncrementMagnitude = Constants.shooterAngleToleranceDegrees + 0.1;
+    public static final double shooterAngleStickIncrementMagnitude = Constants.shooterAngleToleranceDegrees + 0.4;
+    public static final double shooterAngleStickIncrementMagnitudeMaximum = 20;
     // angles of shooter shots
     public static final double shooterAngleShootFromSpeaker = 56.0;
     // TODO - figure out what 'shoot from note' actually means??
