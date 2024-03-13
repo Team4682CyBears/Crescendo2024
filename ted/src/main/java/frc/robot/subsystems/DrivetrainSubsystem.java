@@ -23,7 +23,7 @@ import frc.robot.NavX.AHRS;
 
 import frc.robot.control.Constants;
 import frc.robot.control.InstalledHardware;
-import frc.robot.common.DrivetrainConfig;
+import frc.robot.common.DrivetrainSwerveConfig;
 import frc.robot.common.EulerAngle;
 import frc.robot.common.VectorUtils;
 import frc.robot.control.SwerveDriveMode;
@@ -85,7 +85,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   public static final double MIN_VELOCITY_BOUNDARY_METERS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND * 0.14; // 0.14 a magic number based on testing
 
-  private static DrivetrainConfig drivetrainConfig = 
+  private static DrivetrainSwerveConfig drivetrainConfig = 
     InstalledHardware.tedDrivetrainInstalled ? Constants.tedDrivertainConfig : Constants.babybearDrivetrainConfig;
   private static double DRIVETRAIN_TRACKWIDTH_METERS = drivetrainConfig.getTrackwidthMeters();
   private static double DRIVETRAIN_WHEELBASE_METERS = drivetrainConfig.getWheelbaseMeters();
