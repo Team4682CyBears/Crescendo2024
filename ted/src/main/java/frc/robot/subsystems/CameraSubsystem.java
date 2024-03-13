@@ -3,7 +3,7 @@
 // Home of the Cybears
 // FRC - Crescendo - 2024
 // File: CameraSubsystem.java
-// Intent: Forms the prelminary code for camera train subsystem.
+// Intent: Forms the prelminary code for the camera subsystem.
 // ************************************************************
 
 // ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
