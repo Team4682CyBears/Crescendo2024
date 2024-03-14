@@ -52,24 +52,17 @@ public class ShooterSpinUpAutoCommand extends Command
   {
     shooterOutfeed.setShooterVelocityLeft(Constants.shooterBaseRpm);
     shooterOutfeed.setShooterVelocityRight(Constants.shooterBaseRpm);
-  if (timer.hasElapsed(Constants.autoShooterSpinUpTimeoutSeconds))
-  {
-    shooterOutfeed.setAllStop();
-    done = true;
-  }
+    if (timer.hasElapsed(Constants.autoShooterSpinUpTimeoutSeconds))
+    {
+      shooterOutfeed.setAllStop();
+      done = true;
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted)
   {
-    // Intentionally *not* setting shooter speed to 0 here. 
-    // the timer elapsed conditions above 
-    // already stop the motor. 
-    // If this command is interrupted, e.g. by the codriver hitting the button multiple times
-    // we don't want to stop and restart the shooter. 
-    // There is a default command registered on this sybsystem that stops the motor if no 
-    // other command is running. 
     shooterOutfeed.setAllStop();
     if(interrupted)
     {

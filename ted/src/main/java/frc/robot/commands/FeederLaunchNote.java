@@ -17,8 +17,8 @@ import frc.robot.control.Constants;
 import frc.robot.subsystems.FeederSubsystem;
 
 /**
- * Forms a command to feed the note to the shooter or dunker
- * Feeder is run until note is detected or timer has expired
+ * Forms a command to feed the note to the shooter
+ * Feeder is run until timer has expired
  */
 public class FeederLaunchNote extends Command
 {
