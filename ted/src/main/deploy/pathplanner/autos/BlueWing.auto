@@ -2,43 +2,55 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7071301441350655,
-      "y": 4.376333332273105
+      "x": 0.69,
+      "y": 4.39
     },
-    "rotation": -59.993974264064725
+    "rotation": -60.6653371504826
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.2
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "ShootFromSpeaker"
+            "name": "AngleFromSpeaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FeedNote"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "BlueWingPathToRight"
+            "pathName": "BlueWingPath"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "IntakeNote"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "MidNoteToSpeaker"
+            "name": "AngleFromSpeaker"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ShootFromSpeaker"
+            "name": "FeedNote"
           }
         }
       ]

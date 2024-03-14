@@ -19,13 +19,18 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import frc.robot.commands.ShooterSpinUpAutoCommand;
 import frc.robot.commands.ButtonPressCommand;
 import frc.robot.commands.IntakeAndFeedNoteCommand;
-import frc.robot.commands.ShooterShootCommand;
 import frc.robot.commands.RemoveNoteCommand;
+import frc.robot.commands.ShooterSetAngleCommand;
+import frc.robot.commands.ShooterSetAngleWithVisionOneShotCommand;
 import frc.robot.common.FeederMode;
-import frc.robot.control.SubsystemCollection;
+import frc.robot.commands.FeederLaunchNote;
 
+/**
+* a class for choosing different auto modes from shuffleboard
+*/
 public class AutonomousChooser {
     private SubsystemCollection subsystems;
     private final SendableChooser<AutonomousPath> autonomousPathChooser = new SendableChooser<>();
@@ -33,13 +38,16 @@ public class AutonomousChooser {
     private Command blue123SourceSide;
     private Command red123SourceSide;
     private Command blueWing;
-    private Command redWing;
+    private Command blueFourNote;
     private Command twoNote;
 
+    /**
+     * Constructor for AutonomousChooser
+     * @param subsystems - the SubsystemCollection
+     */
     public AutonomousChooser(SubsystemCollection subsystems){
         this.subsystems = subsystems;
 
-        //TODO make so if we dont have shoot or intake etc we still get mobility
         if (subsystems.isDriveTrainPowerSubsystemAvailable() &&
         subsystems.isIntakeSubsystemAvailable() && subsystems.isFeederSubsystemAvailable() &&
         subsystems.isShooterAngleSubsystemAvailable() && subsystems.isShooterOutfeedSubsystemAvailable()){
@@ -48,14 +56,14 @@ public class AutonomousChooser {
         autonomousPathChooser.addOption("BLUE 123 Source Side", AutonomousPath.BLUE123);
         autonomousPathChooser.addOption("RED 123 Source Side", AutonomousPath.RED123);
         autonomousPathChooser.addOption("BLUE Wing Source Side", AutonomousPath.BLUEWING);
-        autonomousPathChooser.addOption("RED Wing Source Side", AutonomousPath.REDWING);
+        autonomousPathChooser.addOption("BLUE Four Note", AutonomousPath.BLUEFOURNOTE);
 
         SmartDashboard.putData(autonomousPathChooser);
 
         this.blue123SourceSide = getBlue123SourceSide();
         this.red123SourceSide = getRed123SourceSide();
         this.blueWing = getBlueWing();
-        this.redWing = getRedWing();
+        this.blueFourNote = getBlueFourNote();
         this.twoNote = getTwoNote();
         }
         else{
@@ -63,7 +71,11 @@ public class AutonomousChooser {
         }
     }
 
-    public Command getCommand() {
+     /**
+      * returns the path planner auto to be used in auto period
+      * @return command
+      */
+    public Command getAutoPath() {
         switch (autonomousPathChooser.getSelected()) {
             case BLUE123 :
                 return this.blue123SourceSide;
@@ -71,12 +83,23 @@ public class AutonomousChooser {
                 return this.red123SourceSide;
             case BLUEWING :
                 return this.blueWing;
-            case REDWING :
-                return this.redWing;
+            case BLUEFOURNOTE :
+                return this.blueFourNote;
             case TWONOTE :
                 return this.twoNote;
         }
         return new InstantCommand();
+    }
+
+    /**
+     * A method to return the chosen auto command
+     * @return command
+     */
+    public Command getCommand(){
+        return new ParallelCommandGroup(
+            new ShooterSpinUpAutoCommand(subsystems.getShooterOutfeedSubsystem()),
+            getAutoPath()
+        );
     }
 
     private Command getBlue123SourceSide(){
@@ -88,11 +111,11 @@ public class AutonomousChooser {
     }
 
     private Command getBlueWing(){
-        return AutoBuilder.buildAuto("BlueSourceSideWing");
+        return AutoBuilder.buildAuto("BlueWing");
     }
 
-    private Command getRedWing(){
-        return AutoBuilder.buildAuto("RedSourceSideWing");
+    private Command getBlueFourNote(){
+        return AutoBuilder.buildAuto("Blue4Note");
     }
 
     private Command getTwoNote(){
@@ -103,14 +126,18 @@ public class AutonomousChooser {
         BLUE123,
         RED123,
         BLUEWING,
-        REDWING,
+        BLUEFOURNOTE,
         TWONOTE
     }
 
+    /**
+     * configures the PIDs and stuff to be used for autonomous driving
+     * @param subsystems
+     */
     public static void configureAutoBuilder(SubsystemCollection subsystems){
         HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-          new PIDConstants(2.0, 0, 0), // Translation PID constants
-          new PIDConstants(4.5, 0.001, 0), // Rotation PID constants
+          new PIDConstants(1.5, 0.025, 0), // Translation PID constants
+          new PIDConstants(4.0, 0.02, 0), // Rotation PID constants
           1.8, // Max module speed, in m/s
           0.43, // Drive base radius in meters. Distance from robot center to furthest module.
           new ReplanningConfig() // Default path replanning config. See the API for the options here
@@ -129,46 +156,6 @@ public class AutonomousChooser {
         if (subsystems.isDriveTrainPowerSubsystemAvailable() &&
             subsystems.isIntakeSubsystemAvailable() && subsystems.isFeederSubsystemAvailable() &&
             subsystems.isShooterAngleSubsystemAvailable() && subsystems.isShooterOutfeedSubsystemAvailable()) {
-            NamedCommands.registerCommand("ShootFromSpeaker",
-                new ParallelCommandGroup(
-                    new ButtonPressCommand("PathPlanner", "ShootFromSpeaker"),
-                    new ShooterShootCommand(
-                        Constants.shooterAngleShootFromSpeaker,
-                        Constants.shooterOutfeedSpeedForAngleShootFromSpeaker, 
-                        Constants.shooterOutfeedSpeedForAngleShootFromSpeaker,
-                        subsystems.getShooterOutfeedSubsystem(),
-                        subsystems.getShooterAngleSubsystem(),
-                        subsystems.getFeederSubsystem())));
-            NamedCommands.registerCommand("ShootFromNote",
-                new ParallelCommandGroup(
-                    new ButtonPressCommand("PathPlanner", "ShootFromNote"),
-                    new ShooterShootCommand(
-                        Constants.shooterAngleShootFromNote, 
-                        Constants.shooterOutfeedSpeedForAngleShootFromNote, 
-                        Constants.shooterOutfeedSpeedForAngleShootFromNote,
-                        subsystems.getShooterOutfeedSubsystem(),
-                        subsystems.getShooterAngleSubsystem(),
-                        subsystems.getFeederSubsystem())));
-            NamedCommands.registerCommand("ShootFromStage",
-                new ParallelCommandGroup(
-                    new ButtonPressCommand("PathPlanner", "ShootFromStage"),
-                    new ShooterShootCommand(
-                        Constants.shooterAngleShootFromStage, 
-                        Constants.shooterOutfeedSpeedForAngleShootFromStage, 
-                        Constants.shooterOutfeedSpeedForAngleShootFromStage,
-                        subsystems.getShooterOutfeedSubsystem(),
-                        subsystems.getShooterAngleSubsystem(),
-                        subsystems.getFeederSubsystem())));
-            NamedCommands.registerCommand("ShootFromSourceWing",
-                new ParallelCommandGroup(
-                    new ButtonPressCommand("PathPlanner", "ShootFromSourceWing"),
-                    new ShooterShootCommand(
-                        Constants.shooterAngleShootFromSourceWing, 
-                        Constants.shooterOutfeedSpeedForAngleShootFromSourceWing, 
-                        Constants.shooterOutfeedSpeedForAngleShootFromSourceWing,
-                        subsystems.getShooterOutfeedSubsystem(),
-                        subsystems.getShooterAngleSubsystem(),
-                        subsystems.getFeederSubsystem())));
             NamedCommands.registerCommand("IntakeNote",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "IntakeNote"),
@@ -178,6 +165,38 @@ public class AutonomousChooser {
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "OuttakeNote"),
                     new RemoveNoteCommand(subsystems.getIntakeSubsystem())));
+            NamedCommands.registerCommand("SpingUpShooter",
+                new ParallelCommandGroup(
+                    new ButtonPressCommand("PathPlanner", "SpinUpShooter"),
+                    new ShooterSpinUpAutoCommand(subsystems.getShooterOutfeedSubsystem())));
+            NamedCommands.registerCommand("FeedNote",
+                new ParallelCommandGroup(
+                    new ButtonPressCommand("PathPlanner", "FeedNote"),
+                    new FeederLaunchNote(subsystems.getFeederSubsystem(), FeederMode.FeedToShooter)));
+            NamedCommands.registerCommand("AngleFromNote",
+                new ParallelCommandGroup(
+                    new ButtonPressCommand("PathPlanner", "AngleFromNote"),
+                    new ShooterSetAngleCommand(40.0, subsystems.getShooterAngleSubsystem())));
+            NamedCommands.registerCommand("AngleFromSpeaker",
+                new ParallelCommandGroup(
+                    new ButtonPressCommand("PathPlanner", "AngleFromSpeaker"),
+                    new ShooterSetAngleCommand(56.0, subsystems.getShooterAngleSubsystem())));
+            NamedCommands.registerCommand("AngleFromStage",
+                new ParallelCommandGroup(
+                    new ButtonPressCommand("PathPlanner", "AngleFromNote"),
+                    new ShooterSetAngleCommand(38.0, subsystems.getShooterAngleSubsystem())));
+            NamedCommands.registerCommand("AngleFromWing",
+                new ParallelCommandGroup(
+                    new ButtonPressCommand("PathPlanner", "AngleFromWing"),
+                    new ShooterSetAngleCommand(30.0, subsystems.getShooterAngleSubsystem())));
+            NamedCommands.registerCommand("AngleFromFront",
+                new ParallelCommandGroup(
+                    new ButtonPressCommand("PathPlanner", "AngleFromFront"),
+                    new ShooterSetAngleCommand(40.0, subsystems.getShooterAngleSubsystem())));
+            NamedCommands.registerCommand("AutoAngle",
+                new ParallelCommandGroup(
+                    new ButtonPressCommand("PathPlanner", "AutoAngle"),
+                    new ShooterSetAngleWithVisionOneShotCommand(subsystems.getCameraSubsystem(), subsystems.getShooterAngleSubsystem())));
         }
     }
 }

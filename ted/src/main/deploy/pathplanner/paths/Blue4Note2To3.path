@@ -3,41 +3,54 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3745725990970648,
-        "y": 5.574034784276125
+        "x": 2.5338968170340856,
+        "y": 5.546534311529272
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5170878196355146,
-        "y": 5.495578638749864
+        "x": 1.9251090508112731,
+        "y": 5.448742159130731
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Blue4Note2"
     },
     {
       "anchor": {
-        "x": 2.552011912927029,
-        "y": 4.864616708832055
+        "x": 2.5338968170340856,
+        "y": 6.828842280224811
       },
       "prevControl": {
-        "x": 1.552011912927029,
-        "y": 4.864616708832055
+        "x": 1.6763851774572966,
+        "y": 6.314843398917567
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 26.5,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Shoot From Speaker",
-      "waypointRelativePos": 0.0,
+      "name": "IntakeNote",
+      "waypointRelativePos": 0.8,
       "command": {
-        "type": "sequential",
+        "type": "parallel",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "IntakeNote"
+              }
+            }
+          ]
         }
       }
     }
@@ -50,11 +63,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 24.32389294068247,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Tests",
+  "folder": "Blue4Note",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0
