@@ -32,13 +32,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "New Path"
+            "pathName": "BlueWingPath"
           }
         },
         {
           "type": "wait",
           "data": {
             "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AngleFromSpeaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FeedNote"
           }
         }
       ]

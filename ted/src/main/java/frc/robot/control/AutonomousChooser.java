@@ -26,7 +26,8 @@ import frc.robot.commands.IntakeAndFeedNoteCommand;
 import frc.robot.commands.ShooterShootCommand;
 import frc.robot.commands.RemoveNoteCommand;
 import frc.robot.commands.ShooterSetAngleCommand;
-import frc.robot.commands.ShooterSetAngleWithVisionCommand;
+import frc.robot.commands.ShooterSetAngleWithVisionOneShotCommand;
+import frc.robot.commands.ShooterSetAngleWithVisionOneShotCommand;
 import frc.robot.common.FeederMode;
 import frc.robot.commands.FeederLaunchNote;
 import frc.robot.control.SubsystemCollection;
@@ -151,46 +152,6 @@ public class AutonomousChooser {
         if (subsystems.isDriveTrainPowerSubsystemAvailable() &&
             subsystems.isIntakeSubsystemAvailable() && subsystems.isFeederSubsystemAvailable() &&
             subsystems.isShooterAngleSubsystemAvailable() && subsystems.isShooterOutfeedSubsystemAvailable()) {
-            NamedCommands.registerCommand("ShootFromSpeaker",
-                new ParallelCommandGroup(
-                    new ButtonPressCommand("PathPlanner", "ShootFromSpeaker"),
-                    new ShooterShootCommand(
-                        Constants.shooterAngleShootFromSpeaker,
-                        Constants.shooterOutfeedSpeedForAngleShootFromSpeaker, 
-                        Constants.shooterOutfeedSpeedForAngleShootFromSpeaker,
-                        subsystems.getShooterOutfeedSubsystem(),
-                        subsystems.getShooterAngleSubsystem(),
-                        subsystems.getFeederSubsystem())));
-            NamedCommands.registerCommand("ShootFromNote",
-                new ParallelCommandGroup(
-                    new ButtonPressCommand("PathPlanner", "ShootFromNote"),
-                    new ShooterShootCommand(
-                        Constants.shooterAngleShootFromNote, 
-                        Constants.shooterOutfeedSpeedForAngleShootFromNote, 
-                        Constants.shooterOutfeedSpeedForAngleShootFromNote,
-                        subsystems.getShooterOutfeedSubsystem(),
-                        subsystems.getShooterAngleSubsystem(),
-                        subsystems.getFeederSubsystem())));
-            NamedCommands.registerCommand("ShootFromStage",
-                new ParallelCommandGroup(
-                    new ButtonPressCommand("PathPlanner", "ShootFromStage"),
-                    new ShooterShootCommand(
-                        Constants.shooterAngleShootFromStage, 
-                        Constants.shooterOutfeedSpeedForAngleShootFromStage, 
-                        Constants.shooterOutfeedSpeedForAngleShootFromStage,
-                        subsystems.getShooterOutfeedSubsystem(),
-                        subsystems.getShooterAngleSubsystem(),
-                        subsystems.getFeederSubsystem())));
-            NamedCommands.registerCommand("ShootFromSourceWing",
-                new ParallelCommandGroup(
-                    new ButtonPressCommand("PathPlanner", "ShootFromSourceWing"),
-                    new ShooterShootCommand(
-                        Constants.shooterAngleShootFromSourceWing, 
-                        Constants.shooterOutfeedSpeedForAngleShootFromSourceWing, 
-                        Constants.shooterOutfeedSpeedForAngleShootFromSourceWing,
-                        subsystems.getShooterOutfeedSubsystem(),
-                        subsystems.getShooterAngleSubsystem(),
-                        subsystems.getFeederSubsystem())));
             NamedCommands.registerCommand("IntakeNote",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "IntakeNote"),
@@ -231,7 +192,7 @@ public class AutonomousChooser {
             NamedCommands.registerCommand("AutoAngle",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "AutoAngle"),
-                    new ShooterSetAngleWithVisionCommand(subsystems.getCameraSubsystem(), subsystems.getShooterAngleSubsystem())));
+                    new ShooterSetAngleWithVisionOneShotCommand(subsystems.getCameraSubsystem(), subsystems.getShooterAngleSubsystem())));
         }
     }
 }
