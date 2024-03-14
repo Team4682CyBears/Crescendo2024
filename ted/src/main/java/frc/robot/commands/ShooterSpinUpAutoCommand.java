@@ -70,6 +70,7 @@ public class ShooterSpinUpAutoCommand extends Command
     // we don't want to stop and restart the shooter. 
     // There is a default command registered on this sybsystem that stops the motor if no 
     // other command is running. 
+    shooterOutfeed.setAllStop();
     if(interrupted)
     {
     done = true;      

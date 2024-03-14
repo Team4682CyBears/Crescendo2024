@@ -3,7 +3,8 @@
 // Home of the Cybears
 // FRC - Crescendo - 2024
 // File: FeedNoteCommand.java
-// Intent: Forms a command to feed the note to the shooter or dunker. 
+// Intent: Forms a command to shoot a note assuming the shooter is 
+// already at the right angle and speed and does not require the shooter outfeed subsystem
 // ************************************************************
 
 // ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
@@ -27,8 +28,7 @@ public class FeederLaunchNote extends Command
   private FeederMode direction; 
   
   /** 
-  * Creates a new feeder command 
-  * 
+  * Creates a new feeder launch note command
   * @param feederSubsystem - the feeder subsystem
   * @param feederMode - the direction for the feeder
   */
@@ -70,12 +70,6 @@ public class FeederLaunchNote extends Command
   public void end(boolean interrupted)
   {
     // Intentionally *not* setting feeder speed to 0 here. 
-    // the two conditions above (note detected and timer elasped)
-    // already stop the motor. 
-    // If this command is interrupted, e.g. by the codriver hitting the button multiple times
-    // we don't want to stop and restart the intake. 
-    // There is a default command registered on this sybsystem that stops the motor if no 
-    // other command is running. 
     if(interrupted)
     {
     done = true;      
