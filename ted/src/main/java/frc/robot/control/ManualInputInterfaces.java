@@ -12,15 +12,11 @@ package frc.robot.control;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.common.FeederMode;
-import frc.robot.common.MotorUtils;
 import frc.robot.common.ShooterOutfeedSpeedProvider;
-import frc.robot.subsystems.CameraSubsystem;
-import frc.robot.subsystems.ShooterAngleSubsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.*;
 
@@ -360,12 +356,12 @@ public class ManualInputInterfaces {
               ));
 
         // Auto Ranging stuff
-        this.coDriverController.leftTrigger().onTrue(
+        this.coDriverController.leftTrigger().whileTrue(
           new ParallelCommandGroup(
             new ShooterSetAngleWithVisionContinuousCommand(this.subsystemCollection.getCameraSubsystem(), this.subsystemCollection.getShooterAngleSubsystem()),
             new ButtonPressCommand(
               "coDriverController.leftTrigger()",
-              "TODO auto ranging mode on")
+              "auto ranging mode on")
               ));        
 
         // angle change commands 
@@ -416,29 +412,5 @@ public class ManualInputInterfaces {
             );
       }
     }
-  }
-
-  /**
-   * Method to encapsulate increment for easy double supplier conversion
-   * @return current shooter angle incremented
-   */
-  private double incrementShooterAngle() {
-    double value = 0;
-    if(this.subsystemCollection.isShooterAngleSubsystemAvailable()) {
-      value = this.subsystemCollection.getShooterAngleSubsystem().getAngleDegrees() + ShooterAngleSubsystem.getAngleIncrement();
-    }
-    return value;
-  }
-
-  /**
-   * Method to encapsulate increment for easy double supplier conversion
-   * @return current shooter angle incremented
-   */
-  private double decrementShooterAngle() {
-    double value = 0;
-    if(this.subsystemCollection.isShooterAngleSubsystemAvailable()) {
-      value = this.subsystemCollection.getShooterAngleSubsystem().getAngleDegrees() - ShooterAngleSubsystem.getAngleIncrement();
-    }
-    return value;
   }
 }
