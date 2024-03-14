@@ -39,6 +39,7 @@ public class AutonomousChooser {
     private Command red123SourceSide;
     private Command blueWing;
     private Command blueFourNote;
+    private Command blueRush;
     private Command twoNote;
 
     /**
@@ -57,6 +58,7 @@ public class AutonomousChooser {
         autonomousPathChooser.addOption("RED 123 Source Side", AutonomousPath.RED123);
         autonomousPathChooser.addOption("BLUE Wing Source Side", AutonomousPath.BLUEWING);
         autonomousPathChooser.addOption("BLUE Four Note", AutonomousPath.BLUEFOURNOTE);
+        autonomousPathChooser.addOption("BLUE Rush", AutonomousPath.BLUERUSH);
 
         SmartDashboard.putData(autonomousPathChooser);
 
@@ -65,6 +67,7 @@ public class AutonomousChooser {
         this.blueWing = getBlueWing();
         this.blueFourNote = getBlueFourNote();
         this.twoNote = getTwoNote();
+        this.blueRush = getBlueRush();
         }
         else{
             System.out.println(">>>>> NO auto routine becuase missing subsystems");
@@ -85,6 +88,8 @@ public class AutonomousChooser {
                 return this.blueWing;
             case BLUEFOURNOTE :
                 return this.blueFourNote;
+            case BLUERUSH :
+                return this.blueRush;
             case TWONOTE :
                 return this.twoNote;
         }
@@ -118,6 +123,10 @@ public class AutonomousChooser {
         return AutoBuilder.buildAuto("Blue4Note");
     }
 
+    private Command getBlueRush(){
+        return AutoBuilder.buildAuto("BlueRush");
+    }
+
     private Command getTwoNote(){
         return AutoBuilder.buildAuto("TwoNote");
     }
@@ -127,6 +136,7 @@ public class AutonomousChooser {
         RED123,
         BLUEWING,
         BLUEFOURNOTE,
+        BLUERUSH,
         TWONOTE
     }
 
