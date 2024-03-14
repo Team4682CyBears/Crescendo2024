@@ -18,7 +18,7 @@ import frc.robot.subsystems.ShooterOutfeedSubsystem;
  * Forms a command rev the shooter
  * shooter revs for 15seconds (the auto duration)
  */
-public class AutoShooterSpinUpCommand extends Command
+public class ShooterSpinUpAutoCommand extends Command
 {
   private ShooterOutfeedSubsystem shooterOutfeed;
   private Timer timer = new Timer();
@@ -28,7 +28,7 @@ public class AutoShooterSpinUpCommand extends Command
   * creates a new auto shooter spin up command
   * @param shooterSubsystem - the shooter outfeed subsystem
   */
-  public AutoShooterSpinUpCommand(ShooterOutfeedSubsystem shooterSubsystem)
+  public ShooterSpinUpAutoCommand(ShooterOutfeedSubsystem shooterSubsystem)
   {
     this.shooterOutfeed = shooterSubsystem;
     addRequirements(shooterOutfeed);

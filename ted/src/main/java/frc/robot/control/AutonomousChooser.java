@@ -19,7 +19,7 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
-import frc.robot.commands.AutoShooterSpinUpCommand;
+import frc.robot.commands.ShooterSpinUpAutoCommand;
 import frc.robot.commands.ButtonPressCommand;
 import frc.robot.commands.IntakeAndFeedNoteCommand;
 import frc.robot.commands.RemoveNoteCommand;
@@ -102,7 +102,7 @@ public class AutonomousChooser {
      */
     public Command getCommand(){
         return new ParallelCommandGroup(
-            new AutoShooterSpinUpCommand(subsystems.getShooterOutfeedSubsystem()),
+            new ShooterSpinUpAutoCommand(subsystems.getShooterOutfeedSubsystem()),
             getAutoPath()
         );
     }
@@ -178,7 +178,7 @@ public class AutonomousChooser {
             NamedCommands.registerCommand("SpingUpShooter",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "SpinUpShooter"),
-                    new AutoShooterSpinUpCommand(subsystems.getShooterOutfeedSubsystem())));
+                    new ShooterSpinUpAutoCommand(subsystems.getShooterOutfeedSubsystem())));
             NamedCommands.registerCommand("FeedNote",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "FeedNote"),
