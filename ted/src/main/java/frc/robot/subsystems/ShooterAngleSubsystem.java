@@ -27,7 +27,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.control.Constants;
 import frc.robot.control.HardwareConstants;
 import frc.robot.control.InstalledHardware;
-import frc.robot.control.ManualInputInterfaces;
 import frc.robot.common.MotorUtils;
 import frc.robot.common.ShooterPosition;
 

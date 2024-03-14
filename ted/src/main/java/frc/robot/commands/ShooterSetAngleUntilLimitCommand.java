@@ -31,7 +31,7 @@ public class ShooterSetAngleUntilLimitCommand extends Command {
   private static final double thirdTimeLimitSeconds = 1.4;
   private static final double thirdStepSizeDegrees = secondStepSizeDegrees * 1.75;
   private static final double fourthTimeLimitSeconds = 1.8;
-  private static final double fourthStepSizeDegrees = firstStepSizeDegrees * 1.5;
+  private static final double fourthStepSizeDegrees = thirdStepSizeDegrees * 1.5;
 
   private ShooterAngleSubsystem shooter;
   private boolean increasingAngle = false;
@@ -84,11 +84,7 @@ public class ShooterSetAngleUntilLimitCommand extends Command {
     }
 
     if(!done) {
-        shooter.setAngleDegrees(
-            MotorUtils.clamp(
-                proposedAngle,
-                Constants.shooterAngleMinDegrees,
-                Constants.shooterAngleMaxDegrees));
+        this.shooter.setAngleDegrees(proposedAngle);
     }
   }
  
