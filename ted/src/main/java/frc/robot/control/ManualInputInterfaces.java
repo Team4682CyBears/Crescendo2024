@@ -372,52 +372,22 @@ public class ManualInputInterfaces {
         // upward
         this.coDriverController.povUp().whileTrue(
           new ParallelCommandGroup(
-            new RepeatCommand(
-              new SequentialCommandGroup(
-                // adjust the current angle
-                new ShooterSetAngleTesterCommand(
-                  () -> this.incrementShooterAngle(),
-                  this.subsystemCollection.getShooterAngleSubsystem()),
-                new InstantCommand(
-                  ShooterAngleSubsystem::rampAngleIncrement))),
+            new ShooterSetAngleUntilLimitCommand(
+              true,
+              this.subsystemCollection.getShooterAngleSubsystem()),
             new ButtonPressCommand(
               "coDriverController.povUp()",
               "increment angle of shooter")));
 
-        // when released reset the angle increment feature back to original speed
-        this.coDriverController.povUp().onFalse(
-          new ParallelCommandGroup(
-            // reset the angle increment
-            new InstantCommand(
-                  ShooterAngleSubsystem::resetAngleIncrement),
-            new ButtonPressCommand(
-              "coDriverController.povUp().onFalse",
-              "resetAngleIncrement")));
-
         // downward
         this.coDriverController.povDown().whileTrue(
           new ParallelCommandGroup(
-            new RepeatCommand(
-              new SequentialCommandGroup(
-                // adjust the current angle
-                new ShooterSetAngleTesterCommand(
-                  () -> this.decrementShooterAngle(),
-                  this.subsystemCollection.getShooterAngleSubsystem()),
-                new InstantCommand(
-                  ShooterAngleSubsystem::rampAngleIncrement))),
+            new ShooterSetAngleUntilLimitCommand(
+              false,
+              this.subsystemCollection.getShooterAngleSubsystem()),
             new ButtonPressCommand(
               "coDriverController.povDown()",
               "deccrement angle of shooter")));
-
-        // when released reset the angle increment feature back to original speed
-        this.coDriverController.povDown().onFalse(
-          new ParallelCommandGroup(
-            // reset the angle increment
-            new InstantCommand(
-                  ShooterAngleSubsystem::resetAngleIncrement),
-            new ButtonPressCommand(
-              "coDriverController.povDown().onFalse",
-              "resetAngleIncrement")));
       }
 
       if(this.subsystemCollection.isShooterOutfeedSubsystemAvailable() &&
