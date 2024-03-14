@@ -21,15 +21,12 @@ import com.pathplanner.lib.util.ReplanningConfig;
 
 import frc.robot.commands.AutoShooterSpinUpCommand;
 import frc.robot.commands.ButtonPressCommand;
-import frc.robot.commands.FeedNoteCommand;
 import frc.robot.commands.IntakeAndFeedNoteCommand;
-import frc.robot.commands.ShooterShootCommand;
 import frc.robot.commands.RemoveNoteCommand;
 import frc.robot.commands.ShooterSetAngleCommand;
 import frc.robot.commands.ShooterSetAngleWithVisionOneShotCommand;
 import frc.robot.common.FeederMode;
 import frc.robot.commands.FeederLaunchNote;
-import frc.robot.control.SubsystemCollection;
 
 public class AutonomousChooser {
     private SubsystemCollection subsystems;
