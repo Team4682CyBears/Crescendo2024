@@ -95,6 +95,11 @@ public class ShooterSetAngleUntilLimitCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    if(!done){
+      // this will have the effect of stopping the angle movement
+      // at the current angle
+      this.shooter.setAngleDegrees(this.shooter.getAngleDegrees());
+    }
     if(interrupted){
       done = true;
     }
