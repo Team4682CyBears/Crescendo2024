@@ -40,18 +40,6 @@
           "data": {
             "waitTime": 0.5
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "AutoAngle"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "FeedNote"
-          }
         }
       ]
     }
