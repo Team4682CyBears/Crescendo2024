@@ -3,7 +3,7 @@
 // Home of the Cybears
 // FRC - Crescendo - 2024
 // File: ShooterSubsystem.java
-// Intent: Forms a command to make the XBox controller rumble/vibrate.
+// Intent: Forms a command to stop the shooter outfeed subsystem
 // ************************************************************
 
 // ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 

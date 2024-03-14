@@ -11,6 +11,7 @@
 
 package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.common.FeederMode;
 import frc.robot.control.Constants;
@@ -28,9 +29,13 @@ public class IntakeAndFeedNoteCommand extends Command
   private Timer timer = new Timer();
   private boolean done = false;
   private FeederMode direction; 
+  private RumbleCommand rumbleCommand = null;
+  private boolean doRumble = false;
+  private boolean rumbleStarted = false;
   
   /** 
-  * Creates a new feeder command 
+  * Creates a new feeder command without rumble. 
+  * to be used for auto
   * 
   * @param intakeSubsystem - the intake subsystem
   * @param feederSubsystem - the feeder subsystem
@@ -41,6 +46,26 @@ public class IntakeAndFeedNoteCommand extends Command
     this.intake = intakeSubsystem;
     this.feeder = feederSubsystem;
     this.direction = feederMode;
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(intake, feeder);
+  }
+
+  /** 
+  * Creates a new feeder command with rumble
+  * to be used for UI buttons
+  * 
+  * @param intakeSubsystem - the intake subsystem
+  * @param feederSubsystem - the feeder subsystem
+  * @param feederMode - the direction for the feeder
+  * @param xboxController - the xbox controller to be used for rumble
+  */
+  public IntakeAndFeedNoteCommand(IntakeSubsystem intakeSubsystem, FeederSubsystem feederSubsystem, FeederMode feederMode, XboxController xboxController)
+  {
+    this.intake = intakeSubsystem;
+    this.feeder = feederSubsystem;
+    this.direction = feederMode;
+    this.rumbleCommand = new RumbleCommand(xboxController, Constants.rumbleTimeSeconds);
+    this.doRumble = true;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intake, feeder);
   }
@@ -56,12 +81,21 @@ public class IntakeAndFeedNoteCommand extends Command
     timer.reset();
     timer.start();
     done = false;
+    rumbleStarted = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute()
   {
+    // rumble once note is detected in the intake
+    if (doRumble && !rumbleStarted) {
+      if (intake.isNoteDetected()){
+        rumbleCommand.schedule(); // want to call this just once
+        rumbleStarted = true;
+      }
+    }
+    // keep feeding until note is detected in shooter
     if (feeder.isShooterNoteDetected()){
       intake.setAllStop();
       feeder.setAllStop();
