@@ -3,37 +3,43 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3499985088160098,
-        "y": 2.65
+        "x": 2.4253549759335664,
+        "y": 4.361647649950041
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5126821123412604,
-        "y": 2.65
+        "x": 1.1707718414056076,
+        "y": 4.828587942265232
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Blue4NoteStage"
     },
     {
       "anchor": {
-        "x": 2.3487301368054063,
-        "y": 2.65
+        "x": 2.5338968170340856,
+        "y": 5.546534311529272
       },
       "prevControl": {
-        "x": 1.8213041187871724,
-        "y": 2.65
+        "x": 1.8790861578395615,
+        "y": 5.683949298345646
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Blue4Note2"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Intake Note",
-      "waypointRelativePos": 0.9,
+      "name": "IntakeNote",
+      "waypointRelativePos": 0.65,
       "command": {
         "type": "parallel",
         "data": {
@@ -61,9 +67,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Common",
+  "folder": "Blue4Note",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -29.4443203483574,
     "velocity": 0
   },
   "useDefaultConstraints": true
