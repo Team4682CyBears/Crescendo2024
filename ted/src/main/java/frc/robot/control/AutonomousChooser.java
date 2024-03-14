@@ -28,6 +28,9 @@ import frc.robot.commands.ShooterSetAngleWithVisionOneShotCommand;
 import frc.robot.common.FeederMode;
 import frc.robot.commands.FeederLaunchNote;
 
+/**
+* a class for choosing different auto modes from shuffleboard
+*/
 public class AutonomousChooser {
     private SubsystemCollection subsystems;
     private final SendableChooser<AutonomousPath> autonomousPathChooser = new SendableChooser<>();
@@ -39,10 +42,13 @@ public class AutonomousChooser {
     private Command blueRush;
     private Command twoNote;
 
+    /**
+     * Constructor for AutonomousChooser
+     * @param subsystems - the SubsystemCollection
+     */
     public AutonomousChooser(SubsystemCollection subsystems){
         this.subsystems = subsystems;
 
-        //TODO make so if we dont have shoot or intake etc we still get mobility
         if (subsystems.isDriveTrainPowerSubsystemAvailable() &&
         subsystems.isIntakeSubsystemAvailable() && subsystems.isFeederSubsystemAvailable() &&
         subsystems.isShooterAngleSubsystemAvailable() && subsystems.isShooterOutfeedSubsystemAvailable()){
@@ -68,6 +74,10 @@ public class AutonomousChooser {
         }
     }
 
+     /**
+      * returns the path planner auto to be used in auto period
+      * @return command
+      */
     public Command getAutoPath() {
         switch (autonomousPathChooser.getSelected()) {
             case BLUE123 :
@@ -86,6 +96,10 @@ public class AutonomousChooser {
         return new InstantCommand();
     }
 
+    /**
+     * A method to return the chosen auto command
+     * @return command
+     */
     public Command getCommand(){
         return new ParallelCommandGroup(
             new AutoShooterSpinUpCommand(subsystems.getShooterOutfeedSubsystem()),
@@ -126,6 +140,10 @@ public class AutonomousChooser {
         TWONOTE
     }
 
+    /**
+     * configures the PIDs and stuff to be used for autonomous driving
+     * @param subsystems
+     */
     public static void configureAutoBuilder(SubsystemCollection subsystems){
         HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
           new PIDConstants(1.5, 0.025, 0), // Translation PID constants

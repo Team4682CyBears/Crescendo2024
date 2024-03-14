@@ -15,8 +15,8 @@ import frc.robot.control.Constants;
 import frc.robot.subsystems.ShooterOutfeedSubsystem;
 
 /**
- * Forms a command to intake the note
- * Intake is run until note is detected or timer has expired
+ * Forms a command rev the shooter
+ * shooter revs for 15seconds (the auto duration)
  */
 public class AutoShooterSpinUpCommand extends Command
 {
@@ -25,14 +25,12 @@ public class AutoShooterSpinUpCommand extends Command
   private boolean done = false;
   
   /** 
-  * Creates a new intake command 
-  * 
+  * creates a new auto shooter spin up command
   * @param shooterSubsystem - the shooter outfeed subsystem
   */
   public AutoShooterSpinUpCommand(ShooterOutfeedSubsystem shooterSubsystem)
   {
     this.shooterOutfeed = shooterSubsystem;
-    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooterOutfeed);
   }
 
