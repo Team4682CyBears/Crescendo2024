@@ -16,7 +16,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * A class to rumble the xbox controller
+ * A class to set a variable on the dashboard to 
+ * two different values separated by a delay
  */
 public class SetDashboardVariableCommand extends Command{
     private Timer timer = new Timer();
@@ -27,7 +28,7 @@ public class SetDashboardVariableCommand extends Command{
     private String variableName; 
     
     /**
-     * constructor for rumble command
+     * constructor for SetDashboardVariableCommand
      * @param firstValue
      * @param delay
      * @param secondValue
