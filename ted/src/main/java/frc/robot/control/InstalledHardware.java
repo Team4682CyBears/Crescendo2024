@@ -56,7 +56,7 @@ public class InstalledHardware
     // Important! You must disable any TOF sensor that is not installed!! 
     // If you try to configure a TOF sensor that is not installed
     // the other TOF sensors that are installed will not work. 
-    public static final boolean intakeTofInstalled = false;
+    public static final boolean intakeTofInstalled = true;
     public static final boolean firstFeederToShooterTofInstalled = true;
     public static final boolean secondFeederToShooterTofInstalled = true;
     public static final boolean feederToDunkerTofInstalled = false;

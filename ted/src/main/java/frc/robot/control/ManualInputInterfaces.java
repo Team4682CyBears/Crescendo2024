@@ -135,19 +135,17 @@ public class ManualInputInterfaces {
 
       if(this.subsystemCollection.isIntakeSubsystemAvailable() && 
        this.subsystemCollection.isFeederSubsystemAvailable()) {
-        // b button will intake a note
+        // b button will intake a note with rumble on note detected
         this.driverController.b().onTrue(
-          // TODO convert to new intake sensor is availiable
-          new SequentialCommandGroup(
             new ParallelCommandGroup(
               new IntakeAndFeedNoteCommand(
                 this.subsystemCollection.getIntakeSubsystem(),
                 this.subsystemCollection.getFeederSubsystem(),
-                FeederMode.FeedToShooter), 
+                FeederMode.FeedToShooter,
+                this.driverControllerForRumbleOnly), 
               new ButtonPressCommand(
                 "driverController.b()",
-                "intake")),
-          new RumbleCommand(this.driverControllerForRumbleOnly, Constants.rumbleTimeSeconds))
+                "intake"))
         );
       }
 
