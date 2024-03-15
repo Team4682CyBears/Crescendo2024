@@ -144,9 +144,9 @@ public final class Constants {
     public static final double shooterSpinUpDelay = 0.8;
 
     // speeds for specific shooter shots
-    public static final double shooterOutfeedSpeedForAngleShootFromSpeaker = 4000.0;
-    public static final double shooterOutfeedSpeedForAngleShootFromNote = 6000.0; 
-    public static final double shooterOutfeedSpeedForAngleShootFromStage = 6000.0;
+    public static final double shooterOutfeedSpeedForAngleShootFromSpeaker = 4500.0;
+    public static final double shooterOutfeedSpeedForAngleShootFromNote = 6500.0; 
+    public static final double shooterOutfeedSpeedForAngleShootFromStage = 6500.0;
     public static final double shooterOutfeedSpeedForAngleShootFromSourceWing = 6500.0;
     public static final double shooterOutfeedSpeedForAngleShootFromAmp = 250.0;
 
