@@ -19,9 +19,9 @@ public class ShooterAngleHelpers {
     // coefficients for a piece-wise linear function composed of two linear equations
     // and a breakpoint where they meet
     private static double farSlope = -4.65;
-    private static double farOffset = 51.6;
-    private static double closeSlope = -17.9;
-    private static double closeOffset = 79.1;
+    private static double farOffset = 50.6;
+    private static double closeSlope = -19.4;
+    private static double closeOffset = 81.2;
     private static double nearFarBreakpoint = 2.0;
 
     /**

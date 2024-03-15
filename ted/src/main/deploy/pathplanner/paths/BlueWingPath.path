@@ -61,7 +61,30 @@
       "rotateFast": false
     }
   ],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "End",
+      "minWaypointRelativePos": 1.65,
+      "maxWaypointRelativePos": 2.0,
+      "constraints": {
+        "maxVelocity": 2.5,
+        "maxAcceleration": 1.0,
+        "maxAngularVelocity": 200.0,
+        "maxAngularAcceleration": 690.0
+      }
+    },
+    {
+      "name": "Middle",
+      "minWaypointRelativePos": 0.85,
+      "maxWaypointRelativePos": 1.25,
+      "constraints": {
+        "maxVelocity": 3.0,
+        "maxAcceleration": 1.0,
+        "maxAngularVelocity": 200.0,
+        "maxAngularAcceleration": 690.0
+      }
+    }
+  ],
   "eventMarkers": [
     {
       "name": "New Event Marker",
