@@ -311,7 +311,7 @@ public class ManualInputInterfaces {
           new ParallelCommandGroup(
             // shoot at the current angle
             new ShooterSetAngleCommand(
-              Constants.shooterAngleShootFromNote,
+              Constants.shooterAngleShootFromStage,
               this.subsystemCollection.getShooterAngleSubsystem()),
             new ButtonPressCommand(
               "coDriverController.b()",
