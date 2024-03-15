@@ -69,6 +69,9 @@ public class InstalledHardware
     // and disconnect the right motor from the chain. 
     public static final boolean shooterRightAngleMotorrInstalled = true;
     public static final boolean shooterAngleCanCoderInstalled = true; 
+    // for testing shooter angle via the shuffleboard
+    // ensure this is DISABLED for competitions, as it can sometimes crash shuffleboard
+    public static final boolean setShooterAngleFromShuffleboard = false;
 
     // Climber Sensor Related Hardware
     public static final boolean leftClimberInstalled = true;
