@@ -11,10 +11,8 @@
 
 package frc.robot.commands;
 
-import frc.robot.common.MotorUtils;
 import frc.robot.control.Constants;
 import frc.robot.subsystems.ShooterAngleSubsystem;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command; 
 
 /**
@@ -23,19 +21,8 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class ShooterSetAngleUntilLimitCommand extends Command {
 
-  // A block of step functions for time and angle step sizes
-  private static final double firstTimeLimitSeconds = 0.6;
-  private static final double firstStepSizeDegrees = Constants.shooterAngleStickIncrementMagnitude * 2.5;
-  private static final double secondTimeLimitSeconds = 0.9;
-  private static final double secondStepSizeDegrees = firstStepSizeDegrees * 2.0;
-  private static final double thirdTimeLimitSeconds = 1.4;
-  private static final double thirdStepSizeDegrees = secondStepSizeDegrees * 1.75;
-  private static final double fourthTimeLimitSeconds = 1.8;
-  private static final double fourthStepSizeDegrees = thirdStepSizeDegrees * 1.5;
-
   private ShooterAngleSubsystem shooter;
   private boolean increasingAngle = false;
-  private Timer timer = new Timer();
   private boolean done = false;
 
   /**
@@ -54,15 +41,13 @@ public class ShooterSetAngleUntilLimitCommand extends Command {
   @Override
   public void initialize() {
     done = false;
-    timer.reset();
-    timer.start();
   }
 
   // buisness logic to move the shooter once per robot tick (every 20ms / 50Hz)
   @Override
   public void execute() {
 
-    double angleStepSize = this.getAngleStepSize();
+    double angleStepSize = Constants.shooterAngleStickIncrementMagnitude;
     double currentShooterAngle = this.shooter.getAngleDegrees();
     double proposedAngle = currentShooterAngle;
 
@@ -107,31 +92,4 @@ public class ShooterSetAngleUntilLimitCommand extends Command {
     return done;
   }
 
-  /**
-   * A method to return the current angle step size based on how long the command has
-   * been running
-   * @return double representing the angle step size in degrees
-   */
-  private double getAngleStepSize() {
-    double elapsedTimeSeconds = timer.get();
-    double angleStepSize = Constants.shooterAngleStickIncrementMagnitude;
-
-    if(elapsedTimeSeconds > fourthTimeLimitSeconds) {
-        angleStepSize = ShooterSetAngleUntilLimitCommand.fourthStepSizeDegrees;
-    }
-    else if(elapsedTimeSeconds > thirdTimeLimitSeconds) {
-        angleStepSize = ShooterSetAngleUntilLimitCommand.thirdStepSizeDegrees;
-    }
-    else if(elapsedTimeSeconds > secondTimeLimitSeconds) {
-        angleStepSize = ShooterSetAngleUntilLimitCommand.secondStepSizeDegrees;
-    }
-    else if(elapsedTimeSeconds > firstTimeLimitSeconds) {
-        angleStepSize = ShooterSetAngleUntilLimitCommand.firstStepSizeDegrees;
-    }
-
-    return MotorUtils.clamp(
-        angleStepSize,
-        Constants.shooterAngleStickIncrementMagnitude,
-        Constants.shooterAngleStickIncrementMagnitudeMaximum);
-  }
 }
