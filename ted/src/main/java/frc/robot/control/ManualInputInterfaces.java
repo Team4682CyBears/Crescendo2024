@@ -165,26 +165,11 @@ public class ManualInputInterfaces {
         System.out.println("STARTING Registering this.driverController.rightTrigger().onTrue() ... ");
         this.driverController.rightTrigger().onTrue(
             new ParallelCommandGroup(
-              new ShooterShootCommand(
-                () -> this.outfeedSpeedProvider.getShotSpeedForCurrentAngle(),
-                () -> this.outfeedSpeedProvider.getShotSpeedForCurrentAngle(),
-                subsystemCollection.getShooterOutfeedSubsystem(), 
-                subsystemCollection.getFeederSubsystem()),
+              new FeederLaunchNote(
+                subsystemCollection.getFeederSubsystem(), FeederMode.FeedToShooter),
               new ButtonPressCommand(
                 "driverController.rightTrigger()",
                 "Shoot at speed!!")
-              )
-          );
-          this.driverController.rightTrigger().onFalse(
-            new ParallelCommandGroup(
-              new ShooterSpinUpForeverCommand(
-                subsystemCollection.getShooterOutfeedSubsystem(), 
-                subsystemCollection.getFeederSubsystem(),
-                () -> this.outfeedSpeedProvider.getSpinUpSpeedForCurrentAngle(),
-                true),
-              new ButtonPressCommand(
-                "driverController.rightTrigger().onFalse",
-                "Hold speed if note present!!")
               )
           );
         System.out.println("FINISHED registering this.driverController.rightTrigger().onTrue() ... ");
@@ -324,7 +309,7 @@ public class ManualInputInterfaces {
           new ParallelCommandGroup(
             // shoot at the current angle
             new ShooterSetAngleCommand(
-              Constants.shooterAngleShootFromNote,
+              Constants.shooterAngleShootFromStage,
               this.subsystemCollection.getShooterAngleSubsystem()),
             new ButtonPressCommand(
               "coDriverController.b()",
@@ -392,7 +377,7 @@ public class ManualInputInterfaces {
               new ShooterSpinUpForeverCommand(
                 subsystemCollection.getShooterOutfeedSubsystem(), 
                 subsystemCollection.getFeederSubsystem(),
-                () -> this.outfeedSpeedProvider.getSpinUpSpeedForCurrentAngle(),
+                () -> this.outfeedSpeedProvider.getShotSpeedForCurrentAngle(),
                 false),
               new ButtonPressCommand(
                 "coDriverController.rightTriggger()",

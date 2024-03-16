@@ -112,7 +112,9 @@ public class RobotContainer {
           new ShooterSpinUpCommand(this.subsystems.getShooterOutfeedSubsystem()));
     }
 
-    if (this.subsystems.isShooterAngleSubsystemAvailable()) {
+    // this should be disabled during competition as it sometimes crashes shuffleboard
+    // disable by setting setShooterAngleFromShuffleboard in InstalledHardware
+    if (this.subsystems.isShooterAngleSubsystemAvailable() && InstalledHardware.setShooterAngleFromShuffleboard) {
       SmartDashboard.putNumber("Shooter Angle Setter", Constants.shooterStartingAngleOffsetDegrees);
       SmartDashboard.putData(
           "Set Shooter To Specified Angle",
