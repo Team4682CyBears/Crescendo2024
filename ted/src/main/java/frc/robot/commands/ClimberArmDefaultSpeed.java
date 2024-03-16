@@ -10,9 +10,6 @@
 
 package frc.robot.commands;
 
-import frc.robot.common.MotorUtils;
-import frc.robot.control.Constants;
-import frc.robot.control.ManualInputInterfaces;
 import frc.robot.subsystems.ClimberSubsystem;
 import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,6 +22,7 @@ public class ClimberArmDefaultSpeed extends Command {
   private ClimberSubsystem climber;
   private DoubleSupplier leftSpeed;
   private DoubleSupplier rightSpeed;
+  private boolean done = false;
 
   /**
    * Constructor for ClimberArmDefaultSpeed
@@ -46,24 +44,30 @@ public class ClimberArmDefaultSpeed extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    done = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    this.climber.setClimberSpeeds(this.leftSpeed.getAsDouble(), this.rightSpeed.getAsDouble());
+    if(!done) {
+      this.climber.setClimberSpeeds(this.leftSpeed.getAsDouble(), this.rightSpeed.getAsDouble());
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    this.climber.setClimberSpeeds(0.0, 0.0);
+    if(interrupted) {
+      done = true;
+      this.climber.setClimberSpeeds(0.0, 0.0);
+    }
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true; 
+    return done; 
   } 
 
 }

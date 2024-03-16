@@ -12,13 +12,11 @@ package frc.robot.control;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.common.FeederMode;
 import frc.robot.common.ShooterOutfeedSpeedProvider;
-import frc.robot.subsystems.CameraSubsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.*;
 
@@ -341,40 +339,34 @@ public class ManualInputInterfaces {
               ));
 
         // Auto Ranging stuff
-        this.coDriverController.leftTrigger().onTrue(
+        this.coDriverController.leftTrigger().whileTrue(
           new ParallelCommandGroup(
             new ShooterSetAngleWithVisionContinuousCommand(this.subsystemCollection.getCameraSubsystem(), this.subsystemCollection.getShooterAngleSubsystem()),
             new ButtonPressCommand(
               "coDriverController.leftTrigger()",
-              "TODO auto ranging mode on")
+              "auto ranging mode on")
               ));        
 
         // angle change commands 
         // upward
         this.coDriverController.povUp().whileTrue(
           new ParallelCommandGroup(
-            new RepeatCommand(
-              // shoot at the current angle
-              new ShooterSetAngleTesterCommand(
-                () -> this.incrementShooterAngle(),
-                this.subsystemCollection.getShooterAngleSubsystem())),
+            new ShooterSetAngleUntilLimitCommand(
+              true,
+              this.subsystemCollection.getShooterAngleSubsystem()),
             new ButtonPressCommand(
               "coDriverController.povUp()",
-              "increment angle of shooter")
-              ));
+              "increment angle of shooter")));
 
         // downward
         this.coDriverController.povDown().whileTrue(
           new ParallelCommandGroup(
-            new RepeatCommand(
-              // shoot at the current angle
-              new ShooterSetAngleTesterCommand(
-                () -> this.decrementShooterAngle(),
-                this.subsystemCollection.getShooterAngleSubsystem())),
+            new ShooterSetAngleUntilLimitCommand(
+              false,
+              this.subsystemCollection.getShooterAngleSubsystem()),
             new ButtonPressCommand(
               "coDriverController.povDown()",
-              "deccrement angle of shooter")
-              ));
+              "deccrement angle of shooter")));
       }
 
       if(this.subsystemCollection.isShooterOutfeedSubsystemAvailable() &&
@@ -404,29 +396,4 @@ public class ManualInputInterfaces {
       }
     }
   }
-
-  /**
-   * Method to encapsulate increment for easy double supplier conversion
-   * @return current shooter angle incremented
-   */
-  private double incrementShooterAngle() {
-    double value = 0;
-    if(this.subsystemCollection.isShooterAngleSubsystemAvailable()) {
-      value = this.subsystemCollection.getShooterAngleSubsystem().getAngleDegrees() + Constants.shooterAngleStickIncrementMagnitude;
-    }
-    return value;
-  }
-
-  /**
-   * Method to encapsulate increment for easy double supplier conversion
-   * @return current shooter angle incremented
-   */
-  private double decrementShooterAngle() {
-    double value = 0;
-    if(this.subsystemCollection.isShooterAngleSubsystemAvailable()) {
-      value = this.subsystemCollection.getShooterAngleSubsystem().getAngleDegrees() - Constants.shooterAngleStickIncrementMagnitude;
-    }
-    return value;
-  }
-
 }

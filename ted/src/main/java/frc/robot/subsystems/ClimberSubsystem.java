@@ -39,7 +39,7 @@ public class ClimberSubsystem extends SubsystemBase{
     
     // Based on testing
     private static final boolean spoolWindingIsPositiveSparkMaxNeoMotorOutput = true;
-    private static final double neoMotorSpeedReductionFactor = 0.5;
+    private static final double neoMotorSpeedReductionFactor = 1.0;
 
     private static final double lengthClimberExtensionVeryCloseToEndInches = maximumArmHeightInches - 1.5;
     private static final double lengthClimberExtensionVeryCloseToStopInches = 1.5;
