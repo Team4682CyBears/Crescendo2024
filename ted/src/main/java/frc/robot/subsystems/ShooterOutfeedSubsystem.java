@@ -19,6 +19,7 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.control.Constants;
 import frc.robot.control.HardwareConstants;
@@ -96,7 +97,9 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
    * this method will be called once per scheduler run
    */
   @Override
-  public void periodic() {}
+  public void periodic() {
+    this.displayDiagnostics();
+  }
 
   /**
    * A method to stop shooter outfeed motors
@@ -207,6 +210,11 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
 
   private double rotationsPerSToRpm(double rotationsPerS, double targetGearRatio){
     return rotationsPerS / targetGearRatio * 60.0;
+  }
+
+  private void displayDiagnostics(){
+    SmartDashboard.putNumber("Left Shooter Speed", this.getLeftSpeedRpm());
+    SmartDashboard.putNumber("Right Shooter Speed", this.getRightSpeedRpm());
   }
 
 }
