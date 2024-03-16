@@ -351,8 +351,8 @@ public class ManualInputInterfaces {
         // upward
         this.coDriverController.povUp().whileTrue(
           new ParallelCommandGroup(
-            new ShooterSetAngleUntilLimitCommand(
-              true,
+            new ShooterSetAngleDefaultCommand(
+              () -> Constants.shooterAngleStickIncrementMagnitude,
               this.subsystemCollection.getShooterAngleSubsystem()),
             new ButtonPressCommand(
               "coDriverController.povUp()",
@@ -361,8 +361,8 @@ public class ManualInputInterfaces {
         // downward
         this.coDriverController.povDown().whileTrue(
           new ParallelCommandGroup(
-            new ShooterSetAngleUntilLimitCommand(
-              false,
+            new ShooterSetAngleDefaultCommand(
+              () -> -Constants.shooterAngleStickIncrementMagnitude,
               this.subsystemCollection.getShooterAngleSubsystem()),
             new ButtonPressCommand(
               "coDriverController.povDown()",
