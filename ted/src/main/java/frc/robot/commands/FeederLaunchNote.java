@@ -26,16 +26,18 @@ public class FeederLaunchNote extends Command
   private Timer timer = new Timer();
   private boolean done = false;
   private FeederMode direction; 
+  private double timeoutTime;
   
   /** 
   * Creates a new feeder launch note command
   * @param feederSubsystem - the feeder subsystem
   * @param feederMode - the direction for the feeder
   */
-  public FeederLaunchNote(FeederSubsystem feederSubsystem, FeederMode feederMode)
+  public FeederLaunchNote(FeederSubsystem feederSubsystem, FeederMode feederMode, double timeoutTime)
   {
     this.feeder = feederSubsystem;
     this.direction = feederMode;
+    this.timeoutTime = timeoutTime;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(feeder);
   }
@@ -58,7 +60,7 @@ public class FeederLaunchNote extends Command
   public void execute()
   {
     feeder.setFeederSpeed(Constants.feederSpeed);
-    if (timer.hasElapsed(Constants.feederLaunchTimeoutSeconds))
+    if (timer.hasElapsed(timeoutTime))
     {
       feeder.setAllStop();
       done = true;

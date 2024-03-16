@@ -190,7 +190,7 @@ public class AutonomousChooser {
             NamedCommands.registerCommand("FeedNote",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "FeedNote"),
-                    new FeederLaunchNote(subsystems.getFeederSubsystem(), FeederMode.FeedToShooter)));
+                    new FeederLaunchNote(subsystems.getFeederSubsystem(), FeederMode.FeedToShooter, Constants.feederLaunchTimeoutSecondsInAuto)));
             NamedCommands.registerCommand("AngleFromNote",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "AngleFromNote"),
