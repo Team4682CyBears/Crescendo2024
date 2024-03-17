@@ -64,7 +64,7 @@ public class ClimberSubsystem extends SubsystemBase{
     private boolean leftClimberReady = InstalledHardware.leftClimberInstalled && InstalledHardware.leftClimberSensorInstalled;
     private double targetLeftClimberInches = 0;
     private double targetLeftMotorSpeed = 0;
-
+ 
     private CANSparkMax rightMotor;
     private SparkPIDController rightPidController;
     private RelativeEncoder rightEncoder;
