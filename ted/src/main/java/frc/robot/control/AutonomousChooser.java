@@ -56,10 +56,10 @@ public class AutonomousChooser {
         autonomousPathChooser.setDefaultOption("Two Note", AutonomousPath.TWONOTE);
         autonomousPathChooser.addOption("BLUE 123 Source Side", AutonomousPath.BLUE123);
         autonomousPathChooser.addOption("RED 123 Source Side", AutonomousPath.RED123);
-        autonomousPathChooser.addOption("BLUE Wing Source Side", AutonomousPath.BLUEWING);
+        autonomousPathChooser.addOption("BLUE Wing", AutonomousPath.BLUEWING);
         autonomousPathChooser.addOption("BLUE Four Note", AutonomousPath.BLUEFOURNOTE);
-        autonomousPathChooser.addOption("BLUE Four Note", AutonomousPath.REDWING);
-        autonomousPathChooser.addOption("BLUE Four Note", AutonomousPath.REDFOURNOTE);
+        autonomousPathChooser.addOption("RED Wing", AutonomousPath.REDWING);
+        autonomousPathChooser.addOption("RED Four Note", AutonomousPath.REDFOURNOTE);
         SmartDashboard.putData(autonomousPathChooser);
 
         this.blue123SourceSide = getBlue123SourceSide();
@@ -190,7 +190,7 @@ public class AutonomousChooser {
             NamedCommands.registerCommand("FeedNote",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "FeedNote"),
-                    new FeederLaunchNote(subsystems.getFeederSubsystem(), FeederMode.FeedToShooter)));
+                    new FeederLaunchNote(subsystems.getFeederSubsystem(), FeederMode.FeedToShooter, Constants.feederLaunchTimeoutSecondsInAuto)));
             NamedCommands.registerCommand("AngleFromNote",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "AngleFromNote"),

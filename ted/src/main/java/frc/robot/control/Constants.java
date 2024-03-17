@@ -122,11 +122,12 @@ public final class Constants {
     // feederSpeed is [0.0 .. 1.0]
     // it runs in one direction for the shooter 
     // and the opposite direction for the dunker/amp
-    public static final double feederSpeed = 0.20;
+    public static final double feederSpeed = 0.30;
     public static final double feederReverseSpeed = 0.10;
     // feeder will run until note is detected or this timeout has expired
     public static final double feederTimeoutSeconds = 10.0;
-    public static final double feederLaunchTimeoutSeconds = .75;
+    public static final double feederLaunchTimeoutSecondsInAuto = .75;
+    public static final double feederLaunchTimeoutSecondsInTele = 2.00;
 
     // *******************************************************************
     // shooter outfeed constants
@@ -161,14 +162,14 @@ public final class Constants {
     public static final double shooterAbsoluteAngleOffsetDegrees = 59.445;
     public static final double shooterStartingAngleOffsetDegrees = 20.0; 
     public static SensorDirectionValue shooterAngleSensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-    public static final double shooterAngleMaxDegrees = 90;
+    public static final double shooterAngleMaxDegrees = 110;
     public static final double shooterAngleMinDegrees = 20;  
     // stow angle should be low enough to drive under the stage
     public static final double shooterAngleStowDegrees = 25; 
     public static final double shooterAngleToleranceDegrees = 0.5;
     public static final double shooterSetAngleDuration = 3.0;
     // angles increment ranges of stick input
-    public static final double shooterAngleStickIncrementMagnitude = Constants.shooterAngleToleranceDegrees + 10.0;
+    public static final double shooterAngleStickIncrementMagnitude = Constants.shooterAngleToleranceDegrees + 12.0;
     // angles of shooter shots
     public static final double shooterAngleShootFromSpeaker = 56.0;
     // TODO - figure out what 'shoot from note' actually means??

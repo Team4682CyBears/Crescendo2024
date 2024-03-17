@@ -166,7 +166,7 @@ public class ManualInputInterfaces {
         this.driverController.rightTrigger().onTrue(
             new ParallelCommandGroup(
               new FeederLaunchNote(
-                subsystemCollection.getFeederSubsystem(), FeederMode.FeedToShooter),
+                subsystemCollection.getFeederSubsystem(), FeederMode.FeedToShooter, Constants.feederLaunchTimeoutSecondsInTele),
               new ButtonPressCommand(
                 "driverController.rightTrigger()",
                 "Shoot at speed!!")
@@ -341,6 +341,7 @@ public class ManualInputInterfaces {
         // Auto Ranging stuff
         this.coDriverController.leftTrigger().whileTrue(
           new ParallelCommandGroup(
+            // TODO can swap this out for ShooterSetAngleWithVisionContinuousAveratingCommand  
             new ShooterSetAngleWithVisionContinuousCommand(this.subsystemCollection.getCameraSubsystem(), this.subsystemCollection.getShooterAngleSubsystem()),
             new ButtonPressCommand(
               "coDriverController.leftTrigger()",
