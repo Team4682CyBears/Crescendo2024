@@ -19,6 +19,7 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.control.Constants;
 import frc.robot.control.HardwareConstants;
@@ -88,15 +89,18 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
    * @return true if the shooter is at speed
    */
   public boolean isAtSpeed(double shooterLeftTargetSpeedRpm, double shooterRightTargetSpeedRpm) {
-    return (Math.abs(getLeftSpeedRpm() - shooterLeftTargetSpeedRpm) / shooterLeftTargetSpeedRpm) < velocitySufficientWarmupThreshold &&
-      (Math.abs(getRightSpeedRpm() - shooterRightTargetSpeedRpm) / shooterRightTargetSpeedRpm) < velocitySufficientWarmupThreshold;
+    return (Math.abs(getLeftSpeedRpm() - shooterLeftTargetSpeedRpm) / shooterLeftTargetSpeedRpm) < 0.1 &&
+      (Math.abs(getRightSpeedRpm() - shooterRightTargetSpeedRpm) / shooterRightTargetSpeedRpm) < 0.1;
   }
 
   /**
    * this method will be called once per scheduler run
    */
   @Override
-  public void periodic() {}
+  public void periodic(){
+    SmartDashboard.putBoolean("IsShooterRevved?", isAtSpeed(6400, 6400));
+    SmartDashboard.putNumber("Shooter RPM", getRightSpeedRpm());
+  }
 
   /**
    * A method to stop shooter outfeed motors
