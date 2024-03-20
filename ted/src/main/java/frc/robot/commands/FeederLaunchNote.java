@@ -32,6 +32,7 @@ public class FeederLaunchNote extends Command
   * Creates a new feeder launch note command
   * @param feederSubsystem - the feeder subsystem
   * @param feederMode - the direction for the feeder
+  * @param timeoutTime - the duration you want the feeder to run for
   */
   public FeederLaunchNote(FeederSubsystem feederSubsystem, FeederMode feederMode, double timeoutTime)
   {
