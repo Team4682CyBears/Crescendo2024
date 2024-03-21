@@ -134,7 +134,6 @@ public class RobotContainer {
           "Spin Up Shooter at specified speeds",
           new ShooterSpinUpCommand(this.subsystems.getShooterOutfeedSubsystem(), () -> SmartDashboard.getNumber("Shooter Speed RPM Setter", Constants.shooterDefaultSpeedRpm)));
     }
-    }
 
     if (this.subsystems.isIntakeSubsystemAvailable()) {
       SmartDashboard.putData(
