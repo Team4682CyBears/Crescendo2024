@@ -21,8 +21,7 @@ import frc.robot.subsystems.ShooterOutfeedSubsystem;
 public class ShooterOutFeedWarmUpCommand extends Command
 {
   private ShooterOutfeedSubsystem shooterOutfeed;
-  private double leftWarmupSpeedRpm = 0.0;
-  private double rightWarmupSpeedRpm = 0.0;
+  private double warmupSpeedRpm = 0.0;
   private Timer timer = new Timer();
   private boolean done = false;
   
@@ -33,12 +32,10 @@ public class ShooterOutFeedWarmUpCommand extends Command
   */
   public ShooterOutFeedWarmUpCommand(
     ShooterOutfeedSubsystem shooterSubsystem,
-    double leftTargetSpeedRpm,
-    double rightTargetSpeedRpm)
+    double targetSpeedRpm)
   {
     this.shooterOutfeed = shooterSubsystem;
-    this.leftWarmupSpeedRpm = leftTargetSpeedRpm;
-    this.rightWarmupSpeedRpm = rightTargetSpeedRpm;
+    this.warmupSpeedRpm = targetSpeedRpm;
     addRequirements(shooterOutfeed);
   }
 
@@ -58,8 +55,7 @@ public class ShooterOutFeedWarmUpCommand extends Command
   @Override
   public void execute()
   {
-    shooterOutfeed.setShooterVelocityLeft(leftWarmupSpeedRpm);
-    shooterOutfeed.setShooterVelocityRight(rightWarmupSpeedRpm);
+    shooterOutfeed.setShooterVelocity(warmupSpeedRpm);
     if (timer.hasElapsed(Constants.shooterSpinUpTimeoutSeconds))
     {
         done = true;

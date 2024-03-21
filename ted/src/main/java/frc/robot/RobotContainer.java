@@ -128,15 +128,13 @@ public class RobotContainer {
     if (this.subsystems.isIntakeSubsystemAvailable() && this.subsystems.isShooterOutfeedSubsystemAvailable()){
       SmartDashboard.putData(
           "Shoot Shooter (at current angle and default speeds)",
-          new ShooterShootCommand(Constants.shooterLeftDefaultSpeedRpm, Constants.shooterRightDefaultSpeedRpm, 
+          new ShooterShootCommand(Constants.shooterDefaultSpeedRpm, 
           this.subsystems.getShooterOutfeedSubsystem(), this.subsystems.getFeederSubsystem()));
-      SmartDashboard.putNumber("Shooter Left Speed RPM Setter", Constants.shooterLeftDefaultSpeedRpm);
-      SmartDashboard.putNumber("Shooter Right Speed RPM Setter", Constants.shooterRightDefaultSpeedRpm);
+      SmartDashboard.putNumber("Shooter Speed RPM Setter", Constants.shooterDefaultSpeedRpm);
       SmartDashboard.putData(
           "Shooter Shoot to Current Angle and Specified Speeds",
           new ShooterShootCommand(
-            () -> SmartDashboard.getNumber("Shooter Left Speed RPM Setter", Constants.shooterLeftDefaultSpeedRpm),
-            () -> SmartDashboard.getNumber("Shooter Right Speed RPM Setter", Constants.shooterRightDefaultSpeedRpm),
+            () -> SmartDashboard.getNumber("Shooter Speed RPM Setter", Constants.shooterDefaultSpeedRpm),
           this.subsystems.getShooterOutfeedSubsystem(), this.subsystems.getFeederSubsystem()));
     }
 

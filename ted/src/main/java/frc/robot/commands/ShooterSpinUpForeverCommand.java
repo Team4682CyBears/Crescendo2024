@@ -63,8 +63,7 @@ public class ShooterSpinUpForeverCommand extends Command
   {
     if(!done){
         double targetSpeed = targetShooterSpeed.getAsDouble();
-        shooterOutfeed.setShooterVelocityLeft(targetSpeed);
-        shooterOutfeed.setShooterVelocityRight(targetSpeed);
+        shooterOutfeed.setShooterVelocity(targetSpeed);
         done = this.shouldStopSpinning();
     }
   }

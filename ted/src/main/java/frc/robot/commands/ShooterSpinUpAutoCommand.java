@@ -50,8 +50,7 @@ public class ShooterSpinUpAutoCommand extends Command
   @Override
   public void execute()
   {
-    shooterOutfeed.setShooterVelocityLeft(Constants.shooterBaseRpm);
-    shooterOutfeed.setShooterVelocityRight(Constants.shooterBaseRpm);
+    shooterOutfeed.setShooterVelocity(Constants.shooterMaxRpm);
     if (timer.hasElapsed(Constants.autoShooterSpinUpTimeoutSeconds))
     {
       shooterOutfeed.setAllStop();
