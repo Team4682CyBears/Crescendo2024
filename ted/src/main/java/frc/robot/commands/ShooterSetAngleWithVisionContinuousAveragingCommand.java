@@ -58,13 +58,12 @@ public class ShooterSetAngleWithVisionContinuousAveragingCommand extends Shooter
 
   @Override
   public void execute() {
-    if (recentDistances.size() < desiredValidSamples){
+    if (recentDistances.size() <= desiredValidSamples){
       storeDistance();
     }
-    else {
       desiredAngleDegrees = ShooterAngleHelpers.shooterAngleFromDistance(getAverageDistance());
       super.desiredAngleDegrees = desiredAngleDegrees;
-    } // else stay at previous angle
+     // else stay at previous angle
     super.execute();
   }
 
