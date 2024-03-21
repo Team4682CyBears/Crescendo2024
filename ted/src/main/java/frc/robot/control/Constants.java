@@ -135,10 +135,10 @@ public final class Constants {
     public static InvertedValue leftTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;  
     public static final int rightTalonShooterMotorCanId = 21; 
     public static InvertedValue rightTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;
-    // Falcon 500 max speed is 6380 RPM
-    public static double shooterBaseRpm = 6500;
-    public static final double shooterLeftDefaultSpeedRpm = shooterBaseRpm * 0.615;
-    public static final double shooterRightDefaultSpeedRpm = shooterBaseRpm * 0.615;
+    // Falcon 500 max speed is 6380 RPM, but max loaded speed is 5600 deteremined from testing
+    public static double shooterBaseRpm = 5600;
+    public static final double shooterLeftDefaultSpeedRpm = shooterBaseRpm;
+    public static final double shooterRightDefaultSpeedRpm = shooterBaseRpm;
 
     public static final double shooterSpinUpTimeoutSeconds = 5.0;
     public static final double autoShooterSpinUpTimeoutSeconds = 15.0;
@@ -147,9 +147,9 @@ public final class Constants {
 
     // speeds for specific shooter shots
     public static final double shooterOutfeedSpeedForAngleShootFromSpeaker = 4500.0;
-    public static final double shooterOutfeedSpeedForAngleShootFromNote = 6500.0; 
-    public static final double shooterOutfeedSpeedForAngleShootFromStage = 6500.0;
-    public static final double shooterOutfeedSpeedForAngleShootFromSourceWing = 6500.0;
+    public static final double shooterOutfeedSpeedForAngleShootFromNote = shooterBaseRpm; 
+    public static final double shooterOutfeedSpeedForAngleShootFromStage = shooterBaseRpm;
+    public static final double shooterOutfeedSpeedForAngleShootFromSourceWing = shooterBaseRpm;
     public static final double shooterOutfeedSpeedForAngleShootFromAmp = 250.0;
 
     // *******************************************************************

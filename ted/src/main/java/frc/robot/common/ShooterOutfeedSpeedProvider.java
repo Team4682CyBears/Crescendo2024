@@ -15,14 +15,14 @@ public class ShooterOutfeedSpeedProvider {
     private final double spinUpSpeedMulitiplier = 0.8; // spin-up at 80% of target speed
     private final double angleStandardOffset = 4;
     private final double minmumAngleBoundary = 0;
+    private final double speakerToAmpAngleBoundary = 90; 
     private final double maximumAngleBoundary = 180.001; // just so nothing fails at 180
 
     // todo - come up with better alternative for shot speeds using a physics model
     // for now keep it simple and just use a lookup table with pre-set values instead
     // important to order these ascending in angle as interpolation can be broken otherwise
     private final double[][] outfeedSpeedTable = {
-        {this.minmumAngleBoundary, Constants.shooterOutfeedSpeedForAngleShootFromAmp},
-        {this.minmumAngleBoundary + this.angleStandardOffset, Constants.shooterOutfeedSpeedForAngleShootFromAmp},
+        {this.minmumAngleBoundary, Constants.shooterOutfeedSpeedForAngleShootFromSourceWing},
         {Constants.shooterAngleMinDegrees - this.angleStandardOffset, Constants.shooterOutfeedSpeedForAngleShootFromSourceWing},
         {Constants.shooterAngleMinDegrees, Constants.shooterOutfeedSpeedForAngleShootFromSourceWing},
         {Constants.shooterAngleShootFromSourceWing, Constants.shooterOutfeedSpeedForAngleShootFromSourceWing},
@@ -30,6 +30,7 @@ public class ShooterOutfeedSpeedProvider {
         {Constants.shooterAngleShootFromNote, Constants.shooterOutfeedSpeedForAngleShootFromNote},
         {Constants.shooterAngleShootFromSpeaker, Constants.shooterOutfeedSpeedForAngleShootFromSpeaker},
         {Constants.shooterAngleShootFromSpeaker + this.angleStandardOffset, Constants.shooterOutfeedSpeedForAngleShootFromSpeaker},
+        {this.speakerToAmpAngleBoundary, Constants.shooterOutfeedSpeedForAngleShootFromSpeaker}, 
         {Constants.shooterAngleShootFromAmp - this.angleStandardOffset, Constants.shooterOutfeedSpeedForAngleShootFromAmp},
         {Constants.shooterAngleShootFromAmp, Constants.shooterOutfeedSpeedForAngleShootFromAmp},
         {this.maximumAngleBoundary - this.angleStandardOffset, Constants.shooterOutfeedSpeedForAngleShootFromAmp},
