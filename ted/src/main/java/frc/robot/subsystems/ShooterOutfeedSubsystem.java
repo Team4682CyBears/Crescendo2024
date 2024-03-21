@@ -46,14 +46,7 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
   private final VoltageOut leftVoltageController = new VoltageOut(0);
   private TalonFX rightMotor = new TalonFX(Constants.rightTalonShooterMotorCanId);
   private final VoltageOut rightVoltageController = new VoltageOut(0);
-  // angleRightMotor follows angleLeftMotor, so it doesn't need its own VoltageController
 
-  // Converted old settings to new settings using calculator at:
-  // https://v6.docs.ctr-electronics.com/en/stable/docs/migration/migration-guide/closed-loop-guide.html
-  // old settings
-  // private Gains leftMotorGains = new Gains(0.50, 0.001, 5, 1023/20660.0, 300, 1.00);
-  // private Gains rightMotorGains = new Gains(0.50, 0.001, 5, 1023/20660.0, 300, 1.00);
-  // new settings
   private Slot0Configs leftMotorGains = new Slot0Configs().withKP(0.2012).withKI(2.4023).withKD(0.0120).withKV(0.1189);
   private Slot0Configs rightMotorGains = new Slot0Configs().withKP(0.2012).withKI(2.4023).withKD(0.0120).withKV(0.1189);
 
@@ -136,7 +129,7 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
     double revsPerS = this.convertShooterRpmToMotorUnitsPerS(revolutionsPerMinute,
     ShooterOutfeedSubsystem.outfeedShooterGearRatio);
 
-    // System.out.println("attempting left shooter velocity at " + revsPerS + " revs/s.");
+    System.out.println("attempting left shooter velocity at " + revsPerS + " revs/s.");
     leftMotor.setControl(velocityController.withVelocity(revsPerS));
   }
 
@@ -202,7 +195,7 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
   {
     double targetUnitsPerS = 
       MotorUtils.truncateValue(
-        targetRpm,
+        targetRpm * targetGearRatio,
         -1.0 * Constants.talonMaximumRevolutionsPerMinute * targetGearRatio / 60.0,
         Constants.talonMaximumRevolutionsPerMinute) *
       targetGearRatio / 60.0;
