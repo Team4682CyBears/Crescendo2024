@@ -5,7 +5,7 @@
       "x": 0.6924444618120014,
       "y": 3.81
     },
-    "rotation": -60.6653371504826
+    "rotation": 58.24356953822575
   },
   "command": {
     "type": "sequential",
@@ -32,7 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BlueWingPath"
+            "pathName": "RedWingPath"
           }
         },
         {

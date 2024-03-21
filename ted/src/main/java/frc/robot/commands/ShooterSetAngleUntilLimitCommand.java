@@ -35,6 +35,7 @@ public class ShooterSetAngleUntilLimitCommand extends Command {
   public ShooterSetAngleUntilLimitCommand(boolean increaseAngle, ShooterAngleSubsystem shooter) {
     this.increasingAngle = increaseAngle;
     this.shooter = shooter;
+    this.addRequirements(shooter);
   }
 
   // Called when the command is initially scheduled.

@@ -32,10 +32,10 @@ public final class Constants {
         Units.inchesToMeters(22.75), 
         WcpModuleConfigurations.TED,
         // SUBTRACT the values you find in shuffleboard
-        Math.toRadians(-215.15 - 178.76 - 180.0 -358.7), // FRONT LEFT
+        Math.toRadians(-215.15 - 178.76 - 180.0 - 358.7), // FRONT LEFT
         Math.toRadians(-180.61 - 95.27 - 358.6 -169.8 - 150.59), // FRONT RIGHT 
-        Math.toRadians(-191.33 - 257.52 -357.3  - 3.6), // BACK LEFT
-        Math.toRadians(-58.35 - 177.27 - 180.0 - 2.0)); // BACK RIGHT
+        Math.toRadians(-191.33 - 257.52 -357.3  - 3.6 - 355.67), // BACK LEFT
+        Math.toRadians(-58.35 - 177.27 - 180.0 - 2.0 - 358.50)); // BACK RIGHT
 
     //////////////////// BABYBEAR DRIVETRAIN ////////////////////
     public static final DrivetrainSwerveConfig babybearDrivetrainConfig = new DrivetrainSwerveConfig (
@@ -122,11 +122,12 @@ public final class Constants {
     // feederSpeed is [0.0 .. 1.0]
     // it runs in one direction for the shooter 
     // and the opposite direction for the dunker/amp
-    public static final double feederSpeed = 0.20;
+    public static final double feederSpeed = 0.30;
     public static final double feederReverseSpeed = 0.10;
     // feeder will run until note is detected or this timeout has expired
     public static final double feederTimeoutSeconds = 10.0;
-    public static final double feederLaunchTimeoutSeconds = .75;
+    public static final double feederLaunchTimeoutSecondsInAuto = .75;
+    public static final double feederLaunchTimeoutSecondsInTele = 2.00;
 
     // *******************************************************************
     // shooter outfeed constants
@@ -168,7 +169,7 @@ public final class Constants {
     public static final double shooterAngleToleranceDegrees = 0.5;
     public static final double shooterSetAngleDuration = 3.0;
     // angles increment ranges of stick input
-    public static final double shooterAngleStickIncrementMagnitude = Constants.shooterAngleToleranceDegrees + 10.0;
+    public static final double shooterAngleStickIncrementMagnitude = Constants.shooterAngleToleranceDegrees + 12.0;
     // angles of shooter shots
     public static final double shooterAngleShootFromSpeaker = 56.0;
     // TODO - figure out what 'shoot from note' actually means??

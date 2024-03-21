@@ -40,7 +40,8 @@ public class AutonomousChooser {
     private Command blueWing;
     private Command blueFourNote;
     private Command twoNote;
-
+    private Command redWing;
+    private Command redFourNote;
     /**
      * Constructor for AutonomousChooser
      * @param subsystems - the SubsystemCollection
@@ -55,9 +56,10 @@ public class AutonomousChooser {
         autonomousPathChooser.setDefaultOption("Two Note", AutonomousPath.TWONOTE);
         autonomousPathChooser.addOption("BLUE 123 Source Side", AutonomousPath.BLUE123);
         autonomousPathChooser.addOption("RED 123 Source Side", AutonomousPath.RED123);
-        autonomousPathChooser.addOption("BLUE Wing Source Side", AutonomousPath.BLUEWING);
+        autonomousPathChooser.addOption("BLUE Wing", AutonomousPath.BLUEWING);
         autonomousPathChooser.addOption("BLUE Four Note", AutonomousPath.BLUEFOURNOTE);
-
+        autonomousPathChooser.addOption("RED Wing", AutonomousPath.REDWING);
+        autonomousPathChooser.addOption("RED Four Note", AutonomousPath.REDFOURNOTE);
         SmartDashboard.putData(autonomousPathChooser);
 
         this.blue123SourceSide = getBlue123SourceSide();
@@ -65,6 +67,8 @@ public class AutonomousChooser {
         this.blueWing = getBlueWing();
         this.blueFourNote = getBlueFourNote();
         this.twoNote = getTwoNote();
+        this.redWing = getRedWing();
+        this.redFourNote = getRedFourNote();
         }
         else{
             System.out.println(">>>>> NO auto routine becuase missing subsystems");
@@ -87,6 +91,10 @@ public class AutonomousChooser {
                 return this.blueFourNote;
             case TWONOTE :
                 return this.twoNote;
+            case REDWING :
+                return this.redWing;
+            case REDFOURNOTE :
+                return this.redFourNote;
         }
         return new InstantCommand();
     }
@@ -122,12 +130,22 @@ public class AutonomousChooser {
         return AutoBuilder.buildAuto("TwoNote");
     }
 
+    private Command getRedWing(){
+        return AutoBuilder.buildAuto("RedWing");
+    }
+
+    private Command getRedFourNote(){
+        return AutoBuilder.buildAuto("Red4Note");
+    }
+
     private enum AutonomousPath {
         BLUE123,
         RED123,
         BLUEWING,
         BLUEFOURNOTE,
-        TWONOTE
+        TWONOTE,
+        REDWING,
+        REDFOURNOTE
     }
 
     /**
@@ -172,7 +190,7 @@ public class AutonomousChooser {
             NamedCommands.registerCommand("FeedNote",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "FeedNote"),
-                    new FeederLaunchNote(subsystems.getFeederSubsystem(), FeederMode.FeedToShooter)));
+                    new FeederLaunchNote(subsystems.getFeederSubsystem(), FeederMode.FeedToShooter, Constants.feederLaunchTimeoutSecondsInAuto)));
             NamedCommands.registerCommand("AngleFromNote",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "AngleFromNote"),

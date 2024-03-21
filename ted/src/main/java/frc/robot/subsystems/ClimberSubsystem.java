@@ -58,18 +58,18 @@ public class ClimberSubsystem extends SubsystemBase{
     private SparkPIDController leftPidController;
     private RelativeEncoder leftEncoder;
     private double kPLeft, kILeft, kDLeft, kIzLeft, kFFLeft, kMaxOutputLeft, kMinOutputLeft, maxRPMLeft, maxVelLeft, minVelLeft, maxAccLeft, allowedErrLeft;
-    private boolean isLeftMotorInverted = true;
+    private boolean isLeftMotorInverted = false;
     private DigitalInput leftMageneticSensor = null;
     private CorrectableEncoderRevNeoPlusDigitalIoPort leftCorrectableCoupling = null;
     private boolean leftClimberReady = InstalledHardware.leftClimberInstalled && InstalledHardware.leftClimberSensorInstalled;
     private double targetLeftClimberInches = 0;
     private double targetLeftMotorSpeed = 0;
-
+ 
     private CANSparkMax rightMotor;
     private SparkPIDController rightPidController;
     private RelativeEncoder rightEncoder;
     private double kPRight, kIRight, kDRight, kIzRight, kFFRight, kMaxOutputRight, kMinOutputRight, maxRPMRight, maxVelRight, minVelRight, maxAccRight, allowedErrRight;
-    private boolean isRightMotorInverted = false;
+    private boolean isRightMotorInverted = true;
     private DigitalInput rightMageneticSensor = null;
     private CorrectableEncoderRevNeoPlusDigitalIoPort rightCorrectableCoupling = null;
     private boolean rightClimberReady = InstalledHardware.rightClimberInstalled && InstalledHardware.rightClimberSensorInstalled;
