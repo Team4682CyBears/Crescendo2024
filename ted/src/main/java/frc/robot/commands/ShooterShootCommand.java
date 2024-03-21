@@ -29,10 +29,8 @@ public class ShooterShootCommand extends Command {
   private ShooterAngleSubsystem shooterAngle;
   private FeederSubsystem feeder;
   private double desiredAngleDegrees; 
-  private double desiredLeftSpeedRpm; 
-  private double desiredRightSpeedRpm;  
-  private DoubleSupplier desiredLeftSpeedRpmSupplier; 
-  private DoubleSupplier desiredRightSpeedRpmSupplier;  
+  private double desiredSpeedRpm; 
+  private DoubleSupplier desiredSpeedRpmSupplier; 
   private boolean setSpeedsFromSupplier = false;
   private boolean isAtDesiredAngle = false;
   private boolean isDone = false;
@@ -44,22 +42,19 @@ public class ShooterShootCommand extends Command {
    * Constructor for ShooterShootCommand
    * Will set shooter to desired angle and speeds before shooting
    * @param desiredAngleDegrees
-   * @param desiredLeftSpeedRpm
-   * @param desiredRightSpeedRpm
+   * @param desiredSpeedRpm
    * @param shooterOutfeed
    * @param shooterAngle
    * @param feeder
    */
   public ShooterShootCommand(
       double desiredAngleDegrees,
-      double desiredLeftSpeedRpm,
-      double desiredRightSpeedRpm,
+      double desiredSpeedRpm,
       ShooterOutfeedSubsystem shooterOutfeed,
       ShooterAngleSubsystem shooterAngle,
       FeederSubsystem feeder) {
     this.desiredAngleDegrees = desiredAngleDegrees;
-    this.desiredLeftSpeedRpm = desiredLeftSpeedRpm;
-    this.desiredRightSpeedRpm = desiredRightSpeedRpm;
+    this.desiredSpeedRpm = desiredSpeedRpm;
     this.isAtDesiredAngle = false;
     this.isAtDesiredAngleBaseline = this.isAtDesiredAngle;
     this.shooterOutfeed = shooterOutfeed;
@@ -81,7 +76,7 @@ public class ShooterShootCommand extends Command {
    */
   public ShooterShootCommand(double desiredAngleDegrees, ShooterOutfeedSubsystem shooterOutfeed,
       ShooterAngleSubsystem shooterAngle, FeederSubsystem feeder) {
-    this(desiredAngleDegrees, Constants.shooterLeftDefaultSpeedRpm, Constants.shooterRightDefaultSpeedRpm, 
+    this(desiredAngleDegrees, Constants.shooterDefaultSpeedRpm, 
     shooterOutfeed, shooterAngle, feeder);
   }
 
@@ -89,15 +84,13 @@ public class ShooterShootCommand extends Command {
    * Constructor for ShooterShootCommand
    * assumes shooter is already at the desired angle
    * uses specified speeds
-   * @param desiredLeftSpeedRpm
-   * @param desiredRightSpeedRpm
+   * @param desiredSpeedSpeedRpm
    * @param shooterOutfeed
    * @param feeder
    */
-  public ShooterShootCommand(double desiredLeftSpeedRpm, double desiredRightSpeedRpm,
+  public ShooterShootCommand(double desiredSpeedRpm,
   ShooterOutfeedSubsystem shooterOutfeed, FeederSubsystem feeder) {
-    this.desiredLeftSpeedRpm = desiredLeftSpeedRpm;
-    this.desiredRightSpeedRpm = desiredRightSpeedRpm;
+    this.desiredSpeedRpm = desiredSpeedRpm;
     this.isAtDesiredAngle = true;
     this.isAtDesiredAngleBaseline = this.isAtDesiredAngle;
     this.shooterOutfeed = shooterOutfeed;
@@ -110,15 +103,13 @@ public class ShooterShootCommand extends Command {
    * Constructor for ShooterShootCommand
    * assumes shooter is already at the desired angle
    * uses specified speed suppliers
-   * @param desiredLeftSpeedRpmSupplier
-   * @param desiredRightSpeedRpmSupplier
+   * @param desiredSpeedRpmSupplier
    * @param shooterOutfeed
    * @param feeder
    */
-  public ShooterShootCommand(DoubleSupplier desiredLeftSpeedRpmSupplier, DoubleSupplier desiredRightSpeedRpmSupplier,
+  public ShooterShootCommand(DoubleSupplier desiredSpeedRpmSupplier,
   ShooterOutfeedSubsystem shooterOutfeed, FeederSubsystem feeder) {
-    this.desiredLeftSpeedRpmSupplier = desiredLeftSpeedRpmSupplier;
-    this.desiredRightSpeedRpmSupplier = desiredRightSpeedRpmSupplier;
+    this.desiredSpeedRpmSupplier = desiredSpeedRpmSupplier;
     this.setSpeedsFromSupplier = true;
     this.isAtDesiredAngle = true;
     this.isAtDesiredAngleBaseline = this.isAtDesiredAngle;
@@ -136,7 +127,7 @@ public class ShooterShootCommand extends Command {
    * @param feeder
    */
   public ShooterShootCommand(ShooterOutfeedSubsystem shooterOutfeed, FeederSubsystem feeder) {
-    this(Constants.shooterLeftDefaultSpeedRpm, Constants.shooterRightDefaultSpeedRpm, shooterOutfeed, feeder);
+    this(Constants.shooterDefaultSpeedRpm, shooterOutfeed, feeder);
   }
 
   // Called when the command is initially scheduled.
@@ -148,8 +139,7 @@ public class ShooterShootCommand extends Command {
     }
 
     if (setSpeedsFromSupplier) {
-      this.desiredLeftSpeedRpm = this.desiredLeftSpeedRpmSupplier.getAsDouble();
-      this.desiredRightSpeedRpm = this.desiredRightSpeedRpmSupplier.getAsDouble();
+      this.desiredSpeedRpm = this.desiredSpeedRpmSupplier.getAsDouble();
     }
 
     // stop the feeder so the note doesn't go through shooter before shooter is setup
@@ -161,9 +151,8 @@ public class ShooterShootCommand extends Command {
     }
 
     System.out.println("Spinning up shooter...");
-    System.out.println("Target RPM: Left " + desiredLeftSpeedRpm + ". Right RPM: " + desiredRightSpeedRpm);
-    shooterOutfeed.setShooterVelocityLeft(desiredLeftSpeedRpm);
-    shooterOutfeed.setShooterVelocityRight(desiredRightSpeedRpm);
+    System.out.println("Target RPM: " + desiredSpeedRpm);
+    shooterOutfeed.setShooterVelocity(desiredSpeedRpm);
 
     timer.reset();
     delayTimer.reset();
@@ -177,7 +166,7 @@ public class ShooterShootCommand extends Command {
     if (!isAtDesiredAngle){
       isAtDesiredAngle = shooterAngle.isAngleWithinTolerance(desiredAngleDegrees);
     }
-    if (isAtDesiredAngle && shooterOutfeed.isAtSpeed(desiredLeftSpeedRpm, desiredRightSpeedRpm)){
+    if (isAtDesiredAngle && shooterOutfeed.isAtSpeed()){
       System.out.println("Shooter at desired speed and angle.");
       System.out.println("Wait for feeder delay...");
       delayTimer.start();
@@ -193,8 +182,7 @@ public class ShooterShootCommand extends Command {
       isDone = true;
     }
     else {
-      shooterOutfeed.setShooterVelocityLeft(desiredLeftSpeedRpm);
-      shooterOutfeed.setShooterVelocityRight(desiredRightSpeedRpm);
+      shooterOutfeed.setShooterVelocity(desiredSpeedRpm);
     }
   }
 

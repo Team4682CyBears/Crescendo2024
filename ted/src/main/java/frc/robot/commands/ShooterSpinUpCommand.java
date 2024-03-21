@@ -52,8 +52,7 @@ public class ShooterSpinUpCommand extends Command
   @Override
   public void execute()
   {
-    shooterOutfeed.setShooterVelocityLeft(Constants.shooterLeftDefaultSpeedRpm);
-    shooterOutfeed.setShooterVelocityRight(Constants.shooterRightDefaultSpeedRpm);
+    shooterOutfeed.setShooterVelocity(Constants.shooterDefaultSpeedRpm);
     if (timer.hasElapsed(Constants.shooterSpinUpTimeoutSeconds))
     {
       done = true;
