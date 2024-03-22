@@ -135,8 +135,8 @@ public final class Constants {
     public static InvertedValue leftTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;  
     public static final int rightTalonShooterMotorCanId = 21; 
     public static InvertedValue rightTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;
-    // Falcon 500 max speed is 6380 RPM, but max loaded speed is 5600 deteremined from testing
-    public static double shooterMaxRpm = 5600;
+    // Falcon 500 max speed is 6380 RPM, but max loaded speed is 5600 deteremined from testing, but 5000 is a more comfortable max
+    public static double shooterMaxRpm = 5000;
     public static final double shooterDefaultSpeedRpm = shooterMaxRpm;
 
     public static final double shooterSpinUpTimeoutSeconds = 5.0;

@@ -14,6 +14,8 @@ import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -46,9 +48,12 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
   // controllers for setting motors to specific speed with PID control
   private final VelocityVoltage leftVelocityController = new VelocityVoltage(0);
   private final VelocityVoltage rightVelocityController = new VelocityVoltage(0);
+  // controllers for setting motors to 0 without PID control
+  private final VoltageOut leftVoltageController = new VoltageOut(0);
+  private final VoltageOut rightVoltageController = new VoltageOut(0);
 
-  private Slot0Configs leftMotorGains = new Slot0Configs().withKP(0.1012).withKI(0).withKD(0.0).withKV(0.0);
-  private Slot0Configs rightMotorGains = new Slot0Configs().withKP(0.1012).withKI(0).withKD(0.0).withKV(0.0);
+  private Slot0Configs leftMotorGains = new Slot0Configs().withKP(0.46).withKI(0.05).withKD(0.0075).withKV(0.11);
+  private Slot0Configs rightMotorGains = new Slot0Configs().withKP(0.46).withKI(0.05).withKD(0.0075).withKV(0.11);
 
   /**
    * Constructor for shooter subsystem
@@ -93,10 +98,17 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
    */
   @Override
   public void periodic(){
-    double revsPerS = this.convertShooterRpmToMotorUnitsPerS(desiredSpeedRpm,
-    ShooterOutfeedSubsystem.outfeedShooterGearRatio);
-    leftMotor.setControl(leftVelocityController.withVelocity(revsPerS));
-    rightMotor.setControl(rightVelocityController.withVelocity(revsPerS));
+    if (this.desiredSpeedRpm == 0){ // use voltage controller to stop motors
+      leftMotor.setControl(this.leftVoltageController.withOutput(0));
+      rightMotor.setControl(this.rightVoltageController.withOutput(0));
+    }
+    else 
+    { // use PID controllers to set a speed
+      double revsPerS = this.convertShooterRpmToMotorUnitsPerS(desiredSpeedRpm,
+      ShooterOutfeedSubsystem.outfeedShooterGearRatio);
+      leftMotor.setControl(leftVelocityController.withVelocity(revsPerS));
+      rightMotor.setControl(rightVelocityController.withVelocity(revsPerS));
+    }
     SmartDashboard.putBoolean("IsShooterRevved?", isAtSpeed());
     SmartDashboard.putNumber("Shooter RPM", getRightSpeedRpm());
   }
