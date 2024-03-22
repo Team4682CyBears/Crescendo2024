@@ -2,8 +2,9 @@
 // Bishop Blanchet Robotics
 // Home of the Cybears
 // FRC - Crescendo - 2024
-// File: ShooterSetAngleWithVisionCommand.java
-// Intent: Wraps the ShooterSetAngleWithVision command to set angle with vision
+// File: ShooterSetAngleWithVisionContinuousAveragingCommand.java
+// Intent: Wraps the ShooterSetAngleCommand to set angle with vision
+// averages last three vision estiamtes to get more accurate distance
 // ************************************************************
 
 // ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
@@ -20,6 +21,7 @@ import frc.robot.subsystems.ShooterAngleSubsystem;
 
 /**
  * Forms a command to set the angle of the shooter from the caemra. 
+ * averages last three vision estiamtes to get more accurate distance
  * It keeps running until canceled
  * Appropriate to be used for binding to a UI button that is triggered onTrue, for example
  */
@@ -58,11 +60,12 @@ public class ShooterSetAngleWithVisionContinuousAveragingCommand extends Shooter
 
   @Override
   public void execute() {
-    if (recentDistances.size() <= desiredValidSamples){
-      storeDistance();
-    }
+    storeDistance();
+    // wait until there are the right number of samples to average 
+    if (recentDistances.size() >= desiredValidSamples){
       desiredAngleDegrees = ShooterAngleHelpers.shooterAngleFromDistance(getAverageDistance());
       super.desiredAngleDegrees = desiredAngleDegrees;
+    }
      // else stay at previous angle
     super.execute();
   }
@@ -97,7 +100,7 @@ public class ShooterSetAngleWithVisionContinuousAveragingCommand extends Shooter
       distanceSum += recentDistances.get(i);
     }
     double averageDistance = distanceSum/this.recentDistances.size();
-    System.out.println("Calculated avearge distance of " + averageDistance + " from distances of " + recentDistances);
+    // System.out.println("Calculated avearge distance of " + averageDistance + " from distances of " + recentDistances);
     return averageDistance;
   }
 
