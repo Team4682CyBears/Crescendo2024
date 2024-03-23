@@ -106,12 +106,6 @@ public class RobotContainer {
     // Put command scheduler on dashboard
     SmartDashboard.putData(CommandScheduler.getInstance());
 
-    if (this.subsystems.isShooterOutfeedSubsystemAvailable()) {
-      SmartDashboard.putData(
-          "Spin Up Shooter",
-          new ShooterSpinUpCommand(this.subsystems.getShooterOutfeedSubsystem()));
-    }
-
     // this should be disabled during competition as it sometimes crashes shuffleboard
     // disable by setting setShooterAngleFromShuffleboard in InstalledHardware
     if (this.subsystems.isShooterAngleSubsystemAvailable() && InstalledHardware.setShooterAngleFromShuffleboard) {
@@ -128,16 +122,17 @@ public class RobotContainer {
     if (this.subsystems.isIntakeSubsystemAvailable() && this.subsystems.isShooterOutfeedSubsystemAvailable()){
       SmartDashboard.putData(
           "Shoot Shooter (at current angle and default speeds)",
-          new ShooterShootCommand(Constants.shooterLeftDefaultSpeedRpm, Constants.shooterRightDefaultSpeedRpm, 
+          new ShooterShootCommand(Constants.shooterDefaultSpeedRpm, 
           this.subsystems.getShooterOutfeedSubsystem(), this.subsystems.getFeederSubsystem()));
-      SmartDashboard.putNumber("Shooter Left Speed RPM Setter", Constants.shooterLeftDefaultSpeedRpm);
-      SmartDashboard.putNumber("Shooter Right Speed RPM Setter", Constants.shooterRightDefaultSpeedRpm);
+      SmartDashboard.putNumber("Shooter Speed RPM Setter", Constants.shooterDefaultSpeedRpm);
       SmartDashboard.putData(
           "Shooter Shoot to Current Angle and Specified Speeds",
           new ShooterShootCommand(
-            () -> SmartDashboard.getNumber("Shooter Left Speed RPM Setter", Constants.shooterLeftDefaultSpeedRpm),
-            () -> SmartDashboard.getNumber("Shooter Right Speed RPM Setter", Constants.shooterRightDefaultSpeedRpm),
+            () -> SmartDashboard.getNumber("Shooter Speed RPM Setter", Constants.shooterDefaultSpeedRpm),
           this.subsystems.getShooterOutfeedSubsystem(), this.subsystems.getFeederSubsystem()));
+      SmartDashboard.putData(
+          "Spin Up Shooter at specified speeds",
+          new ShooterSpinUpCommand(this.subsystems.getShooterOutfeedSubsystem(), () -> SmartDashboard.getNumber("Shooter Speed RPM Setter", Constants.shooterDefaultSpeedRpm)));
     }
 
     if (this.subsystems.isIntakeSubsystemAvailable()) {

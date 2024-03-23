@@ -9,6 +9,8 @@
 // ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
 
 package frc.robot.commands;
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.control.Constants;
@@ -23,18 +25,33 @@ public class ShooterSpinUpCommand extends Command
   private ShooterOutfeedSubsystem shooterOutfeed;
   private Timer timer = new Timer();
   private boolean done = false;
+  private DoubleSupplier desiredSpeedRpmSupplier;
   
   /** 
-  * Creates a new intake command 
+  * Creates a new shooter spin up command 
+  * 
+  * @param shooterSubsystem - the shooter outfeed subsystem
+  * @param desiredSpeedRpmSupplier - the desired speed supplier
+  */
+  public ShooterSpinUpCommand(ShooterOutfeedSubsystem shooterSubsystem, DoubleSupplier desiredSpeedRpmSupplier)
+  {
+    this.shooterOutfeed = shooterSubsystem;
+    this.desiredSpeedRpmSupplier = desiredSpeedRpmSupplier;
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(shooterOutfeed);
+  }
+  
+  /** 
+  * Creates a new shooter spin up command 
   * 
   * @param shooterSubsystem - the shooter outfeed subsystem
   */
   public ShooterSpinUpCommand(ShooterOutfeedSubsystem shooterSubsystem)
   {
-    this.shooterOutfeed = shooterSubsystem;
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooterOutfeed);
+    this(shooterSubsystem, () -> Constants.shooterDefaultSpeedRpm);
   }
+
+
 
   // Called when the command is initially scheduled.
   @Override
@@ -52,8 +69,7 @@ public class ShooterSpinUpCommand extends Command
   @Override
   public void execute()
   {
-    shooterOutfeed.setShooterVelocityLeft(Constants.shooterLeftDefaultSpeedRpm);
-    shooterOutfeed.setShooterVelocityRight(Constants.shooterRightDefaultSpeedRpm);
+    shooterOutfeed.setShooterVelocity(desiredSpeedRpmSupplier.getAsDouble());
     if (timer.hasElapsed(Constants.shooterSpinUpTimeoutSeconds))
     {
       done = true;
