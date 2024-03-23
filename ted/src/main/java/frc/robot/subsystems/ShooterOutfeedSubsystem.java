@@ -121,7 +121,9 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
   }
 
   /**
-   * the shooter motors to a specific velocity using the in-built PID controller
+   * the shooter motors to a specific velocity 
+   * uses voltage control if spped is 0, 
+   * otherwise, uses the in-built PID controller
    * @param revolutionsPerMinute - the RPM that the shooter motors should spin
    */
   public void setShooterVelocity(double revolutionsPerMinute) {
