@@ -11,6 +11,8 @@
 package frc.robot.subsystems;
 
 import java.util.ArrayList;
+
+import edu.wpi.first.hal.PowerJNI;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -23,6 +25,11 @@ public class PowerDistributionPanelWatcherSubsystem extends SubsystemBase {
         Constants.currentPowerDistributionPanelCanId,
         Constants.currentPowerDistributionPanelType);
     private ArrayList<PortSpy> myList = new ArrayList<PortSpy>();
+
+    private int brownoutEventCount = 0;
+    private Runnable brownoutAction = null;
+    private int brownoutEventsPerAction;
+    private boolean handleBrownouts = false;
 
     public PowerDistributionPanelWatcherSubsystem() {
         /* 
@@ -63,8 +70,23 @@ public class PowerDistributionPanelWatcherSubsystem extends SubsystemBase {
         }
     }
 
+    /**
+     * Sets the callback action to run every brownoutEventsPerAction times a brownout happens
+     * @param brownoutAction
+     * @param brownoutEventsPerAction
+     */
+    public void setBrownoutCallback(Runnable brownoutAction, int brownoutEventsPerAction){
+        this.brownoutAction = brownoutAction;
+        this.brownoutEventsPerAction = brownoutEventsPerAction;
+        this.handleBrownouts = true;
+        this.brownoutEventCount = 0; 
+    }
+
     @Override
     public void periodic() {
+        // handle brownouts
+        handleBrownouts();
+        // handle port spies
         for (int counter = 0; counter < myList.size(); counter++) {
             PortSpy nextSpy = myList.get(counter);
             double current = distroPannel.getCurrent(nextSpy.getPort());
@@ -82,4 +104,27 @@ public class PowerDistributionPanelWatcherSubsystem extends SubsystemBase {
             SmartDashboard.putNumber(nextSpy.getActionDescription(), current);
         }
     }
+
+    /**
+     * A method to check for and handle brownout events
+     * runs the brownoutAction every brownoutEventsPerAction times a brownout event is detected.
+     */
+    private void handleBrownouts(){
+        if (isNearBrownout()){
+            brownoutEventCount += 1;
+            if (this.handleBrownouts && (brownoutEventCount % this.brownoutEventsPerAction == 0)){
+                brownoutAction.run();
+            }
+        }
+    }
+
+    /**
+     * A Method to check for brownouts. 
+     * The PDP voltage is compared against the brownout voltage + specified voltage margin
+     * @return true when a near brownout is detected
+     */
+    private boolean isNearBrownout(){
+        return distroPannel.getVoltage() < PowerJNI.getBrownoutVoltage() + Constants.bownoutVoltageSafetyMarginVolts;
+    }
+
 }

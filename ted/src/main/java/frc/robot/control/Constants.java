@@ -221,5 +221,12 @@ public final class Constants {
     public static final ModuleType currentPowerDistributionPanelType = ModuleType.kRev;
     public static final double overcurrentRumbleTimeSeconds = 0.25;
 
+    // 
+    // Brownout Event Constants
+    // how far above the actual brownout voltage do we want to trigger action
+    public static final double bownoutVoltageSafetyMarginVolts = 0.5;
+    // number of brownout events per action taken
+    public static final int brownoutEventsPerAction = 3; 
+
 
 }

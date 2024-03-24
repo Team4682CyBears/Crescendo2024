@@ -103,11 +103,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public static final double MIN_ANGULAR_VELOCITY_BOUNDARY_RADIANS_PER_SECOND = MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND * 0.06; // 0.06 a magic number based on testing
   private double MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED = 70.0;
 
-  private static final int PositionHistoryWindowTimeMilliseconds = 5000;
-  private static final int CommandSchedulerPeriodMilliseconds = 20;
   private final double deltaTimeSeconds = 0.02; // 20ms scheduler time tick
-  private static final int CommandSchedulerCyclesPerSecond = 1000/CommandSchedulerPeriodMilliseconds;
-  private static final int PositionHistoryStorageSize = PositionHistoryWindowTimeMilliseconds/CommandSchedulerPeriodMilliseconds;
 
   private static final Lock theLock = new ReentrantLock();
 
@@ -142,11 +138,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   private SwerveDrivePoseEstimator swervePoseEstimator = null;
   private Pose2d currentPosition = new Pose2d();
-  private ArrayDeque<Pose2d> historicPositions = new ArrayDeque<Pose2d>(PositionHistoryStorageSize + 1);
 
   private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
   private ChassisSpeeds previousChassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
   private double speedReductionFactor = 1.0;
+  private double accelerationReductionFactor = 1.0;
 
   private SwerveDriveMode swerveDriveMode = SwerveDriveMode.NORMAL_DRIVING;
   private SwerveDriveCenterOfRotation swerveDriveCenterOfRotation = SwerveDriveCenterOfRotation.RobotCenter;
@@ -237,6 +233,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   /**
+   * Method to get the current acceleration reduction factor
+   * @return - the current acceleration reduction factor
+   */
+  public double getAccelerationReductionFactor() {
+    return this.accelerationReductionFactor;
+  }
+  
+  /**
    * returns chassis speeds (robot relative)
    * @return chassis speeds
    */
@@ -289,6 +293,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
     backLeftModule.setAbsoluteEncoderOffset();
     backRightModule.setAbsoluteEncoderOffset();
     System.out.println("Setting Absolute Encoder Offsets");
+  }
+  
+  /**
+   * Method to set the current acceleration reduction factor to a new value
+   * @param value - the new acceleration reduction factor
+   */
+  public void setAccelerationReductionFactor(double value) {
+    this.accelerationReductionFactor = MotorUtils.truncateValue(value, 0.0, 1.0);
   }
   
   /**
@@ -381,74 +393,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return currentPosition;
   }
 
-  /**
-   * A method to obtain the distance along the segments recently traveled
-   * @param historicDurationMilliseconds - the total milliseconds to look back in time
-   * @return A double of the distance traveled by the robot in meters over the time window requested
-   */
-  public double getRecentTotalDistanceInMeters(int historicDurationMilliseconds)
-  {
-    ArrayList<Double> distances = this.getRecentDistanceTraveled(historicDurationMilliseconds);
-    double resultDistance = 0.0;
-    for(int inx = 0; inx < distances.size(); ++inx)
-    {
-      resultDistance += distances.get(inx);
-    }
-    return resultDistance;
-  }
-
-  /**
-   * A method to obtain the average velocity of the robot recently traveled
-   * @param historicDurationMilliseconds - the total milliseconds to look back in time
-   * @return A double of the velocity of the robot in meters per second over the time window requested
-   */
-  public double getRecentAverageVelocityInMetersPerSecond(int historicDurationMilliseconds)
-  {
-    ArrayList<Double> recentVelocities = this.getRecentVelocities(historicDurationMilliseconds);
-    double sumOfVelocities = 0.0;
-    int countOfDeltas = 0;
-    for(; countOfDeltas < recentVelocities.size(); ++countOfDeltas)
-    {
-      sumOfVelocities += recentVelocities.get(countOfDeltas);
-    }
-    return sumOfVelocities/countOfDeltas;
-  }
-
-  /**
-   * A method to obtain the average angular velocity of the robot recently experienced
-   * @param historicDurationMilliseconds - the total milliseconds to look back in time
-   * @return A double of the angular velocity of the robot in radians per second over the time window requested
-   */
-  public double getRecentAverageAngularVelocityInRadiansPerSecond(int historicDurationMilliseconds)
-  {
-    ArrayList<Double> recentAngularVelocities = this.getRecentAngularVelocities(historicDurationMilliseconds);
-
-    double sumOfAngularVelocities = 0.0;
-    int countOfDeltas = 0;
-    for(; countOfDeltas < recentAngularVelocities.size(); ++countOfDeltas)
-    {
-      sumOfAngularVelocities += recentAngularVelocities.get(countOfDeltas);
-    }
-    return sumOfAngularVelocities/countOfDeltas;
-  }
-
-  /**
-   * A method to obtain the acceleration experienced by the robot over the 
-   * @param historicDurationMilliseconds - the total milliseconds to look back in time
-   * @return A double of the average acceleration experienced by the robot in meters/second^2 for the time window requested
-   */
-  public double getRecentAverageAccelerationInMetersPerSecondSquared(int historicDurationMilliseconds)
-  {
-    ArrayList<Double> recentAccelerations = this.getRecentAccelerations(historicDurationMilliseconds);
-    double sumOfAccelerations = 0.0;
-    int countOfDeltas = 0;
-    for(; countOfDeltas < recentAccelerations.size(); ++countOfDeltas)
-    {
-      sumOfAccelerations += recentAccelerations.get(countOfDeltas);
-    }
-    return sumOfAccelerations/countOfDeltas;
-  }
-
    /**
     * A method to obtain the recent pitches 
     * @return a listing of recent pitches
@@ -510,8 +454,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     if(InstalledHardware.limelightInstalled){
       this.addVisionMeasurement(cameraSubsystem.getVisionBotPose());
     }
-    // store the recalculated position
-    this.storeUpdatedPosition();
+
     // store navx info
     this.storePitch();
     this.storeRoll();    
@@ -778,8 +721,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @return
    */
   private ChassisSpeeds limitChassisSpeedsAccel(ChassisSpeeds speeds) {
-    double xVelocityLimited = limitAxisSpeed(speeds.vxMetersPerSecond, previousChassisSpeeds.vxMetersPerSecond, MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
-    double yVelocityLimited = limitAxisSpeed(speeds.vyMetersPerSecond, previousChassisSpeeds.vyMetersPerSecond, MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
+    double xVelocityLimited = limitAxisSpeed(speeds.vxMetersPerSecond, previousChassisSpeeds.vxMetersPerSecond, 
+    MAX_ACCELERATION_METERS_PER_SECOND_SQUARED * this.accelerationReductionFactor);
+    double yVelocityLimited = limitAxisSpeed(speeds.vyMetersPerSecond, previousChassisSpeeds.vyMetersPerSecond, 
+    MAX_ACCELERATION_METERS_PER_SECOND_SQUARED * this.accelerationReductionFactor);
     double omegaVelocityLimited = limitAxisSpeed(speeds.omegaRadiansPerSecond, previousChassisSpeeds.omegaRadiansPerSecond, MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED);
     return new ChassisSpeeds(xVelocityLimited, yVelocityLimited, omegaVelocityLimited);
   }
@@ -912,143 +857,4 @@ public class DrivetrainSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("BackRightDistanceMeters", positions[3].distanceMeters);
     }
   }
-
-  /**
-   * A method devoted to making sure the current position is added to the historic position listing
-   * as well as maintaining the size of the list at a predefined maximum
-   */
-  private void storeUpdatedPosition()
-  {
-    this.historicPositions.add(currentPosition);
-    while(this.historicPositions.size() > PositionHistoryStorageSize)
-    {
-      this.historicPositions.remove();
-    }
-  }
-
-  /**
-   * Method to get the recent translations
-   * @param historicDurationMilliseconds - the historic time window in milliseconds of points to establish translations
-   * @return the array of translations associated with the points at hand
-   */
-  private ArrayList<Transform2d> getRecentTransforms(int historicDurationMilliseconds)
-  {
-    // first get the list of translations between the Pos2d's stored
-    int intendedCount = historicDurationMilliseconds/CommandSchedulerPeriodMilliseconds;
-    int maxCount = (intendedCount>PositionHistoryStorageSize ? PositionHistoryStorageSize : intendedCount);
-    int currentCount = 0;
-    ArrayList<Transform2d> transforms = new ArrayList<Transform2d>();
-    Pose2d lastPosition = null;
-    Pose2d currentPosition = null;
-    for (Iterator<Pose2d> iter = this.historicPositions.iterator(); iter.hasNext() && currentCount < maxCount; ++currentCount ) {
-      currentPosition = iter.next();
-      // assume the first position has no translation (even though it likely actually have had one)
-      if(lastPosition != null)
-      {
-        Transform2d nextTransform = new Transform2d(lastPosition, currentPosition);
-        transforms.add(nextTransform);
-      }
-      lastPosition = currentPosition;
-    }
-    return transforms;
-  }
-
-  /**
-   * Method to obtain the array of distances recently traveled
-   * @param historicDurationMilliseconds - the historic time window in milliseconds of points to establish distances
-   * @return array of distances traveled recently
-   */
-  private ArrayList<Double> getRecentDistanceTraveled(int historicDurationMilliseconds)
-  {
-    ArrayList<Transform2d> transforms = this.getRecentTransforms(historicDurationMilliseconds);
-    ArrayList<Double> resultDistances = new ArrayList<Double>();
-    Translation2d previousTranslation = null;
-    Translation2d currentTranslation = null;
-    for(int inx = 0; inx < transforms.size(); ++inx)
-    {
-      currentTranslation = transforms.get(inx).getTranslation();
-      if(previousTranslation != null)
-      {
-        resultDistances.add(previousTranslation.getDistance(currentTranslation));
-      }
-      previousTranslation = currentTranslation;
-    }
-    return resultDistances;
-  }
-
-  /**
-   * Method to obtain the array of angular velocities recently traveled
-   * @param historicDurationMilliseconds - the historic time window in milliseconds to obtain velocities from
-   * @return array of rotation velocities traveled recently - in radians/s
-   */
-  private ArrayList<Double> getRecentAngularVelocities(int historicDurationMilliseconds)
-  {
-    ArrayList<Transform2d> transforms = this.getRecentTransforms(historicDurationMilliseconds);
-    ArrayList<Double> resultRotationVelocities = new ArrayList<Double>();
-    Transform2d previousTransform = null;
-    Transform2d currentTransform = null;
-    for(int inx = 0; inx < transforms.size(); ++inx)
-    {
-      currentTransform = transforms.get(inx);
-      if(previousTransform != null)
-      {
-        // with this conversion below we will be making an assumption:
-        // that angular velocities will never exceed pi radians per 20 ms clock cycle
-        // (e.g., that the robot is unable to sweep > 180 degrees in 20 ms,
-        // or said another way the robot can't physically spin > 25 spins per second - 1500 RPM)
-        // to produce a result, we need to rely on MathUtil.angleModulus() static method - this keeps the math tidy
-        double currentRadians = MathUtil.angleModulus(currentTransform.getRotation().getRadians());
-        double previousRadians = MathUtil.angleModulus(previousTransform.getRotation().getRadians());
-        double deltaRadians = MathUtil.angleModulus(currentRadians - previousRadians);
-
-        // assumed cycle time and that the current distance is for a 20 ms movement
-        resultRotationVelocities.add(deltaRadians * CommandSchedulerCyclesPerSecond); 
-      }
-      previousTransform = currentTransform;
-    }
-    return resultRotationVelocities;
-  }
-
-  /**
-   * Method to obtain the array of velocities recently traveled
-   * @param historicDurationMilliseconds - the historic time window in milliseconds to obtain velocities from
-   * @return array of velocities traveled recently
-   */
-  private ArrayList<Double> getRecentVelocities(int historicDurationMilliseconds)
-  {
-    ArrayList<Double> recentDistances = this.getRecentDistanceTraveled(historicDurationMilliseconds);
-    ArrayList<Double> resultVelocities = new ArrayList<Double>();
-    for(int inx = 0; inx < recentDistances.size(); ++inx)
-    {
-      double currentDistance = recentDistances.get(inx);
-      double currentVelocity = currentDistance * CommandSchedulerCyclesPerSecond; // assumed cycle time and that the current distance is for a 20 ms movement
-      resultVelocities.add(currentVelocity);
-    }
-    return resultVelocities;
-  }
-
-  /**
-   * Method to obtain the array of accelerations recently having occured
-   * @param historicDurationMilliseconds - the historic time window in milliseconds to obtain accelerations from
-   * @return array of accelerations traveled recently
-   */
-  private ArrayList<Double> getRecentAccelerations(int historicDurationMilliseconds)
-  {
-    ArrayList<Double> recentVelocities = this.getRecentVelocities(historicDurationMilliseconds);
-    ArrayList<Double> resultAccelerations = new ArrayList<Double>();
-    Double currentVelocity = null;
-    Double previousVelocity = null;
-    for(int inx = 0; inx < recentVelocities.size(); ++inx)
-    {
-      currentVelocity = recentVelocities.get(inx);
-      if(previousVelocity != null)
-      {
-        double currentAcceleration = (currentVelocity - previousVelocity) * CommandSchedulerCyclesPerSecond; // assumed cycle time and that the current distance is for a 20 ms movement
-        resultAccelerations.add(currentAcceleration);
-      }
-      previousVelocity = currentVelocity;
-    }
-    return resultAccelerations;
-  }
-
 }

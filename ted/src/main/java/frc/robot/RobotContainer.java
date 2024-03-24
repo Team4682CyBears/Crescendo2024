@@ -64,6 +64,9 @@ public class RobotContainer {
     // do late binding of default commands
     this.lateBindDefaultCommands();
 
+    // bind brownout actions
+    this.bindBrownoutActions();
+
     AutonomousChooser.configureAutoBuilder(subsystems);
     autonomousChooser  = new AutonomousChooser(subsystems);
 
@@ -160,6 +163,12 @@ public class RobotContainer {
     return autonomousChooser.getCommand();
   }
 
+  private void bindBrownoutActions(){
+    this.subsystems.getPowerDistributionPanelWatcherSubsystem().setBrownoutCallback(
+      this.subsystems.getDriveTrainAccelerationSubsystem()::decrementReductionFactor,
+      Constants.brownoutEventsPerAction);
+  }
+
   /**
    * A method to init the climbers
    */
@@ -212,6 +221,7 @@ public class RobotContainer {
       subsystems.setDriveTrainSubsystem(new DrivetrainSubsystem(subsystems));
       subsystems.getDriveTrainSubsystem().zeroRobotPosition(); // can I add this?
       subsystems.setDriveTrainPowerSubsystem(new DrivetrainPowerSubsystem(subsystems.getDriveTrainSubsystem()));
+      subsystems.setDriveTrainAccelerationSubsystem(new DrivetrainAccelerationSubsystem(subsystems.getDriveTrainSubsystem()));
       SmartDashboard.putData("Debug: DrivetrainSub", subsystems.getDriveTrainSubsystem());
       System.out.println("SUCCESS: initializeDrivetrain");
 
