@@ -86,6 +86,7 @@ public class PowerDistributionPanelWatcherSubsystem extends SubsystemBase {
     public void periodic() {
         // handle brownouts
         handleBrownouts();
+        SmartDashboard.putNumber("Brownout Count", this.brownoutEventCount);
         // handle port spies
         for (int counter = 0; counter < myList.size(); counter++) {
             PortSpy nextSpy = myList.get(counter);
