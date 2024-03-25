@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import edu.wpi.first.hal.PowerJNI;
 import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -125,7 +126,10 @@ public class PowerDistributionPanelWatcherSubsystem extends SubsystemBase {
      * @return true when a near brownout is detected
      */
     private boolean isNearBrownout(){
-        return distroPannel.getVoltage() < PowerJNI.getBrownoutVoltage() + Constants.bownoutVoltageSafetyMarginVolts;
+        // this way seemed to way over-count brownouts with a safety margin of 0.5V. Maybe need to decrease margin to ~0.1V?
+        // return distroPannel.getVoltage() < PowerJNI.getBrownoutVoltage() + Constants.bownoutVoltageSafetyMarginVolts;
+        // Trying this way instead:
+        return RobotController.isBrownedOut();
     }
 
 }
