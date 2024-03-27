@@ -44,6 +44,97 @@
               "imageWidth": -1,
               "imageHeight": -1
             }
+          },
+          "7,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/LED",
+              "_title": "/SmartDashboard/LED",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "4,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/LEDEasy",
+              "_title": "/SmartDashboard/LEDEasy",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "5,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/LEDEveryother",
+              "_title": "/SmartDashboard/LEDEveryother",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "6,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/LEDShooterpattern",
+              "_title": "/SmartDashboard/LEDShooterpattern",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "7,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/LEDidlepattern",
+              "_title": "/SmartDashboard/LEDidlepattern",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "4,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/LEDintakepattern",
+              "_title": "/SmartDashboard/LEDintakepattern",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "5,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Current Channel 21",
+              "_title": "/SmartDashboard/Current Channel 21",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
           }
         }
       }
@@ -854,9 +945,9 @@
     }
   ],
   "windowGeometry": {
-    "x": -7.0,
+    "x": 0.0,
     "y": 0.0,
-    "width": 1934.0,
-    "height": 846.0
+    "width": 1536.0,
+    "height": 912.0
   }
 }

@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.simulation.PDPSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -25,13 +26,17 @@ import frc.robot.control.ManualInputInterfaces;
 import frc.robot.control.SubsystemCollection;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
+import frc.robot.commands.LEDCommand.LEDPatterns;
 import frc.robot.control.AutonomousChooser;
 import frc.robot.control.Constants;
+import edu.wpi.first.wpilibj.PowerDistribution;
 
 public class RobotContainer {
 
   private SubsystemCollection subsystems = new SubsystemCollection();
   private final AutonomousChooser autonomousChooser;
+  private PowerDistribution p = new PowerDistribution();
+  private double current21 = p.getVoltage();
 
   public RobotContainer() {
 
@@ -40,6 +45,8 @@ public class RobotContainer {
 
     // init the camera (before drivetrain)
     this.initializeCameraSubsystem();
+
+    this.initializeLEDSubsystem();
 
     // intake subsystem init
         // intake subsystem init
@@ -249,6 +256,24 @@ public class RobotContainer {
     else {
       System.out.println("FAIL: initializeCamera");
     }
+  }
+
+  private void initializeLEDSubsystem(){
+    if(InstalledHardware.LEDSInstalled){
+      subsystems.setLEDSubsystem(new LEDSubsystem(0, subsystems));
+      SmartDashboard.putData("LEDEasy", new LEDCommand(subsystems.getLEDSubsystem() , LEDPatterns.Easy));
+      SmartDashboard.putData("LEDEveryother", new LEDCommand(subsystems.getLEDSubsystem() , LEDPatterns.EveryOther));
+      SmartDashboard.putData("LEDidlepattern", new LEDCommand(subsystems.getLEDSubsystem() , LEDPatterns.IdlePattern));
+      SmartDashboard.putData("LEDShooterpattern", new LEDCommand(subsystems.getLEDSubsystem() , LEDPatterns.ShooterPattern));
+      SmartDashboard.putData("LEDintakepattern", new LEDCommand(subsystems.getLEDSubsystem() , LEDPatterns.IntakePattern));
+      SmartDashboard.putData("LEDSolid", new LEDCommand(subsystems.getLEDSubsystem() , LEDPatterns.SolidLEDs));
+      SmartDashboard.putNumber("Current Channel 21", current21);
+      System.out.println("SUCCESS: initializeLEDS");
+    }
+    else {
+      System.out.println("FAIL: initializeLEDS");
+    }
+
   }
   
   /**
