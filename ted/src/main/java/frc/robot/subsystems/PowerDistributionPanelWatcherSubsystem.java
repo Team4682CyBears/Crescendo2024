@@ -12,7 +12,6 @@ package frc.robot.subsystems;
 
 import java.util.ArrayList;
 
-import edu.wpi.first.hal.PowerJNI;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -29,7 +28,7 @@ public class PowerDistributionPanelWatcherSubsystem extends SubsystemBase {
 
     private int brownoutEventCount = 0;
     private Runnable brownoutAction = null;
-    private int brownoutEventsPerAction;
+    private int brownoutEventsBeforeAction;
     private boolean handleBrownouts = false;
 
     public PowerDistributionPanelWatcherSubsystem() {
@@ -76,9 +75,9 @@ public class PowerDistributionPanelWatcherSubsystem extends SubsystemBase {
      * @param brownoutAction
      * @param brownoutEventsPerAction
      */
-    public void setBrownoutCallback(Runnable brownoutAction, int brownoutEventsPerAction){
+    public void setBrownoutCallback(Runnable brownoutAction, int brownoutEventsBeforeAction){
         this.brownoutAction = brownoutAction;
-        this.brownoutEventsPerAction = brownoutEventsPerAction;
+        this.brownoutEventsBeforeAction = brownoutEventsBeforeAction;
         this.handleBrownouts = true;
         this.brownoutEventCount = 0; 
     }
@@ -109,26 +108,23 @@ public class PowerDistributionPanelWatcherSubsystem extends SubsystemBase {
 
     /**
      * A method to check for and handle brownout events
-     * runs the brownoutAction every brownoutEventsPerAction times a brownout event is detected.
+     * runs the brownoutAction once brownoutEventsBeforeAction brownouts are detected.
      */
     private void handleBrownouts(){
-        if (isNearBrownout()){
+        if (isBrownedOut()){
             brownoutEventCount += 1;
-            if (this.handleBrownouts && (brownoutEventCount % this.brownoutEventsPerAction == 0)){
+            if (this.handleBrownouts && (brownoutEventCount >= this.brownoutEventsBeforeAction)){
                 brownoutAction.run();
+                this.handleBrownouts = false; 
             }
         }
     }
 
     /**
      * A Method to check for brownouts. 
-     * The PDP voltage is compared against the brownout voltage + specified voltage margin
-     * @return true when a near brownout is detected
+     * @return true when a brownout is detected
      */
-    private boolean isNearBrownout(){
-        // this way seemed to way over-count brownouts with a safety margin of 0.5V. Maybe need to decrease margin to ~0.1V?
-        // return distroPannel.getVoltage() < PowerJNI.getBrownoutVoltage() + Constants.bownoutVoltageSafetyMarginVolts;
-        // Trying this way instead:
+    private boolean isBrownedOut(){
         return RobotController.isBrownedOut();
     }
 

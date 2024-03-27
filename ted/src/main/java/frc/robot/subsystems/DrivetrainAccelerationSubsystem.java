@@ -20,6 +20,7 @@ public class DrivetrainAccelerationSubsystem extends SubsystemBase {
     private final double maximumReductionFactor = 1.0;
     private final double defaultReductionFactor = 1.0;
     private double reductionFactor = defaultReductionFactor;
+    private final double reducedReductionFactor = 0.5; // used for brownout conditions
     private double reductionFactorIncrement = 0.1;
 
     /**
@@ -59,6 +60,11 @@ public class DrivetrainAccelerationSubsystem extends SubsystemBase {
      */
     public void resetPowerReductionFactor() {
         reductionFactor = defaultReductionFactor;
+        this.updateReductionFactor();
+    }
+
+    public void setReducedReductionFactor() {
+        reductionFactor = reducedReductionFactor;
         this.updateReductionFactor();
     }
 

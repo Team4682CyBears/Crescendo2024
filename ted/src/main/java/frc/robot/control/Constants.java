@@ -223,10 +223,8 @@ public final class Constants {
 
     // 
     // Brownout Event Constants
-    // how far above the actual brownout voltage do we want to trigger action
-    public static final double bownoutVoltageSafetyMarginVolts = 0.5;
-    // number of brownout events per action taken
-    public static final int brownoutEventsPerAction = 3; 
+    // number of brownout events before action taken
+    public static final int brownoutEventsBeforeAction = 3; 
 
 
 }
