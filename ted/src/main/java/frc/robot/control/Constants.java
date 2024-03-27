@@ -221,5 +221,10 @@ public final class Constants {
     public static final ModuleType currentPowerDistributionPanelType = ModuleType.kRev;
     public static final double overcurrentRumbleTimeSeconds = 0.25;
 
+    // 
+    // Brownout Event Constants
+    // number of brownout events before action taken
+    public static final int brownoutEventsBeforeAction = 3; 
+
 
 }
