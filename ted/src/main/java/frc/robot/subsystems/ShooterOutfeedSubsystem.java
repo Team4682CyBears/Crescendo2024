@@ -15,7 +15,6 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
-import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -54,6 +53,9 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
 
   private Slot0Configs leftMotorGains = new Slot0Configs().withKP(0.46).withKI(0.05).withKD(0.0075).withKV(0.11);
   private Slot0Configs rightMotorGains = new Slot0Configs().withKP(0.46).withKI(0.05).withKD(0.0075).withKV(0.11);
+
+  // a variable to use as the indicator to enforce brake mode on shooter oufeed motors
+  private NeutralModeValue outfeedMotorTargetNeutralModeValue = NeutralModeValue.Coast;
 
   /**
    * Constructor for shooter subsystem
@@ -103,7 +105,11 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
       rightMotor.setControl(this.rightVoltageController.withOutput(0));
     }
     else 
-    { // use PID controllers to set a speed
+    {
+      // using the target speed update brake settings on outfeed motors
+      this.enforceBrakeOnTargetSpeed();
+
+      // use PID controllers to set a speed
       double revsPerS = this.convertShooterRpmToMotorUnitsPerS(desiredSpeedRpm,
       ShooterOutfeedSubsystem.outfeedShooterGearRatio);
       leftMotor.setControl(leftVelocityController.withVelocity(revsPerS));
@@ -145,7 +151,7 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
   private void configureOutfeedMotors() {
     // Config left motor
     TalonFXConfiguration talonConfigs = new TalonFXConfiguration();
-    talonConfigs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+    talonConfigs.MotorOutput.NeutralMode = this.outfeedMotorTargetNeutralModeValue;
     talonConfigs.MotorOutput.withDutyCycleNeutralDeadband(kMinDeadband);
     talonConfigs.Slot0 = leftMotorGains;
     // do not config feedbacksource, since the default is the internal one.
@@ -190,6 +196,33 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
 
   private double rotationsPerSToRpm(double rotationsPerS, double targetGearRatio){
     return rotationsPerS / targetGearRatio * 60.0;
+  }
+
+  /**
+   * A method to issue brake/non-brake on outfeed motors
+   */
+  private void enforceBrakeOnTargetSpeed() {
+    // when the target speed is less than the threshold then 
+    NeutralModeValue targetNeutralModeValue = 
+      ((this.desiredSpeedRpm >= Constants.shooterOutfeedSpeedForcedBrakeThreshold) ? NeutralModeValue.Coast : NeutralModeValue.Brake);
+
+    // only update the brake behavior of motors when state changes
+    if(this.outfeedMotorTargetNeutralModeValue != targetNeutralModeValue) {
+      // update the state
+      this.outfeedMotorTargetNeutralModeValue = targetNeutralModeValue;
+
+      // get the configs from the motors and update the configs in memory
+      TalonFXConfiguration leftConfigs = new TalonFXConfiguration();
+      TalonFXConfiguration rightConfigs = new TalonFXConfiguration();
+      leftMotor.getConfigurator().refresh(leftConfigs);
+      rightMotor.getConfigurator().refresh(rightConfigs);
+      leftConfigs.MotorOutput.NeutralMode = outfeedMotorTargetNeutralModeValue;
+      rightConfigs.MotorOutput.NeutralMode = outfeedMotorTargetNeutralModeValue;
+
+      // want these to send signals down to the motors as close to one another as possible (~atomic)
+      leftMotor.getConfigurator().apply(leftConfigs);
+      rightMotor.getConfigurator().apply(rightConfigs);
+    }
   }
 
 }
