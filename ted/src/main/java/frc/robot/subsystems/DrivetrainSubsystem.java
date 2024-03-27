@@ -780,7 +780,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private void displayDiagnostics(){
     SmartDashboard.putBoolean("NavX is calibrating", swerveNavx.isCalibrating());
     SmartDashboard.putBoolean("NavX is calibrated", swerveNavx.isMagnetometerCalibrated());
-    SmartDashboard.putNumber("Drive Accel. Reduceion Factor", this.accelerationReductionFactor);
+    SmartDashboard.putNumber("Drive Accel. Reduction Factor", this.accelerationReductionFactor);
   }
  
   /**

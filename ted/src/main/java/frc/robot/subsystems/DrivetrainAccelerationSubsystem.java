@@ -13,6 +13,9 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.common.MotorUtils;
 
+/**
+ * Forms a class to control access to acceleration in DrivetrainSubsystem
+ */
 public class DrivetrainAccelerationSubsystem extends SubsystemBase {
 
     private DrivetrainSubsystem currentDrivetrainSubsystem = null;
@@ -63,20 +66,32 @@ public class DrivetrainAccelerationSubsystem extends SubsystemBase {
         this.updateReductionFactor();
     }
 
+    /**
+     * Method to set the reduced power reduction factor
+     */
     public void setReducedReductionFactor() {
         reductionFactor = reducedReductionFactor;
         this.updateReductionFactor();
     }
 
+    /**
+     * Called once per scheduler tick for this subsystem
+     */
     @Override
     public void periodic() {
     }
 
+    /**
+     * Called once per scheduler tick in simulation
+     */
     @Override
     public void simulationPeriodic() {
         // This method will be called once per scheduler run during simulation
     }
 
+    /**
+     * Set the reduction speed on the drivetrainSusbystem
+     */
     public void updateReductionFactor() {
         if (this.currentDrivetrainSubsystem != null) {
             this.currentDrivetrainSubsystem.setAccelerationReductionFactor(this.reductionFactor);

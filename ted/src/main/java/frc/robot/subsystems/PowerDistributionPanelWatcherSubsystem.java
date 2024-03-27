@@ -71,9 +71,9 @@ public class PowerDistributionPanelWatcherSubsystem extends SubsystemBase {
     }
 
     /**
-     * Sets the callback action to run every brownoutEventsPerAction times a brownout happens
+     * Sets the callback action to run once brownoutEventsPerAction brownouts happen
      * @param brownoutAction
-     * @param brownoutEventsPerAction
+     * @param brownoutEventsBeforeAction
      */
     public void setBrownoutCallback(Runnable brownoutAction, int brownoutEventsBeforeAction){
         this.brownoutAction = brownoutAction;
