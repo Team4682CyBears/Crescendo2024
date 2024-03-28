@@ -210,6 +210,7 @@ public final class Constants {
     // camera constants
     public static final int speakerBlueTagID = 7;
     public static final int spekaerRedTagID = 4;
+    public static final double autoUseFusedVisionDuration = 15.0;
   
     // ********************************************************************
     // Controller Constants

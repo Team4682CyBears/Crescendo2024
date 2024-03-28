@@ -666,8 +666,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private void addVisionMeasurement(VisionMeasurement visionMeasurement){
     // The wpilib matrix constructor requires sizes specified as Nat types. 
     // trying to update the matrix dynamicaly leads to issues
-    Matrix<N3,N1> visionStdDev = MatBuilder.fill(Nat.N3(), Nat.N1(), new double[]{0.9, 0.9, 0.9});
-    // for now ignore all vision measurements that are null or contained robot position is null
+    Matrix<N3,N1> visionStdDev = MatBuilder.fill(Nat.N3(), Nat.N1(), new double[]{0.7, 0.7, 99999999});
     // for now ignore all vision measurements that are null or contained robot position is null
     if (visionMeasurement != null && useVision){
       Pose2d visionComputedMeasurement = visionMeasurement.getRobotPosition();

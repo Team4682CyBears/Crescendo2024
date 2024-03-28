@@ -12,6 +12,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -26,10 +27,13 @@ import frc.robot.common.DistanceMeasurement;
  */
 public class CameraSubsystem extends SubsystemBase {
   private final double milisecondsInSeconds = 1000.0;
-  private final int defaultDoubleArraySize = 7;
+  private final int TagDoubleArraySize = 7;
+  private final int BotposeDoubleArraySize = 8;
   private final int TimestampIndex = 6;
-  private final int botPositionXIndex = 0;
-  private final int botPositionYIndex = 2;
+  private final int tagSpaceXIndex = 0;
+  private final int tagSpaceYIndex = 2;
+  private final int fieldSpaceXIndex = 0;
+  private final int fieldSpaceYIndex = 1;
   private final int botRotationIndex = 5;
   private final int noTagInSightId = -1;
   private NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -51,9 +55,10 @@ public class CameraSubsystem extends SubsystemBase {
       return new VisionMeasurement(null, 0.0);
     }
     else{
-      double[] botpose = this.table.getEntry("botpose").getDoubleArray(new double[this.defaultDoubleArraySize]);
-      Double timestamp = Timer.getFPGATimestamp() - (botpose[this.TimestampIndex]/this.milisecondsInSeconds);
-      Translation2d botTranslation = new Translation2d(botpose[this.botPositionXIndex], botpose[this.botPositionYIndex]);
+      NetworkTableEntry botposeEntry = this.table.getEntry("botpose");
+      double[] botpose = botposeEntry.getDoubleArray(new double[this.BotposeDoubleArraySize]);
+      Double timestamp = (botposeEntry.getLastChange() / 1000000.0) - (botpose[this.TimestampIndex]/this.milisecondsInSeconds);
+      Translation2d botTranslation = new Translation2d(botpose[this.fieldSpaceXIndex], botpose[this.fieldSpaceYIndex]);
       Rotation2d botYaw = Rotation2d.fromDegrees(botpose[this.botRotationIndex]);
       Pose2d realRobotPosition = new Pose2d(botTranslation, botYaw);
       return new VisionMeasurement(realRobotPosition, timestamp);
@@ -93,8 +98,8 @@ public class CameraSubsystem extends SubsystemBase {
    */
   public Pose2d getVisionBotPoseInTargetSpace(){
     double tagId = table.getEntry("tid").getDouble(0);
-    double[] botpose = this.table.getEntry("botpose_targetspace").getDoubleArray(new double[this.defaultDoubleArraySize]);
-    Translation2d botTranslation = new Translation2d(botpose[this.botPositionXIndex], botpose[this.botPositionYIndex]);
+    double[] botpose = this.table.getEntry("botpose_targetspace").getDoubleArray(new double[this.TagDoubleArraySize]);
+    Translation2d botTranslation = new Translation2d(botpose[this.tagSpaceXIndex], botpose[this.tagSpaceYIndex]);
     Rotation2d botYaw = Rotation2d.fromDegrees(botpose[this.botRotationIndex]);
     Pose2d realRobotPosition = new Pose2d(botTranslation, botYaw);
 
@@ -112,19 +117,17 @@ public class CameraSubsystem extends SubsystemBase {
    */
   @Override
   public void periodic() {
-    Pose2d dm = getVisionBotPoseInTargetSpace();
-    if(dm != null){
-      SmartDashboard.putNumber("relative X", dm.getX());
-      SmartDashboard.putNumber("relative Y", dm.getY());
+    VisionMeasurement vm = getVisionBotPose();
+    double x = 99999;
+    double y = 99999;
+    if(vm.getRobotPosition() != null){
+      x = vm.getRobotPosition().getX();
+      y = vm.getRobotPosition().getY();
     } 
 
-    DistanceMeasurement measurement = this.getDistanceFromTag(7.0, 4.0);
-    double putter = 0.0;
-    if(measurement.getIsValid()){
-      putter = measurement.getDistanceMeters();
-    }
-    SmartDashboard.putNumber("distance from tag", putter);
-    SmartDashboard.putNumber("vison angle", -4.65*putter + 51.6);
+    SmartDashboard.putNumber("bot x", x);
+    SmartDashboard.putNumber("bot y", y);
+
 
   }
 }

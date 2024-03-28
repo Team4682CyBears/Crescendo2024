@@ -130,6 +130,8 @@ public class RobotContainer {
           new ShooterShootCommand(
             () -> SmartDashboard.getNumber("Shooter Speed RPM Setter", Constants.shooterDefaultSpeedRpm),
           this.subsystems.getShooterOutfeedSubsystem(), this.subsystems.getFeederSubsystem()));
+        SmartDashboard.putData("Fused Vision Button", new UseFusedVisionInAutoCommand(subsystems.getDriveTrainSubsystem()));
+        SmartDashboard.putData("set odometry to starting pos", new InstantCommand( () -> subsystems.getDriveTrainSubsystem().setRobotPosition(new Pose2d(new Translation2d(-4.7, 1.6), new Rotation2d(0)))));
       SmartDashboard.putData(
           "Spin Up Shooter at specified speeds",
           new ShooterSpinUpCommand(this.subsystems.getShooterOutfeedSubsystem(), () -> SmartDashboard.getNumber("Shooter Speed RPM Setter", Constants.shooterDefaultSpeedRpm)));
