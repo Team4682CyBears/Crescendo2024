@@ -139,7 +139,7 @@ public final class Constants {
     // but 5000 is a more comfortable max
     public static final double shooterMaxRpm = 5000;
     public static final double shooterDefaultSpeedRpm = shooterMaxRpm;
-    public static final double shooterOutfeedSpeedForcedBrakeThreshold = shooterMaxRpm * 0.2;
+    public static final double shooterOutfeedSpeedForcedBrakeThreshold = shooterMaxRpm * 0.25;
 
     public static final double shooterSpinUpTimeoutSeconds = 5.0;
     public static final double autoShooterSpinUpTimeoutSeconds = 15.0;
@@ -151,7 +151,7 @@ public final class Constants {
     public static final double shooterOutfeedSpeedForAngleShootFromNote = shooterMaxRpm; 
     public static final double shooterOutfeedSpeedForAngleShootFromStage = shooterMaxRpm;
     public static final double shooterOutfeedSpeedForAngleShootFromSourceWing = shooterMaxRpm;
-    public static final double shooterOutfeedSpeedForAngleShootFromAmp = 250.0;
+    public static final double shooterOutfeedSpeedForAngleShootFromAmp = 1000.0;
 
     // *******************************************************************
     // shooter angle constants  
