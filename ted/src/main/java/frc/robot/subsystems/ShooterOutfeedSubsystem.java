@@ -15,8 +15,8 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
-import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -54,6 +54,12 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
 
   private Slot0Configs leftMotorGains = new Slot0Configs().withKP(0.46).withKI(0.05).withKD(0.0075).withKV(0.11);
   private Slot0Configs rightMotorGains = new Slot0Configs().withKP(0.46).withKI(0.05).withKD(0.0075).withKV(0.11);
+
+  // motor configurations
+  private TalonFXConfiguration leftMotorConfiguration = null;
+  private TalonFXConfiguration rightMotorConfiguration = null;
+  // a variable to use as the indicator to enforce brake mode on shooter oufeed motors
+  private NeutralModeValue outfeedMotorTargetNeutralModeValue = NeutralModeValue.Coast;
 
   /**
    * Constructor for shooter subsystem
@@ -103,7 +109,11 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
       rightMotor.setControl(this.rightVoltageController.withOutput(0));
     }
     else 
-    { // use PID controllers to set a speed
+    {
+      // using the target speed update brake settings on outfeed motors
+      this.enforceBrakeOnTargetSpeed();
+
+      // use PID controllers to set a speed
       double revsPerS = this.convertShooterRpmToMotorUnitsPerS(desiredSpeedRpm,
       ShooterOutfeedSubsystem.outfeedShooterGearRatio);
       leftMotor.setControl(leftVelocityController.withVelocity(revsPerS));
@@ -144,10 +154,42 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
 
   private void configureOutfeedMotors() {
     // Config left motor
+    this.leftMotorConfiguration = this.getOutfeedMotorConfiguration(
+      Constants.leftTalonShooterMotorDefaultDirection,
+      leftMotorGains);
+
+    StatusCode response = leftMotor.getConfigurator().apply(this.leftMotorConfiguration);
+    if (!response.isOK()) {
+      System.out.println(
+          "TalonFX ID " + leftMotor.getDeviceID() + " failed config with error " + response.toString());
+    }
+
+    // Config right motor
+    this.rightMotorConfiguration = this.getOutfeedMotorConfiguration(
+      Constants.rightTalonShooterMotorDefaultDirection,
+      rightMotorGains);
+    response = rightMotor.getConfigurator().apply(this.rightMotorConfiguration);
+    if (!response.isOK()) {
+      System.out.println(
+          "TalonFX ID " + rightMotor.getDeviceID() + " failed config with error " + response.toString());
+    }
+  }
+
+  /**
+   * A method to build the motor configuration for shooter outfeed motors
+   * @param targetInvert - the desired motor direction
+   * @param targetConfigs - the desired motor slot0 configurations
+   * @return - the constructed configuration for that target motor
+   */
+  private TalonFXConfiguration getOutfeedMotorConfiguration(
+    InvertedValue targetInvert,
+    Slot0Configs targetConfigs) {
+
+    // Config left motor
     TalonFXConfiguration talonConfigs = new TalonFXConfiguration();
-    talonConfigs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+    talonConfigs.MotorOutput.NeutralMode = this.outfeedMotorTargetNeutralModeValue;
     talonConfigs.MotorOutput.withDutyCycleNeutralDeadband(kMinDeadband);
-    talonConfigs.Slot0 = leftMotorGains;
+    talonConfigs.Slot0 = targetConfigs;
     // do not config feedbacksource, since the default is the internal one.
     talonConfigs.Voltage.PeakForwardVoltage = 12;
     talonConfigs.Voltage.PeakReverseVoltage = -12;
@@ -158,25 +200,8 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
     talonConfigs.CurrentLimits.SupplyCurrentLimit = HardwareConstants.shooterOutfeedSupplyCurrentMaximumAmps;
     talonConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
     // left motor direction
-    talonConfigs.MotorOutput.Inverted = Constants.leftTalonShooterMotorDefaultDirection;
-    // apply configs
-    StatusCode response = leftMotor.getConfigurator().apply(talonConfigs);
-    if (!response.isOK()) {
-      System.out.println(
-          "TalonFX ID " + leftMotor.getDeviceID() + " failed config with error " + response.toString());
-    }
-
-    // Config right motor
-    // modify left config for right motor
-    // right motor goes a different direction
-    talonConfigs.MotorOutput.Inverted = Constants.rightTalonShooterMotorDefaultDirection;
-    talonConfigs.Slot0 = rightMotorGains;
-    // apply configs
-    response = rightMotor.getConfigurator().apply(talonConfigs);
-    if (!response.isOK()) {
-      System.out.println(
-          "TalonFX ID " + rightMotor.getDeviceID() + " failed config with error " + response.toString());
-    }
+    talonConfigs.MotorOutput.Inverted = targetInvert;
+    return talonConfigs;
   }
 
   // V6 lib needs revolutions per second
@@ -190,6 +215,57 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
 
   private double rotationsPerSToRpm(double rotationsPerS, double targetGearRatio){
     return rotationsPerS / targetGearRatio * 60.0;
+  }
+
+  /**
+   * A method to issue brake/non-brake on outfeed motors
+   */
+  private void enforceBrakeOnTargetSpeed() {
+
+    // only when the configs are already setup should this code run
+    if(this.leftMotorConfiguration != null && this.rightMotorConfiguration != null) {
+
+      // when the target speed is less than the threshold then attempt a change
+      NeutralModeValue targetNeutralModeValue = 
+        ((this.desiredSpeedRpm >= Constants.shooterOutfeedSpeedForcedBrakeThreshold) ? NeutralModeValue.Coast : NeutralModeValue.Brake);
+
+      // only update the brake behavior of motors when state changes 
+      if(this.outfeedMotorTargetNeutralModeValue != targetNeutralModeValue) {
+        System.out.println("ATTEMPTING UPDATE of mode to " + targetNeutralModeValue.toString());
+        this.leftMotorConfiguration.MotorOutput.NeutralMode = targetNeutralModeValue;
+        this.rightMotorConfiguration.MotorOutput.NeutralMode = targetNeutralModeValue;
+        // want these to send signals down to the motors as close to one another as possible (~atomic)
+        StatusCode leftStatus = leftMotor.getConfigurator().apply(this.leftMotorConfiguration);
+        StatusCode rightStatus = rightMotor.getConfigurator().apply(this.rightMotorConfiguration);
+
+        // in the event one of the apply updates failed we want to revert it!!
+        boolean attemptRevert = (leftStatus != StatusCode.OK || rightStatus != StatusCode.OK);
+        if(attemptRevert) {
+          System.out.println("REVERTING UPDATE of mode back to " + this.outfeedMotorTargetNeutralModeValue.toString());
+          this.leftMotorConfiguration.MotorOutput.NeutralMode = this.outfeedMotorTargetNeutralModeValue;
+          this.rightMotorConfiguration.MotorOutput.NeutralMode = this.outfeedMotorTargetNeutralModeValue;
+
+          leftStatus = leftMotor.getConfigurator().apply(this.leftMotorConfiguration);
+          rightStatus = rightMotor.getConfigurator().apply(this.rightMotorConfiguration);
+
+          if(leftStatus != StatusCode.OK || rightStatus != StatusCode.OK) {
+            System.out.println(
+              "MOTOR CONFIG REVERT FAILED , left status == " +
+              leftStatus.toString() +
+            " right status == " +
+            rightStatus.toString());
+          }
+          else {
+            System.out.println("REVERT UPDATE of mode success!");
+          }
+        }
+        // if all goes well update the current state
+        else {
+          this.outfeedMotorTargetNeutralModeValue = targetNeutralModeValue;
+          System.out.println("COMPLETED UPDATE of mode to " + targetNeutralModeValue.toString());
+        }
+      }
+    }
   }
 
 }
