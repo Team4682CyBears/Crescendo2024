@@ -17,7 +17,7 @@ import frc.robot.control.SubsystemCollection;
 
 
 public class LEDSubsystem extends SubsystemBase {
-      private final int BUFFER_LENGTH = 150;
+      private final int BUFFER_LENGTH = 144/2;
       private final AddressableLED leds;
       private final AddressableLEDBuffer buffer;  // Creates a new buffer object
       private SubsystemCollection subsystems;
