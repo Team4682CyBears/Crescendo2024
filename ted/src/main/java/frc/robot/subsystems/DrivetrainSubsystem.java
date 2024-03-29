@@ -143,6 +143,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private SwerveDrivePoseEstimator swervePoseEstimator = null;
   private Pose2d currentPosition = new Pose2d();
   private ArrayDeque<Pose2d> historicPositions = new ArrayDeque<Pose2d>(PositionHistoryStorageSize + 1);
+  // Standard deviations for poseEstimator updates
+  // The wpilib matrix constructor requires sizes specified as Nat types. 
+  private Matrix<N3,N1> visionStdDev = MatBuilder.fill(Nat.N3(), Nat.N1(), new double[]{0.7, 0.7, 10});
+  private Matrix<N3,N1> odometryStdDev = MatBuilder.fill(Nat.N3(), Nat.N1(), new double[]{0.1, 0.1, 0.1});
 
   private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
   private ChassisSpeeds previousChassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
@@ -664,14 +668,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @param visionMeasurement the most recent vision measurement provided by vision subsystem
    */
   private void addVisionMeasurement(VisionMeasurement visionMeasurement){
-    // The wpilib matrix constructor requires sizes specified as Nat types. 
-    // trying to update the matrix dynamicaly leads to issues
-    Matrix<N3,N1> visionStdDev = MatBuilder.fill(Nat.N3(), Nat.N1(), new double[]{0.7, 0.7, 99999999});
     // for now ignore all vision measurements that are null or contained robot position is null
     if (visionMeasurement != null && useVision){
       Pose2d visionComputedMeasurement = visionMeasurement.getRobotPosition();
       if(visionComputedMeasurement != null) {
-          swervePoseEstimator.addVisionMeasurement(visionComputedMeasurement, visionMeasurement.getTimestamp(), visionStdDev);
+          swervePoseEstimator.addVisionMeasurement(visionComputedMeasurement, visionMeasurement.getTimestamp());
       }
     }
 }
@@ -850,7 +851,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
         swerveKinematics,
         this.getGyroscopeRotation(),
         this.getSwerveModulePositions(),
-        currentRobotPosition); 
+        currentRobotPosition, 
+        odometryStdDev,
+        visionStdDev); 
   }
 
   /**
