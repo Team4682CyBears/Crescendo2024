@@ -24,114 +24,63 @@
               "_showGlyph": false
             }
           },
-          "3,0": {
+          "2,0": {
             "size": [
-              3,
-              2
+              7,
+              5
             ],
             "content": {
-              "_type": "Camera Stream",
-              "_source0": "camera_server://limelight",
-              "_title": "limelight",
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/IsShooterRevved?",
+              "_title": "SmartDashboard/IsShooterRevved?",
               "_glyph": 148,
               "_showGlyph": false,
-              "Crosshair/Show crosshair": true,
-              "Crosshair/Crosshair color": "#FFFFFFFF",
-              "Controls/Show controls": true,
-              "Controls/Rotation": "NONE",
-              "compression": -1.0,
-              "fps": -1,
-              "imageWidth": -1,
-              "imageHeight": -1
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
             }
           },
-          "7,1": {
+          "9,2": {
             "size": [
-              1,
-              1
+              3,
+              3
             ],
             "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/LED",
-              "_title": "/SmartDashboard/LED",
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/Shooter RPM",
+              "_title": "SmartDashboard/Shooter RPM",
               "_glyph": 148,
-              "_showGlyph": false
+              "_showGlyph": false,
+              "Graph/Visible time": 30.0,
+              "Graph/X-axis auto scrolling": true,
+              "Y-axis/Automatic bounds": true,
+              "Y-axis/Upper bound": 1.0,
+              "Y-axis/Lower bound": -1.0,
+              "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/Shooter RPM": true
             }
           },
-          "4,3": {
+          "9,0": {
             "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/LEDEasy",
-              "_title": "/SmartDashboard/LEDEasy",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "5,3": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/LEDEveryother",
-              "_title": "/SmartDashboard/LEDEveryother",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "6,3": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/LEDShooterpattern",
-              "_title": "/SmartDashboard/LEDShooterpattern",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "7,3": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/LEDidlepattern",
-              "_title": "/SmartDashboard/LEDidlepattern",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "4,4": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/LEDintakepattern",
-              "_title": "/SmartDashboard/LEDintakepattern",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "5,4": {
-            "size": [
-              1,
+              2,
               1
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Current Channel 21",
-              "_title": "/SmartDashboard/Current Channel 21",
+              "_source0": "network_table:///SmartDashboard/Brownout Count",
+              "_title": "/SmartDashboard/Brownout Count",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "9,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Drive Accel. Reduceion Factor",
+              "_title": "/SmartDashboard/Drive Accel. Reduceion Factor",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -202,36 +151,6 @@
               "_showGlyph": false
             }
           },
-          "7,0": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/NavX is calibrated",
-              "_title": "SmartDashboard/NavX is calibrated",
-              "_glyph": 148,
-              "_showGlyph": false,
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
-            }
-          },
-          "5,0": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/NavX is calibrating",
-              "_title": "SmartDashboard/NavX is calibrating",
-              "_glyph": 148,
-              "_showGlyph": false,
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
-            }
-          },
           "4,1": {
             "size": [
               5,
@@ -265,97 +184,6 @@
               "_glyph": 148,
               "_showGlyph": false
             }
-          },
-          "9,1": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Drive Forward Trajectory",
-              "_title": "SmartDashboard/Drive Forward Trajectory",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "9,3": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Drive Turn90 Trajectory",
-              "_title": "SmartDashboard/Drive Turn90 Trajectory",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "9,2": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Drive ZigZag Trajectory",
-              "_title": "SmartDashboard/Drive ZigZag Trajectory",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "0,3": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Shadow X",
-              "_title": "SmartDashboard/Shadow X",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "5,4": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Shadow Y",
-              "_title": "SmartDashboard/Shadow Y",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "0,4": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Shadow Rotation",
-              "_title": "SmartDashboard/Shadow Rotation",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "9,4": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Allign relative to tag",
-              "_title": "/SmartDashboard/Allign relative to tag",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
           }
         }
       }
@@ -371,20 +199,7 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "6,1": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Spin Up Shooter",
-              "_title": "/SmartDashboard/Spin Up Shooter",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "8,2": {
+          "5,1": {
             "size": [
               2,
               1
@@ -397,7 +212,7 @@
               "_showGlyph": false
             }
           },
-          "8,3": {
+          "5,2": {
             "size": [
               2,
               1
@@ -410,7 +225,7 @@
               "_showGlyph": false
             }
           },
-          "8,4": {
+          "5,3": {
             "size": [
               2,
               1
@@ -419,110 +234,6 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Shooter Angle Motor Rotations ",
               "_title": "SmartDashboard/Shooter Angle Motor Rotations ",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "3,1": {
-            "size": [
-              3,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Shooter Shoot to Current Angle and Specified Speeds",
-              "_title": "SmartDashboard/Shooter Shoot to Current Angle and Specified Speeds",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "3,0": {
-            "size": [
-              3,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Set Shooter To Specified Angle",
-              "_title": "SmartDashboard/Set Shooter To Specified Angle",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "3,2": {
-            "size": [
-              3,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Shoot Shooter (at current angle and default speeds)",
-              "_title": "SmartDashboard/Shoot Shooter (at current angle and default speeds)",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "8,1": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Shooter Angle",
-              "_title": "/SmartDashboard/Shooter Angle",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "1,0": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Shooter Angle Setter",
-              "_title": "SmartDashboard/Shooter Angle Setter",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "1,1": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Shooter Left Speed RPM Setter",
-              "_title": "SmartDashboard/Shooter Left Speed RPM Setter",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "1,2": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Shooter Right Speed RPM Setter",
-              "_title": "SmartDashboard/Shooter Right Speed RPM Setter",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "10,1": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Shoot from speaker",
-              "_title": "SmartDashboard/Shoot from speaker",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -540,84 +251,6 @@
               "_showGlyph": false
             }
           },
-          "10,0": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/ShootPickShoot Path",
-              "_title": "SmartDashboard/ShootPickShoot Path",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "6,2": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Run Intake and Feeder",
-              "_title": "SmartDashboard/Run Intake and Feeder",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "12,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/PAth planner variable",
-              "_title": "SmartDashboard/PAth planner variable",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "4,3": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/ShootPickShoot Auto",
-              "_title": "SmartDashboard/ShootPickShoot Auto",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "4,4": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/SourceSideWing Auto",
-              "_title": "SmartDashboard/SourceSideWing Auto",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "6,3": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/123SourceSide Auto",
-              "_title": "/SmartDashboard/123SourceSide Auto",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
           "3,3": {
             "size": [
               1,
@@ -631,28 +264,48 @@
               "_showGlyph": false
             }
           },
-          "1,3": {
+          "1,1": {
             "size": [
               2,
               1
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/maximumAccelerationMultiplicationFactor",
-              "_title": "/SmartDashboard/maximumAccelerationMultiplicationFactor",
+              "_source0": "network_table:///SmartDashboard/Shooter Speed RPM Setter",
+              "_title": "/SmartDashboard/Shooter Speed RPM Setter",
               "_glyph": 148,
               "_showGlyph": false
             }
           },
-          "1,4": {
+          "0,2": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/Shooter RPM",
+              "_title": "SmartDashboard/Shooter RPM",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Graph/Visible time": 30.0,
+              "Graph/X-axis auto scrolling": true,
+              "Y-axis/Automatic bounds": true,
+              "Y-axis/Upper bound": 1.0,
+              "Y-axis/Lower bound": -1.0,
+              "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/Shooter RPM": true
+            }
+          },
+          "3,1": {
             "size": [
               2,
               1
             ],
             "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/maximumAngularAccelerationMultiplicationFactor",
-              "_title": "SmartDashboard/maximumAngularAccelerationMultiplicationFactor",
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Spin Up Shooter at specified speeds",
+              "_title": "SmartDashboard/Spin Up Shooter at specified speeds",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -914,53 +567,14 @@
         "hgap": 16.0,
         "vgap": 16.0,
         "titleType": 0,
-        "tiles": {
-          "3,0": {
-            "size": [
-              10,
-              3
-            ],
-            "content": {
-              "_type": "Graph",
-              "_source0": "network_table:///SmartDashboard/RightOutfeedMotorSpeed",
-              "_title": "SmartDashboard/RightOutfeedMotorSpeed",
-              "_glyph": 148,
-              "_showGlyph": false,
-              "Graph/Visible time": 60.0,
-              "Graph/X-axis auto scrolling": true,
-              "Y-axis/Automatic bounds": true,
-              "Y-axis/Upper bound": 10000.0,
-              "Y-axis/Lower bound": 0.0,
-              "Y-axis/Unit": "ul"
-            }
-          },
-          "3,3": {
-            "size": [
-              10,
-              3
-            ],
-            "content": {
-              "_type": "Graph",
-              "_source0": "network_table:///SmartDashboard/LeftOutfeedMotorSpeed",
-              "_title": "SmartDashboard/LeftOutfeedMotorSpeed",
-              "_glyph": 148,
-              "_showGlyph": false,
-              "Graph/Visible time": 60.0,
-              "Graph/X-axis auto scrolling": true,
-              "Y-axis/Automatic bounds": true,
-              "Y-axis/Upper bound": 10000.0,
-              "Y-axis/Lower bound": -10000.0,
-              "Y-axis/Unit": "ul"
-            }
-          }
-        }
+        "tiles": {}
       }
     }
   ],
   "windowGeometry": {
-    "x": 0.0,
-    "y": 0.0,
-    "width": 1536.0,
-    "height": 912.0
+    "x": -4.0,
+    "y": 2.0,
+    "width": 1936.0,
+    "height": 843.0
   }
 }
