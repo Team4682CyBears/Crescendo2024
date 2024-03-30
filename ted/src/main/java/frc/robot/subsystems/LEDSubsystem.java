@@ -39,7 +39,7 @@ public class LEDSubsystem extends SubsystemBase {
       public LEDSubsystem(int port, SubsystemCollection subsystems) {
             // TODO maybe pass in buffer length
             this.subsystems = subsystems;
-            leds = new AddressableLED(1); // initialization of the AdressableLED
+            leds = new AddressableLED(port); // initialization of the AdressableLED
             leds.setLength(BUFFER_LENGTH); // Sets the LED Strip length once
             buffer = new AddressableLEDBuffer(BUFFER_LENGTH);
             // TODO we start a starting color
@@ -47,7 +47,6 @@ public class LEDSubsystem extends SubsystemBase {
 
             //TODO:SEE IF WE NEED THIS LINE
             leds.start();
-            leds.stop();
       }
 
       public void RegisterStateAction(BooleanSupplier shouldTakeAction, LEDState ledState){
@@ -55,9 +54,14 @@ public class LEDSubsystem extends SubsystemBase {
       }
 
       public void periodic(){
-            ledState = LEDState.Off;
+            LEDState nexState = LEDState.Off;
             for(int i = 0; i < ledStateActions.size(); i++){
-                  if(ledState == LEDState.OrangeBlink){
+                 if(ledStateActions.get(i).getShouldTakeAction().getAsBoolean()){
+                        nextState = ledStateActions.get(i).getLedState();
+                        System.out.println("Setting led state to " + nextState);
+                 }
+            }
+             if(ledState == LEDState.OrangeBlink){
                         noteInIntake();
                   }
                   else if(ledState == LEDState.OrangeSolid){
@@ -69,16 +73,24 @@ public class LEDSubsystem extends SubsystemBase {
                   else if(ledState == LEDState.Green){
                         shooterRevvedTo90();
                   }
-            }
+                  else if(ledState == LEDState.Off){
+                        offState();
+                  }
 
       }
 
       public void noteInIntake() {
             ledState = LEDState.OrangeBlink;
+            int counter =0;
             for (int i = 0; i < buffer.getLength(); i++) {
-                  buffer.setRGB(i, 255,140,0); 
-                  buffer.setRGB(i, 0,0,0); 
-            }    
+                  if(counter%2 == 0){
+                        buffer.setRGB(i, 0, 0, 225); // blue
+                  }
+                  else{
+                       buffer.setRGB(i, 0, 0, 225); // blue 
+                  }
+                  counter++;
+            }
       }
 
       public void noteAtShooter() {
@@ -99,6 +111,13 @@ public class LEDSubsystem extends SubsystemBase {
             ledState = LEDState.Green;
             for (int i = 0; i < buffer.getLength(); i++) {
                   buffer.setRGB(i, 150,150,0); 
+            }  
+      }
+
+      public void offState() {
+            ledState = LEDState.Off;
+            for (int i = 0; i < buffer.getLength(); i++) {
+                  buffer.setRGB(i, 0,0,0); 
             }  
       }
 

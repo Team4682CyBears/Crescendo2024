@@ -144,20 +144,13 @@ public class RobotContainer {
       SmartDashboard.putData(
           "Spin Up Shooter at specified speeds",
           new ShooterSpinUpCommand(this.subsystems.getShooterOutfeedSubsystem(), () -> SmartDashboard.getNumber("Shooter Speed RPM Setter", Constants.shooterDefaultSpeedRpm)));
-          if(this.subsystems.getIntakeSubsystem().isNoteDetected()){
-            this.subsystems.getLEDSubsystem().RegisterStateAction(ledAction, LEDState.OrangeBlink);
-          }
-          if(this.subsystems.getFeederSubsystem().isShooterNoteDetected()){
-            this.subsystems.getLEDSubsystem().RegisterStateAction(ledAction, LEDState.OrangeSolid);
-          }
-          if(this.subsystems.getShooterOutfeedSubsystem().isNearSpeed()){
-            this.subsystems.getLEDSubsystem().RegisterStateAction(ledAction, LEDState.Yellow);
-          }
-          if(this.subsystems.getShooterOutfeedSubsystem().isAtSpeed()){
-            this.subsystems.getLEDSubsystem().RegisterStateAction(ledAction, LEDState.Green);
+            this.subsystems.getLEDSubsystem().RegisterStateAction(this.subsystems.getIntakeSubsystem()::isNoteDetected, LEDState.OrangeBlink);
+            this.subsystems.getLEDSubsystem().RegisterStateAction(this.subsystems.getFeederSubsystem()::isShooterNoteDetected, LEDState.OrangeSolid);
+            this.subsystems.getLEDSubsystem().RegisterStateAction(this.subsystems.getShooterOutfeedSubsystem()::isNearSpeed, LEDState.Yellow);
+            this.subsystems.getLEDSubsystem().RegisterStateAction(this.subsystems.getShooterOutfeedSubsystem()::isAtSpeed, LEDState.Green);
           }
           
-    }
+    
 
     if (this.subsystems.isIntakeSubsystemAvailable()) {
       SmartDashboard.putData(
@@ -274,7 +267,7 @@ public class RobotContainer {
     if(InstalledHardware.LEDSInstalled){
       subsystems.setLEDSubsystem(new LEDSubsystem(0, subsystems));
       SmartDashboard.putData("LEDEasy", new LEDCommand(subsystems.getLEDSubsystem() , LEDPatterns.Easy));
-      SmartDashboard.putData("LEDEveryother", new LEDCommand(subsystems.getLEDSubsystem() , LEDPatterns.EveryOther));
+      SmartDashboard.putData("LEDEBlink", new LEDCommand(subsystems.getLEDSubsystem() , LEDPatterns.EveryOther));
       SmartDashboard.putData("LEDidlepattern", new LEDCommand(subsystems.getLEDSubsystem() , LEDPatterns.IdlePattern));
       SmartDashboard.putData("LEDShooterpattern", new LEDCommand(subsystems.getLEDSubsystem() , LEDPatterns.ShooterPattern));
       SmartDashboard.putData("LEDintakepattern", new LEDCommand(subsystems.getLEDSubsystem() , LEDPatterns.IntakePattern));

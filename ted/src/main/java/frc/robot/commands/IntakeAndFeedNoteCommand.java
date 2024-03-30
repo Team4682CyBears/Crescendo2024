@@ -10,18 +10,14 @@
 // ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
 
 package frc.robot.commands;
-import java.util.function.BooleanSupplier;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.common.FeederMode;
-import frc.robot.common.LEDState;
 import frc.robot.control.Constants;
 import frc.robot.control.InstalledHardware;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.LEDSubsystem;
 
 /**
  * Forms a command to feed the note to the shooter or dunker
@@ -37,8 +33,6 @@ public class IntakeAndFeedNoteCommand extends Command
   private RumbleCommand rumbleCommand = null;
   private boolean doRumble = false;
   private boolean rumbleStarted = false;
-  private BooleanSupplier ledAction;
-  private LEDSubsystem ledSubsystem;
   
   /** 
   * Creates a new feeder command without rumble. 
@@ -70,7 +64,6 @@ public class IntakeAndFeedNoteCommand extends Command
   {
     this.intake = intakeSubsystem;
     this.feeder = feederSubsystem;
-    //this.ledSubsystem = ledSubsystem;
     this.direction = feederMode;
     this.rumbleCommand = new RumbleCommand(xboxController, Constants.rumbleTimeSeconds);
     this.doRumble = true;
@@ -97,9 +90,8 @@ public class IntakeAndFeedNoteCommand extends Command
   public void execute()
   {
     // rumble once note is detected in the intake
-    if (doRumble && !rumbleStarted && InstalledHardware.LEDSInstalled) {
+    if (doRumble && !rumbleStarted) {
       if (intake.isNoteDetected()){
-        ledSubsystem.RegisterStateAction(ledAction, LEDState.OrangeBlink);
         rumbleCommand.schedule(); // want to call this just once
         rumbleStarted = true;
       }
@@ -108,8 +100,7 @@ public class IntakeAndFeedNoteCommand extends Command
     }*/
     }
     // keep feeding until note is detected in shooter
-    if (feeder.isShooterNoteDetected() && InstalledHardware.LEDSInstalled){
-      ledSubsystem.RegisterStateAction(ledAction, LEDState.OrangeSolid);
+    if (feeder.isShooterNoteDetected()){
       intake.setAllStop();
       feeder.setAllStop();
       done = true;
