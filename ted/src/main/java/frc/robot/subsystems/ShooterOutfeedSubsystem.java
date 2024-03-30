@@ -52,8 +52,11 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
   private final VoltageOut leftVoltageController = new VoltageOut(0);
   private final VoltageOut rightVoltageController = new VoltageOut(0);
 
-  private Slot0Configs leftMotorGains = new Slot0Configs().withKP(0.46).withKI(0.05).withKD(0.0075).withKV(0.11);
-  private Slot0Configs rightMotorGains = new Slot0Configs().withKP(0.46).withKI(0.05).withKD(0.0075).withKV(0.11);
+  //private Slot0Configs leftMotorGains = new Slot0Configs().withKP(0.46).withKI(0.05).withKD(0.0075).withKV(0.11);
+  //private Slot0Configs rightMotorGains = new Slot0Configs().withKP(0.46).withKI(0.05).withKD(0.0075).withKV(0.11);
+  private Slot0Configs leftMotorGains = new Slot0Configs().withKP(0.20).withKI(0.2).withKD(0.0075).withKV(0.05);
+  private Slot0Configs rightMotorGains = new Slot0Configs().withKP(0.20).withKI(0.2).withKD(0.0075).withKV(0.05);
+
 
   /**
    * Constructor for shooter subsystem
