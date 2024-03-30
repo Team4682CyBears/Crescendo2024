@@ -4,24 +4,24 @@
     {
       "anchor": {
         "x": 2.5338968170340856,
-        "y": 5.55
+        "y": 2.65
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9251090508112731,
-        "y": 5.452207847601459
+        "x": 1.9251163833594993,
+        "y": 2.7478377889584786
       },
       "isLocked": false,
-      "linkedName": "Blue4Note2"
+      "linkedName": "RedNote"
     },
     {
       "anchor": {
         "x": 2.5338968170340856,
-        "y": 6.83
+        "y": 1.37
       },
       "prevControl": {
-        "x": 1.6763851774572966,
-        "y": 6.316001118692756
+        "x": 1.6763960584556923,
+        "y": 1.8840170337958178
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,7 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.5,
-      "rotationDegrees": 26.5,
+      "rotationDegrees": -26.5,
       "rotateFast": false
     }
   ],
@@ -63,11 +63,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 24.32389294068247,
+    "rotation": -25.349822432788642,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Blue4Note",
+  "folder": "Red4Note",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

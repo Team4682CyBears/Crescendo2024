@@ -13,12 +13,13 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.control.Constants;
 import frc.robot.control.HardwareConstants;
@@ -31,30 +32,28 @@ import frc.robot.common.MotorUtils;
  */
 public class ShooterOutfeedSubsystem extends SubsystemBase {
 
-  // Talon info
-  private static final double velocitySufficientWarmupThreshold = 0.9;
+  // allowable error in velocty as a % of target
+  private final double velocityErrorThreshold = 0.05;
 
   // Shooter gearing - currently 1:1
   private static final double outfeedShooterGearRatio = 1.0;
   
   private static final double kMinDeadband = 0.001;
   private static final int kPIDLoopIdx = 0;
-  private static final double kMaxVoltage = 12;
+
+  private double desiredSpeedRpm = 0;
 
   private TalonFX leftMotor = new TalonFX(Constants.leftTalonShooterMotorCanId);
-  private final VoltageOut leftVoltageController = new VoltageOut(0);
   private TalonFX rightMotor = new TalonFX(Constants.rightTalonShooterMotorCanId);
+  // controllers for setting motors to specific speed with PID control
+  private final VelocityVoltage leftVelocityController = new VelocityVoltage(0);
+  private final VelocityVoltage rightVelocityController = new VelocityVoltage(0);
+  // controllers for setting motors to 0 without PID control
+  private final VoltageOut leftVoltageController = new VoltageOut(0);
   private final VoltageOut rightVoltageController = new VoltageOut(0);
-  // angleRightMotor follows angleLeftMotor, so it doesn't need its own VoltageController
 
-  // Converted old settings to new settings using calculator at:
-  // https://v6.docs.ctr-electronics.com/en/stable/docs/migration/migration-guide/closed-loop-guide.html
-  // old settings
-  // private Gains leftMotorGains = new Gains(0.50, 0.001, 5, 1023/20660.0, 300, 1.00);
-  // private Gains rightMotorGains = new Gains(0.50, 0.001, 5, 1023/20660.0, 300, 1.00);
-  // new settings
-  private Slot0Configs leftMotorGains = new Slot0Configs().withKP(0.2012).withKI(2.4023).withKD(0.0120).withKV(0.1189);
-  private Slot0Configs rightMotorGains = new Slot0Configs().withKP(0.2012).withKI(2.4023).withKD(0.0120).withKV(0.1189);
+  private Slot0Configs leftMotorGains = new Slot0Configs().withKP(0.46).withKI(0.05).withKD(0.0075).withKV(0.11);
+  private Slot0Configs rightMotorGains = new Slot0Configs().withKP(0.46).withKI(0.05).withKD(0.0075).withKV(0.11);
 
   /**
    * Constructor for shooter subsystem
@@ -62,8 +61,11 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
   public ShooterOutfeedSubsystem() {
     configureOutfeedMotors();
     /* Make control requests synchronous */
-    leftVoltageController.UpdateFreqHz = 0;
-    rightVoltageController.UpdateFreqHz = 0; 
+    leftVelocityController.UpdateFreqHz = 0;
+    rightVelocityController.UpdateFreqHz = 0; 
+    // set PID slots on velocity controllers
+    leftVelocityController.Slot = kPIDLoopIdx;
+    rightVelocityController.Slot = kPIDLoopIdx;
   }
 
   /**
@@ -84,69 +86,53 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
 
   /**
    * A method to test whether the shooter is at speed
-   * @param shooterLeftTargetSpeedRpm
    * @return true if the shooter is at speed
    */
-  public boolean isAtSpeed(double shooterLeftTargetSpeedRpm, double shooterRightTargetSpeedRpm) {
-    return (Math.abs(getLeftSpeedRpm() - shooterLeftTargetSpeedRpm) / shooterLeftTargetSpeedRpm) < velocitySufficientWarmupThreshold &&
-      (Math.abs(getRightSpeedRpm() - shooterRightTargetSpeedRpm) / shooterRightTargetSpeedRpm) < velocitySufficientWarmupThreshold;
+  public boolean isAtSpeed() {
+    return (Math.abs(getLeftSpeedRpm() - this.desiredSpeedRpm) / this.desiredSpeedRpm) < this.velocityErrorThreshold &&
+      (Math.abs(getRightSpeedRpm() - this.desiredSpeedRpm) / this.desiredSpeedRpm) < this.velocityErrorThreshold;
   }
 
   /**
    * this method will be called once per scheduler run
    */
   @Override
-  public void periodic() {}
+  public void periodic(){
+    if (this.desiredSpeedRpm == 0){ // use voltage controller to stop motors
+      leftMotor.setControl(this.leftVoltageController.withOutput(0));
+      rightMotor.setControl(this.rightVoltageController.withOutput(0));
+    }
+    else 
+    { // use PID controllers to set a speed
+      double revsPerS = this.convertShooterRpmToMotorUnitsPerS(desiredSpeedRpm,
+      ShooterOutfeedSubsystem.outfeedShooterGearRatio);
+      leftMotor.setControl(leftVelocityController.withVelocity(revsPerS));
+      rightMotor.setControl(rightVelocityController.withVelocity(revsPerS));
+    }
+    SmartDashboard.putBoolean("IsShooterRevved?", isAtSpeed());
+    SmartDashboard.putNumber("Shooter RPM", getRightSpeedRpm());
+  }
 
   /**
    * A method to stop shooter outfeed motors
    */
   public void setAllStop() {
-    this.setShooterSpeedLeft(0.0);
-    this.setShooterSpeedRight(0.0);
+    this.setShooterVelocity(0.0);
   }
 
   /**
-   * A method to set the speed of the shooter left motor
-   * @param speed a percentage [0 .. 1]
+   * the shooter motors to a specific velocity 
+   * uses voltage control if spped is 0, 
+   * otherwise, uses the in-built PID controller
+   * @param revolutionsPerMinute - the RPM that the shooter motors should spin
    */
-  public void setShooterSpeedLeft(double speed) {
-    leftMotor.setControl(leftVoltageController.withOutput(kMaxVoltage * speed));
-  }
-
-  /**
-   * A method to set the speed of the shooter right motor
-   * @param speed a percentage [0 .. 1]
-   */
-  public void setShooterSpeedRight(double speed) {
-    rightMotor.setControl(rightVoltageController.withOutput(kMaxVoltage * speed));
-  }
-
-  /**
-   * the top shooter motor to a specific velocity using the in-built PID controller
-   * @param revolutionsPerMinute - the RPM that the top motor should spin
-   */
-  public void setShooterVelocityLeft(double revolutionsPerMinute) {
-    final VelocityVoltage velocityController = new VelocityVoltage(0);
-    velocityController.Slot = kPIDLoopIdx;
-    double revsPerS = this.convertShooterRpmToMotorUnitsPerS(revolutionsPerMinute,
-    ShooterOutfeedSubsystem.outfeedShooterGearRatio);
-
-    // System.out.println("attempting left shooter velocity at " + revsPerS + " revs/s.");
-    leftMotor.setControl(velocityController.withVelocity(revsPerS));
-  }
-
-  /**
-   * Set the top shooter motor to a specific velocity using the in-built PID controller
-   * @param revolutionsPerMinute - the RPM that the top motor should spin
-   */
-  public void setShooterVelocityRight(double revolutionsPerMinute) {
-    final VelocityVoltage velocityController = new VelocityVoltage(0);
-    velocityController.Slot = kPIDLoopIdx;
-    double revsPerS = this.convertShooterRpmToMotorUnitsPerS(revolutionsPerMinute,
-    ShooterOutfeedSubsystem.outfeedShooterGearRatio);
-
-    rightMotor.setControl(velocityController.withVelocity(revsPerS));
+  public void setShooterVelocity(double revolutionsPerMinute) {
+    this.desiredSpeedRpm = MotorUtils.truncateValue(revolutionsPerMinute, 0, Constants.shooterMaxRpm);
+    if (this.desiredSpeedRpm != revolutionsPerMinute) {
+      System.out.println("Warning: Shooter requested speed of " + revolutionsPerMinute + 
+      "exceeded max speed of" + Constants.shooterMaxRpm +
+      ". Clamped to " + this.desiredSpeedRpm + ".");
+    }
   }
 
   /**
@@ -197,10 +183,7 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
   private double convertShooterRpmToMotorUnitsPerS(double targetRpm, double targetGearRatio)
   {
     double targetUnitsPerS = 
-      MotorUtils.truncateValue(
-        targetRpm,
-        -1.0 * Constants.talonMaximumRevolutionsPerMinute * targetGearRatio / 60.0,
-        Constants.talonMaximumRevolutionsPerMinute) *
+      MotorUtils.truncateValue(targetRpm, 0, Constants.shooterMaxRpm) *
       targetGearRatio / 60.0;
     return targetUnitsPerS;
   }

@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 1.3412763391943208,
-        "y": 5.55134450818189
+        "y": 2.65
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.749463135289907,
-        "y": 5.084166531969428
+        "x": 1.8169891003061749,
+        "y": 3.1775913657030497
       },
       "isLocked": false,
       "linkedName": null
@@ -17,15 +17,15 @@
     {
       "anchor": {
         "x": 1.9554131415955147,
-        "y": 4.55
+        "y": 3.65
       },
       "prevControl": {
-        "x": 1.9640242916849469,
-        "y": 4.981550326737017
+        "x": 1.8707368323827558,
+        "y": 3.2837185674371354
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "InFrontStage"
+      "linkedName": "RedInFront"
     }
   ],
   "rotationTargets": [],
@@ -39,11 +39,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -23.5920179617815,
+    "rotation": 23.71043664112413,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Blue4Note",
+  "folder": "Red4Note",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

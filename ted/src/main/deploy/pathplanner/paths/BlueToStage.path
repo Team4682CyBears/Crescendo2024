@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 1.9554131415955147,
-        "y": 4.552561520149875
+        "y": 4.55
       },
       "prevControl": null,
       "nextControl": {
         "x": 2.0329875843987315,
-        "y": 4.523182331810955
+        "y": 4.52062081166108
       },
       "isLocked": false,
       "linkedName": "InFrontStage"

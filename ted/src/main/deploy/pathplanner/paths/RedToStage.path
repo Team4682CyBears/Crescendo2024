@@ -3,34 +3,34 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.5338968170340856,
-        "y": 5.55
+        "x": 1.9554131415955147,
+        "y": 3.65
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9251090508112731,
-        "y": 5.452207847601459
+        "x": 2.032989022722098,
+        "y": 3.679375390229195
       },
       "isLocked": false,
-      "linkedName": "Blue4Note2"
+      "linkedName": "RedInFront"
     },
     {
       "anchor": {
-        "x": 2.5338968170340856,
-        "y": 6.83
+        "x": 2.4253549759335664,
+        "y": 3.84
       },
       "prevControl": {
-        "x": 1.6763851774572966,
-        "y": 6.316001118692756
+        "x": 2.2196981706687957,
+        "y": 3.812084451095112
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "RedStage"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 0.35,
       "rotationDegrees": 26.5,
       "rotateFast": false
     }
@@ -39,7 +39,7 @@
   "eventMarkers": [
     {
       "name": "IntakeNote",
-      "waypointRelativePos": 0.8,
+      "waypointRelativePos": 0.6,
       "command": {
         "type": "parallel",
         "data": {
@@ -63,13 +63,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 24.32389294068247,
+    "rotation": 29.199696605059593,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Blue4Note",
+  "folder": "Red4Note",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 21.325592976902666,
     "velocity": 0
   },
   "useDefaultConstraints": true

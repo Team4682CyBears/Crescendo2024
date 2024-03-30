@@ -3,7 +3,7 @@
   "startingPose": {
     "position": {
       "x": 1.3412763391943208,
-      "y": 5.55134450818189
+      "y": 2.65
     },
     "rotation": 0
   },
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BlueToInfront"
+            "pathName": "RedToInfront"
           }
         },
         {
@@ -32,7 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "BlueToStage"
+            "pathName": "RedToStage"
           }
         },
         {
@@ -63,7 +63,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Blue4Note1To2"
+            "pathName": "Red4Note1To2"
           }
         },
         {
@@ -94,7 +94,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Blue4Note2To3"
+            "pathName": "Red4Note2To3"
           }
         },
         {

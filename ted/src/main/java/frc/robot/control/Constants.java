@@ -32,10 +32,10 @@ public final class Constants {
         Units.inchesToMeters(22.75), 
         WcpModuleConfigurations.TED,
         // SUBTRACT the values you find in shuffleboard
-        Math.toRadians(-215.15 - 178.76 - 180.0 -358.7), // FRONT LEFT
+        Math.toRadians(-215.15 - 178.76 - 180.0 - 358.7), // FRONT LEFT
         Math.toRadians(-180.61 - 95.27 - 358.6 -169.8 - 150.59), // FRONT RIGHT 
-        Math.toRadians(-191.33 - 257.52 -357.3  - 3.6), // BACK LEFT
-        Math.toRadians(-58.35 - 177.27 - 180.0 - 2.0)); // BACK RIGHT
+        Math.toRadians(-191.33 - 257.52 -357.3  - 3.6 - 355.67), // BACK LEFT
+        Math.toRadians(-58.35 - 177.27 - 180.0 - 2.0 - 358.50)); // BACK RIGHT
 
     //////////////////// BABYBEAR DRIVETRAIN ////////////////////
     public static final DrivetrainSwerveConfig babybearDrivetrainConfig = new DrivetrainSwerveConfig (
@@ -122,21 +122,23 @@ public final class Constants {
     // feederSpeed is [0.0 .. 1.0]
     // it runs in one direction for the shooter 
     // and the opposite direction for the dunker/amp
-    public static final double feederSpeed = 0.20;
+    public static final double feederSpeed = 0.50;
     public static final double feederReverseSpeed = 0.10;
     // feeder will run until note is detected or this timeout has expired
     public static final double feederTimeoutSeconds = 10.0;
-    public static final double feederLaunchTimeoutSeconds = .75;
+    public static final double feederLaunchTimeoutSecondsInAuto = .75;
+    public static final double feederLaunchTimeoutSecondsInTele = 2.00;
 
     // *******************************************************************
     // shooter outfeed constants
     public static final int leftTalonShooterMotorCanId = 18; 
     public static InvertedValue leftTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;  
     public static final int rightTalonShooterMotorCanId = 21; 
-    public static InvertedValue rightTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;  
-    public static double shooterBaseRpm = 6500;
-    public static final double shooterLeftDefaultSpeedRpm = shooterBaseRpm * 0.615;
-    public static final double shooterRightDefaultSpeedRpm = shooterBaseRpm * 0.615;
+    public static InvertedValue rightTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;
+    // Falcon 500 max speed is 6380 RPM, max loaded speed is 5600 deteremined from testing, 
+    // but 5000 is a more comfortable max
+    public static final double shooterMaxRpm = 5000;
+    public static final double shooterDefaultSpeedRpm = shooterMaxRpm;
 
     public static final double shooterSpinUpTimeoutSeconds = 5.0;
     public static final double autoShooterSpinUpTimeoutSeconds = 15.0;
@@ -145,9 +147,9 @@ public final class Constants {
 
     // speeds for specific shooter shots
     public static final double shooterOutfeedSpeedForAngleShootFromSpeaker = 4500.0;
-    public static final double shooterOutfeedSpeedForAngleShootFromNote = 6500.0; 
-    public static final double shooterOutfeedSpeedForAngleShootFromStage = 6500.0;
-    public static final double shooterOutfeedSpeedForAngleShootFromSourceWing = 6500.0;
+    public static final double shooterOutfeedSpeedForAngleShootFromNote = shooterMaxRpm; 
+    public static final double shooterOutfeedSpeedForAngleShootFromStage = shooterMaxRpm;
+    public static final double shooterOutfeedSpeedForAngleShootFromSourceWing = shooterMaxRpm;
     public static final double shooterOutfeedSpeedForAngleShootFromAmp = 250.0;
 
     // *******************************************************************
@@ -158,7 +160,7 @@ public final class Constants {
     // TODO depending on which side the motor is mounted, may need to invert these.
     public static InvertedValue angleLeftTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;
     public static InvertedValue angleRightTalonShooterMotorDefaultDirection = InvertedValue.Clockwise_Positive;
-    public static final double shooterAbsoluteAngleOffsetDegrees = 59.445;
+    public static final double shooterAbsoluteAngleOffsetDegrees = 59.445 - 310.09;
     public static final double shooterStartingAngleOffsetDegrees = 20.0; 
     public static SensorDirectionValue shooterAngleSensorDirection = SensorDirectionValue.CounterClockwise_Positive;
     public static final double shooterAngleMaxDegrees = 110;
@@ -168,7 +170,7 @@ public final class Constants {
     public static final double shooterAngleToleranceDegrees = 0.5;
     public static final double shooterSetAngleDuration = 3.0;
     // angles increment ranges of stick input
-    public static final double shooterAngleStickIncrementMagnitude = Constants.shooterAngleToleranceDegrees + 10.0;
+    public static final double shooterAngleStickIncrementMagnitude = Constants.shooterAngleToleranceDegrees + 12.0;
     // angles of shooter shots
     public static final double shooterAngleShootFromSpeaker = 56.0;
     // TODO - figure out what 'shoot from note' actually means??
