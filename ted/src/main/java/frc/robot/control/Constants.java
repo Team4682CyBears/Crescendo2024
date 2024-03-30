@@ -86,8 +86,6 @@ public final class Constants {
     // *****************************************************************
     // navx isLevel tolerence in degrees
     public static final double navxTolDegrees = 4;
-    //this is the starting offset we apply to the robot upon start up
-    public static final double navxToRobotRotation = 90; 
     // ************************************
     // trajectory constants
     public static final double TrajectoryMaxAcceleration = 1;
