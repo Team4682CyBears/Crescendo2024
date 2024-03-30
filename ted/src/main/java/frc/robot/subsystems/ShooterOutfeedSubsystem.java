@@ -40,7 +40,8 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
   private static final double outfeedShooterGearRatio = 1.0;
   
   private static final double kMinDeadband = 0.001;
-  private static final int kPIDLoopIdx = 0;
+  private static final int kPIDHighRpmLoopIdx = 0;
+  private static final int kPIDLowRpmLoopIdx = 1;
 
   private double desiredSpeedRpm = 0;
 
@@ -57,7 +58,6 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
   private Slot0Configs leftMotorHighRpmGains = new Slot0Configs().withKP(0.36).withKI(0.1).withKD(0.0075).withKV(0.10);
   private Slot0Configs rightMotorHighRpmGains = new Slot0Configs().withKP(0.36).withKI(0.1).withKD(0.0075).withKV(0.10);
   // PID settings for low RPM
-  // TODO switch the code between these settings for low speeds. 
   private Slot1Configs leftMotorLowRpmGains = new Slot1Configs().withKP(0.20).withKI(0.2).withKD(0.0075).withKV(0.05);
   private Slot1Configs rightMotorLowRpmGains = new Slot1Configs().withKP(0.20).withKI(0.2).withKD(0.0075).withKV(0.05);
 
@@ -77,8 +77,8 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
     leftVelocityController.UpdateFreqHz = 0;
     rightVelocityController.UpdateFreqHz = 0; 
     // set PID slots on velocity controllers
-    leftVelocityController.Slot = kPIDLoopIdx;
-    rightVelocityController.Slot = kPIDLoopIdx;
+    leftVelocityController.Slot = kPIDHighRpmLoopIdx;
+    rightVelocityController.Slot = kPIDHighRpmLoopIdx;
   }
 
   /**
@@ -123,8 +123,8 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
       // use PID controllers to set a speed
       double revsPerS = this.convertShooterRpmToMotorUnitsPerS(desiredSpeedRpm,
       ShooterOutfeedSubsystem.outfeedShooterGearRatio);
-      leftMotor.setControl(leftVelocityController.withVelocity(revsPerS));
-      rightMotor.setControl(rightVelocityController.withVelocity(revsPerS));
+      leftMotor.setControl(leftVelocityController.withVelocity(revsPerS).withSlot(getPidIdxForTargetSpeed()));
+      rightMotor.setControl(rightVelocityController.withVelocity(revsPerS).withSlot(getPidIdxForTargetSpeed()));
     }
     SmartDashboard.putBoolean("IsShooterRevved?", isAtSpeed());
     SmartDashboard.putNumber("Shooter RPM", getRightSpeedRpm());
@@ -163,7 +163,8 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
     // Config left motor
     this.leftMotorConfiguration = this.getOutfeedMotorConfiguration(
       Constants.leftTalonShooterMotorDefaultDirection,
-      leftMotorHighRpmGains);
+      leftMotorHighRpmGains, 
+      leftMotorLowRpmGains);
 
     StatusCode response = leftMotor.getConfigurator().apply(this.leftMotorConfiguration);
     if (!response.isOK()) {
@@ -174,7 +175,8 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
     // Config right motor
     this.rightMotorConfiguration = this.getOutfeedMotorConfiguration(
       Constants.rightTalonShooterMotorDefaultDirection,
-      rightMotorHighRpmGains);
+      rightMotorHighRpmGains,
+      rightMotorLowRpmGains);
     response = rightMotor.getConfigurator().apply(this.rightMotorConfiguration);
     if (!response.isOK()) {
       System.out.println(
@@ -190,13 +192,15 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
    */
   private TalonFXConfiguration getOutfeedMotorConfiguration(
     InvertedValue targetInvert,
-    Slot0Configs targetConfigs) {
+    Slot0Configs targetSlot0Configs,
+    Slot1Configs targetSlot1Configs) {
 
     // Config left motor
     TalonFXConfiguration talonConfigs = new TalonFXConfiguration();
     talonConfigs.MotorOutput.NeutralMode = this.outfeedMotorTargetNeutralModeValue;
     talonConfigs.MotorOutput.withDutyCycleNeutralDeadband(kMinDeadband);
-    talonConfigs.Slot0 = leftMotorHighRpmGains;
+    talonConfigs.Slot0 = targetSlot0Configs;
+    talonConfigs.Slot1 = targetSlot1Configs;
     // do not config feedbacksource, since the default is the internal one.
     talonConfigs.Voltage.PeakForwardVoltage = 12;
     talonConfigs.Voltage.PeakReverseVoltage = -12;
@@ -220,6 +224,14 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
     return targetUnitsPerS;
   }
 
+  /**
+   * A method to return PIDs slot based on target speed on outfeed motors
+   * @return the index of the PID to use
+   */
+  private int getPidIdxForTargetSpeed() {
+    return (this.desiredSpeedRpm >= Constants.shooterOutfeedSpeedLowRpmPidThreshold) ? kPIDHighRpmLoopIdx : kPIDLowRpmLoopIdx;
+  }
+  
   private double rotationsPerSToRpm(double rotationsPerS, double targetGearRatio){
     return rotationsPerS / targetGearRatio * 60.0;
   }

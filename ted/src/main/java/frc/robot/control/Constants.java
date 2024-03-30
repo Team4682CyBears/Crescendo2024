@@ -139,7 +139,10 @@ public final class Constants {
     // but 5000 is a more comfortable max
     public static final double shooterMaxRpm = 5200;
     public static final double shooterDefaultSpeedRpm = shooterMaxRpm;
+    // brake mode is used below this threshold; coast mode is used above this threshold
     public static final double shooterOutfeedSpeedForcedBrakeThreshold = shooterMaxRpm * 0.20;
+    // low RPM PIDs are used below this threshold; high RPM PIDs are used above this threshold
+    public static final double shooterOutfeedSpeedLowRpmPidThreshold = shooterMaxRpm * 0.20;
 
     public static final double shooterSpinUpTimeoutSeconds = 5.0;
     public static final double autoShooterSpinUpTimeoutSeconds = 15.0;
