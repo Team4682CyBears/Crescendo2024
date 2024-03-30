@@ -23,7 +23,7 @@ import frc.robot.common.LEDStateAction;
 
 
 public class LEDSubsystem extends SubsystemBase {
-      private final int BUFFER_LENGTH = 144/2;
+      private final int BUFFER_LENGTH = 144;
       private final AddressableLED leds;
       private final AddressableLEDBuffer buffer;  // Creates a new buffer object
       private SubsystemCollection subsystems;
@@ -39,7 +39,7 @@ public class LEDSubsystem extends SubsystemBase {
       public LEDSubsystem(int port, SubsystemCollection subsystems) {
             // TODO maybe pass in buffer length
             this.subsystems = subsystems;
-            leds = new AddressableLED(port); // initialization of the AdressableLED
+            leds = new AddressableLED(1); // initialization of the AdressableLED
             leds.setLength(BUFFER_LENGTH); // Sets the LED Strip length once
             buffer = new AddressableLEDBuffer(BUFFER_LENGTH);
             // TODO we start a starting color

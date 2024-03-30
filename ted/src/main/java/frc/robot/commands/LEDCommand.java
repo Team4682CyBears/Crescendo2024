@@ -5,10 +5,10 @@ import frc.robot.subsystems.LEDSubsystem;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 
 // TODO remove println's, format code, remove dead code, rewiew intake/shoot patterns, clean up warning
-public class LEDCommand extends CommandBase {
+public class LEDCommand extends Command {
 
       private static final int LIGHT_DELAY_NUM_OF_ITERATIONS = 32;
 
@@ -318,13 +318,13 @@ public class LEDCommand extends CommandBase {
 
             // If counter is equal or greater to 2 (basically acting as a delay)
             if (counter >= LIGHT_DELAY_NUM_OF_ITERATIONS) {
-                  for (int ii = 0; ii < m_LEDSubsystem.getBufferLength(); ii++) {
+                  for (int ii = 0; ii < m_LEDSubsystem.getBufferLength() + 3; ii++) {
 
-                        //m_buffer.setRGB(ii, 0, 0, 0);
-                        //m_buffer.setRGB(yellowOffIndex, 0, 0, 0);
-                        //moveLEDs(); // Moves the LEDs
-                        m_buffer.setRGB(blueOnIndex, 0, 225, 0); // Blue
-                        //m_buffer.setRGB(yellowOnIndex, 255, 255, 0); // Yellow
+                        m_buffer.setRGB(blueOffIndex, 0, 0, 0);
+                        m_buffer.setRGB(yellowOffIndex, 0, 0, 0);
+                        moveLEDs(); // Moves the LEDs
+                        m_buffer.setRGB(blueOnIndex, 0, 0, 255); // Blue
+                        m_buffer.setRGB(yellowOnIndex, 255, 255, 0); // Yellow
                   }
 
                   // Resets the counter to 0 once the pattern is set
@@ -473,9 +473,9 @@ public class LEDCommand extends CommandBase {
 
       public void SolidLEDs() {
             for (int i = 0; i < m_LEDSubsystem.getBufferLength(); i++) {
-                  m_buffer.setRGB(i, 0, 225, 0); // blue
+                  m_buffer.setRGB(i, 0, 0, 225); // blue
             }
-            m_LEDSubsystem.setBuffer(m_buffer);   
+            m_LEDSubsystem.setBuffer(m_buffer);
       }
 
 }

@@ -10,6 +10,8 @@
 
 package frc.robot;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -21,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.common.TestTrajectories;
 import frc.robot.common.FeederMode;
+import frc.robot.common.LEDState;
 import frc.robot.control.InstalledHardware;
 import frc.robot.control.ManualInputInterfaces;
 import frc.robot.control.SubsystemCollection;
@@ -37,6 +40,7 @@ public class RobotContainer {
   private final AutonomousChooser autonomousChooser;
   private PowerDistribution p = new PowerDistribution();
   private double current21 = p.getVoltage();
+  private BooleanSupplier ledAction;
 
   public RobotContainer() {
 
@@ -140,6 +144,19 @@ public class RobotContainer {
       SmartDashboard.putData(
           "Spin Up Shooter at specified speeds",
           new ShooterSpinUpCommand(this.subsystems.getShooterOutfeedSubsystem(), () -> SmartDashboard.getNumber("Shooter Speed RPM Setter", Constants.shooterDefaultSpeedRpm)));
+          if(this.subsystems.getIntakeSubsystem().isNoteDetected()){
+            this.subsystems.getLEDSubsystem().RegisterStateAction(ledAction, LEDState.OrangeBlink);
+          }
+          if(this.subsystems.getFeederSubsystem().isShooterNoteDetected()){
+            this.subsystems.getLEDSubsystem().RegisterStateAction(ledAction, LEDState.OrangeSolid);
+          }
+          if(this.subsystems.getShooterOutfeedSubsystem().isNearSpeed()){
+            this.subsystems.getLEDSubsystem().RegisterStateAction(ledAction, LEDState.Yellow);
+          }
+          if(this.subsystems.getShooterOutfeedSubsystem().isAtSpeed()){
+            this.subsystems.getLEDSubsystem().RegisterStateAction(ledAction, LEDState.Green);
+          }
+          
     }
 
     if (this.subsystems.isIntakeSubsystemAvailable()) {
