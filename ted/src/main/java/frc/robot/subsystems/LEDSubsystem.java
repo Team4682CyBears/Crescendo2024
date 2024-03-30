@@ -10,10 +10,16 @@
 
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.control.SubsystemCollection;
+import frc.robot.common.LEDState;
+import frc.robot.common.LEDStateAction;
+//import frc.robot.common.LEDState;
 
 
 public class LEDSubsystem extends SubsystemBase {
@@ -21,6 +27,10 @@ public class LEDSubsystem extends SubsystemBase {
       private final AddressableLED leds;
       private final AddressableLEDBuffer buffer;  // Creates a new buffer object
       private SubsystemCollection subsystems;
+      private AddressableLEDBuffer ledsOff;
+      private ArrayList <LEDStateAction> ledStateActions = new ArrayList<>();
+      LEDState nextState;
+      private LEDState ledState = LEDState.Off;
 
       /**
        * LEDSubsystem
@@ -37,6 +47,59 @@ public class LEDSubsystem extends SubsystemBase {
 
             //TODO:SEE IF WE NEED THIS LINE
             leds.start();
+            leds.stop();
+      }
+
+      public void RegisterStateAction(BooleanSupplier shouldTakeAction, LEDState ledState){
+            ledStateActions.add(new LEDStateAction(shouldTakeAction, ledState));
+      }
+
+      public void periodic(){
+            ledState = LEDState.Off;
+            for(int i = 0; i < ledStateActions.size(); i++){
+                  if(ledState == LEDState.OrangeBlink){
+                        noteInIntake();
+                  }
+                  else if(ledState == LEDState.OrangeSolid){
+                        noteAtShooter();
+                  }
+                  else if(ledState == LEDState.Yellow){
+                        shooterRevvedTo80();
+                  }
+                  else if(ledState == LEDState.Green){
+                        shooterRevvedTo90();
+                  }
+            }
+
+      }
+
+      public void noteInIntake() {
+            ledState = LEDState.OrangeBlink;
+            for (int i = 0; i < buffer.getLength(); i++) {
+                  buffer.setRGB(i, 255,140,0); 
+                  buffer.setRGB(i, 0,0,0); 
+            }    
+      }
+
+      public void noteAtShooter() {
+            ledState = LEDState.OrangeSolid;
+            for (int i = 0; i < buffer.getLength(); i++) {
+                  buffer.setRGB(i, 255,140,0); 
+            }   
+      }
+
+      public void shooterRevvedTo80() {
+            ledState = LEDState.Yellow;
+            for (int i = 0; i < buffer.getLength(); i++) {
+                  buffer.setRGB(i, 150,150,0); 
+            }  
+      }
+
+      public void shooterRevvedTo90() {
+            ledState = LEDState.Green;
+            for (int i = 0; i < buffer.getLength(); i++) {
+                  buffer.setRGB(i, 150,150,0); 
+            }  
       }
 
       /**
