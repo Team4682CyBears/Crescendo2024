@@ -211,6 +211,7 @@ public class RobotContainer {
       // The robot's subsystems and commands are defined here...
       subsystems.setDriveTrainSubsystem(new DrivetrainSubsystem(subsystems));
       subsystems.getDriveTrainSubsystem().zeroRobotPosition(); // can I add this?
+      subsystems.getDriveTrainSubsystem().setRobotPosition(new Pose2d(0.0,0.0, new Rotation2d(-Constants.navxToRobotRotation)));
       subsystems.setDriveTrainPowerSubsystem(new DrivetrainPowerSubsystem(subsystems.getDriveTrainSubsystem()));
       SmartDashboard.putData("Debug: DrivetrainSub", subsystems.getDriveTrainSubsystem());
       System.out.println("SUCCESS: initializeDrivetrain");
