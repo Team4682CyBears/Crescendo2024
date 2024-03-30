@@ -12,9 +12,9 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityVoltage;
-import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -53,8 +53,14 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
   private final VoltageOut leftVoltageController = new VoltageOut(0);
   private final VoltageOut rightVoltageController = new VoltageOut(0);
 
-  private Slot0Configs leftMotorGains = new Slot0Configs().withKP(0.46).withKI(0.05).withKD(0.0075).withKV(0.11);
-  private Slot0Configs rightMotorGains = new Slot0Configs().withKP(0.46).withKI(0.05).withKD(0.0075).withKV(0.11);
+  // PID settings for high RPM
+  private Slot0Configs leftMotorHighRpmGains = new Slot0Configs().withKP(0.36).withKI(0.1).withKD(0.0075).withKV(0.10);
+  private Slot0Configs rightMotorHighRpmGains = new Slot0Configs().withKP(0.36).withKI(0.1).withKD(0.0075).withKV(0.10);
+  // PID settings for low RPM
+  // TODO switch the code between these settings for low speeds. 
+  private Slot1Configs leftMotorLowRpmGains = new Slot1Configs().withKP(0.20).withKI(0.2).withKD(0.0075).withKV(0.05);
+  private Slot1Configs rightMotorLowRpmGains = new Slot1Configs().withKP(0.20).withKI(0.2).withKD(0.0075).withKV(0.05);
+
 
   /**
    * Constructor for shooter subsystem
@@ -148,7 +154,7 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
     TalonFXConfiguration talonConfigs = new TalonFXConfiguration();
     talonConfigs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
     talonConfigs.MotorOutput.withDutyCycleNeutralDeadband(kMinDeadband);
-    talonConfigs.Slot0 = leftMotorGains;
+    talonConfigs.Slot0 = leftMotorHighRpmGains;
     // do not config feedbacksource, since the default is the internal one.
     talonConfigs.Voltage.PeakForwardVoltage = 12;
     talonConfigs.Voltage.PeakReverseVoltage = -12;
@@ -171,7 +177,7 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
     // modify left config for right motor
     // right motor goes a different direction
     talonConfigs.MotorOutput.Inverted = Constants.rightTalonShooterMotorDefaultDirection;
-    talonConfigs.Slot0 = rightMotorGains;
+    talonConfigs.Slot0 = rightMotorHighRpmGains;
     // apply configs
     response = rightMotor.getConfigurator().apply(talonConfigs);
     if (!response.isOK()) {
