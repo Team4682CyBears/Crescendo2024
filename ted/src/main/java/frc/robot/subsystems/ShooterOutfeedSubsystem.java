@@ -100,6 +100,11 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
       (Math.abs(getRightSpeedRpm() - this.desiredSpeedRpm) / this.desiredSpeedRpm) < this.velocityErrorThreshold;
   }
 
+  public boolean isNearSpeed() {
+    return (Math.abs(getLeftSpeedRpm() - this.desiredSpeedRpm) / this.desiredSpeedRpm) < this.velocityNearErrorThreshold &&
+      (Math.abs(getRightSpeedRpm() - this.desiredSpeedRpm) / this.desiredSpeedRpm) < this.velocityNearErrorThreshold;
+  }
+
   /**
    * this method will be called once per scheduler run
    */
@@ -116,6 +121,7 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
       leftMotor.setControl(leftVelocityController.withVelocity(revsPerS));
       rightMotor.setControl(rightVelocityController.withVelocity(revsPerS));
     }
+    SmartDashboard.putBoolean("IsShooterNearRevved?", isNearSpeed());
     SmartDashboard.putBoolean("IsShooterRevved?", isAtSpeed());
     SmartDashboard.putNumber("Shooter RPM", getRightSpeedRpm());
   }
