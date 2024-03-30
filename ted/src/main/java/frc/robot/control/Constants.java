@@ -122,7 +122,7 @@ public final class Constants {
     // feederSpeed is [0.0 .. 1.0]
     // it runs in one direction for the shooter 
     // and the opposite direction for the dunker/amp
-    public static final double feederSpeed = 0.30;
+    public static final double feederSpeed = 0.50;
     public static final double feederReverseSpeed = 0.10;
     // feeder will run until note is detected or this timeout has expired
     public static final double feederTimeoutSeconds = 10.0;
@@ -137,7 +137,7 @@ public final class Constants {
     public static InvertedValue rightTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;
     // Falcon 500 max speed is 6380 RPM, max loaded speed is 5600 deteremined from testing, 
     // but 5000 is a more comfortable max
-    public static final double shooterMaxRpm = 5000;
+    public static final double shooterMaxRpm = 5200;
     public static final double shooterDefaultSpeedRpm = shooterMaxRpm;
     public static final double shooterOutfeedSpeedForcedBrakeThreshold = shooterMaxRpm * 0.20;
 
@@ -161,7 +161,7 @@ public final class Constants {
     // TODO depending on which side the motor is mounted, may need to invert these.
     public static InvertedValue angleLeftTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;
     public static InvertedValue angleRightTalonShooterMotorDefaultDirection = InvertedValue.Clockwise_Positive;
-    public static final double shooterAbsoluteAngleOffsetDegrees = 59.445;
+    public static final double shooterAbsoluteAngleOffsetDegrees = 59.445 - 308.09;
     public static final double shooterStartingAngleOffsetDegrees = 20.0; 
     public static SensorDirectionValue shooterAngleSensorDirection = SensorDirectionValue.CounterClockwise_Positive;
     public static final double shooterAngleMaxDegrees = 110;
