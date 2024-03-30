@@ -34,6 +34,7 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
 
   // allowable error in velocty as a % of target
   private final double velocityErrorThreshold = 0.05;
+  private final double velocityNearErrorThreshold = 0.1;
 
   // Shooter gearing - currently 1:1
   private static final double outfeedShooterGearRatio = 1.0;
