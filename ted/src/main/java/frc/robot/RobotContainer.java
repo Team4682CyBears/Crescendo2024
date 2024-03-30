@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.common.TestTrajectories;
 import frc.robot.common.FeederMode;
 import frc.robot.control.InstalledHardware;
@@ -131,7 +132,10 @@ public class RobotContainer {
             () -> SmartDashboard.getNumber("Shooter Speed RPM Setter", Constants.shooterDefaultSpeedRpm),
           this.subsystems.getShooterOutfeedSubsystem(), this.subsystems.getFeederSubsystem()));
         SmartDashboard.putData("Fused Vision Button", new UseFusedVisionInAutoCommand(subsystems.getDriveTrainSubsystem()));
-        SmartDashboard.putData("set odometry to starting pos", new InstantCommand( () -> subsystems.getDriveTrainSubsystem().setRobotPosition(new Pose2d(new Translation2d(-4.7, 1.6), new Rotation2d(0)))));
+        TestTrajectories tTrajectories = new TestTrajectories(
+          this.subsystems.getDriveTrainSubsystem().getTrajectoryConfig());
+        SmartDashboard.putData("set odometry to starting pos", new InstantCommand( () -> subsystems.getDriveTrainSubsystem().setRobotPosition(new Pose2d(new Translation2d(-3.32, 1.66), new Rotation2d(0)))));
+        SmartDashboard.putData("zig zag", new ParallelCommandGroup(new UseFusedVisionInAutoCommand(this.subsystems.getDriveTrainSubsystem()), new DriveTrajectoryCommand(subsystems.getDriveTrainSubsystem(), tTrajectories.traverseZigZag)));
       SmartDashboard.putData(
           "Spin Up Shooter at specified speeds",
           new ShooterSpinUpCommand(this.subsystems.getShooterOutfeedSubsystem(), () -> SmartDashboard.getNumber("Shooter Speed RPM Setter", Constants.shooterDefaultSpeedRpm)));

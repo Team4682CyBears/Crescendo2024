@@ -672,11 +672,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
     if (visionMeasurement != null && useVision){
       Pose2d visionComputedMeasurement = visionMeasurement.getRobotPosition();
       if(visionComputedMeasurement != null) {
+        if(visionComputedMeasurement.getTranslation().getDistance(getRobotPosition().getTranslation()) <= 1){
           swervePoseEstimator.addVisionMeasurement(visionComputedMeasurement, visionMeasurement.getTimestamp());
+        }
       }
     }
 }
-
 
   /**
    * Determine if recent navx is all level
