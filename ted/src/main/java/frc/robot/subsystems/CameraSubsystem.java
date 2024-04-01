@@ -14,7 +14,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+
+import java.util.Optional;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -38,6 +42,7 @@ public class CameraSubsystem extends SubsystemBase {
   private final int fieldSpaceYIndex = 1;
   private final int botRotationIndex = 5;
   private final int noTagInSightId = -1;
+  private String botPoseSource = "botpose";
   private NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
   /**
    * a constructor for the camera subsystem class
@@ -52,7 +57,7 @@ public class CameraSubsystem extends SubsystemBase {
    */
   public VisionMeasurement getVisionBotPose(){
     double tagId = this.table.getEntry("tid").getDouble(noTagInSightId);
-    NetworkTableEntry botposeEntry = this.table.getEntry("botpose");
+    NetworkTableEntry botposeEntry = this.table.getEntry(botPoseSource);
     VisionMeasurement visionMeasurement = new VisionMeasurement(null, 0.0);
 
     if (botposeEntry.exists() && tagId != noTagInSightId){
@@ -64,6 +69,23 @@ public class CameraSubsystem extends SubsystemBase {
       visionMeasurement = new VisionMeasurement(realRobotPosition, timestamp);
     }
     return visionMeasurement;
+  }
+
+  public String getBotPoseSource(){
+    return botPoseSource;
+  }
+
+  public void setBotPoseSource(){
+    var alliance = DriverStation.getAlliance();
+    if(alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red){
+      botPoseSource = "botpose_wpired";
+    }
+    else if(alliance.isPresent() && alliance.get() == DriverStation.Alliance.Blue){
+      botPoseSource = "botpose_wpiblue";
+    }
+    else{
+      botPoseSource = "botpose";
+    }
   }
 
   /**

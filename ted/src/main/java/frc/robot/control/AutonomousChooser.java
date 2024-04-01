@@ -25,7 +25,9 @@ import frc.robot.commands.IntakeAndFeedNoteCommand;
 import frc.robot.commands.RemoveNoteCommand;
 import frc.robot.commands.ShooterSetAngleCommand;
 import frc.robot.commands.ShooterSetAngleWithVisionOneShotCommand;
+import frc.robot.commands.UseFusedVisionInAutoCommand;
 import frc.robot.common.FeederMode;
+import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.commands.FeederLaunchNote;
 
 /**
@@ -104,8 +106,10 @@ public class AutonomousChooser {
      * @return command
      */
     public Command getCommand(){
+        subsystems.getCameraSubsystem().setBotPoseSource();
         return new ParallelCommandGroup(
             new ShooterSpinUpAutoCommand(subsystems.getShooterOutfeedSubsystem()),
+            new UseFusedVisionInAutoCommand(subsystems.getDriveTrainSubsystem()),
             getAutoPath()
         );
     }
