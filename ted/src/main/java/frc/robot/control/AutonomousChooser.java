@@ -44,6 +44,7 @@ public class AutonomousChooser {
     private Command twoNote;
     private Command redWing;
     private Command redFourNote;
+    private Command redFiveNote;
     /**
      * Constructor for AutonomousChooser
      * @param subsystems - the SubsystemCollection
@@ -62,6 +63,7 @@ public class AutonomousChooser {
         autonomousPathChooser.addOption("BLUE Four Note", AutonomousPath.BLUEFOURNOTE);
         autonomousPathChooser.addOption("RED Wing", AutonomousPath.REDWING);
         autonomousPathChooser.addOption("RED Four Note", AutonomousPath.REDFOURNOTE);
+        autonomousPathChooser.addOption("RED 5 note", AutonomousPath.REDFIVENOTE);
         SmartDashboard.putData(autonomousPathChooser);
 
         this.blue123SourceSide = getBlue123SourceSide();
@@ -71,6 +73,7 @@ public class AutonomousChooser {
         this.twoNote = getTwoNote();
         this.redWing = getRedWing();
         this.redFourNote = getRedFourNote();
+        this.redFiveNote = getRedFiveNote();
         }
         else{
             System.out.println(">>>>> NO auto routine becuase missing subsystems");
@@ -97,6 +100,8 @@ public class AutonomousChooser {
                 return this.redWing;
             case REDFOURNOTE :
                 return this.redFourNote;
+            case REDFIVENOTE :
+                return this.redFiveNote;
         }
         return new InstantCommand();
     }
@@ -142,6 +147,10 @@ public class AutonomousChooser {
         return AutoBuilder.buildAuto("Red4Note");
     }
 
+    private Command getRedFiveNote(){
+        return AutoBuilder.buildAuto("Red5Note");
+    }
+
     private enum AutonomousPath {
         BLUE123,
         RED123,
@@ -149,7 +158,8 @@ public class AutonomousChooser {
         BLUEFOURNOTE,
         TWONOTE,
         REDWING,
-        REDFOURNOTE
+        REDFOURNOTE,
+        REDFIVENOTE
     }
 
     /**
@@ -198,7 +208,7 @@ public class AutonomousChooser {
             NamedCommands.registerCommand("AngleFromNote",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "AngleFromNote"),
-                    new ShooterSetAngleCommand(40.0, subsystems.getShooterAngleSubsystem())));
+                    new ShooterSetAngleCommand(38.0, subsystems.getShooterAngleSubsystem())));
             NamedCommands.registerCommand("AngleFromSpeaker",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "AngleFromSpeaker"),
@@ -206,7 +216,7 @@ public class AutonomousChooser {
             NamedCommands.registerCommand("AngleFromStage",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "AngleFromNote"),
-                    new ShooterSetAngleCommand(38.0, subsystems.getShooterAngleSubsystem())));
+                    new ShooterSetAngleCommand(36.0, subsystems.getShooterAngleSubsystem())));
             NamedCommands.registerCommand("AngleFromWing",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "AngleFromWing"),
@@ -215,6 +225,10 @@ public class AutonomousChooser {
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "AngleFromFront"),
                     new ShooterSetAngleCommand(40.0, subsystems.getShooterAngleSubsystem())));
+            NamedCommands.registerCommand("AngleFromUnder",
+                new ParallelCommandGroup(
+                    new ButtonPressCommand("PathPlanner", "AngleFromFront"),
+                    new ShooterSetAngleCommand(28.5, subsystems.getShooterAngleSubsystem())));
             NamedCommands.registerCommand("AutoAngle",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "AutoAngle"),

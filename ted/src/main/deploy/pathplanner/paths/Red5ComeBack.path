@@ -3,29 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3412763391943208,
-        "y": 2.65
+        "x": 8.018380400397163,
+        "y": 2.220241531392155
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7401343893596877,
-        "y": 3.1624448703442867
+        "x": 6.730973578552662,
+        "y": 3.778109143278111
+      },
+      "isLocked": false,
+      "linkedName": "Red5Mid"
+    },
+    {
+      "anchor": {
+        "x": 5.3503590643544925,
+        "y": 3.7967995935991876
+      },
+      "prevControl": {
+        "x": 5.732839078574393,
+        "y": 3.8340999058289706
+      },
+      "nextControl": {
+        "x": 4.897815555716578,
+        "y": 3.7526665316294423
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.9826817835453852,
-        "y": 3.330362297088231
+        "x": 4.230909552728196,
+        "y": 3.34
       },
       "prevControl": {
-        "x": 1.6655044219179347,
-        "y": 3.041171173251438
+        "x": 4.6600384202327785,
+        "y": 3.6198523270870986
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "RedInFront"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -39,13 +55,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 23.71043664112413,
+    "rotation": 14.248689258961383,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "Red4Note",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 15.41732214778442,
     "velocity": 0
   },
   "useDefaultConstraints": true
