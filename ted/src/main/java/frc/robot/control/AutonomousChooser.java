@@ -227,7 +227,7 @@ public class AutonomousChooser {
                     new ShooterSetAngleCommand(40.0, subsystems.getShooterAngleSubsystem())));
             NamedCommands.registerCommand("AngleFromUnder",
                 new ParallelCommandGroup(
-                    new ButtonPressCommand("PathPlanner", "AngleFromFront"),
+                    new ButtonPressCommand("PathPlanner", "AngleFromUnder"),
                     new ShooterSetAngleCommand(28.5, subsystems.getShooterAngleSubsystem())));
             NamedCommands.registerCommand("AutoAngle",
                 new ParallelCommandGroup(
