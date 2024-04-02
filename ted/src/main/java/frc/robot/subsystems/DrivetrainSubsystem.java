@@ -146,6 +146,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   // Standard deviations for poseEstimator updates
   // The wpilib matrix constructor requires sizes specified as Nat types. 
   // These are the default recommended settings
+  // we dont trust the camera yaw because we have navx
   private Matrix<N3,N1> visionStdDev = MatBuilder.fill(Nat.N3(), Nat.N1(), new double[]{0.7, 0.7, 10});
   private Matrix<N3,N1> odometryStdDev = MatBuilder.fill(Nat.N3(), Nat.N1(), new double[]{0.1, 0.1, 0.1});
 
