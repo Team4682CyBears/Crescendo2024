@@ -41,6 +41,7 @@ public class AutonomousChooser {
     private Command red123SourceSide;
     private Command blueWing;
     private Command blueFourNote;
+    private Command blueFiveNote;
     private Command twoNote;
     private Command redWing;
     private Command redFourNote;
@@ -61,6 +62,7 @@ public class AutonomousChooser {
         autonomousPathChooser.addOption("RED 123 Source Side", AutonomousPath.RED123);
         autonomousPathChooser.addOption("BLUE Wing", AutonomousPath.BLUEWING);
         autonomousPathChooser.addOption("BLUE Four Note", AutonomousPath.BLUEFOURNOTE);
+        autonomousPathChooser.addOption("BLUE 5 note", AutonomousPath.BLUEFIVENOTE);
         autonomousPathChooser.addOption("RED Wing", AutonomousPath.REDWING);
         autonomousPathChooser.addOption("RED Four Note", AutonomousPath.REDFOURNOTE);
         autonomousPathChooser.addOption("RED 5 note", AutonomousPath.REDFIVENOTE);
@@ -70,10 +72,12 @@ public class AutonomousChooser {
         this.red123SourceSide = getRed123SourceSide();
         this.blueWing = getBlueWing();
         this.blueFourNote = getBlueFourNote();
+        this.blueFiveNote = getBlueFiveNote();
         this.twoNote = getTwoNote();
         this.redWing = getRedWing();
         this.redFourNote = getRedFourNote();
         this.redFiveNote = getRedFiveNote();
+
         }
         else{
             System.out.println(">>>>> NO auto routine becuase missing subsystems");
@@ -94,6 +98,8 @@ public class AutonomousChooser {
                 return this.blueWing;
             case BLUEFOURNOTE :
                 return this.blueFourNote;
+            case BLUEFIVENOTE :
+                return this.blueFiveNote;
             case TWONOTE :
                 return this.twoNote;
             case REDWING :
@@ -135,6 +141,10 @@ public class AutonomousChooser {
         return AutoBuilder.buildAuto("Blue4Note");
     }
 
+    private Command getBlueFiveNote(){
+        return AutoBuilder.buildAuto("Blue5Note");
+    }
+
     private Command getTwoNote(){
         return AutoBuilder.buildAuto("TwoNote");
     }
@@ -156,6 +166,7 @@ public class AutonomousChooser {
         RED123,
         BLUEWING,
         BLUEFOURNOTE,
+        BLUEFIVENOTE,
         TWONOTE,
         REDWING,
         REDFOURNOTE,
