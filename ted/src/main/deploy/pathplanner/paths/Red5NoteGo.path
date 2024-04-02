@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.5338968170340856,
-        "y": 1.37
+        "x": 2.7,
+        "y": 1.6
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.8204447317985544,
-        "y": 0.7742859122081884
+        "x": 3.986547914764469,
+        "y": 1.0042859122081884
       },
       "isLocked": false,
-      "linkedName": "Red4End"
+      "linkedName": "RedNote3"
     },
     {
       "anchor": {
