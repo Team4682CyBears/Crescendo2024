@@ -3,29 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3412763391943208,
-        "y": 2.65
+        "x": 8.018380400397163,
+        "y": 5.98
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7401343893596877,
-        "y": 3.1624448703442867
+        "x": 6.730973578552662,
+        "y": 4.422132388114044
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.9826817835453852,
-        "y": 3.330362297088231
+        "x": 5.3503590643544925,
+        "y": 4.4
       },
       "prevControl": {
-        "x": 1.6655044219179347,
-        "y": 3.041171173251438
+        "x": 5.732839078574393,
+        "y": 4.362699687770217
+      },
+      "nextControl": {
+        "x": 4.897815555716578,
+        "y": 4.444133061969746
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.230909552728196,
+        "y": 4.86
+      },
+      "prevControl": {
+        "x": 4.6600384202327785,
+        "y": 4.580147672912902
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "RedInFront"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -39,13 +55,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 23.71043664112413,
+    "rotation": -11.039385167997256,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Red4Note",
+  "folder": "Blue4Note",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -36.73292545072441,
     "velocity": 0
   },
   "useDefaultConstraints": true

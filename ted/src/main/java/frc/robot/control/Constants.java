@@ -154,7 +154,7 @@ public final class Constants {
     public static final double shooterOutfeedSpeedForAngleShootFromNote = shooterMaxRpm; 
     public static final double shooterOutfeedSpeedForAngleShootFromStage = shooterMaxRpm;
     public static final double shooterOutfeedSpeedForAngleShootFromSourceWing = shooterMaxRpm;
-    public static final double shooterOutfeedSpeedForAngleShootFromAmp = 250.0;
+    public static final double shooterOutfeedSpeedForAngleShootFromAmp = 300.0;
 
     // *******************************************************************
     // shooter angle constants  
@@ -182,7 +182,7 @@ public final class Constants {
     public static final double shooterAngleShootFromStage = 40.0;
     public static final double shooterAngleShootFromSideStage = 34.0;
     public static final double shooterAngleShootFromSourceWing = 22.0;
-    public static final double shooterAngleShootFromAmp = Constants.shooterAngleMaxDegrees;
+    public static final double shooterAngleShootFromAmp = 101.0;
 
     // ******************************************************************
     // climber constants
@@ -214,6 +214,7 @@ public final class Constants {
     // camera constants
     public static final int speakerBlueTagID = 7;
     public static final int spekaerRedTagID = 4;
+    public static final double autoUseFusedVisionDuration = 15.0;
   
     // ********************************************************************
     // Controller Constants

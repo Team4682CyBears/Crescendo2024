@@ -70,12 +70,12 @@ python_snapscript_name:
 red_balance:1200
 roi_x:0
 roi_y:0.000000
-rsf:0.34
+rsf:-0.34
 rspitch:39
 rsroll:1.4
 rss:0.155
 rsu:0.25
-rsyaw:-5.2
+rsyaw:-185.2
 sat_max:255
 sat_min:70
 send_corners:0
