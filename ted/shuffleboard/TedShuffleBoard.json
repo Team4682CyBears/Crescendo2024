@@ -39,7 +39,7 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "9,1": {
+          "9,2": {
             "size": [
               3,
               3
@@ -57,6 +57,32 @@
               "Y-axis/Lower bound": -1.0,
               "Y-axis/Unit": "ul",
               "Visible data/SmartDashboard/Shooter RPM": true
+            }
+          },
+          "9,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Brownout Count",
+              "_title": "/SmartDashboard/Brownout Count",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "9,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Drive Accel. Reduction Factor",
+              "_title": "/SmartDashboard/Drive Accel. Reduction Factor",
+              "_glyph": 148,
+              "_showGlyph": false
             }
           }
         }
@@ -112,7 +138,7 @@
               "_showGlyph": false
             }
           },
-          "4,0": {
+          "4,1": {
             "size": [
               5,
               3
@@ -142,71 +168,6 @@
               "_type": "Text View",
               "_source0": "network_table:///limelight/tid",
               "_title": "limelight/tid",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "2,1": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Fused Vision Button",
-              "_title": "/SmartDashboard/Fused Vision Button",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "2,2": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/set odometry to starting pos",
-              "_title": "/SmartDashboard/set odometry to starting pos",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "0,3": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/bot x",
-              "_title": "SmartDashboard/bot x",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "2,3": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/bot y",
-              "_title": "SmartDashboard/bot y",
-              "_glyph": 148,
-              "_showGlyph": false
-            }
-          },
-          "2,4": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/zig zag",
-              "_title": "/SmartDashboard/zig zag",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -576,6 +537,33 @@
               "_type": "Command",
               "_source0": "network_table:///SmartDashboard/Climber Left to 10",
               "_title": "/SmartDashboard/Climber Left to 10",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Tab 7",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "3,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/LEDSolid",
+              "_title": "/SmartDashboard/LEDSolid",
               "_glyph": 148,
               "_showGlyph": false
             }
