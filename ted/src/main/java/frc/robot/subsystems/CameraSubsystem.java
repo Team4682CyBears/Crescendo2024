@@ -71,10 +71,18 @@ public class CameraSubsystem extends SubsystemBase {
     return visionMeasurement;
   }
 
+  /**
+   * a method that gets botPoseSource
+   * @return which limelight datatable we are using
+   */
   public String getBotPoseSource(){
     return botPoseSource;
   }
 
+  /**
+   * a method that sets which limelight data table we should be using
+   * based on the alliance spit out from driver station
+   */
   public void setBotPoseSource(){
     var alliance = DriverStation.getAlliance();
     if(alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red){

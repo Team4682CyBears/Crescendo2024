@@ -15,8 +15,8 @@ import frc.robot.control.Constants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
 /**
- * Forms a command rev the shooter
- * shooter revs for 15seconds (the auto duration)
+ * Forms a command to use fused vision
+ * uses it for 15seconds (the auto duration)
  */
 public class UseFusedVisionInAutoCommand extends Command
 {
