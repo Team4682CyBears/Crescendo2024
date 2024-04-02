@@ -33,6 +33,7 @@ import frc.robot.commands.LEDCommand.LEDPatterns;
 import frc.robot.control.AutonomousChooser;
 import frc.robot.control.Constants;
 import edu.wpi.first.wpilibj.PowerDistribution;
+import frc.robot.commands.LEDSCommand;
 
 public class RobotContainer {
 
@@ -40,7 +41,6 @@ public class RobotContainer {
   private final AutonomousChooser autonomousChooser;
   private PowerDistribution p = new PowerDistribution();
   private double current21 = p.getVoltage();
-  private BooleanSupplier ledAction;
 
   public RobotContainer() {
 
@@ -145,12 +145,16 @@ public class RobotContainer {
           "Spin Up Shooter at specified speeds",
           new ShooterSpinUpCommand(this.subsystems.getShooterOutfeedSubsystem(), () -> SmartDashboard.getNumber("Shooter Speed RPM Setter", Constants.shooterDefaultSpeedRpm)));
             this.subsystems.getLEDSubsystem().RegisterStateAction(this.subsystems.getIntakeSubsystem()::isNoteDetected, LEDState.OrangeBlink);
+            this.subsystems.getLEDSubsystem().RegisterStateAction(() -> !this.subsystems.getIntakeSubsystem().isNoteDetected(),LEDState.Off);
             this.subsystems.getLEDSubsystem().RegisterStateAction(this.subsystems.getFeederSubsystem()::isShooterNoteDetected, LEDState.OrangeSolid);
+            this.subsystems.getLEDSubsystem().RegisterStateAction(() -> !this.subsystems.getFeederSubsystem().isShooterNoteDetected(),LEDState.Off);
             this.subsystems.getLEDSubsystem().RegisterStateAction(this.subsystems.getShooterOutfeedSubsystem()::isNearSpeed, LEDState.Yellow);
+            this.subsystems.getLEDSubsystem().RegisterStateAction(() -> !this.subsystems.getShooterOutfeedSubsystem().isNearSpeed(),LEDState.Off);
             this.subsystems.getLEDSubsystem().RegisterStateAction(this.subsystems.getShooterOutfeedSubsystem()::isAtSpeed, LEDState.Green);
+            this.subsystems.getLEDSubsystem().RegisterStateAction(() -> !this.subsystems.getShooterOutfeedSubsystem().isAtSpeed(),LEDState.Off);
+            SmartDashboard.putData("leds command", new LEDSCommand(subsystems.getLEDSubsystem(), subsystems.getIntakeSubsystem()));
+
           }
-          
-    
 
     if (this.subsystems.isIntakeSubsystemAvailable()) {
       SmartDashboard.putData(

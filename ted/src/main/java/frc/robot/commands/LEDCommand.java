@@ -472,10 +472,22 @@ public class LEDCommand extends Command {
       }
 
       public void SolidLEDs() {
+            counter =0;
             for (int i = 0; i < m_LEDSubsystem.getBufferLength(); i++) {
-                  m_buffer.setRGB(i, 0, 0, 225); // blue
+                  if(counter%5 == 0){
+                        for (i = 0; i < m_LEDSubsystem.getBufferLength(); i++) {
+                              m_buffer.setRGB(i, 0, 0, 0);
+                        }
+                  }
+                  else{
+                         for (i = 0; i < m_LEDSubsystem.getBufferLength(); i++) {
+                              m_buffer.setRGB(i, 225, 140, 0);
+                        }
+                  }
+                  counter++;
             }
             m_LEDSubsystem.setBuffer(m_buffer);
       }
+
 
 }

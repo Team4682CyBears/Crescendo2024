@@ -54,14 +54,14 @@ public class LEDSubsystem extends SubsystemBase {
       }
 
       public void periodic(){
-            LEDState nexState = LEDState.Off;
+            LEDState nexState = LEDState.OrangeBlink;
             for(int i = 0; i < ledStateActions.size(); i++){
                  if(ledStateActions.get(i).getShouldTakeAction().getAsBoolean()){
                         nextState = ledStateActions.get(i).getLedState();
                         System.out.println("Setting led state to " + nextState);
                  }
             }
-             if(ledState == LEDState.OrangeBlink){
+             if(subsystems.getIntakeSubsystem().isNoteDetected()){
                         noteInIntake();
                   }
                   else if(ledState == LEDState.OrangeSolid){
@@ -81,16 +81,20 @@ public class LEDSubsystem extends SubsystemBase {
 
       public void noteInIntake() {
             ledState = LEDState.OrangeBlink;
-            int counter =0;
+             for (int i = 0; i < buffer.getLength(); i++) {
+                  buffer.setRGB(i, 255,140,0); 
+
+            } 
+            /*int counter =0;
             for (int i = 0; i < buffer.getLength(); i++) {
-                  if(counter%2 == 0){
-                        buffer.setRGB(i, 0, 0, 225); // blue
+                  if(counter%5 == 0){
+                        buffer.setRGB(i, 0, 0, 0);
                   }
                   else{
-                       buffer.setRGB(i, 0, 0, 225); // blue 
+                       buffer.setRGB(i, 225, 140, 0);
                   }
                   counter++;
-            }
+            }*/
       }
 
       public void noteAtShooter() {
