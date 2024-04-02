@@ -117,6 +117,7 @@ public class AutonomousChooser {
      * @return command
      */
     public Command getCommand(){
+        //this needs to be called here because we might not be connected to the fms before
         subsystems.getCameraSubsystem().setBotPoseSource();
         return new ParallelCommandGroup(
             new ShooterSpinUpAutoCommand(subsystems.getShooterOutfeedSubsystem()),

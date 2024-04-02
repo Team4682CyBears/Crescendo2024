@@ -145,6 +145,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private ArrayDeque<Pose2d> historicPositions = new ArrayDeque<Pose2d>(PositionHistoryStorageSize + 1);
   // Standard deviations for poseEstimator updates
   // The wpilib matrix constructor requires sizes specified as Nat types. 
+  // These are the default recommended settings
   private Matrix<N3,N1> visionStdDev = MatBuilder.fill(Nat.N3(), Nat.N1(), new double[]{0.7, 0.7, 10});
   private Matrix<N3,N1> odometryStdDev = MatBuilder.fill(Nat.N3(), Nat.N1(), new double[]{0.1, 0.1, 0.1});
 
@@ -672,6 +673,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     if (visionMeasurement != null && useVision){
       Pose2d visionComputedMeasurement = visionMeasurement.getRobotPosition();
       if(visionComputedMeasurement != null) {
+        //we want to reject vision measurements that are more than 1 meter away in case vison gives a bad read
         if(visionComputedMeasurement.getTranslation().getDistance(getRobotPosition().getTranslation()) <= 1){
           swervePoseEstimator.addVisionMeasurement(visionComputedMeasurement, visionMeasurement.getTimestamp());
         }

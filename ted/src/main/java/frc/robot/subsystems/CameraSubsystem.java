@@ -17,8 +17,6 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 
-import java.util.Optional;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -82,6 +80,7 @@ public class CameraSubsystem extends SubsystemBase {
   /**
    * a method that sets which limelight data table we should be using
    * based on the alliance spit out from driver station
+   * https://docs.limelightvision.io/docs/docs-limelight/apis/complete-networktables-api#apriltag-and-3d-data
    */
   public void setBotPoseSource(){
     var alliance = DriverStation.getAlliance();
