@@ -143,6 +143,10 @@ public final class Constants {
     // but 5000 is a more comfortable max
     public static final double shooterMaxRpm = 5200;
     public static final double shooterDefaultSpeedRpm = shooterMaxRpm;
+    // brake mode is used below this threshold; coast mode is used above this threshold
+    public static final double shooterOutfeedSpeedForcedBrakeThreshold = shooterMaxRpm * 0.20;
+    // low RPM PIDs are used below this threshold; high RPM PIDs are used above this threshold
+    public static final double shooterOutfeedSpeedLowRpmPidThreshold = shooterMaxRpm * 0.20;
 
     public static final double shooterSpinUpTimeoutSeconds = 5.0;
     public static final double autoShooterSpinUpTimeoutSeconds = 15.0;
@@ -154,7 +158,7 @@ public final class Constants {
     public static final double shooterOutfeedSpeedForAngleShootFromNote = shooterMaxRpm; 
     public static final double shooterOutfeedSpeedForAngleShootFromStage = shooterMaxRpm;
     public static final double shooterOutfeedSpeedForAngleShootFromSourceWing = shooterMaxRpm;
-    public static final double shooterOutfeedSpeedForAngleShootFromAmp = 250.0;
+    public static final double shooterOutfeedSpeedForAngleShootFromAmp = 300.0;
 
     // *******************************************************************
     // shooter angle constants  
@@ -182,7 +186,7 @@ public final class Constants {
     public static final double shooterAngleShootFromStage = 40.0;
     public static final double shooterAngleShootFromSideStage = 34.0;
     public static final double shooterAngleShootFromSourceWing = 22.0;
-    public static final double shooterAngleShootFromAmp = Constants.shooterAngleMaxDegrees;
+    public static final double shooterAngleShootFromAmp = 101.0;
 
     // ******************************************************************
     // climber constants
@@ -214,6 +218,7 @@ public final class Constants {
     // camera constants
     public static final int speakerBlueTagID = 7;
     public static final int spekaerRedTagID = 4;
+    public static final double autoUseFusedVisionDuration = 15.0;
   
     // ********************************************************************
     // Controller Constants
