@@ -10,22 +10,16 @@
 
 package frc.robot.subsystems;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.BooleanSupplier;
-
-import com.ctre.phoenix6.signals.Led1OffColorValue;
-
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.control.SubsystemCollection;
 import frc.robot.common.LEDState;
 import frc.robot.common.LEDStateAction;
-//import frc.robot.common.LEDState;
-
 
 public class LEDSubsystem extends SubsystemBase {
+
       private final int BUFFER_LENGTH = 144;
       private final AddressableLED leds;
       private final AddressableLEDBuffer buffer;  // Creates a new buffer object
@@ -61,7 +55,7 @@ public class LEDSubsystem extends SubsystemBase {
             ledStateActions.put(ledState, new LEDStateAction(shouldTakeAction, ledState));
       }
 
-      public void periodic(){
+      public void periodic() {
 
             boolean hasPreviousColorState = false;
             LEDState currLedState = LEDState.Off;
@@ -75,7 +69,7 @@ public class LEDSubsystem extends SubsystemBase {
                         currLedState = LEDState.Green;
                         hasPreviousColorState = true;
                         if(this.doUpdateOfRequestedLedColorState(currLedState)) {
-                              System.out.println("Setting led state to " + currLedState.toString());
+                              System.out.println("**** UPDATING LED STATE TO " + currLedState.toString());
                               this.greenSolid();
                         }
                   }
@@ -88,7 +82,7 @@ public class LEDSubsystem extends SubsystemBase {
                         currLedState = LEDState.Yellow;
                         hasPreviousColorState = true;
                         if(this.doUpdateOfRequestedLedColorState(currLedState)) {
-                              System.out.println("Setting led state to " + currLedState.toString());
+                              System.out.println("**** UPDATING LED STATE TO " + currLedState.toString());
                               this.yellowSolid();
                         }
                   }
@@ -101,7 +95,7 @@ public class LEDSubsystem extends SubsystemBase {
                         currLedState = LEDState.OrangeSolid;
                         hasPreviousColorState = true;
                         if(this.doUpdateOfRequestedLedColorState(currLedState)) {
-                              System.out.println("Setting led state to " + currLedState.toString());
+                              System.out.println("**** UPDATING LED STATE TO " + currLedState.toString());
                               this.orangeSolid();
                         }
                   }
@@ -114,7 +108,7 @@ public class LEDSubsystem extends SubsystemBase {
                         currLedState = LEDState.OrangeBlink;
                         hasPreviousColorState = true;
                         if(this.doUpdateOfRequestedLedColorState(currLedState)) {
-                              System.out.println("Setting led state to " + currLedState.toString());
+                              System.out.println("**** UPDATING LED STATE TO " + currLedState.toString());
                               this.orangeBlink();
                         }
                   }
@@ -125,7 +119,8 @@ public class LEDSubsystem extends SubsystemBase {
                   currLedState = LEDState.Off;
                   hasPreviousColorState = true;
                   if(this.doUpdateOfRequestedLedColorState(currLedState)) {
-                        System.out.println("No other LED state requested, setting to " + LEDState.Off.toString());
+                        System.out.println("No other LED state requested!!");
+                        System.out.println("**** UPDATING LED STATE TO " + currLedState.toString());
                         this.offState();
                   }
             }
@@ -141,31 +136,36 @@ public class LEDSubsystem extends SubsystemBase {
                   else {
                         buffer.setRGB(i, 0, 0, 0);
                   }
-            } 
+            }
+            this.leds.setData(this.buffer);
       }
 
       private void orangeSolid() {
             for (int i = 0; i < buffer.getLength(); i++) {
                   buffer.setRGB(i, 255,140,0); 
             }   
+            this.leds.setData(this.buffer);
       }
 
       private void yellowSolid() {
             for (int i = 0; i < buffer.getLength(); i++) {
                   buffer.setRGB(i, 150,150,0); 
             }  
+            this.leds.setData(this.buffer);
       }
 
       private void greenSolid() {
             for (int i = 0; i < buffer.getLength(); i++) {
                   buffer.setRGB(i, 150,150,0); 
             }  
+            this.leds.setData(this.buffer);
       }
 
       private void offState() {
             for (int i = 0; i < buffer.getLength(); i++) {
                   buffer.setRGB(i, 0,0,0); 
             }  
+            this.leds.setData(this.buffer);
       }
 
       private void updateBlinkCounterState() {
