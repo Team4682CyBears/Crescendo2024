@@ -109,7 +109,7 @@ public class LEDSubsystem extends SubsystemBase {
                         hasPreviousColorState = true;
                         if(this.doUpdateOfRequestedLedColorState(currLedState)) {
                               System.out.println("**** UPDATING LED STATE TO " + currLedState.toString());
-                              this.orangeBlink();
+                              this.orangeSolid();
                         }
                   }
             }
@@ -142,7 +142,7 @@ public class LEDSubsystem extends SubsystemBase {
 
       private void orangeSolid() {
             for (int i = 0; i < buffer.getLength(); i++) {
-                  buffer.setRGB(i, 255,140,0); 
+                  buffer.setRGB(i, 255,165,0); 
             }   
             this.leds.setData(this.buffer);
       }
