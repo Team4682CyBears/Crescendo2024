@@ -27,6 +27,7 @@ public class LEDSubsystem extends SubsystemBase {
       private int blinkPeriodInHertz = 10; // increase this for longer blinks!!!
       private int blinkCounter = 0;
       private boolean currentBlinkState = false;
+      private boolean lastBlinkState = false;
       private LEDState lastLEDState = LEDState.Off;
 
       /**
@@ -107,9 +108,11 @@ public class LEDSubsystem extends SubsystemBase {
                   if(action.getShouldTakeAction().getAsBoolean()) {
                         currLedState = LEDState.OrangeBlink;
                         hasPreviousColorState = true;
-                        if(this.doUpdateOfRequestedLedColorState(currLedState)) {
+                        boolean theCurrentBlinkState = this.currentBlinkState;
+                        if(this.doUpdateOfRequestedLedColorState(currLedState) || theCurrentBlinkState != this.lastBlinkState) {
+                              this.lastBlinkState = theCurrentBlinkState;
                               System.out.println("**** UPDATING LED STATE TO " + currLedState.toString());
-                              this.orangeSolid();
+                              this.orangeBlink(theCurrentBlinkState);
                         }
                   }
             }
@@ -127,11 +130,10 @@ public class LEDSubsystem extends SubsystemBase {
 
       }
 
-      private void orangeBlink() {
-            boolean localBlinkState = this.currentBlinkState;
+      private void orangeBlink(boolean localBlinkState) {
             for (int i = 0; i < buffer.getLength(); i++) {
                   if(localBlinkState) {
-                        buffer.setRGB(i, 255,140,0); 
+                        buffer.setRGB(i, 255,165,0); 
                   }
                   else {
                         buffer.setRGB(i, 0, 0, 0);
