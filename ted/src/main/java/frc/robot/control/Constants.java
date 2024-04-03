@@ -95,6 +95,10 @@ public final class Constants {
     public static final Pose2d TrajectoryPoseTol = new Pose2d(0.1, 0.1, Rotation2d.fromDegrees(5));
 
     //*****************************************
+    // LED constants
+    public static final int ledPwmPortNumber = 0;
+
+    //*****************************************
     // Fine placement constants
     // Center of rotation for fine placement
     public static final Translation2d RobotFrontRotationalCenter = 

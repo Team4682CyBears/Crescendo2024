@@ -10,16 +10,20 @@
 
 package frc.robot;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.simulation.PDPSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.common.TestTrajectories;
 import frc.robot.common.FeederMode;
+import frc.robot.common.LEDState;
 import frc.robot.control.InstalledHardware;
 import frc.robot.control.ManualInputInterfaces;
 import frc.robot.control.SubsystemCollection;
@@ -27,13 +31,19 @@ import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 import frc.robot.control.AutonomousChooser;
 import frc.robot.control.Constants;
+import edu.wpi.first.wpilibj.PowerDistribution;
 
 public class RobotContainer {
 
   private SubsystemCollection subsystems = new SubsystemCollection();
   private final AutonomousChooser autonomousChooser;
+  private PowerDistribution p = new PowerDistribution();
+  private double current21 = p.getVoltage();
 
   public RobotContainer() {
+
+    // init the led
+    this.initializeLEDSubsystem();
 
     // init the pdp watcher
     this.initializePowerDistributionPanelWatcherSubsystem();
@@ -130,9 +140,6 @@ public class RobotContainer {
           new ShooterShootCommand(
             () -> SmartDashboard.getNumber("Shooter Speed RPM Setter", Constants.shooterDefaultSpeedRpm),
           this.subsystems.getShooterOutfeedSubsystem(), this.subsystems.getFeederSubsystem()));
-      SmartDashboard.putData(
-          "Spin Up Shooter at specified speeds",
-          new ShooterSpinUpCommand(this.subsystems.getShooterOutfeedSubsystem(), () -> SmartDashboard.getNumber("Shooter Speed RPM Setter", Constants.shooterDefaultSpeedRpm)));
     }
 
     if (this.subsystems.isIntakeSubsystemAvailable()) {
@@ -245,6 +252,19 @@ public class RobotContainer {
       System.out.println("FAIL: initializeCamera");
     }
   }
+
+  /**
+   * A method to init the led subsystem
+   */
+  private void initializeLEDSubsystem(){
+    if(InstalledHardware.LEDSInstalled){
+      subsystems.setLEDSubsystem(new LEDSubsystem(Constants.ledPwmPortNumber));
+      System.out.println("SUCCESS: initializeLEDS");
+    }
+    else {
+      System.out.println("FAIL: initializeLEDS");
+    }
+  }
   
   /**
    * A method to init the feeder subsystem
@@ -259,7 +279,15 @@ public class RobotContainer {
           subsystems.getFeederSubsystem()::setAllStop, 
           subsystems.getFeederSubsystem()));
       System.out.println("SUCCESS: FeederSubsystem");
-    } else {
+
+      // register the led colors when leds are ready to go - OrangeSolid on note in shooter
+      if(subsystems.isLEDSubsystemAvailable()) {
+        subsystems.getLEDSubsystem().registerStateAction(
+          LEDState.OrangeSolid,
+          this.subsystems.getFeederSubsystem()::isShooterNoteDetected);
+      }
+    }
+    else {
       System.out.println("FAIL: FeederSubsystem");
     }
   }
@@ -277,7 +305,15 @@ public class RobotContainer {
           subsystems.getIntakeSubsystem()::setAllStop, 
           subsystems.getIntakeSubsystem()));
       System.out.println("SUCCESS: IntakeSubsystem");
-    } else {
+
+      // register the led colors when leds are ready to go - OrangeBlink on note in intake
+      if(subsystems.isLEDSubsystemAvailable()) {
+        subsystems.getLEDSubsystem().registerStateAction(
+          LEDState.OrangeBlink,
+          this.subsystems.getIntakeSubsystem()::isNoteDetected);
+      }
+    }
+    else {
       System.out.println("FAIL: IntakeSubsystem");
     }
   }
@@ -307,6 +343,17 @@ public class RobotContainer {
       subsystems.setShooterOutfeedSubsystem(new ShooterOutfeedSubsystem());
       SmartDashboard.putData("Debug: ShooterSubsystem", subsystems.getShooterOutfeedSubsystem());
       System.out.println("SUCCESS: ShooterOutfeedSubsystem");
+
+      // register the led colors when leds are ready to go - Yellow or Green based on speed of outfeed
+      if(subsystems.isLEDSubsystemAvailable()) {
+        subsystems.getLEDSubsystem().registerStateAction(
+          LEDState.Yellow,
+          this.subsystems.getShooterOutfeedSubsystem()::isNearSpeed);
+        subsystems.getLEDSubsystem().registerStateAction(
+          LEDState.Green,
+          this.subsystems.getShooterOutfeedSubsystem()::isAtSpeed);
+      }
+
     }
     else {
       System.out.println("FAIL: ShooterOutfeedSubsystem");

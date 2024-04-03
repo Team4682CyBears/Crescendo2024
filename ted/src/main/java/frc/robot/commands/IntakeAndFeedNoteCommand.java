@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.common.FeederMode;
 import frc.robot.control.Constants;
+import frc.robot.control.InstalledHardware;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 
@@ -94,6 +95,9 @@ public class IntakeAndFeedNoteCommand extends Command
         rumbleCommand.schedule(); // want to call this just once
         rumbleStarted = true;
       }
+      /*if(InstalledHardware.LEDSInstalled && intake.isNoteDetected()){
+      ledSubsystem.RegisterStateAction(orangeBlink, LEDState.OrangeBlink);
+    }*/
     }
     // keep feeding until note is detected in shooter
     if (feeder.isShooterNoteDetected()){
@@ -110,6 +114,7 @@ public class IntakeAndFeedNoteCommand extends Command
       feeder.setAllStop();
       done = true;
     }
+  
   }
 
   // Called once the command ends or is interrupted.
