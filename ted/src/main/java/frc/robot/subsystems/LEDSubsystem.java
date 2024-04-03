@@ -42,8 +42,8 @@ public class LEDSubsystem extends SubsystemBase {
       public LEDSubsystem(int port) {
 
             leds = new AddressableLED(port); // initialization of the AdressableLED
-            leds.setLength(BUFFER_LENGTH); // Sets the LED Strip length once
             buffer = new AddressableLEDBuffer(BUFFER_LENGTH);
+            leds.setLength(buffer.getLength()); // Sets the LED Strip length once
 
             leds.setData(buffer);
             leds.start();
