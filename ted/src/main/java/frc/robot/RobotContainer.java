@@ -29,11 +29,9 @@ import frc.robot.control.ManualInputInterfaces;
 import frc.robot.control.SubsystemCollection;
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
-import frc.robot.commands.LEDCommand.LEDPatterns;
 import frc.robot.control.AutonomousChooser;
 import frc.robot.control.Constants;
 import edu.wpi.first.wpilibj.PowerDistribution;
-import frc.robot.commands.LEDSCommand;
 
 public class RobotContainer {
 
@@ -44,13 +42,14 @@ public class RobotContainer {
 
   public RobotContainer() {
 
+    // init the led
+    this.initializeLEDSubsystem();
+
     // init the pdp watcher
     this.initializePowerDistributionPanelWatcherSubsystem();
 
     // init the camera (before drivetrain)
     this.initializeCameraSubsystem();
-
-    this.initializeLEDSubsystem();
 
     // intake subsystem init
         // intake subsystem init
@@ -141,20 +140,7 @@ public class RobotContainer {
           new ShooterShootCommand(
             () -> SmartDashboard.getNumber("Shooter Speed RPM Setter", Constants.shooterDefaultSpeedRpm),
           this.subsystems.getShooterOutfeedSubsystem(), this.subsystems.getFeederSubsystem()));
-      SmartDashboard.putData(
-          "Spin Up Shooter at specified speeds",
-          new ShooterSpinUpCommand(this.subsystems.getShooterOutfeedSubsystem(), () -> SmartDashboard.getNumber("Shooter Speed RPM Setter", Constants.shooterDefaultSpeedRpm)));
-            this.subsystems.getLEDSubsystem().RegisterStateAction(this.subsystems.getIntakeSubsystem()::isNoteDetected, LEDState.OrangeBlink);
-            this.subsystems.getLEDSubsystem().RegisterStateAction(() -> !this.subsystems.getIntakeSubsystem().isNoteDetected(),LEDState.Off);
-            this.subsystems.getLEDSubsystem().RegisterStateAction(this.subsystems.getFeederSubsystem()::isShooterNoteDetected, LEDState.OrangeSolid);
-            this.subsystems.getLEDSubsystem().RegisterStateAction(() -> !this.subsystems.getFeederSubsystem().isShooterNoteDetected(),LEDState.Off);
-            this.subsystems.getLEDSubsystem().RegisterStateAction(this.subsystems.getShooterOutfeedSubsystem()::isNearSpeed, LEDState.Yellow);
-            this.subsystems.getLEDSubsystem().RegisterStateAction(() -> !this.subsystems.getShooterOutfeedSubsystem().isNearSpeed(),LEDState.Off);
-            this.subsystems.getLEDSubsystem().RegisterStateAction(this.subsystems.getShooterOutfeedSubsystem()::isAtSpeed, LEDState.Green);
-            this.subsystems.getLEDSubsystem().RegisterStateAction(() -> !this.subsystems.getShooterOutfeedSubsystem().isAtSpeed(),LEDState.Off);
-            SmartDashboard.putData("leds command", new LEDSCommand(subsystems.getLEDSubsystem(), subsystems.getIntakeSubsystem()));
-
-          }
+    }
 
     if (this.subsystems.isIntakeSubsystemAvailable()) {
       SmartDashboard.putData(
@@ -267,22 +253,17 @@ public class RobotContainer {
     }
   }
 
+  /**
+   * A method to init the led subsystem
+   */
   private void initializeLEDSubsystem(){
     if(InstalledHardware.LEDSInstalled){
-      subsystems.setLEDSubsystem(new LEDSubsystem(0, subsystems));
-      SmartDashboard.putData("LEDEasy", new LEDCommand(subsystems.getLEDSubsystem() , LEDPatterns.Easy));
-      SmartDashboard.putData("LEDEBlink", new LEDCommand(subsystems.getLEDSubsystem() , LEDPatterns.EveryOther));
-      SmartDashboard.putData("LEDidlepattern", new LEDCommand(subsystems.getLEDSubsystem() , LEDPatterns.IdlePattern));
-      SmartDashboard.putData("LEDShooterpattern", new LEDCommand(subsystems.getLEDSubsystem() , LEDPatterns.ShooterPattern));
-      SmartDashboard.putData("LEDintakepattern", new LEDCommand(subsystems.getLEDSubsystem() , LEDPatterns.IntakePattern));
-      SmartDashboard.putData("LEDSolid", new LEDCommand(subsystems.getLEDSubsystem() , LEDPatterns.SolidLEDs));
-      SmartDashboard.putNumber("Current Channel 21", current21);
+      subsystems.setLEDSubsystem(new LEDSubsystem(Constants.ledPwmPortNumber));
       System.out.println("SUCCESS: initializeLEDS");
     }
     else {
       System.out.println("FAIL: initializeLEDS");
     }
-
   }
   
   /**
@@ -298,7 +279,15 @@ public class RobotContainer {
           subsystems.getFeederSubsystem()::setAllStop, 
           subsystems.getFeederSubsystem()));
       System.out.println("SUCCESS: FeederSubsystem");
-    } else {
+
+      // register the led colors when leds are ready to go - OrangeSolid on note in shooter
+      if(subsystems.isLEDSubsystemAvailable()) {
+        subsystems.getLEDSubsystem().registerStateAction(
+          LEDState.OrangeSolid,
+          this.subsystems.getFeederSubsystem()::isShooterNoteDetected);
+      }
+    }
+    else {
       System.out.println("FAIL: FeederSubsystem");
     }
   }
@@ -316,7 +305,15 @@ public class RobotContainer {
           subsystems.getIntakeSubsystem()::setAllStop, 
           subsystems.getIntakeSubsystem()));
       System.out.println("SUCCESS: IntakeSubsystem");
-    } else {
+
+      // register the led colors when leds are ready to go - OrangeBlink on note in intake
+      if(subsystems.isLEDSubsystemAvailable()) {
+        subsystems.getLEDSubsystem().registerStateAction(
+          LEDState.OrangeBlink,
+          this.subsystems.getIntakeSubsystem()::isNoteDetected);
+      }
+    }
+    else {
       System.out.println("FAIL: IntakeSubsystem");
     }
   }
@@ -346,6 +343,17 @@ public class RobotContainer {
       subsystems.setShooterOutfeedSubsystem(new ShooterOutfeedSubsystem());
       SmartDashboard.putData("Debug: ShooterSubsystem", subsystems.getShooterOutfeedSubsystem());
       System.out.println("SUCCESS: ShooterOutfeedSubsystem");
+
+      // register the led colors when leds are ready to go - Yellow or Green based on speed of outfeed
+      if(subsystems.isLEDSubsystemAvailable()) {
+        subsystems.getLEDSubsystem().registerStateAction(
+          LEDState.Yellow,
+          this.subsystems.getShooterOutfeedSubsystem()::isNearSpeed);
+        subsystems.getLEDSubsystem().registerStateAction(
+          LEDState.Green,
+          this.subsystems.getShooterOutfeedSubsystem()::isAtSpeed);
+      }
+
     }
     else {
       System.out.println("FAIL: ShooterOutfeedSubsystem");

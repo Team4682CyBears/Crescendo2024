@@ -56,7 +56,7 @@ public class SubsystemCollection
 
     public LEDSubsystem getLEDSubsystem() { return LEDSubsystem; }
     public void setLEDSubsystem(LEDSubsystem value) { LEDSubsystem = value; }
-    public boolean isLEDSubsystemAvailable() { return cameraSubsystem != null; }
+    public boolean isLEDSubsystemAvailable() { return LEDSubsystem != null; }
 
     public DrivetrainPowerSubsystem getDriveTrainPowerSubsystem() { return driveTrainPowerSubsystem; }
     public void setDriveTrainPowerSubsystem(DrivetrainPowerSubsystem value) { driveTrainPowerSubsystem = value; }
