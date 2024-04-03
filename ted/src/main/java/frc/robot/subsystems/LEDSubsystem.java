@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.BooleanSupplier;
 
+import com.ctre.phoenix6.signals.Led1OffColorValue;
+
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -31,7 +33,7 @@ public class LEDSubsystem extends SubsystemBase {
       private int blinkPeriodInHertz = 10; // increase this for longer blinks!!!
       private int blinkCounter = 0;
       private boolean currentBlinkState = false;
-
+      private LEDState lastLEDState = LEDState.Off;
 
       /**
        * LEDSubsystem
@@ -43,7 +45,7 @@ public class LEDSubsystem extends SubsystemBase {
             leds.setLength(BUFFER_LENGTH); // Sets the LED Strip length once
             buffer = new AddressableLEDBuffer(BUFFER_LENGTH);
 
-            //TODO:SEE IF WE NEED THIS LINE
+            leds.setData(buffer);
             leds.start();
       }
 
@@ -61,44 +63,70 @@ public class LEDSubsystem extends SubsystemBase {
 
       public void periodic(){
 
+            boolean hasPreviousColorState = false;
+            LEDState currLedState = LEDState.Off;
+
             this.updateBlinkCounterState();
 
-            // LEDState.Off
-            this.offState();
-
-            // LEDState.OrangeBlink
-            if(ledStateActions.containsKey(LEDState.OrangeBlink)){
-                  LEDStateAction action = ledStateActions.get(LEDState.OrangeBlink);
+            // LEDState.Green
+            if(!hasPreviousColorState && ledStateActions.containsKey(LEDState.Green)){
+                  LEDStateAction action = ledStateActions.get(LEDState.Green);
                   if(action.getShouldTakeAction().getAsBoolean()) {
-                        System.out.println("Setting led state to " + LEDState.OrangeBlink.toString());
-                        this.orangeBlink();
-                  }
-            }
-
-            // LEDState.OrangeSolid
-            if(ledStateActions.containsKey(LEDState.OrangeSolid)){
-                  LEDStateAction action = ledStateActions.get(LEDState.OrangeSolid);
-                  if(action.getShouldTakeAction().getAsBoolean()) {
-                        System.out.println("Setting led state to " + LEDState.OrangeSolid.toString());
-                        this.orangeSolid();
+                        currLedState = LEDState.Green;
+                        hasPreviousColorState = true;
+                        if(this.doUpdateOfRequestedLedColorState(currLedState)) {
+                              System.out.println("Setting led state to " + currLedState.toString());
+                              this.greenSolid();
+                        }
                   }
             }
 
             // LEDState.Yellow
-            if(ledStateActions.containsKey(LEDState.Yellow)){
+            if(!hasPreviousColorState && ledStateActions.containsKey(LEDState.Yellow)){
                   LEDStateAction action = ledStateActions.get(LEDState.Yellow);
                   if(action.getShouldTakeAction().getAsBoolean()) {
-                        System.out.println("Setting led state to " + LEDState.Yellow.toString());
-                        this.yellowSolid();
+                        currLedState = LEDState.Yellow;
+                        hasPreviousColorState = true;
+                        if(this.doUpdateOfRequestedLedColorState(currLedState)) {
+                              System.out.println("Setting led state to " + currLedState.toString());
+                              this.yellowSolid();
+                        }
                   }
             }
 
-            // LEDState.Green
-            if(ledStateActions.containsKey(LEDState.Green)){
-                  LEDStateAction action = ledStateActions.get(LEDState.Green);
+            // LEDState.OrangeSolid
+            if(!hasPreviousColorState && ledStateActions.containsKey(LEDState.OrangeSolid)){
+                  LEDStateAction action = ledStateActions.get(LEDState.OrangeSolid);
                   if(action.getShouldTakeAction().getAsBoolean()) {
-                        System.out.println("Setting led state to " + LEDState.Green.toString());
-                        this.greenSolid();
+                        currLedState = LEDState.OrangeSolid;
+                        hasPreviousColorState = true;
+                        if(this.doUpdateOfRequestedLedColorState(currLedState)) {
+                              System.out.println("Setting led state to " + currLedState.toString());
+                              this.orangeSolid();
+                        }
+                  }
+            }
+
+            // LEDState.OrangeBlink
+            if(!hasPreviousColorState && ledStateActions.containsKey(LEDState.OrangeBlink)){
+                  LEDStateAction action = ledStateActions.get(LEDState.OrangeBlink);
+                  if(action.getShouldTakeAction().getAsBoolean()) {
+                        currLedState = LEDState.OrangeBlink;
+                        hasPreviousColorState = true;
+                        if(this.doUpdateOfRequestedLedColorState(currLedState)) {
+                              System.out.println("Setting led state to " + currLedState.toString());
+                              this.orangeBlink();
+                        }
+                  }
+            }
+
+            // LEDState.Off
+            if(!hasPreviousColorState && currLedState == LEDState.Off) {
+                  currLedState = LEDState.Off;
+                  hasPreviousColorState = true;
+                  if(this.doUpdateOfRequestedLedColorState(currLedState)) {
+                        System.out.println("No other LED state requested, setting to " + LEDState.Off.toString());
+                        this.offState();
                   }
             }
 
@@ -145,5 +173,14 @@ public class LEDSubsystem extends SubsystemBase {
             if(this.blinkCounter % this.blinkPeriodInHertz == 0){
                   this.currentBlinkState = !this.currentBlinkState;
             }
+      }
+
+      private boolean doUpdateOfRequestedLedColorState(LEDState requestedState) {
+            boolean changeState = false;
+            if(requestedState != this.lastLEDState) {
+                  changeState = true;
+                  this.lastLEDState = requestedState;
+            }
+            return changeState;
       }
 }
