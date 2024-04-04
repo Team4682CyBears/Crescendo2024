@@ -16,22 +16,22 @@
     },
     {
       "anchor": {
-        "x": 2.46777657191678,
-        "y": 4.35
+        "x": 2.598379014939848,
+        "y": 4.281894381970583
       },
       "prevControl": {
-        "x": 2.365146606046272,
-        "y": 4.5458964559654005
+        "x": 2.49574904906934,
+        "y": 4.477790837935983
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "BlueStage"
     }
   ],
   "rotationTargets": [
     {
       "waypointRelativePos": 0.35,
-      "rotationDegrees": -26.5,
+      "rotationDegrees": -33.4874300234794,
       "rotateFast": false
     }
   ],

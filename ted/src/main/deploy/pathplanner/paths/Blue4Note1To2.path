@@ -3,36 +3,36 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.46777657191678,
-        "y": 4.35
+        "x": 2.4253549759335664,
+        "y": 4.361647649950041
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2303344090904202,
-        "y": 4.682390543798126
+        "x": 1.1707718414056076,
+        "y": 4.828587942265232
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Blue4NoteStage"
     },
     {
       "anchor": {
-        "x": 2.56,
+        "x": 2.5338968170340856,
         "y": 5.55
       },
       "prevControl": {
-        "x": 2.232684326098308,
-        "y": 5.420009896840658
+        "x": 1.8790861578395615,
+        "y": 5.687414986816374
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Blue4Note2"
     }
   ],
   "rotationTargets": [
     {
       "waypointRelativePos": 0.5,
-      "rotationDegrees": 27.52,
-      "rotateFast": true
+      "rotationDegrees": 0,
+      "rotateFast": false
     }
   ],
   "constraintZones": [],
@@ -69,7 +69,7 @@
   "reversed": false,
   "folder": "Blue4Note",
   "previewStartingState": {
-    "rotation": -26.74215145743145,
+    "rotation": -29.4443203483574,
     "velocity": 0
   },
   "useDefaultConstraints": true
