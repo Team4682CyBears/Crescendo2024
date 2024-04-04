@@ -59,6 +59,13 @@ public class DrivetrainAccelerationSubsystem extends SubsystemBase {
     }
 
     /**
+     * Called once per scheduler tick for this subsystem
+     */
+    @Override
+    public void periodic() {
+    }
+
+    /**
      * Method to reset the power reduction factor
      */
     public void resetPowerReductionFactor() {
@@ -75,18 +82,17 @@ public class DrivetrainAccelerationSubsystem extends SubsystemBase {
     }
 
     /**
-     * Called once per scheduler tick for this subsystem
+     * Method to toggle the reduced power reduction factor
+     * if the reduction factor is not the reducedReductionFactor, set it to the reducedReductionFactor
+     * Otherwise, set it to the defaultReductionFactor
      */
-    @Override
-    public void periodic() {
-    }
-
-    /**
-     * Called once per scheduler tick in simulation
-     */
-    @Override
-    public void simulationPeriodic() {
-        // This method will be called once per scheduler run during simulation
+    public void togglePowerReductionFactor() {
+        if (reductionFactor != reducedReductionFactor){
+            reductionFactor = reducedReductionFactor;
+        }
+        else {
+            reductionFactor = defaultReductionFactor;
+        }
     }
 
     /**
