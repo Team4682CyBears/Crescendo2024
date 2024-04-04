@@ -138,6 +138,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   private SwerveDrivePoseEstimator swervePoseEstimator = null;
   private Pose2d currentPosition = new Pose2d();
+  // Standard deviations for poseEstimator updates
+  // The wpilib matrix constructor requires sizes specified as Nat types. 
+  // Determined these settings from looking at other team's settings
+  // we use a high variance for the camera yaw because we don't want it to override 
+  // the odometry yaw, which comes from the very accurate navx
+  private Matrix<N3,N1> visionStdDev = MatBuilder.fill(Nat.N3(), Nat.N1(), new double[]{0.7, 0.7, 10});
+  private Matrix<N3,N1> odometryStdDev = MatBuilder.fill(Nat.N3(), Nat.N1(), new double[]{0.1, 0.1, 0.1});
 
   private ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
   private ChassisSpeeds previousChassisSpeeds = new ChassisSpeeds(0.0, 0.0, 0.0);
@@ -607,19 +614,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @param visionMeasurement the most recent vision measurement provided by vision subsystem
    */
   private void addVisionMeasurement(VisionMeasurement visionMeasurement){
-    // The wpilib matrix constructor requires sizes specified as Nat types. 
-    // trying to update the matrix dynamicaly leads to issues
-    Matrix<N3,N1> visionStdDev = MatBuilder.fill(Nat.N3(), Nat.N1(), new double[]{0.9, 0.9, 0.9});
-    // for now ignore all vision measurements that are null or contained robot position is null
     // for now ignore all vision measurements that are null or contained robot position is null
     if (visionMeasurement != null && useVision){
       Pose2d visionComputedMeasurement = visionMeasurement.getRobotPosition();
       if(visionComputedMeasurement != null) {
-          swervePoseEstimator.addVisionMeasurement(visionComputedMeasurement, visionMeasurement.getTimestamp(), visionStdDev);
+        //we want to reject vision measurements that are more than 1 meter away in case vison gives a bad read
+        if(visionComputedMeasurement.getTranslation().getDistance(getRobotPosition().getTranslation()) <= 1){
+          swervePoseEstimator.addVisionMeasurement(visionComputedMeasurement, visionMeasurement.getTimestamp());
+        }
       }
     }
 }
-
 
   /**
    * Determine if recent navx is all level
@@ -797,7 +802,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
         swerveKinematics,
         this.getGyroscopeRotation(),
         this.getSwerveModulePositions(),
-        currentRobotPosition); 
+        currentRobotPosition, 
+        odometryStdDev,
+        visionStdDev); 
   }
 
   /**
