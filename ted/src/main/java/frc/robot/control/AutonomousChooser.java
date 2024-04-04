@@ -187,6 +187,10 @@ public class AutonomousChooser {
           new ReplanningConfig() // Default path replanning config. See the API for the options here
         );
 
+        if (subsystems.isDriveTrainPowerSubsystemAvailable() &&
+            subsystems.isIntakeSubsystemAvailable() && subsystems.isFeederSubsystemAvailable() &&
+            subsystems.isShooterAngleSubsystemAvailable() && subsystems.isShooterOutfeedSubsystemAvailable()) {
+
             AutoBuilder.configureHolonomic(
                 subsystems.getDriveTrainSubsystem()::getRobotPosition, // Pose supplier
                 subsystems.getDriveTrainSubsystem()::setRobotPosition, // Position setter
@@ -197,9 +201,6 @@ public class AutonomousChooser {
                 () -> false,
             subsystems.getDriveTrainSubsystem());
 
-        if (subsystems.isDriveTrainPowerSubsystemAvailable() &&
-            subsystems.isIntakeSubsystemAvailable() && subsystems.isFeederSubsystemAvailable() &&
-            subsystems.isShooterAngleSubsystemAvailable() && subsystems.isShooterOutfeedSubsystemAvailable()) {
             NamedCommands.registerCommand("IntakeNote",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "IntakeNote"),

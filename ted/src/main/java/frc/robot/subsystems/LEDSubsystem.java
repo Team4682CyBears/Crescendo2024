@@ -28,7 +28,7 @@ public class LEDSubsystem extends SubsystemBase {
       private final AddressableLED leds;
       private final AddressableLEDBuffer buffer;  // Creates a new buffer object
       private HashMap <LEDState, LEDStateAction> ledStateActions = new HashMap<LEDState, LEDStateAction>();
-      private int blinkPeriodInHertz = 10; // increase this for longer blinks!!!
+      private int blinkPeriodInHertz = 25; // increase this for longer blinks!!!
       private int blinkCounter = 0;
       private boolean lastBlinkState = false;
       private boolean currentBlinkState = false;
@@ -39,13 +39,10 @@ public class LEDSubsystem extends SubsystemBase {
        * @param port PWM port on the roboRIO
        */
       public LEDSubsystem(int port) {
-
-            leds = new AddressableLED(port); // initialization of the AdressableLED
-            buffer = new AddressableLEDBuffer(BUFFER_LENGTH);
-            leds.setLength(buffer.getLength()); // Sets the LED Strip length once
-
-            leds.setData(buffer);
-            leds.start();
+            this.leds = new AddressableLED(port); // initialization of the AdressableLED
+            this.buffer = new AddressableLEDBuffer(BUFFER_LENGTH);
+            this.leds.setLength(buffer.getLength()); // Sets the LED Strip length once
+            this.leds.start();
       }
 
       /**
@@ -142,8 +139,8 @@ public class LEDSubsystem extends SubsystemBase {
       }
 
       private void setLedStringColor(int red, int green, int blue) {
-            for (int i = 0; i < buffer.getLength(); i++) {
-                  buffer.setRGB(i, red, green, blue); 
+            for (int i = 0; i < this.buffer.getLength(); i++) {
+                  this.buffer.setRGB(i, red, green, blue); 
             }  
             this.leds.setData(this.buffer);
       }
