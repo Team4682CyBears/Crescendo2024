@@ -39,9 +39,13 @@ public class LEDSubsystem extends SubsystemBase {
        * @param port PWM port on the roboRIO
        */
       public LEDSubsystem(int port) {
-            this.leds = new AddressableLED(port); // initialization of the AdressableLED
             this.buffer = new AddressableLEDBuffer(BUFFER_LENGTH);
-            this.leds.setLength(buffer.getLength()); // Sets the LED Strip length once
+            this.leds = new AddressableLED(port); // initialization of the AdressableLED
+            this.leds.setLength(this.buffer.getLength()); // Sets the LED Strip length once
+
+            // TODO - remove this when we have tested LEDs
+            this.setLedStringColor(150,150,0); 
+
             this.leds.start();
       }
 
@@ -58,6 +62,7 @@ public class LEDSubsystem extends SubsystemBase {
       }
 
       public void periodic() {
+            /* 
 
             // figure out if the blink should be on or off now
             this.updateBlinkCounterState();
@@ -111,6 +116,7 @@ public class LEDSubsystem extends SubsystemBase {
                   System.out.println("**** BLINKING LED STATE TO " + this.currentLEDState.toString());
                   this.orangeBlink();
             }
+*/
       }
 
       private void orangeBlink() {
