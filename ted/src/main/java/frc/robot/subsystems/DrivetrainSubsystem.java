@@ -243,7 +243,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * Method to get the current acceleration reduction factor
    * @return - the current acceleration reduction factor
    */
-  public double getAccelerationReductionFactor() {
+  protected double getAccelerationReductionFactor() {
     return this.accelerationReductionFactor;
   }
   
@@ -306,7 +306,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * Method to set the current acceleration reduction factor to a new value
    * @param value - the new acceleration reduction factor
    */
-  public void setAccelerationReductionFactor(double value) {
+  protected void setAccelerationReductionFactor(double value) {
     this.accelerationReductionFactor = MotorUtils.truncateValue(value, 0.0, 1.0);
   }
   
