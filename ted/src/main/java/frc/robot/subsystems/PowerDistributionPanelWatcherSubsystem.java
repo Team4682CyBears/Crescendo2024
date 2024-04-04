@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.common.PortSpy;
@@ -27,7 +28,7 @@ public class PowerDistributionPanelWatcherSubsystem extends SubsystemBase {
     private ArrayList<PortSpy> myList = new ArrayList<PortSpy>();
 
     private int brownoutEventCount = 0;
-    private Runnable brownoutAction = null;
+    private Command brownoutAction = null;
     private int brownoutEventsBeforeAction;
     private boolean handleBrownouts = false;
 
@@ -75,7 +76,7 @@ public class PowerDistributionPanelWatcherSubsystem extends SubsystemBase {
      * @param brownoutAction
      * @param brownoutEventsBeforeAction
      */
-    public void setBrownoutCallback(Runnable brownoutAction, int brownoutEventsBeforeAction){
+    public void setBrownoutCallback(Command brownoutAction, int brownoutEventsBeforeAction){
         this.brownoutAction = brownoutAction;
         this.brownoutEventsBeforeAction = brownoutEventsBeforeAction;
         this.handleBrownouts = true;
@@ -114,7 +115,7 @@ public class PowerDistributionPanelWatcherSubsystem extends SubsystemBase {
         if (isBrownedOut()){
             brownoutEventCount += 1;
             if (this.handleBrownouts && (brownoutEventCount >= this.brownoutEventsBeforeAction)){
-                brownoutAction.run();
+                brownoutAction.schedule();;
                 this.handleBrownouts = false; 
             }
         }

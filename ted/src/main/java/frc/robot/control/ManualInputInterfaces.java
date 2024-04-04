@@ -369,6 +369,18 @@ public class ManualInputInterfaces {
               "deccrement angle of shooter")));
       }
 
+      // right bumper press will toggle drivetrain reduced acceleration mode
+        this.coDriverController.rightBumper().onTrue(
+          new ParallelCommandGroup(
+            new InstantCommand(
+              () -> subsystemCollection.getDriveTrainAccelerationSubsystem().togglePowerReductionFactor()
+            ),
+            new ButtonPressCommand(
+            "coDriverController.rightBumper()",
+            "toggle limited acceleration mode")
+          )
+        );
+
       if(this.subsystemCollection.isShooterOutfeedSubsystemAvailable() &&
          this.subsystemCollection.isShooterAngleSubsystemAvailable() &&
          this.subsystemCollection.isFeederSubsystemAvailable()) {

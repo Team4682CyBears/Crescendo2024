@@ -165,7 +165,7 @@ public class RobotContainer {
 
   private void bindBrownoutActions(){
     this.subsystems.getPowerDistributionPanelWatcherSubsystem().setBrownoutCallback(
-      this.subsystems.getDriveTrainAccelerationSubsystem()::setReducedReductionFactor,
+      new InstantCommand(() -> this.subsystems.getDriveTrainAccelerationSubsystem().setReducedReductionFactor()),
       Constants.brownoutEventsBeforeAction);
   }
 
