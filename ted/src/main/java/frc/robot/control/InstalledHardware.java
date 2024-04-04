@@ -40,7 +40,7 @@ public class InstalledHardware
     public static final boolean coDriverXboxControllerInstalled = true;
 
     // DriveTrain Related Hardware
-    public static final boolean tedDrivetrainInstalled = true; // false is ted, false is babybear/minibear
+    public static final boolean tedDrivetrainInstalled = true; // true is ted, false is babybear/minibear
     public static final boolean leftFrontDriveInstalled = true;
     public static final boolean leftRearDriveInstalled = true;
     public static final boolean rightFrontDriveInstalled = true;
@@ -50,34 +50,32 @@ public class InstalledHardware
     public static final boolean intakeInstalled = true;
 
     // Feeder Related Hardware
-    public static final boolean feederInstalled = false;
+    public static final boolean feederInstalled = true;
 
     // TOF Sensor Hardware
     // Important! You must disable any TOF sensor that is not installed!! 
     // If you try to configure a TOF sensor that is not installed
     // the other TOF sensors that are installed will not work. 
     public static final boolean intakeTofInstalled = true;
-    public static final boolean firstFeederToShooterTofInstalled = false;
-    public static final boolean secondFeederToShooterTofInstalled = false;
+    public static final boolean firstFeederToShooterTofInstalled = true;
+    public static final boolean secondFeederToShooterTofInstalled = true;
     public static final boolean feederToDunkerTofInstalled = false;
 
     // Shooter Related Hardware
-    public static final boolean shooterOutfeedInstalled = false;
-    public static final boolean shooterAngleInstalled = false;
+    public static final boolean shooterOutfeedInstalled = true;
+    public static final boolean shooterAngleInstalled = true;
     // for testing, to decrease the power of the shooter angle mechanism, 
     // reduce the left motor gear box to 10x (instaed of 100x)
     // and disconnect the right motor from the chain. 
-    public static final boolean shooterRightAngleMotorrInstalled = false;
-    public static final boolean shooterAngleCanCoderInstalled = false; 
+    public static final boolean shooterRightAngleMotorrInstalled = true;
+    public static final boolean shooterAngleCanCoderInstalled = true; 
     // for testing shooter angle via the shuffleboard
     // ensure this is DISABLED for competitions, as it can sometimes crash shuffleboard
     public static final boolean setShooterAngleFromShuffleboard = false;
 
     // Climber Sensor Related Hardware
-    public static final boolean leftClimberInstalled = false;
-    public static final boolean rightClimberInstalled = false;
-    public static final boolean leftClimberSensorInstalled = false;
-    public static final boolean rightClimberSensorInstalled = false;
-
-    public static final boolean LEDSInstalled = true;
+    public static final boolean leftClimberInstalled = true;
+    public static final boolean rightClimberInstalled = true;
+    public static final boolean leftClimberSensorInstalled = true;
+    public static final boolean rightClimberSensorInstalled = true;
 }
