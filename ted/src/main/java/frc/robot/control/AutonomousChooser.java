@@ -46,6 +46,7 @@ public class AutonomousChooser {
     private Command redWing;
     private Command redFourNote;
     private Command redFiveNote;
+    private Command doNothing;
     /**
      * Constructor for AutonomousChooser
      * @param subsystems - the SubsystemCollection
@@ -66,6 +67,7 @@ public class AutonomousChooser {
         autonomousPathChooser.addOption("RED Wing", AutonomousPath.REDWING);
         autonomousPathChooser.addOption("RED Four Note", AutonomousPath.REDFOURNOTE);
         autonomousPathChooser.addOption("RED 5 note", AutonomousPath.REDFIVENOTE);
+        autonomousPathChooser.addOption("Do Nothing", AutonomousPath.DONOTHING);
         SmartDashboard.putData(autonomousPathChooser);
 
         this.blue123SourceSide = getBlue123SourceSide();
@@ -77,6 +79,7 @@ public class AutonomousChooser {
         this.redWing = getRedWing();
         this.redFourNote = getRedFourNote();
         this.redFiveNote = getRedFiveNote();
+        this.doNothing = getDoNothing();
 
         }
         else{
@@ -108,6 +111,8 @@ public class AutonomousChooser {
                 return this.redFourNote;
             case REDFIVENOTE :
                 return this.redFiveNote;
+            case DONOTHING :
+                return this.doNothing;
         }
         return new InstantCommand();
     }
@@ -162,6 +167,10 @@ public class AutonomousChooser {
         return AutoBuilder.buildAuto("Red5Note");
     }
 
+    private Command getDoNothing(){
+        return AutoBuilder.buildAuto("DoNothing");
+    }
+
     private enum AutonomousPath {
         BLUE123,
         RED123,
@@ -171,7 +180,8 @@ public class AutonomousChooser {
         TWONOTE,
         REDWING,
         REDFOURNOTE,
-        REDFIVENOTE
+        REDFIVENOTE,
+        DONOTHING
     }
 
     /**
@@ -209,10 +219,6 @@ public class AutonomousChooser {
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "OuttakeNote"),
                     new RemoveNoteCommand(subsystems.getIntakeSubsystem())));
-            NamedCommands.registerCommand("SpingUpShooter",
-                new ParallelCommandGroup(
-                    new ButtonPressCommand("PathPlanner", "SpinUpShooter"),
-                    new ShooterSpinUpAutoCommand(subsystems.getShooterOutfeedSubsystem())));
             NamedCommands.registerCommand("FeedNote",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "FeedNote"),

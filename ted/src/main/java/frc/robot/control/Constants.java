@@ -182,7 +182,7 @@ public final class Constants {
     public static final double shooterAngleShootFromStage = 40.0;
     public static final double shooterAngleShootFromSideStage = 34.0;
     public static final double shooterAngleShootFromSourceWing = 22.0;
-    public static final double shooterAngleShootFromAmp = 101.0;
+    public static final double shooterAngleShootFromAmp = 109.0;
 
     // ******************************************************************
     // climber constants
