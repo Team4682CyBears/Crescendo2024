@@ -93,6 +93,7 @@ public class DrivetrainAccelerationSubsystem extends SubsystemBase {
         else {
             reductionFactor = defaultReductionFactor;
         }
+        this.updateReductionFactor();
     }
 
     /**
