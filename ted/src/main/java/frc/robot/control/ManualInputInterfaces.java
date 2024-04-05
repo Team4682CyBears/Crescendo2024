@@ -175,11 +175,15 @@ public class ManualInputInterfaces {
         System.out.println("FINISHED registering this.driverController.rightTrigger().onTrue() ... ");
       }
 
-      if(this.subsystemCollection.isIntakeSubsystemAvailable()) {
+      if(this.subsystemCollection.isIntakeSubsystemAvailable() &&
+         this.subsystemCollection.isFeederSubsystemAvailable()) {
           this.driverController.y().onTrue(
             new ParallelCommandGroup(
               new RemoveNoteCommand(
                 this.subsystemCollection.getIntakeSubsystem()),
+              new FeedNoteCommand(
+                this.subsystemCollection.getFeederSubsystem(), 
+                FeederMode.FeedToDunker),
               new ButtonPressCommand(
                 "driverController.y()",
                 "Remove Note")
