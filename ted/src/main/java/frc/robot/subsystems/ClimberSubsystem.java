@@ -250,7 +250,7 @@ public class ClimberSubsystem extends SubsystemBase{
     public void periodic() {
         // incremenet the counter
         ++counter;
-
+        
         // confirm that the smart motion is setup - no-op after it is setup first time
         this.initializeMotorsSmartMotion();
 

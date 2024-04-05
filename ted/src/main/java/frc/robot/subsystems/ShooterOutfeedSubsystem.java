@@ -35,6 +35,7 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
 
   // allowable error in velocty as a % of target
   private final double velocityErrorThreshold = 0.05;
+  private final double nearVelocityErrorThreshold = 0.30;
 
   // Shooter gearing - currently 1:1
   private static final double outfeedShooterGearRatio = 1.0;
@@ -107,6 +108,15 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
   }
 
   /**
+   * A method to test whether the shooter is near speed
+   * @return true if the shooter is at speed
+   */
+  public boolean isNearSpeed() {
+    return (Math.abs(getLeftSpeedRpm() - this.desiredSpeedRpm) / this.desiredSpeedRpm) < this.nearVelocityErrorThreshold &&
+      (Math.abs(getRightSpeedRpm() - this.desiredSpeedRpm) / this.desiredSpeedRpm) < this.nearVelocityErrorThreshold;
+  }
+
+  /**
    * this method will be called once per scheduler run
    */
   @Override
@@ -126,7 +136,8 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
       leftMotor.setControl(leftVelocityController.withVelocity(revsPerS).withSlot(getPidIdxForTargetSpeed()));
       rightMotor.setControl(rightVelocityController.withVelocity(revsPerS).withSlot(getPidIdxForTargetSpeed()));
     }
-    SmartDashboard.putBoolean("IsShooterRevved?", isAtSpeed());
+    SmartDashboard.putBoolean("IsShooterRevved?", isAtSpeed());        
+    SmartDashboard.putBoolean("IsShooterNearlyRevved?", isNearSpeed());
     SmartDashboard.putNumber("Shooter RPM", getRightSpeedRpm());
   }
 

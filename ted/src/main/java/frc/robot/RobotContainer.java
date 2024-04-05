@@ -182,6 +182,8 @@ public class RobotContainer {
           subsystems.getClimberSubsystem(),
           () -> RobotContainer.deadband(this.subsystems.getManualInputInterfaces().getInputLeftClimberArmZ(), Constants.climberControllerStickDeadband),
           () -> RobotContainer.deadband(this.subsystems.getManualInputInterfaces().getInputRightClimberArmZ(), Constants.climberControllerStickDeadband)));
+      SmartDashboard.putData("Left Climber",   new ClimberArmDefaultSpeed(subsystems.getClimberSubsystem(), () -> -.2, () -> 0));
+      SmartDashboard.putData("Right Climber",   new ClimberArmDefaultSpeed(subsystems.getClimberSubsystem(), () -> 0, () -> -.2));
     }
     else {
       System.out.println("FAIL: ClimberSubsystem");

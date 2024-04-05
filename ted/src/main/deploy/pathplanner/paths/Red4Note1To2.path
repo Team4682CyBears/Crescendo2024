@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2303357899934197,
-        "y": 3.520380538942897
+        "x": 1.2131556044938208,
+        "y": 3.3859334395320206
       },
       "isLocked": false,
       "linkedName": "RedStage"
     },
     {
       "anchor": {
-        "x": 2.56,
+        "x": 2.5338968170340856,
         "y": 2.65
       },
       "prevControl": {
-        "x": 2.2326748688365585,
-        "y": 2.7799662872053017
+        "x": 1.8790818497277217,
+        "y": 2.512605543823351
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,8 +31,8 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.5,
-      "rotationDegrees": -27.519999999999982,
-      "rotateFast": true
+      "rotationDegrees": 0,
+      "rotateFast": false
     }
   ],
   "constraintZones": [],

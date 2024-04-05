@@ -32,9 +32,9 @@ public final class Constants {
         Units.inchesToMeters(22.75), 
         WcpModuleConfigurations.TED,
         // SUBTRACT the values you find in shuffleboard
-        Math.toRadians(-215.15 - 178.76 - 180.0 - 358.7), // FRONT LEFT
+        Math.toRadians(-215.15 - 178.76 - 180.0 - 358.7 - 12.2 - 358.9 - 208.38), // FRONT LEFT
         Math.toRadians(-180.61 - 95.27 - 358.6 -169.8 - 150.59), // FRONT RIGHT 
-        Math.toRadians(-191.33 - 257.52 -357.3  - 3.6 - 355.67), // BACK LEFT
+        Math.toRadians(-191.33 - 257.52 -357.3  - 3.6 - 355.67 - 357.7), // BACK LEFT
         Math.toRadians(-58.35 - 177.27 - 180.0 - 2.0 - 358.50)); // BACK RIGHT
 
     //////////////////// BABYBEAR DRIVETRAIN ////////////////////
@@ -112,7 +112,7 @@ public final class Constants {
     public static final double intakeSpeed = -1.0;
     public static final double removeSpeed = 1.0;
     // intake will run until note is detected or this timeout has expired
-    public static final double intakeTimeoutSeconds = 10.0;
+    public static final double intakeTimeoutSeconds = 5.0;
 
     // ******************************************************************
     // feeder constants
@@ -125,7 +125,7 @@ public final class Constants {
     public static final double feederSpeed = 0.50;
     public static final double feederReverseSpeed = 0.10;
     // feeder will run until note is detected or this timeout has expired
-    public static final double feederTimeoutSeconds = 10.0;
+    public static final double feederTimeoutSeconds = 5.0;
     public static final double feederLaunchTimeoutSecondsInAuto = .75;
     public static final double feederLaunchTimeoutSecondsInTele = 2.00;
 
@@ -182,7 +182,7 @@ public final class Constants {
     public static final double shooterAngleShootFromStage = 40.0;
     public static final double shooterAngleShootFromSideStage = 34.0;
     public static final double shooterAngleShootFromSourceWing = 22.0;
-    public static final double shooterAngleShootFromAmp = 101.0;
+    public static final double shooterAngleShootFromAmp = 109.0;
 
     // ******************************************************************
     // climber constants
