@@ -99,6 +99,32 @@
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
+          },
+          "12,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Left Climber",
+              "_title": "/SmartDashboard/Left Climber",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "12,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Right Climber",
+              "_title": "/SmartDashboard/Right Climber",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
           }
         }
       }
@@ -589,7 +615,7 @@
   ],
   "windowGeometry": {
     "x": -4.0,
-    "y": 6.0,
+    "y": 7.0,
     "width": 1920.0,
     "height": 1032.0
   }
