@@ -337,6 +337,19 @@
               "_glyph": 148,
               "_showGlyph": false
             }
+          },
+          "7,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/distance",
+              "_title": "SmartDashboard/distance",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
           }
         }
       }

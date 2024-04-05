@@ -18,10 +18,10 @@ import frc.robot.control.Constants;
 public class ShooterAngleHelpers {
     // coefficients for a piece-wise linear function composed of two linear equations
     // and a breakpoint where they meet
-    private static double farSlope = -6.98;
-    private static double farOffset = 55.4;
-    private static double closeSlope = -19.4;
-    private static double closeOffset = 81.2;
+    private static double farSlope = -5.78;
+    private static double farOffset = 54.1;
+    private static double closeSlope = -15.5;
+    private static double closeOffset = 75.8;
     private static double nearFarBreakpoint = 2.0;
 
     /**
