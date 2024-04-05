@@ -113,7 +113,7 @@ public final class Constants {
     public static final double removeSpeed = 1.0;
     // intake will run until note is detected or this timeout has expired
     public static final double intakeTimeoutSeconds = 3.0;
-    public static final double intakeRemoveSeconds = 2.0;
+    public static final double intakeRemoveSeconds = 1.0;
 
     // ******************************************************************
     // feeder constants
@@ -129,7 +129,7 @@ public final class Constants {
     public static final double feederTimeoutSeconds = 3.0;
     public static final double feederLaunchTimeoutSecondsInAuto = .75;
     public static final double feederLaunchTimeoutSecondsInTele = 2.00;
-    public static final double feederRewindSeconds = 2.0;
+    public static final double feederRewindSeconds = intakeTimeoutSeconds;
 
     // *******************************************************************
     // shooter outfeed constants
