@@ -52,16 +52,13 @@ public class RemoveNoteCommand extends Command
   @Override
   public void execute()
   {
-    if (intake.isNoteDetected()){
-      intake.setAllStop();
-      done = true;
-    } else { // run intake
-      intake.setIntakeSpeed(Constants.removeSpeed);
-    }
     if (timer.hasElapsed(Constants.intakeTimeoutSeconds))
     {
       intake.setAllStop();
       done = true;
+    }
+    else { // run intake
+      intake.setIntakeSpeed(Constants.removeSpeed);
     }
   }
 
