@@ -181,9 +181,9 @@ public class ManualInputInterfaces {
             new ParallelCommandGroup(
               new RemoveNoteCommand(
                 this.subsystemCollection.getIntakeSubsystem()),
-              new FeedNoteCommand(
+              new RewindFeederCommand(
                 this.subsystemCollection.getFeederSubsystem(), 
-                FeederMode.FeedToDunker),
+                FeederMode.FeedToShooter),
               new ButtonPressCommand(
                 "driverController.y()",
                 "Remove Note")
