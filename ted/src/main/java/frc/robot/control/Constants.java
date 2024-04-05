@@ -32,9 +32,9 @@ public final class Constants {
         Units.inchesToMeters(22.75), 
         WcpModuleConfigurations.TED,
         // SUBTRACT the values you find in shuffleboard
-        Math.toRadians(-215.15 - 178.76 - 180.0 - 358.7), // FRONT LEFT
+        Math.toRadians(-215.15 - 178.76 - 180.0 - 358.7 - 12.2 - 358.9), // FRONT LEFT
         Math.toRadians(-180.61 - 95.27 - 358.6 -169.8 - 150.59), // FRONT RIGHT 
-        Math.toRadians(-191.33 - 257.52 -357.3  - 3.6 - 355.67), // BACK LEFT
+        Math.toRadians(-191.33 - 257.52 -357.3  - 3.6 - 355.67 - 357.7), // BACK LEFT
         Math.toRadians(-58.35 - 177.27 - 180.0 - 2.0 - 358.50)); // BACK RIGHT
 
     //////////////////// BABYBEAR DRIVETRAIN ////////////////////
