@@ -52,7 +52,7 @@ public class RemoveNoteCommand extends Command
   @Override
   public void execute()
   {
-    if (timer.hasElapsed(Constants.intakeTimeoutSeconds))
+    if (timer.hasElapsed(Constants.intakeRemoveSeconds))
     {
       intake.setAllStop();
       done = true;

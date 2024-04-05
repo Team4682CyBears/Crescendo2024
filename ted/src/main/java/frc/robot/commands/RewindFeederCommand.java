@@ -58,7 +58,7 @@ public class RewindFeederCommand extends Command
   @Override
   public void execute()
   {
-    if (timer.hasElapsed(Constants.feederTimeoutSeconds))
+    if (timer.hasElapsed(Constants.feederRewindSeconds))
     {
       feeder.setAllStop();
       done = true;
