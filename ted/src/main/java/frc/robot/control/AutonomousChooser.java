@@ -226,7 +226,7 @@ public class AutonomousChooser {
             NamedCommands.registerCommand("AngleFromNote",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "AngleFromNote"),
-                    new ShooterSetAngleCommand(39.5, subsystems.getShooterAngleSubsystem())));
+                    new ShooterSetAngleCommand(39.0, subsystems.getShooterAngleSubsystem())));
             NamedCommands.registerCommand("AngleFromSpeaker",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "AngleFromSpeaker"),
