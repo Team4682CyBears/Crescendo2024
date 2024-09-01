@@ -126,7 +126,7 @@ public class AutonomousChooser {
         subsystems.getCameraSubsystem().setBotPoseSource();
         return new ParallelCommandGroup(
             new ShooterSpinUpAutoCommand(subsystems.getShooterOutfeedSubsystem()),
-            new UseFusedVisionInAutoCommand(subsystems.getDriveTrainSubsystem()),
+            //new UseFusedVisionInAutoCommand(subsystems.getDriveTrainSubsystem()),
             getAutoPath()
         );
     }
@@ -226,7 +226,7 @@ public class AutonomousChooser {
             NamedCommands.registerCommand("AngleFromNote",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "AngleFromNote"),
-                    new ShooterSetAngleCommand(39.0, subsystems.getShooterAngleSubsystem())));
+                    new ShooterSetAngleCommand(38.0, subsystems.getShooterAngleSubsystem())));
             NamedCommands.registerCommand("AngleFromSpeaker",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "AngleFromSpeaker"),
@@ -234,7 +234,7 @@ public class AutonomousChooser {
             NamedCommands.registerCommand("AngleFromStage",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "AngleFromStage"),
-                    new ShooterSetAngleCommand(38.0, subsystems.getShooterAngleSubsystem())));
+                    new ShooterSetAngleCommand(37.0, subsystems.getShooterAngleSubsystem())));
             NamedCommands.registerCommand("AngleFromWing",
                 new ParallelCommandGroup(
                     new ButtonPressCommand("PathPlanner", "AngleFromWing"),
