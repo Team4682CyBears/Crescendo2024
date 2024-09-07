@@ -14,6 +14,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -37,6 +40,9 @@ public class RobotContainer {
 
     // init the pdp watcher
     this.initializePowerDistributionPanelWatcherSubsystem();
+
+    // init the data logging
+    this.initializeDataLogging();
 
     // init the camera (before drivetrain)
     this.initializeCameraSubsystem();
@@ -66,7 +72,6 @@ public class RobotContainer {
 
     AutonomousChooser.configureAutoBuilder(subsystems);
     autonomousChooser  = new AutonomousChooser(subsystems);
-
 
     // Configure the button bindings
     if(this.subsystems.isManualInputInterfacesAvailable()) {
@@ -158,6 +163,14 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return autonomousChooser.getCommand();
+  }
+
+  /**
+   * A method to init all the data logging
+   */
+  private void initializeDataLogging() {
+    DataLogManager.start();
+    DriverStation.startDataLog(DataLogManager.getLog());
   }
 
   /**
