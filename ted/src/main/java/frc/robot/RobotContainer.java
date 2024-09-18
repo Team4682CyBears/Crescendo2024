@@ -164,9 +164,11 @@ public class RobotContainer {
   }
 
   private void bindBrownoutActions(){
-    this.subsystems.getPowerDistributionPanelWatcherSubsystem().setBrownoutCallback(
-      new InstantCommand(() -> this.subsystems.getDriveTrainAccelerationSubsystem().setReducedReductionFactor()),
-      Constants.brownoutEventsBeforeAction);
+    if (Constants.enableBrownoutActions){
+      this.subsystems.getPowerDistributionPanelWatcherSubsystem().setBrownoutCallback(
+        new InstantCommand(() -> this.subsystems.getDriveTrainAccelerationSubsystem().setReducedReductionFactor()),
+        Constants.brownoutEventsBeforeAction);
+    }
   }
 
   /**

@@ -231,6 +231,7 @@ public final class Constants {
     // 
     // Brownout Event Constants
     // number of brownout events before action taken
+    public static final boolean enableBrownoutActions = false;
     public static final int brownoutEventsBeforeAction = 3; 
 
 
