@@ -32,10 +32,10 @@ public final class Constants {
         Units.inchesToMeters(22.75), 
         WcpModuleConfigurations.TED,
         // SUBTRACT the values you find in shuffleboard
-        Math.toRadians(-215.15 - 178.76 - 180.0 - 358.7), // FRONT LEFT
+        Math.toRadians(-215.15 - 178.76 - 358.7 - 43.9 - 354.5), // FRONT LEFT
         Math.toRadians(-180.61 - 95.27 - 358.6 -169.8 - 150.59), // FRONT RIGHT 
         Math.toRadians(-191.33 - 257.52 -357.3  - 3.6 - 355.67), // BACK LEFT
-        Math.toRadians(-58.35 - 177.27 - 180.0 - 2.0 - 358.50)); // BACK RIGHT
+        Math.toRadians(-58.35 - 177.27 - 180.0 - 2.0 - 358.50 - 51.9)); // BACK RIGHT
 
     //////////////////// BABYBEAR DRIVETRAIN ////////////////////
     public static final DrivetrainSwerveConfig babybearDrivetrainConfig = new DrivetrainSwerveConfig (
@@ -112,7 +112,8 @@ public final class Constants {
     public static final double intakeSpeed = -1.0;
     public static final double removeSpeed = 1.0;
     // intake will run until note is detected or this timeout has expired
-    public static final double intakeTimeoutSeconds = 10.0;
+    public static final double intakeTimeoutSeconds = 3.0;
+    public static final double intakeRemoveSeconds = 1.0;
 
     // ******************************************************************
     // feeder constants
@@ -125,9 +126,10 @@ public final class Constants {
     public static final double feederSpeed = 0.50;
     public static final double feederReverseSpeed = 0.10;
     // feeder will run until note is detected or this timeout has expired
-    public static final double feederTimeoutSeconds = 10.0;
+    public static final double feederTimeoutSeconds = 3.0;
     public static final double feederLaunchTimeoutSecondsInAuto = .75;
     public static final double feederLaunchTimeoutSecondsInTele = 2.00;
+    public static final double feederRewindSeconds = intakeTimeoutSeconds;
 
     // *******************************************************************
     // shooter outfeed constants
@@ -164,7 +166,7 @@ public final class Constants {
     // TODO depending on which side the motor is mounted, may need to invert these.
     public static InvertedValue angleLeftTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;
     public static InvertedValue angleRightTalonShooterMotorDefaultDirection = InvertedValue.Clockwise_Positive;
-    public static final double shooterAbsoluteAngleOffsetDegrees = 59.445 - 308.09;
+    public static final double shooterAbsoluteAngleOffsetDegrees = 59.445 - 308.09 +359.9 + .23;
     public static final double shooterStartingAngleOffsetDegrees = 20.0; 
     public static SensorDirectionValue shooterAngleSensorDirection = SensorDirectionValue.CounterClockwise_Positive;
     public static final double shooterAngleMaxDegrees = 110;
@@ -176,13 +178,13 @@ public final class Constants {
     // angles increment ranges of stick input
     public static final double shooterAngleStickIncrementMagnitude = Constants.shooterAngleToleranceDegrees + 12.0;
     // angles of shooter shots
-    public static final double shooterAngleShootFromSpeaker = 56.0;
+    public static final double shooterAngleShootFromSpeaker = 54.5;
     // TODO - figure out what 'shoot from note' actually means??
     public static final double shooterAngleShootFromNote = 42.0; 
     public static final double shooterAngleShootFromStage = 40.0;
     public static final double shooterAngleShootFromSideStage = 34.0;
     public static final double shooterAngleShootFromSourceWing = 22.0;
-    public static final double shooterAngleShootFromAmp = 101.0;
+    public static final double shooterAngleShootFromAmp = 109.0;
 
     // ******************************************************************
     // climber constants
@@ -214,6 +216,7 @@ public final class Constants {
     // camera constants
     public static final int speakerBlueTagID = 7;
     public static final int spekaerRedTagID = 4;
+    public static final boolean useFusedVisionInAuto = false;
     public static final double autoUseFusedVisionDuration = 15.0;
   
     // ********************************************************************
@@ -225,6 +228,12 @@ public final class Constants {
     public static final int currentPowerDistributionPanelCanId = 29;
     public static final ModuleType currentPowerDistributionPanelType = ModuleType.kRev;
     public static final double overcurrentRumbleTimeSeconds = 0.25;
+
+    // 
+    // Brownout Event Constants
+    // number of brownout events before action taken
+    public static final boolean enableBrownoutActions = false;
+    public static final int brownoutEventsBeforeAction = 3; 
 
 
 }

@@ -64,6 +64,9 @@ public class RobotContainer {
     // do late binding of default commands
     this.lateBindDefaultCommands();
 
+    // bind brownout actions
+    this.bindBrownoutActions();
+
     AutonomousChooser.configureAutoBuilder(subsystems);
     autonomousChooser  = new AutonomousChooser(subsystems);
 
@@ -160,6 +163,14 @@ public class RobotContainer {
     return autonomousChooser.getCommand();
   }
 
+  private void bindBrownoutActions(){
+    if (Constants.enableBrownoutActions){
+      this.subsystems.getPowerDistributionPanelWatcherSubsystem().setBrownoutCallback(
+        new InstantCommand(() -> this.subsystems.getDriveTrainAccelerationSubsystem().setReducedReductionFactor()),
+        Constants.brownoutEventsBeforeAction);
+    }
+  }
+
   /**
    * A method to init the climbers
    */
@@ -173,6 +184,8 @@ public class RobotContainer {
           subsystems.getClimberSubsystem(),
           () -> RobotContainer.deadband(this.subsystems.getManualInputInterfaces().getInputLeftClimberArmZ(), Constants.climberControllerStickDeadband),
           () -> RobotContainer.deadband(this.subsystems.getManualInputInterfaces().getInputRightClimberArmZ(), Constants.climberControllerStickDeadband)));
+      SmartDashboard.putData("Left Climber",   new ClimberArmDefaultSpeed(subsystems.getClimberSubsystem(), () -> -.2, () -> 0));
+      SmartDashboard.putData("Right Climber",   new ClimberArmDefaultSpeed(subsystems.getClimberSubsystem(), () -> 0, () -> -.2));
     }
     else {
       System.out.println("FAIL: ClimberSubsystem");
@@ -212,6 +225,7 @@ public class RobotContainer {
       subsystems.setDriveTrainSubsystem(new DrivetrainSubsystem(subsystems));
       subsystems.getDriveTrainSubsystem().zeroRobotPosition(); // can I add this?
       subsystems.setDriveTrainPowerSubsystem(new DrivetrainPowerSubsystem(subsystems.getDriveTrainSubsystem()));
+      subsystems.setDriveTrainAccelerationSubsystem(new DrivetrainAccelerationSubsystem(subsystems.getDriveTrainSubsystem()));
       SmartDashboard.putData("Debug: DrivetrainSub", subsystems.getDriveTrainSubsystem());
       System.out.println("SUCCESS: initializeDrivetrain");
 

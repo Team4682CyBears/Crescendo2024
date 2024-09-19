@@ -2,8 +2,8 @@
 // Bishop Blanchet Robotics
 // Home of the Cybears
 // FRC - Crescendo - 2024
-// File: RemoveNoteCommand.java
-// Intent: Forms a command to remove the note. 
+// File: RewindFeederCommand.java
+// Intent: Forms a command to rewind feeder. 
 // ************************************************************
 
 // ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
@@ -11,54 +11,59 @@
 package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.common.FeederMode;
 import frc.robot.control.Constants;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.FeederSubsystem;
 
 /**
- * Forms a command to intake the note
- * Intake is run until note is detected or timer has expired
+ * Forms a command to rewind the note throug the intake
  */
-public class RemoveNoteCommand extends Command
+public class RewindFeederCommand extends Command
 {
-  private IntakeSubsystem intake;
+  private FeederSubsystem feeder;
   private Timer timer = new Timer();
   private boolean done = false;
+  private FeederMode direction; 
   
   /** 
-  * Creates a new intake command 
+  * Creates a new feeder command 
   * 
-  * @param intakeSubsystem - the intake subsystem
+  * @param feederSubsystem - the feeder subsystem
+  * @param feederMode - the direction for the feeder
   */
-  public RemoveNoteCommand(IntakeSubsystem intakeSubsystem)
+  public RewindFeederCommand(FeederSubsystem feederSubsystem, FeederMode feederMode)
   {
-    this.intake = intakeSubsystem;
+    this.feeder = feederSubsystem;
+    this.direction = feederMode;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(intake);
+    addRequirements(feeder);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize()
   {
-    // intentionally *not* setting intake speed to 0 here. 
-    // If the intake is currently running, don't stop it. 
+    // set the feeder in the right direction 
+    feeder.setFeederMode(direction);
+    // intentionally *not* setting feeder speed to 0 here. 
+    // If the feeder is currently running, don't stop it. 
     timer.reset();
     timer.start();
     done = false;
-    System.out.println("Starting IntakeNoteCommand");
+    System.out.println("Starting RewindFeederCommand");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute()
   {
-    if (timer.hasElapsed(Constants.intakeRemoveSeconds))
+    if (timer.hasElapsed(Constants.feederRewindSeconds))
     {
-      intake.setAllStop();
+      feeder.setAllStop();
       done = true;
     }
-    else { // run intake
-      intake.setIntakeSpeed(Constants.removeSpeed);
+    else {
+        feeder.setFeederSpeed(-1 * Constants.feederSpeed);
     }
   }
 
@@ -66,7 +71,7 @@ public class RemoveNoteCommand extends Command
   @Override
   public void end(boolean interrupted)
   {
-    // Intentionally *not* setting intake speed to 0 here. 
+    // Intentionally *not* setting feeder speed to 0 here. 
     // the two conditions above (note detected and timer elasped)
     // already stop the motor. 
     // If this command is interrupted, e.g. by the codriver hitting the button multiple times

@@ -3,40 +3,35 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.56,
+        "x": 2.5338968170340856,
         "y": 5.55
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9434998503469259,
-        "y": 5.9331406548033625
+        "x": 1.9251090508112731,
+        "y": 5.452207847601459
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Blue4Note2"
     },
     {
       "anchor": {
-        "x": 2.7,
-        "y": 6.6
+        "x": 2.5338968170340856,
+        "y": 6.83
       },
       "prevControl": {
-        "x": 2.4752977877772206,
-        "y": 6.440076233873517
+        "x": 1.6763851774572966,
+        "y": 6.316001118692756
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "BlueNote3"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
     {
       "waypointRelativePos": 0.5,
-      "rotationDegrees": 52.82,
-      "rotateFast": true
-    },
-    {
-      "waypointRelativePos": 0.9,
-      "rotationDegrees": 57.518785725486104,
+      "rotationDegrees": 26.5,
       "rotateFast": true
     }
   ],
@@ -68,7 +63,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 24.170395111439667,
+    "rotation": 24.32389294068247,
     "rotateFast": false
   },
   "reversed": false,

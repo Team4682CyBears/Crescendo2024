@@ -11,8 +11,11 @@
 package frc.robot.subsystems;
 
 import java.util.ArrayList;
+
 import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.common.PortSpy;
@@ -23,6 +26,11 @@ public class PowerDistributionPanelWatcherSubsystem extends SubsystemBase {
         Constants.currentPowerDistributionPanelCanId,
         Constants.currentPowerDistributionPanelType);
     private ArrayList<PortSpy> myList = new ArrayList<PortSpy>();
+
+    private int brownoutEventCount = 0;
+    private Command brownoutAction = null;
+    private int brownoutEventsBeforeAction;
+    private boolean handleBrownouts = false;
 
     public PowerDistributionPanelWatcherSubsystem() {
         /* 
@@ -63,8 +71,24 @@ public class PowerDistributionPanelWatcherSubsystem extends SubsystemBase {
         }
     }
 
+    /**
+     * Sets the callback action to run once brownoutEventsPerAction brownouts happen
+     * @param brownoutAction
+     * @param brownoutEventsBeforeAction
+     */
+    public void setBrownoutCallback(Command brownoutAction, int brownoutEventsBeforeAction){
+        this.brownoutAction = brownoutAction;
+        this.brownoutEventsBeforeAction = brownoutEventsBeforeAction;
+        this.handleBrownouts = true;
+        this.brownoutEventCount = 0; 
+    }
+
     @Override
     public void periodic() {
+        // handle brownouts
+        handleBrownouts();
+        SmartDashboard.putNumber("Brownout Count", this.brownoutEventCount);
+        // handle port spies
         for (int counter = 0; counter < myList.size(); counter++) {
             PortSpy nextSpy = myList.get(counter);
             double current = distroPannel.getCurrent(nextSpy.getPort());
@@ -82,4 +106,27 @@ public class PowerDistributionPanelWatcherSubsystem extends SubsystemBase {
             SmartDashboard.putNumber(nextSpy.getActionDescription(), current);
         }
     }
+
+    /**
+     * A method to check for and handle brownout events
+     * runs the brownoutAction once brownoutEventsBeforeAction brownouts are detected.
+     */
+    private void handleBrownouts(){
+        if (isBrownedOut()){
+            brownoutEventCount += 1;
+            if (this.handleBrownouts && (brownoutEventCount >= this.brownoutEventsBeforeAction)){
+                brownoutAction.schedule();;
+                this.handleBrownouts = false; 
+            }
+        }
+    }
+
+    /**
+     * A Method to check for brownouts. 
+     * @return true when a brownout is detected
+     */
+    private boolean isBrownedOut(){
+        return RobotController.isBrownedOut();
+    }
+
 }

@@ -175,11 +175,15 @@ public class ManualInputInterfaces {
         System.out.println("FINISHED registering this.driverController.rightTrigger().onTrue() ... ");
       }
 
-      if(this.subsystemCollection.isIntakeSubsystemAvailable()) {
+      if(this.subsystemCollection.isIntakeSubsystemAvailable() &&
+         this.subsystemCollection.isFeederSubsystemAvailable()) {
           this.driverController.y().onTrue(
             new ParallelCommandGroup(
               new RemoveNoteCommand(
                 this.subsystemCollection.getIntakeSubsystem()),
+              new RewindFeederCommand(
+                this.subsystemCollection.getFeederSubsystem(), 
+                FeederMode.FeedToShooter),
               new ButtonPressCommand(
                 "driverController.y()",
                 "Remove Note")
@@ -368,6 +372,18 @@ public class ManualInputInterfaces {
               "coDriverController.povDown()",
               "deccrement angle of shooter")));
       }
+
+      // right bumper press will toggle drivetrain reduced acceleration mode
+        this.coDriverController.rightBumper().onTrue(
+          new ParallelCommandGroup(
+            new InstantCommand(
+              () -> subsystemCollection.getDriveTrainAccelerationSubsystem().togglePowerReductionFactor()
+            ),
+            new ButtonPressCommand(
+            "coDriverController.rightBumper()",
+            "toggle limited acceleration mode")
+          )
+        );
 
       if(this.subsystemCollection.isShooterOutfeedSubsystemAvailable() &&
          this.subsystemCollection.isShooterAngleSubsystemAvailable() &&

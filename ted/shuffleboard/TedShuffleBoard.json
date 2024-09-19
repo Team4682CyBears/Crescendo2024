@@ -11,7 +11,7 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "0,0": {
+          "9,0": {
             "size": [
               2,
               1
@@ -24,10 +24,10 @@
               "_showGlyph": false
             }
           },
-          "2,0": {
+          "4,0": {
             "size": [
-              7,
-              5
+              5,
+              6
             ],
             "content": {
               "_type": "Boolean Box",
@@ -59,7 +59,7 @@
               "Visible data/SmartDashboard/Shooter RPM": true
             }
           },
-          "9,0": {
+          "9,1": {
             "size": [
               2,
               1
@@ -72,7 +72,7 @@
               "_showGlyph": false
             }
           },
-          "9,1": {
+          "11,1": {
             "size": [
               2,
               1
@@ -81,6 +81,47 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Drive Accel. Reduction Factor",
               "_title": "/SmartDashboard/Drive Accel. Reduction Factor",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "0,0": {
+            "size": [
+              4,
+              6
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/IsShooterNearlyRevved?",
+              "_title": "/SmartDashboard/IsShooterNearlyRevved?",
+              "_glyph": 148,
+              "_showGlyph": false,
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "12,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Left Climber",
+              "_title": "/SmartDashboard/Left Climber",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "12,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Right Climber",
+              "_title": "/SmartDashboard/Right Climber",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -293,6 +334,19 @@
               "_type": "Command",
               "_source0": "network_table:///SmartDashboard/Spin Up Shooter at specified speeds",
               "_title": "SmartDashboard/Spin Up Shooter at specified speeds",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "7,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/distance",
+              "_title": "SmartDashboard/distance",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -573,9 +627,9 @@
     }
   ],
   "windowGeometry": {
-    "x": -4.0,
-    "y": 2.0,
-    "width": 1936.0,
-    "height": 843.0
+    "x": -68.0,
+    "y": 75.0,
+    "width": 1935.0,
+    "height": 839.0
   }
 }
