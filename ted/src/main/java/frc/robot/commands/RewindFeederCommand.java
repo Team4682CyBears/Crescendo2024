@@ -16,8 +16,7 @@ import frc.robot.control.Constants;
 import frc.robot.subsystems.FeederSubsystem;
 
 /**
- * Forms a command to feed the note to the shooter or dunker
- * Feeder is run until note is detected or timer has expired
+ * Forms a command to rewind the note throug the intake
  */
 public class RewindFeederCommand extends Command
 {
@@ -51,7 +50,7 @@ public class RewindFeederCommand extends Command
     timer.reset();
     timer.start();
     done = false;
-    System.out.println("Starting FeedNoteCommand");
+    System.out.println("Starting RewindFeederCommand");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
