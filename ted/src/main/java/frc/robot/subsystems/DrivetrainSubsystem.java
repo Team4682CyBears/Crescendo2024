@@ -78,7 +78,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * Gear ratio: 7.85:1. Free speed of 14.19 ft/s = 4.3251 m/s
    */
   public static final double MAX_VELOCITY_METERS_PER_SECOND = 4.3251;
-  public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 6.5;
+  public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 6.0;
+  public static final double MAX_DECELERATION_METERS_PER_SECOND_SQUARED = 12.0;
 
   public static final double MIN_VELOCITY_BOUNDARY_METERS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND * 0.14; // 0.14 a magic number based on testing
 
@@ -726,11 +727,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @return
    */
   private ChassisSpeeds limitChassisSpeedsAccel(ChassisSpeeds speeds) {
+    // translational acceleration has different accel/decel limits
     double xVelocityLimited = limitAxisSpeed(speeds.vxMetersPerSecond, previousChassisSpeeds.vxMetersPerSecond, 
-    MAX_ACCELERATION_METERS_PER_SECOND_SQUARED * this.accelerationReductionFactor);
+    MAX_ACCELERATION_METERS_PER_SECOND_SQUARED * this.accelerationReductionFactor, 
+    MAX_DECELERATION_METERS_PER_SECOND_SQUARED); // acceleration reduction factor does not apply to deceleration
     double yVelocityLimited = limitAxisSpeed(speeds.vyMetersPerSecond, previousChassisSpeeds.vyMetersPerSecond, 
-    MAX_ACCELERATION_METERS_PER_SECOND_SQUARED * this.accelerationReductionFactor);
-    double omegaVelocityLimited = limitAxisSpeed(speeds.omegaRadiansPerSecond, previousChassisSpeeds.omegaRadiansPerSecond, MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED);
+    MAX_ACCELERATION_METERS_PER_SECOND_SQUARED * this.accelerationReductionFactor, 
+    MAX_DECELERATION_METERS_PER_SECOND_SQUARED); // acceleration reduction factor does not apply to deceleration
+    // angular acceleration is has same accel/decel limit
+    double omegaVelocityLimited = limitAxisSpeed(speeds.omegaRadiansPerSecond, previousChassisSpeeds.omegaRadiansPerSecond, 
+    MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED, 
+    MAX_ANGULAR_ACCELERATION_RADIANS_PER_SECOND_SQUARED);
     return new ChassisSpeeds(xVelocityLimited, yVelocityLimited, omegaVelocityLimited);
   }
 
@@ -741,12 +748,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @param maxAccel
    * @return limited speed
    */
-  private double limitAxisSpeed(double commandedSpeed, double previousSpeed, double maxAccel){
+  private double limitAxisSpeed(double commandedSpeed, double previousSpeed, double maxAccel, double maxDecel){
       double accel = (commandedSpeed - previousSpeed)/deltaTimeSeconds;
       double speedLimited = commandedSpeed;
-      if (Math.abs(accel) > maxAccel){
-          // new velocity is the old velocity + the maximum allowed change toward the new direction
-          speedLimited = previousSpeed + Math.copySign(maxAccel * deltaTimeSeconds, accel);
+      if (accel > maxAccel){ // positive accel is greater than max
+        // new velocity is the old velocity + the maximum allowed change toward the new direction
+        speedLimited = previousSpeed + Math.copySign(maxAccel * deltaTimeSeconds, accel);
+      } else if (accel < -maxDecel) { // accel is less than negative max
+        speedLimited = previousSpeed + Math.copySign(maxDecel * deltaTimeSeconds, accel);
       }
       return speedLimited;
   }
