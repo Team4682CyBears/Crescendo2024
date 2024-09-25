@@ -41,6 +41,9 @@ public class RobotContainer {
     // init the camera (before drivetrain)
     this.initializeCameraSubsystem();
 
+    // init the leds
+    this.initializeLEDSubsystem();
+
     // intake subsystem init
         // intake subsystem init
     this.initializeIntakeSubsystem();
@@ -259,6 +262,17 @@ public class RobotContainer {
       System.out.println("FAIL: initializeCamera");
     }
   }
+
+  private void initializeLEDSubsystem(){
+    if(InstalledHardware.LEDSInstalled){
+      subsystems.setLEDSubsystem(new LEDSubsystem(Constants.ledCanID));
+      System.out.println("SUCCESS: initializeLEDS");
+    }
+    else {
+      System.out.println("FAIL: initializeLEDS");
+    }
+  }
+
   
   /**
    * A method to init the feeder subsystem

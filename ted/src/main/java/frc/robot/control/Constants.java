@@ -105,6 +105,10 @@ public final class Constants {
     public static final double FinePlacementRotationalVelocity = 0.7;
 
     // ******************************************************************
+    //led constants
+    public static final int ledCanID = 0;
+
+    // ******************************************************************
     // intake constants
     public static final int intakeMotorCanId = 13;
     public static final int intakeTofCanId = 14;
