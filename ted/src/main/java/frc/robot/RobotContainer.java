@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.common.TestTrajectories;
 import frc.robot.common.FeederMode;
+import frc.robot.common.LEDState;
 import frc.robot.control.InstalledHardware;
 import frc.robot.control.ManualInputInterfaces;
 import frc.robot.control.SubsystemCollection;
@@ -286,10 +287,17 @@ public class RobotContainer {
         new InstantCommand(
           subsystems.getFeederSubsystem()::setAllStop, 
           subsystems.getFeederSubsystem()));
-      System.out.println("SUCCESS: FeederSubsystem");
-    } else {
-      System.out.println("FAIL: FeederSubsystem");
-    }
+          System.out.println("SUCCESS: FeederSubsystem");
+
+          // register the led colors when leds are ready to go - OrangeSolid on note in shooter
+          if(subsystems.isLEDSubsystemAvailable()) {
+            subsystems.getLedSubsystem().registerStateAction(
+              LEDState.OrangeSolid,
+              this.subsystems.getFeederSubsystem()::isShooterNoteDetected);
+          }
+        } else {
+          System.out.println("FAIL: FeederSubsystem");
+        }
   }
 
   /**
@@ -305,6 +313,13 @@ public class RobotContainer {
           subsystems.getIntakeSubsystem()::setAllStop, 
           subsystems.getIntakeSubsystem()));
       System.out.println("SUCCESS: IntakeSubsystem");
+
+      // register the led colors when leds are ready to go - OrangeBlink on note in intake
+      if(subsystems.isLEDSubsystemAvailable()) {
+        subsystems.getLedSubsystem().registerStateAction(
+          LEDState.OrangeBlink,
+          this.subsystems.getIntakeSubsystem()::isNoteDetected);
+      }
     } else {
       System.out.println("FAIL: IntakeSubsystem");
     }
@@ -335,6 +350,16 @@ public class RobotContainer {
       subsystems.setShooterOutfeedSubsystem(new ShooterOutfeedSubsystem());
       SmartDashboard.putData("Debug: ShooterSubsystem", subsystems.getShooterOutfeedSubsystem());
       System.out.println("SUCCESS: ShooterOutfeedSubsystem");
+
+      // register the led colors when leds are ready to go - Yellow or Green based on speed of outfeed
+      if(subsystems.isLEDSubsystemAvailable()) {
+        subsystems.getLedSubsystem().registerStateAction(
+          LEDState.Yellow,
+          this.subsystems.getShooterOutfeedSubsystem()::isNearSpeed);
+        subsystems.getLedSubsystem().registerStateAction(
+          LEDState.Green,
+          this.subsystems.getShooterOutfeedSubsystem()::isAtSpeed);
+      }
     }
     else {
       System.out.println("FAIL: ShooterOutfeedSubsystem");
