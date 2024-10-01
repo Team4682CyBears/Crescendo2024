@@ -74,8 +74,8 @@ public class InstalledHardware
     public static final boolean setShooterAngleFromShuffleboard = false;
 
     // Climber Sensor Related Hardware
-    public static final boolean leftClimberInstalled = false;
-    public static final boolean rightClimberInstalled = false;
-    public static final boolean leftClimberSensorInstalled = false;
-    public static final boolean rightClimberSensorInstalled = false;
+    public static final boolean leftClimberInstalled = true;
+    public static final boolean rightClimberInstalled = true;
+    public static final boolean leftClimberSensorInstalled = true;
+    public static final boolean rightClimberSensorInstalled = true;
 }

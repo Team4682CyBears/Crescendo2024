@@ -16,28 +16,12 @@
     },
     {
       "anchor": {
-        "x": 8.5,
-        "y": 7.45
+        "x": 8.138085399605595,
+        "y": 7.475012302436476
       },
       "prevControl": {
-        "x": 7.500000000000003,
-        "y": 7.45
-      },
-      "nextControl": {
-        "x": 8.632171140907579,
-        "y": 7.45
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 0.64,
-        "y": 3.76
-      },
-      "prevControl": {
-        "x": 2.064557065080529,
-        "y": 6.329968975514577
+        "x": 5.037180016797036,
+        "y": 7.475012302436476
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,26 +30,21 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.9,
+      "waypointRelativePos": 0.1,
+      "rotationDegrees": 59.35,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 0.3,
       "rotationDegrees": 13.24,
-      "rotateFast": true
-    },
-    {
-      "waypointRelativePos": 2.0,
-      "rotationDegrees": 59.35,
-      "rotateFast": true
-    },
-    {
-      "waypointRelativePos": 0.2,
-      "rotationDegrees": 59.35,
       "rotateFast": false
     }
   ],
   "constraintZones": [
     {
       "name": "End",
-      "minWaypointRelativePos": 1.65,
-      "maxWaypointRelativePos": 2.0,
+      "minWaypointRelativePos": 0.85,
+      "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 2.5,
         "maxAcceleration": 1.0,
@@ -75,8 +54,8 @@
     },
     {
       "name": "Middle",
-      "minWaypointRelativePos": 0.85,
-      "maxWaypointRelativePos": 1.25,
+      "minWaypointRelativePos": 0.45,
+      "maxWaypointRelativePos": 0.65,
       "constraints": {
         "maxVelocity": 3.0,
         "maxAcceleration": 1.0,
@@ -87,19 +66,12 @@
   ],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.7,
+      "name": "IntakeNote",
+      "waypointRelativePos": 0.5,
       "command": {
         "type": "parallel",
         "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "IntakeNote"
-              }
-            }
-          ]
+          "commands": []
         }
       }
     }
@@ -112,7 +84,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 57.83218213656586,
+    "rotation": -8.615648184164193,
     "rotateFast": false
   },
   "reversed": false,

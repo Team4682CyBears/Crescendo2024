@@ -30,15 +30,33 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "IntakeNote"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "BlueWingPath"
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "IntakeNote"
+          }
+        },
+        {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 2.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BlueWingEtended"
           }
         },
         {

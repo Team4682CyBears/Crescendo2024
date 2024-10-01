@@ -111,11 +111,12 @@ public class CameraSubsystem extends SubsystemBase {
    */
   public DistanceMeasurement getDistanceFromTag(double blueTId, double redTId){
     DistanceMeasurement measurement = new DistanceMeasurement(false, 0.0);
-    if((getTagId() == blueTId || getTagId() == redTId) && getVisionBotPoseInTargetSpace() != null){
+    Pose2d botPoseIntargetSpace = getVisionBotPoseInTargetSpace();
+    if((getTagId() == blueTId || getTagId() == redTId) && botPoseIntargetSpace != null){
       measurement.setIsValid(true);
 
-      double xDistance = getVisionBotPoseInTargetSpace().getTranslation().getX();
-      double yDistance = getVisionBotPoseInTargetSpace().getTranslation().getY();
+      double xDistance = botPoseIntargetSpace.getTranslation().getX();
+      double yDistance = botPoseIntargetSpace.getTranslation().getY();
       double totalDistance = Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
       measurement.setDistanceMeteres(totalDistance);
     }
