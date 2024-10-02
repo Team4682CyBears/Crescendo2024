@@ -14,7 +14,7 @@ public class Robot extends TimedRobot {
 
   private static final int controllerPort = 0;
 
-  private static final int motorPort = 0;
+  private static final int motorPort = 1;
 
   private final MotorSubsystem motorSubsystem = new MotorSubsystem(motorPort);
   private final XboxController xboxController = new XboxController(controllerPort);
