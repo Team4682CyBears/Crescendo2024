@@ -27,6 +27,9 @@ import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 import frc.robot.control.AutonomousChooser;
 import frc.robot.control.Constants;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 
 public class RobotContainer {
 
@@ -37,6 +40,9 @@ public class RobotContainer {
 
     // init the pdp watcher
     this.initializePowerDistributionPanelWatcherSubsystem();
+
+    // init the data logging
+    this.initializeDataLogging();
 
     // init the camera (before drivetrain)
     this.initializeCameraSubsystem();
@@ -171,6 +177,14 @@ public class RobotContainer {
     }
   }
 
+   /**
+   * A method to init all the data logging
+   */
+  private void initializeDataLogging() {
+    DataLogManager.start();
+    DriverStation.startDataLog(DataLogManager.getLog());
+  }
+  
   /**
    * A method to init the climbers
    */
