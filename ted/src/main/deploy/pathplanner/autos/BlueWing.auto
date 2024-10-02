@@ -3,7 +3,7 @@
   "startingPose": {
     "position": {
       "x": 0.6924444618120014,
-      "y": 4.39
+      "y": 3.81
     },
     "rotation": -60.6653371504826
   },
@@ -30,33 +30,15 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "IntakeNote"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "BlueWingPath"
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "IntakeNote"
-          }
-        },
-        {
           "type": "wait",
           "data": {
-            "waitTime": 2.5
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "BlueWingEtended"
+            "waitTime": 0.5
           }
         },
         {
