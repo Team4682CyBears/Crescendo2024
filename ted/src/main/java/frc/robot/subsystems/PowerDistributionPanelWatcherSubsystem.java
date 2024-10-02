@@ -12,6 +12,7 @@ package frc.robot.subsystems;
 
 import java.util.ArrayList;
 
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -34,9 +35,9 @@ public class PowerDistributionPanelWatcherSubsystem extends SubsystemBase {
 
     public PowerDistributionPanelWatcherSubsystem() {
         /* 
-        System.out.println("CTOR PowerDistributionPanelWatcherSubsystem");
+        DataLogManager.log("CTOR PowerDistributionPanelWatcherSubsystem");
         for(var next: Thread.currentThread().getStackTrace()) {
-            System.out.println(next.toString());
+            DataLogManager.log(next.toString());
         }
         */
 //        CommandScheduler.getInstance().registerSubsystem(this);
@@ -95,7 +96,7 @@ public class PowerDistributionPanelWatcherSubsystem extends SubsystemBase {
 
             if(nextSpy.getEnabled() && current > nextSpy.getCurrentLimit())
             {
-                System.out.println(
+                DataLogManager.log(
                     "Overcurrent detected for port " + nextSpy.getPort() +
                     " with maximum of " + nextSpy.getCurrentLimit() + 
                     " and actual of " + current + 

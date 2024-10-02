@@ -21,6 +21,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.Trajectory.State;
+import edu.wpi.first.wpilibj.DataLogManager;
 
 /**
  * A collection of methods to generate trajectories for swerve drives.  
@@ -119,7 +120,7 @@ public class SwerveTrajectoryGenerator {
      */
     public static void printTrajectory(Trajectory t){
         for (int i = 0; i < t.getStates().size(); i++) {
-            System.out.println(t.getStates().get(i));
+            DataLogManager.log(t.getStates().get(i).toString());
         }
     }
 
@@ -133,7 +134,7 @@ public class SwerveTrajectoryGenerator {
     public static void printSampledTrajectory(Trajectory trajectory, int numSamples){
         double smallScaleUpFactor = 1.0001;
         for (double t = 0; t <= trajectory.getTotalTimeSeconds() * smallScaleUpFactor; t += trajectory.getTotalTimeSeconds()/(numSamples-1)){
-            System.out.println(trajectory.sample(t));
+            DataLogManager.log(trajectory.sample(t).toString());
         }
     }
 

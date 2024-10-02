@@ -15,6 +15,7 @@ import frc.robot.control.Constants;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.ShooterAngleSubsystem;
 import frc.robot.subsystems.ShooterOutfeedSubsystem;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -135,7 +136,7 @@ public class ShooterShootCommand extends Command {
   public void initialize() {
     this.isAtDesiredAngle = this.isAtDesiredAngleBaseline;
     if (!isAtDesiredAngle) {
-      System.out.println("Setting Angle to " + desiredAngleDegrees + " degrees");
+      DataLogManager.log("Setting Angle to " + desiredAngleDegrees + " degrees");
     }
 
     if (setSpeedsFromSupplier) {
@@ -150,8 +151,8 @@ public class ShooterShootCommand extends Command {
       shooterAngle.setAngleDegrees(desiredAngleDegrees);
     }
 
-    System.out.println("Spinning up shooter...");
-    System.out.println("Target RPM: " + desiredSpeedRpm);
+    DataLogManager.log("Spinning up shooter...");
+    DataLogManager.log("Target RPM: " + desiredSpeedRpm);
     shooterOutfeed.setShooterVelocity(desiredSpeedRpm);
 
     timer.reset();
@@ -167,13 +168,13 @@ public class ShooterShootCommand extends Command {
       isAtDesiredAngle = shooterAngle.isAngleWithinTolerance(desiredAngleDegrees);
     }
     if (isAtDesiredAngle && shooterOutfeed.isAtSpeed()){
-      System.out.println("Shooter at desired speed and angle.");
-      System.out.println("Wait for feeder delay...");
+      DataLogManager.log("Shooter at desired speed and angle.");
+      DataLogManager.log("Wait for feeder delay...");
       delayTimer.start();
     }
     if (delayTimer.hasElapsed(Constants.shooterSpinUpDelay)){
       feeder.setFeederSpeed(Constants.feederSpeed);
-      System.out.println("Feeding Note...");
+      DataLogManager.log("Feeding Note...");
       timer.start();
     }
     if (timer.hasElapsed(Constants.shooterShootDuration)){
@@ -192,7 +193,7 @@ public class ShooterShootCommand extends Command {
     feeder.setAllStop();
     shooterOutfeed.setAllStop();
     isDone = true;
-    System.out.println("end of ShootAtSpeedCommand ... ");
+    DataLogManager.log("end of ShootAtSpeedCommand ... ");
   }
 
   // Returns true when the command should end.

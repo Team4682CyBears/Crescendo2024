@@ -17,6 +17,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
+import edu.wpi.first.wpilibj.DataLogManager;
 import frc.robot.swerveLib.AbsoluteEncoder;
 import frc.robot.swerveLib.AbsoluteEncoderFactory;
 
@@ -35,14 +36,14 @@ public class CanCoderFactoryBuilder {
     }
 */
     public CanCoderFactoryBuilder withDirection(Direction direction) {
-        System.out.println("shouldn't be here #0!");
+        DataLogManager.log("shouldn't be here #0!");
         this.direction = direction;
         return this;
     }
 
     public AbsoluteEncoderFactory<CanCoderAbsoluteConfiguration> build()  {
         return configuration -> {
-            System.out.println("shouldn't be here #1!");
+            DataLogManager.log("shouldn't be here #1!");
             CANcoderConfiguration canCoderConfig = new CANcoderConfiguration();
             canCoderConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1; // seems like implementation discontinuity between libraries to me...
             canCoderConfig.MagnetSensor.MagnetOffset = CtreUtils.convertFromRadiansToNormalizedDecmil(configuration.getOffset());
@@ -59,12 +60,12 @@ public class CanCoderFactoryBuilder {
 
         private EncoderImplementation(CANcoder encoder) {
             this.encoder = encoder;
-            System.out.println("shouldn't be here #2!");
+            DataLogManager.log("shouldn't be here #2!");
         }
 
         @Override
         public double getAbsoluteAngle() {
-            System.out.println("shouldn't be here #3!");
+            DataLogManager.log("shouldn't be here #3!");
             double angle = 2.0 * Math.PI * encoder.getAbsolutePosition().getValueAsDouble();
             angle %= 2.0 * Math.PI;
             if (angle < 0.0) {

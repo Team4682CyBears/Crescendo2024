@@ -13,7 +13,7 @@ package frc.robot.control;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.common.FeederMode;
 import frc.robot.common.ShooterOutfeedSpeedProvider;
@@ -162,7 +162,7 @@ public class ManualInputInterfaces {
 
       if(this.subsystemCollection.isShooterOutfeedSubsystemAvailable() &&
          this.subsystemCollection.isFeederSubsystemAvailable()) {
-        System.out.println("STARTING Registering this.driverController.rightTrigger().onTrue() ... ");
+        DataLogManager.log("STARTING Registering this.driverController.rightTrigger().onTrue() ... ");
         this.driverController.rightTrigger().onTrue(
             new ParallelCommandGroup(
               new FeederLaunchNote(
@@ -172,7 +172,7 @@ public class ManualInputInterfaces {
                 "Shoot at speed!!")
               )
           );
-        System.out.println("FINISHED registering this.driverController.rightTrigger().onTrue() ... ");
+        DataLogManager.log("FINISHED registering this.driverController.rightTrigger().onTrue() ... ");
       }
 
       if(this.subsystemCollection.isIntakeSubsystemAvailable() &&

@@ -14,6 +14,7 @@ import com.playingwithfusion.TimeOfFlight;
 import com.playingwithfusion.TimeOfFlight.RangingMode;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -35,7 +36,7 @@ public class NoteTofSensor {
     // short mode is accurate to 1.3m 
     // 20ms sample time matches robot update rate
     tofSensor.setRangingMode(RangingMode.Short, 20);
-    System.out.println("==== DONE CONFIG of TOF SENSOR at CanID " + canID);
+    DataLogManager.log("==== DONE CONFIG of TOF SENSOR at CanID " + canID);
   }
   
   /**

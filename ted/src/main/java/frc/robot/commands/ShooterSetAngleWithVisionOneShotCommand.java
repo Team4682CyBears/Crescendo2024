@@ -12,6 +12,7 @@ package frc.robot.commands;
 
 import java.util.ArrayList;
 
+import edu.wpi.first.wpilibj.DataLogManager;
 import frc.robot.common.DistanceMeasurement;
 import frc.robot.common.ShooterAngleHelpers;
 import frc.robot.control.Constants;
@@ -101,7 +102,7 @@ public class ShooterSetAngleWithVisionOneShotCommand extends ShooterSetAngleComm
       distanceSum += recentDistances.get(i);
     }
     double averageDistance = distanceSum/this.recentDistances.size();
-    System.out.println("Calculated avearge distance of " + averageDistance + " from distances of " + recentDistances);
+    DataLogManager.log("Calculated avearge distance of " + averageDistance + " from distances of " + recentDistances);
     return averageDistance;
   }
 

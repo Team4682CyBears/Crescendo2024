@@ -10,6 +10,7 @@
 
 package frc.robot.control;
 
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
@@ -83,7 +84,7 @@ public class AutonomousChooser {
 
         }
         else{
-            System.out.println(">>>>> NO auto routine becuase missing subsystems");
+            DataLogManager.log(">>>>> NO auto routine becuase missing subsystems");
         }
     }
 

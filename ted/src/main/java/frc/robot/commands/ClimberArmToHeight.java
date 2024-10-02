@@ -12,7 +12,7 @@ package frc.robot.commands;
 
 import frc.robot.control.Constants;
 import frc.robot.subsystems.ClimberSubsystem;
-
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -74,7 +74,7 @@ public class ClimberArmToHeight extends Command {
     }
     if(interrupted){
       done = true;
-      System.out.println("interrupted end of ClimberArmToHeight ... ");
+      DataLogManager.log("interrupted end of ClimberArmToHeight ... ");
     }
   }
 
