@@ -47,6 +47,8 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -63,6 +65,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private CameraSubsystem cameraSubsystem;
 
   private boolean useVision = false;
+
+  StructArrayPublisher<SwerveModuleState> publisher;
 
   /**
    * The maximum voltage that will be delivered to the drive motors.
@@ -163,6 +167,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     if(InstalledHardware.limelightInstalled){
       cameraSubsystem = subsystems.getCameraSubsystem();
     }
+
+    publisher = NetworkTableInstance.getDefault().getStructArrayTopic("MyStates", SwerveModuleState.struct).publish();
 
     ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
 
@@ -499,6 +505,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     } 
     // next we take the state and set the states on the swerve modules
     setSwerveModuleStates(states);
+
+    publisher.set(states);
   }
 
   /**
