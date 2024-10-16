@@ -13,7 +13,7 @@ The table below highlights various challanges that coder members will be assigne
 
 |Input Hardware | Output Hardware | Expected Outcome | Target Owner | Owner |
 |--|--|--|--|--|
-| XBox Controller Left and Right bumper | Falcon | Left bumper press drives the motor backwards or when not pressed use right bumper press to drive motor forwards | 1st year | Matthew Getachew  |
+| XBox Controller Left and Right bumper | Talon | Left bumper press drives the motor backwards or when not pressed use right bumper press to drive motor forwards | 1st year | Matthew Getachew  |
 | XBox Controller Left Stick Y direction | Neo motor  | Use of the input of the Left stick y double/floating point value to control the speed of the motor | 1st year | Isaac Bess  |
 | Multi-function joystick twist | Talon Motor | Use of the input of the joystick twist axist double/floating point value to control the speed of the motor | 1st year | ??  |
 | Button board two buttons | bag motor on/off in forward and reverse directions | Use one button to drive the motor in forward direction and the other button press to run the motor in the other direction | 1st year | ??  |
