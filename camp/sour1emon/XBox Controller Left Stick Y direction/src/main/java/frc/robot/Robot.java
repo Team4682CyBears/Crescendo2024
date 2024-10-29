@@ -14,14 +14,14 @@ public class Robot extends TimedRobot {
 
   private static final int controllerPort = 0;
 
-  private static final int motorPort = 1;
+  private static final int motorPort = 5;
 
   private final MotorSubsystem motorSubsystem = new MotorSubsystem(motorPort);
   private final XboxController xboxController = new XboxController(controllerPort);
 
   @Override
   public void robotInit() {
-    motorSubsystem.setDefaultCommand(new MotorDefaultCommand(motorSubsystem, xboxController));
+    this.motorSubsystem.setDefaultCommand(new MotorDefaultCommand(motorSubsystem, xboxController));
   }
 
   @Override

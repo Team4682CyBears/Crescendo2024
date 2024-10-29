@@ -15,8 +15,7 @@ public class MotorDefaultCommand extends Command {
     }
 
     @Override
-    public void initialize() {
-        System.out.println(controller.getLeftY());
+    public void execute() {
         motorSubsystem.setSpeed(controller.getLeftY());
     }
 }

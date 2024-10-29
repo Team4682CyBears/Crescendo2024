@@ -1,15 +1,16 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkLowLevel.*;
+
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class MotorSubsystem implements Subsystem {
 
-    private PWMSparkMax motor;
+    private CANSparkMax motor;
 
     public MotorSubsystem(int motorPort) {
-        motor = new PWMSparkMax(motorPort);
-        motor.set(0.0);
+        this.motor = new CANSparkMax(motorPort, MotorType.kBrushless);
     }
 
     private double clamp(double value, double min, double max) {
