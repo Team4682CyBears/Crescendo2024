@@ -51,9 +51,9 @@ All team members should follow the getting starting guide.  See: [2023 Getting S
 
 1. Create a New WPILib Project<br>
     a. by using one of the WPILib 'command' based examples<br>
-       i. Select a project type -> Template <br>
-       ii. Select a language -> java <br>
-       iii. Select a project base -> Command Robot <br>
+        i. Select a project type -> Template <br>
+        ii. Select a language -> java <br>
+        iii. Select a project base -> Command Robot <br>
     b. select project directory - e.g., %root%/camp/username<br>
     c. Name your project with something that reflects the expected outcome<br>
     d. Team Number - 4682<br>
