@@ -106,7 +106,7 @@ public final class Constants {
 
     // ******************************************************************
     //led constants
-    public static final int ledCanID = 0;
+    public static final int ledCanID = 30;
 
     // ******************************************************************
     // intake constants

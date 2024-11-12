@@ -51,10 +51,12 @@ public class LEDSubsystem extends SubsystemBase {
         CANdleConfiguration configAll = new CANdleConfiguration();
         configAll.statusLedOffWhenActive = true;
         configAll.disableWhenLOS = false;
-        configAll.stripType = LEDStripType.RGBW;
-        configAll.brightnessScalar = 0.1;
+        configAll.stripType = LEDStripType.RGB;
+        configAll.brightnessScalar = 0.5;
         configAll.vBatOutputMode = VBatOutputMode.Modulated;
         this.leds.configAllSettings(configAll, 100);
+        this.leds.configLEDType(LEDStripType.RGB);
+
 
       }
 
@@ -96,6 +98,7 @@ public class LEDSubsystem extends SubsystemBase {
             if(ledStateActions.containsKey(ledState)) {
                   ledStateActions.remove(ledState);
             }
+            System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
             ledStateActions.put(ledState, new LEDStateAction(ledState, shouldTakeAction));
       }
 
@@ -154,36 +157,38 @@ public class LEDSubsystem extends SubsystemBase {
 
       private void orangeBlink() {
             if(this.currentBlinkState) {
-                  this.setLedStringColor(255,165,0,0);
+                  this.setLedStringColor(255,165,0);
             }
             else {
-                  this.setLedStringColor(0, 0, 0,0);
+                  this.setLedStringColor(0, 0, 0);
             }
       }
 
 
       private void orangeSolid() {
-            this.setLedStringColor(255,165,0,0);
+            this.setLedStringColor(255,165,0);
       }
 
 
       private void yellowSolid() {
-            this.setLedStringColor(150,150,0,0);
+            this.setLedStringColor(150,150,0);
       }
 
 
       private void greenSolid() {
-            this.setLedStringColor(0,200,0,0);
+            this.setLedStringColor(0,200,0);
       }
 
 
       private void offState() {
-            this.setLedStringColor(0,0,0,0);
+            this.setLedStringColor(0,0,0);
+            this.leds.modulateVBatOutput(0);
       }
 
 
-      private void setLedStringColor(int red, int green, int blue, int white) {
-                  this.leds.setLEDs(red, green, blue, white, startIdx, BUFFER_LENGTH);
+      private void setLedStringColor(int red, int green, int blue) {
+                  this.leds.setLEDs(red, green, blue, 0, startIdx, BUFFER_LENGTH);
+                  this.leds.modulateVBatOutput(0.9);
       }
 
 

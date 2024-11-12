@@ -316,9 +316,11 @@ public class RobotContainer {
 
       // register the led colors when leds are ready to go - OrangeBlink on note in intake
       if(subsystems.isLEDSubsystemAvailable()) {
+        System.out.println("??????????????????????????");
         subsystems.getLedSubsystem().registerStateAction(
           LEDState.OrangeBlink,
           this.subsystems.getIntakeSubsystem()::isNoteDetected);
+          System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
       }
     } else {
       System.out.println("FAIL: IntakeSubsystem");
