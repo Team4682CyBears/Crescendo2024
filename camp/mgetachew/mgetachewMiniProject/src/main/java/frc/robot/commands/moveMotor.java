@@ -26,6 +26,8 @@ public class moveMotor extends Command{
             motorTalonToMove.motorReverse();
         } else if(rightBumperSupplier.getAsBoolean()){
             motorTalonToMove.motorForwards();
+        } else {
+            motorTalonToMove.motorStop();
         }
     }
 
