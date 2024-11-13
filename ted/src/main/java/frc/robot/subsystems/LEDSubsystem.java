@@ -11,7 +11,7 @@
 
 
 // ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ
-
+/* 
 package frc.robot.subsystems;
 
 import java.util.HashMap;
@@ -45,17 +45,17 @@ public class LEDSubsystem extends SubsystemBase {
       /**
        * LEDSubsystem
        * @param port PWM port on the roboRIO
-        */
+        
       public LEDSubsystem(int canID) {
         this.leds = new CANdle(canID); // initialization of the AdressableLED
         CANdleConfiguration configAll = new CANdleConfiguration();
-        configAll.statusLedOffWhenActive = true;
-        configAll.disableWhenLOS = false;
+        //configAll.statusLedOffWhenActive = true;
+       // configAll.disableWhenLOS = false;
         configAll.stripType = LEDStripType.RGB;
         configAll.brightnessScalar = 0.5;
         configAll.vBatOutputMode = VBatOutputMode.Modulated;
         this.leds.configAllSettings(configAll, 100);
-        this.leds.configLEDType(LEDStripType.RGB);
+       // this.leds.configLEDType(LEDStripType.RGB);
 
 
       }
@@ -201,3 +201,4 @@ public class LEDSubsystem extends SubsystemBase {
       }
 }
 
+*/
