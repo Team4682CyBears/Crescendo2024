@@ -11,7 +11,7 @@
 
 
 // ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ
-/* 
+
 package frc.robot.subsystems;
 
 import java.util.HashMap;
@@ -20,9 +20,7 @@ import java.util.function.BooleanSupplier;
 import java.util.Iterator;
 
 import frc.robot.common.LEDStateAction;
-import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.control.Constants;
 import frc.robot.common.LEDState;
 import com.ctre.phoenix.led.*;
 import com.ctre.phoenix.led.CANdle.LEDStripType;
@@ -31,61 +29,29 @@ import com.ctre.phoenix.led.CANdle.VBatOutputMode;
 public class LEDSubsystem extends SubsystemBase {
     private final CANdle leds;
     
-    private final int BUFFER_LENGTH = 144;
-    private int startIdx = 0;
-        // Creates a new buffer object
+      private final int BUFFER_LENGTH = 144;
+      private int startIdx = 0;
       private HashMap <LEDState, LEDStateAction> ledStateActions = new HashMap<LEDState, LEDStateAction>();
       private int blinkPeriodInHertz = 25; // increase this for longer blinks!!!
       private int blinkCounter = 0;
       private boolean currentBlinkState = false;
       private boolean lastBlinkState = false;
-       private LEDState currentLEDState = LEDState.Off;
+      private LEDState currentLEDState = LEDState.Off;
 
 
       /**
        * LEDSubsystem
-       * @param port PWM port on the roboRIO
-        
+       * @param canID can id of the CANdle
+        */
       public LEDSubsystem(int canID) {
         this.leds = new CANdle(canID); // initialization of the AdressableLED
         CANdleConfiguration configAll = new CANdleConfiguration();
-        //configAll.statusLedOffWhenActive = true;
-       // configAll.disableWhenLOS = false;
         configAll.stripType = LEDStripType.RGB;
         configAll.brightnessScalar = 0.5;
         configAll.vBatOutputMode = VBatOutputMode.Modulated;
         this.leds.configAllSettings(configAll, 100);
-       // this.leds.configLEDType(LEDStripType.RGB);
-
-
       }
 
-    //Gets the Voltage of VBat as measured by CANdle
-    public double getVbat() {
-         return leds.getBusVoltage(); 
-    }
-
-    //Gets the Voltage of the 5V line as measured by CANdle
-    public double get5V() { 
-        return leds.get5VRailVoltage(); 
-    }
-
-    //Gets the low-side current as measured by CANdle
-    public double getCurrent() { 
-        return leds.getCurrent(); 
-    }
-
-    public double getTemperature() {
-         return leds.getTemperature(); 
-        }
-
-    public void configBrightness(double percent) { 
-        leds.configBrightnessScalar(percent, 0); 
-    }
-
-    public void configLos(boolean disableWhenLos) { 
-        leds.configLOSBehavior(disableWhenLos, 0); 
-    }
     public void configLedType(LEDStripType type) { 
         leds.configLEDType(type, 0); 
     }
@@ -98,10 +64,8 @@ public class LEDSubsystem extends SubsystemBase {
             if(ledStateActions.containsKey(ledState)) {
                   ledStateActions.remove(ledState);
             }
-            System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
             ledStateActions.put(ledState, new LEDStateAction(ledState, shouldTakeAction));
       }
-
 
       public void periodic() {
         // figure out if the blink should be on or off now
@@ -153,8 +117,7 @@ public class LEDSubsystem extends SubsystemBase {
         }
   }
 
-
-
+      //Sets leds to orange blink
       private void orangeBlink() {
             if(this.currentBlinkState) {
                   this.setLedStringColor(255,165,0);
@@ -164,34 +127,34 @@ public class LEDSubsystem extends SubsystemBase {
             }
       }
 
-
+      //Sets leds to orange solid
       private void orangeSolid() {
             this.setLedStringColor(255,165,0);
       }
 
-
+      //Sets leds to yellow solid
       private void yellowSolid() {
             this.setLedStringColor(150,150,0);
       }
 
-
+      //Sets leds to green solid
       private void greenSolid() {
             this.setLedStringColor(0,200,0);
       }
 
-
+      //Turns off leds
       private void offState() {
             this.setLedStringColor(0,0,0);
             this.leds.modulateVBatOutput(0);
       }
 
-
+      //Sets leds color
       private void setLedStringColor(int red, int green, int blue) {
                   this.leds.setLEDs(red, green, blue, 0, startIdx, BUFFER_LENGTH);
                   this.leds.modulateVBatOutput(0.9);
       }
 
-
+      //Updates the blink state of leds
       private void updateBlinkCounterState() {
             this.lastBlinkState = this.currentBlinkState;
             this.blinkCounter++;
@@ -201,4 +164,3 @@ public class LEDSubsystem extends SubsystemBase {
       }
 }
 
-*/
