@@ -36,11 +36,16 @@ public class TalonMotorSubsystem extends SubsystemBase{
 
     public void setSpeed(double speed){
         // TODO if speed = 0 use voltage controller like line 125
+        if(Math.abs(speed) < 0.1){
+            speed = 0;
+        }
         if(speed == 0){
             motor.setControl(this.voltageController.withOutput(0));
+            //System.out.println("0");
         }
         else{
             this.motor.setControl(velocityController.withVelocity(speed));
+            //System.out.println(Double.toString(speed));
         }
         // else use velocity controller like line 136
     }
@@ -53,6 +58,7 @@ public class TalonMotorSubsystem extends SubsystemBase{
     private void configureMotor(){
     // Config motor
     // TODO find Hardware constants and put them in constants so they can be accsessed
+    motorConfiguration = new TalonFXConfiguration();
     motorConfiguration.MotorOutput.NeutralMode = this.outfeedMotorTargetNeutralModeValue;
     motorConfiguration.MotorOutput.withDutyCycleNeutralDeadband(kMinDeadband);
     motorConfiguration.Slot0 = motorRpmGains;
