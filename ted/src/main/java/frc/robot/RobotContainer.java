@@ -44,9 +44,6 @@ public class RobotContainer {
     // init the camera (before drivetrain)
     this.initializeCameraSubsystem();
 
-    // init the data logging
-    this.initializeDataLogging();
-
     // intake subsystem init
         // intake subsystem init
     this.initializeIntakeSubsystem();
@@ -63,6 +60,9 @@ public class RobotContainer {
 
     // init the climber subsystem
     this.initializeClimberSubsystem();
+
+    // init the data logging
+    this.initializeDataLogging();
 
     // init the input system 
     this.initializeManualInputInterfaces();
