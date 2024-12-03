@@ -1,5 +1,14 @@
-package frc.robot.common;
+// ************************************************************
+// Bishop Blanchet Robotics
+// Home of the Cybears
+// FRC - Crescendo - 2024
+// File: LEDStateAction.java
+// Intent: Determines the LED state action
+// ************************************************************
 
+// ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ  
+
+package frc.robot.common;
 
 import java.util.Iterator;
 import java.util.ArrayDeque;
@@ -7,19 +16,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BooleanSupplier;
 
-
 /**
  * Class to encapsulate the LED state action
  */
 public class LEDStateAction {
-
 
     private int cacheSize = 5;
     private ArrayDeque<Long> resultCache = new ArrayDeque<Long>();
     private HashMap<Long, Pair<Long, Boolean>> resultMap = new HashMap<Long, Pair<Long,Boolean>>();
     private BooleanSupplier shouldTakeAction;
     private LEDState ledState;
-
 
     /**
      * A wrapper class to encapsulate both the target state and the supplier that will indicate if the state is signaled or not
@@ -30,7 +36,6 @@ public class LEDStateAction {
         this.shouldTakeAction = shouldTakeAction;
         this.ledState = ledState;
     }
-
 
     /**
      * A wrapper class to encapsulate both the target state and the supplier that will indicate if the state is signaled or not
@@ -43,7 +48,6 @@ public class LEDStateAction {
         this.ledState = ledState;
         this.cacheSize = recentCacheSize;
     }
-
 
     /**
      * Accessor to the most recent state of the underlying LED state action
@@ -62,7 +66,6 @@ public class LEDStateAction {
         return resultValue.value.booleanValue();
     }
 
-
     /**
      * Accessor to the most prevelant state found over a succession of recent state evaluations
      * @return When true the LED should be illuminated, when false the LED should not be illuminated
@@ -70,7 +73,6 @@ public class LEDStateAction {
     public boolean getRecentState() {
         // first ensure the current state is cached
         this.getCurrentState();
-
 
         // find the recent count of times it has been true and false
         int countTrue = 0;
@@ -88,7 +90,6 @@ public class LEDStateAction {
         return (countTrue >= countFalse);
     }    
 
-
     /**
      * Getter method for the state associated with the double supplier
      * @return - The LED state
@@ -96,7 +97,6 @@ public class LEDStateAction {
     public LEDState getLedState(){
         return this.ledState;
     }
-
 
     /**
      * Method to insert and properly prune cache mechanism
@@ -115,7 +115,6 @@ public class LEDStateAction {
         }
     }
 
-
     /**
      * Get a fresh evaluation of the current state
      * @return a pair of the time and state of boolean supplier
@@ -125,9 +124,6 @@ public class LEDStateAction {
         return new Pair<Long, Boolean>(currentTimeMillis, state);
     }
 }
-
-
-
 
 /**
  * Inner class to store results in

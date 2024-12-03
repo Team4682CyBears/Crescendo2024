@@ -10,6 +10,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.led.CANdle.LEDStripType;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -97,7 +99,6 @@ public class RobotContainer {
           new DriveTrajectoryCommand(this.subsystems.getDriveTrainSubsystem(), testtrajectories.turn90));
     }
 
-
     // Path Planner Path Commands
     // commands to drive path planner test trajectories
     // Register Named Commands
@@ -168,7 +169,6 @@ public class RobotContainer {
     return autonomousChooser.getCommand();
   }
 
-  
   private void bindBrownoutActions(){
     if (Constants.enableBrownoutActions){
       this.subsystems.getPowerDistributionPanelWatcherSubsystem().setBrownoutCallback(
@@ -198,8 +198,6 @@ public class RobotContainer {
     }
   }
 
-  
-
   /**
    * A method to init the PDP watcher
    */
@@ -213,7 +211,6 @@ public class RobotContainer {
     }
   }
   
-
   /**
    * A method to init items for the debug dashboard
    */
@@ -274,7 +271,7 @@ public class RobotContainer {
    */
   private void initializeLEDSubsystem(){
     if(InstalledHardware.LEDSInstalled){
-      subsystems.setLEDSubsystem(new LEDSubsystem(Constants.ledCanID));
+      subsystems.setLEDSubsystem(new LEDSubsystem(Constants.ledCanID, LEDStripType.RGB));
       System.out.println("SUCCESS: initializeLEDS");
     }
     else {
@@ -295,7 +292,6 @@ public class RobotContainer {
         new InstantCommand(
           subsystems.getFeederSubsystem()::setAllStop, 
           subsystems.getFeederSubsystem()));
-          System.out.println("SUCCESS: FeederSubsystem");
 
           // register the led colors when leds are ready to go - OrangeSolid on note in shooter
           if(subsystems.isLEDSubsystemAvailable()) {
@@ -303,7 +299,7 @@ public class RobotContainer {
               LEDState.OrangeSolid,
               this.subsystems.getFeederSubsystem()::isShooterNoteDetected);
           }
-          
+          System.out.println("SUCCESS: FeederSubsystem");
         } else {
           System.out.println("FAIL: FeederSubsystem");
         }
@@ -321,8 +317,6 @@ public class RobotContainer {
         new InstantCommand(
           subsystems.getIntakeSubsystem()::setAllStop, 
           subsystems.getIntakeSubsystem()));
-      System.out.println("SUCCESS: IntakeSubsystem");
-
 
       // register the led colors when leds are ready to go - OrangeBlink on note in intake
       if(subsystems.isLEDSubsystemAvailable()) {
@@ -330,7 +324,7 @@ public class RobotContainer {
           LEDState.OrangeBlink,
           this.subsystems.getIntakeSubsystem()::isNoteDetected);
       }
-      
+      System.out.println("SUCCESS: IntakeSubsystem");
     } else {
       System.out.println("FAIL: IntakeSubsystem");
     }
@@ -360,7 +354,6 @@ public class RobotContainer {
       // The robot's subsystems and commands are defined here...
       subsystems.setShooterOutfeedSubsystem(new ShooterOutfeedSubsystem());
       SmartDashboard.putData("Debug: ShooterSubsystem", subsystems.getShooterOutfeedSubsystem());
-      System.out.println("SUCCESS: ShooterOutfeedSubsystem");
 
       // register the led colors when leds are ready to go - Yellow or Green based on speed of outfeed
       if(subsystems.isLEDSubsystemAvailable()) {
@@ -371,6 +364,7 @@ public class RobotContainer {
           LEDState.Green,
           this.subsystems.getShooterOutfeedSubsystem()::isAtSpeed);
       }
+      System.out.println("SUCCESS: ShooterOutfeedSubsystem");
     }
     else {
       System.out.println("FAIL: ShooterOutfeedSubsystem");

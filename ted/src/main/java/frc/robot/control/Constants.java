@@ -107,6 +107,10 @@ public final class Constants {
     // ******************************************************************
     //led constants
     public static final int ledCanID = 30;
+    public static final int ledLength = 72;
+    public static final int ledStartIdx = 0;
+    public static final int ledBlinkDurationInHertz = 2; 
+    public static final double ledBrightness = 0.5;   
 
     // ******************************************************************
     // intake constants
