@@ -38,6 +38,9 @@ public class RobotContainer {
 
   public RobotContainer() {
 
+    // init the data logging
+    this.initializeDataLogging();
+
     // init the pdp watcher
     this.initializePowerDistributionPanelWatcherSubsystem();
 
@@ -60,9 +63,6 @@ public class RobotContainer {
 
     // init the climber subsystem
     this.initializeClimberSubsystem();
-
-    // init the data logging
-    this.initializeDataLogging();
 
     // init the input system 
     this.initializeManualInputInterfaces();
@@ -177,14 +177,6 @@ public class RobotContainer {
     }
   }
 
-   /**
-   * A method to init all the data logging
-   */
-  private void initializeDataLogging() {
-    DataLogManager.start();
-    DriverStation.startDataLog(DataLogManager.getLog());
-  }
-
   /**
    * A method to init the climbers
    */
@@ -204,6 +196,14 @@ public class RobotContainer {
     else {
       DataLogManager.log("FAIL: ClimberSubsystem");
     }
+  }
+
+   /**
+   * A method to init all the data logging
+   */
+  private void initializeDataLogging() {
+    DataLogManager.start();
+    DriverStation.startDataLog(DataLogManager.getLog());
   }
 
   /**
