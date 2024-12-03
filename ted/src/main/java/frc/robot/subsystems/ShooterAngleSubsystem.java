@@ -22,6 +22,7 @@ import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.control.Constants;
@@ -141,10 +142,10 @@ public class ShooterAngleSubsystem extends SubsystemBase {
    * @param degrees
    */
   public void setAngleDegrees(double degrees){
-    // System.out.println("Setting Shooter Angle to " + degrees + " degrees.");
+    // DataLogManager.log("Setting Shooter Angle to " + degrees + " degrees.");
     double clampedDegrees = MotorUtils.clamp(degrees, Constants.shooterAngleMinDegrees, Constants.shooterAngleMaxDegrees);
     if (clampedDegrees != degrees){
-      System.out.println("Warning: Shooter Angle requested degrees of " + degrees + 
+      DataLogManager.log("Warning: Shooter Angle requested degrees of " + degrees + 
       "exceeded bounds of [" + Constants.shooterAngleMinDegrees + " .. " + Constants.shooterAngleMaxDegrees +
       "]. Clamped to " + clampedDegrees + ".");
     }
@@ -177,7 +178,7 @@ public class ShooterAngleSubsystem extends SubsystemBase {
     // apply configs
     StatusCode response = angleEncoder.getConfigurator().apply(encoderConfigs);
     if (!response.isOK()) {
-      System.out.println(
+      DataLogManager.log(
         "CANcoder ID " + angleEncoder.getDeviceID() + " failed config with error " + response.toString());
     }
   }
@@ -194,7 +195,7 @@ public class ShooterAngleSubsystem extends SubsystemBase {
     angleConfigs.Voltage.SupplyVoltageTimeConstant = HardwareConstants.shooterAngleSupplyVoltageTimeConstant;
     // FeedbackConfigs and offsets
     if (InstalledHardware.shooterAngleCanCoderInstalled) {
-      System.out.println("Configuring Shooter Angle Motor with CanCoder Feedback.");
+      DataLogManager.log("Configuring Shooter Angle Motor with CanCoder Feedback.");
       angleConfigs.Slot0 = angleMotorGainsForAbsoluteEncoder;
       angleConfigs.Feedback.SensorToMechanismRatio = angleEncoderGearRatio;
       angleConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
@@ -202,7 +203,7 @@ public class ShooterAngleSubsystem extends SubsystemBase {
       // offset is set in CanCoder config above
     } 
     else {
-      System.out.println("Configuring Shooter Angle Motor with Internal Encoder Feedback.");
+      DataLogManager.log("Configuring Shooter Angle Motor with Internal Encoder Feedback.");
       angleConfigs.Slot0 = angleMotorGainsForInternalEncoder;
       angleConfigs.Feedback.SensorToMechanismRatio = angleMotorGearRatio;
       angleConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; // the internal encoder
@@ -213,7 +214,7 @@ public class ShooterAngleSubsystem extends SubsystemBase {
     // apply configs
     StatusCode response = angleLeftMotor.getConfigurator().apply(angleConfigs);
     if (!response.isOK()) {
-      System.out.println(
+      DataLogManager.log(
           "TalonFX ID " + angleLeftMotor.getDeviceID() + " failed config with error " + response.toString());
     }
     // change invert for angleRightMotor
@@ -221,7 +222,7 @@ public class ShooterAngleSubsystem extends SubsystemBase {
     // apply configs
     response = angleRightMotor.getConfigurator().apply(angleConfigs);
     if (!response.isOK()) {
-      System.out.println(
+      DataLogManager.log(
           "TalonFX ID " + angleRightMotor.getDeviceID() + " failed config with error " + response.toString());
     }
   }

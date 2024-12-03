@@ -18,6 +18,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
+import edu.wpi.first.wpilibj.DataLogManager;
 import frc.robot.swerveLib.ctre.CanCoderAbsoluteConfiguration;
 import frc.robot.swerveLib.ctre.CtreUtils;
 
@@ -35,7 +36,7 @@ public class CanCoderFactoryBuilder {
             canCoderConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
             canCoderConfig.MagnetSensor.MagnetOffset = CtreUtils.convertFromRadiansToNormalizedDecmil(configuration.getOffset());
             canCoderConfig.MagnetSensor.SensorDirection = (direction == Direction.CLOCKWISE ? SensorDirectionValue.Clockwise_Positive : SensorDirectionValue.CounterClockwise_Positive);
-            System.out.println("Using sensor direction of: " + canCoderConfig.MagnetSensor.SensorDirection.toString());
+            DataLogManager.log("Using sensor direction of: " + canCoderConfig.MagnetSensor.SensorDirection.toString());
 
             CANcoder encoder = new CANcoder(configuration.getId());
             CtreUtils.checkCtreError(encoder.getConfigurator().apply(canCoderConfig, 250), "Failed to configure CANCoder");
@@ -63,7 +64,7 @@ public class CanCoderFactoryBuilder {
             // https://www.chiefdelphi.com/t/official-sds-mk3-mk4-code/397109/99
             encoderStatus = encoder.getFaultField().getStatus();
             if(encoderStatus != StatusCode.OK){
-                System.out.println("ERROR: Reading absolute encoder position failed.");
+                DataLogManager.log("ERROR: Reading absolute encoder position failed.");
             }
             angle %= 2.0 * Math.PI;
             if (angle < 0.0) {

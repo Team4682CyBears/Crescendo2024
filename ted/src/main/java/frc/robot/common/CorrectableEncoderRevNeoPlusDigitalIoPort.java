@@ -11,6 +11,8 @@
 package frc.robot.common;
 
 import com.revrobotics.RelativeEncoder;
+
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 public class CorrectableEncoderRevNeoPlusDigitalIoPort implements ICorrectableEncoder {
@@ -68,7 +70,7 @@ public class CorrectableEncoderRevNeoPlusDigitalIoPort implements ICorrectableEn
             this.revNeoMotorEncoder.setPosition(this.encoderTicksAtStateChangeSetPoint);
             this.lastState = currentState;
             motorEncoderPositionReset = true;
-            System.out.println(">>>>>>> Climber Sensor triggered. Resetting motor encoder position");
+            DataLogManager.log(">>>>>>> Climber Sensor triggered. Resetting motor encoder position");
         }
 
         return this.revNeoMotorEncoder.getPosition();

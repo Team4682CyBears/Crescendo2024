@@ -21,6 +21,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.control.Constants;
@@ -84,7 +85,7 @@ public class DriveTrajectoryCommand extends Command{
     Pose2d targetPose = movementPlan.sample(0.0).poseMeters;
     Translation2d deltaLocation = currentLocation.getTranslation().minus(targetPose.getTranslation());
     if (abs(deltaLocation.getNorm())>0.5){
-      System.out.println("ERROR: ABORTING TRAJECTORY: Current position " + currentLocation + " is too far from trajectory starting position " + targetPose);
+      DataLogManager.log("ERROR: ABORTING TRAJECTORY: Current position " + currentLocation + " is too far from trajectory starting position " + targetPose);
       done = true;
     }
     
@@ -120,7 +121,7 @@ public class DriveTrajectoryCommand extends Command{
     if(interrupted) {
       done = true;      
     }
-    System.out.println("Movement Complete: expected duration (seconds) == " + this.expectedDuration + " actual duration (seconds) == " + timer.get());
+    DataLogManager.log("Movement Complete: expected duration (seconds) == " + this.expectedDuration + " actual duration (seconds) == " + timer.get());
   }
 
   // Returns true when the command should end.

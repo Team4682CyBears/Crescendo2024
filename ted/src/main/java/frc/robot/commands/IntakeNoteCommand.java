@@ -9,6 +9,7 @@
 // ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
 
 package frc.robot.commands;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.control.Constants;
@@ -45,7 +46,7 @@ public class IntakeNoteCommand extends Command
     timer.reset();
     timer.start();
     done = false;
-    System.out.println("Starting IntakeNoteCommand");
+    DataLogManager.log("Starting IntakeNoteCommand");
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -20,6 +20,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.control.Constants;
@@ -157,7 +158,7 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
   public void setShooterVelocity(double revolutionsPerMinute) {
     this.desiredSpeedRpm = MotorUtils.truncateValue(revolutionsPerMinute, 0, Constants.shooterMaxRpm);
     if (this.desiredSpeedRpm != revolutionsPerMinute) {
-      System.out.println("Warning: Shooter requested speed of " + revolutionsPerMinute + 
+      DataLogManager.log("Warning: Shooter requested speed of " + revolutionsPerMinute + 
       "exceeded max speed of" + Constants.shooterMaxRpm +
       ". Clamped to " + this.desiredSpeedRpm + ".");
     }
@@ -179,7 +180,7 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
 
     StatusCode response = leftMotor.getConfigurator().apply(this.leftMotorConfiguration);
     if (!response.isOK()) {
-      System.out.println(
+      DataLogManager.log(
           "TalonFX ID " + leftMotor.getDeviceID() + " failed config with error " + response.toString());
     }
 
@@ -190,7 +191,7 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
       rightMotorLowRpmGains);
     response = rightMotor.getConfigurator().apply(this.rightMotorConfiguration);
     if (!response.isOK()) {
-      System.out.println(
+      DataLogManager.log(
           "TalonFX ID " + rightMotor.getDeviceID() + " failed config with error " + response.toString());
     }
   }
@@ -261,7 +262,7 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
 
       // only update the brake behavior of motors when state changes 
       if(this.outfeedMotorTargetNeutralModeValue != targetNeutralModeValue) {
-        System.out.println("ATTEMPTING UPDATE of mode to " + targetNeutralModeValue.toString());
+        DataLogManager.log("ATTEMPTING UPDATE of mode to " + targetNeutralModeValue.toString());
         this.leftMotorConfiguration.MotorOutput.NeutralMode = targetNeutralModeValue;
         this.rightMotorConfiguration.MotorOutput.NeutralMode = targetNeutralModeValue;
         // want these to send signals down to the motors as close to one another as possible (~atomic)
@@ -271,7 +272,7 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
         // in the event one of the apply updates failed we want to revert it!!
         boolean attemptRevert = (leftStatus != StatusCode.OK || rightStatus != StatusCode.OK);
         if(attemptRevert) {
-          System.out.println("REVERTING UPDATE of mode back to " + this.outfeedMotorTargetNeutralModeValue.toString());
+          DataLogManager.log("REVERTING UPDATE of mode back to " + this.outfeedMotorTargetNeutralModeValue.toString());
           this.leftMotorConfiguration.MotorOutput.NeutralMode = this.outfeedMotorTargetNeutralModeValue;
           this.rightMotorConfiguration.MotorOutput.NeutralMode = this.outfeedMotorTargetNeutralModeValue;
 
@@ -279,20 +280,20 @@ public class ShooterOutfeedSubsystem extends SubsystemBase {
           rightStatus = rightMotor.getConfigurator().apply(this.rightMotorConfiguration);
 
           if(leftStatus != StatusCode.OK || rightStatus != StatusCode.OK) {
-            System.out.println(
+            DataLogManager.log(
               "MOTOR CONFIG REVERT FAILED , left status == " +
               leftStatus.toString() +
             " right status == " +
             rightStatus.toString());
           }
           else {
-            System.out.println("REVERT UPDATE of mode success!");
+            DataLogManager.log("REVERT UPDATE of mode success!");
           }
         }
         // if all goes well update the current state
         else {
           this.outfeedMotorTargetNeutralModeValue = targetNeutralModeValue;
-          System.out.println("COMPLETED UPDATE of mode to " + targetNeutralModeValue.toString());
+          DataLogManager.log("COMPLETED UPDATE of mode to " + targetNeutralModeValue.toString());
         }
       }
     }

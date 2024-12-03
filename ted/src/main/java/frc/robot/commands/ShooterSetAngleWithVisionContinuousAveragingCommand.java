@@ -100,7 +100,7 @@ public class ShooterSetAngleWithVisionContinuousAveragingCommand extends Shooter
       distanceSum += recentDistances.get(i);
     }
     double averageDistance = distanceSum/this.recentDistances.size();
-    // System.out.println("Calculated avearge distance of " + averageDistance + " from distances of " + recentDistances);
+    // DataLogManager.log("Calculated avearge distance of " + averageDistance + " from distances of " + recentDistances);
     return averageDistance;
   }
 

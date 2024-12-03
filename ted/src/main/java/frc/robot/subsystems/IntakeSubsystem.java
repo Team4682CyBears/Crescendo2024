@@ -17,6 +17,7 @@ import com.revrobotics.REVLibError;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.common.NoteTofSensor;
 import frc.robot.control.Constants;
@@ -48,7 +49,7 @@ public class IntakeSubsystem extends SubsystemBase {
     /* 
     // move the motor creation to the constructor, since it was erroring when done as a class variable. 
     for(int inx = 0; inx < this.maximumInitTries && intakeMotor == null; ++inx) {
-      System.out.println("Initializing Intake Motor try# " + inx+1 + " ...");
+      DataLogManager.log("Initializing Intake Motor try# " + inx+1 + " ...");
       boolean allIsWell = true;
       try {
         CANSparkMax assembledMotor = new CANSparkMax(Constants.intakeMotorCanId, MotorType.kBrushless);
@@ -63,7 +64,7 @@ public class IntakeSubsystem extends SubsystemBase {
           int loopCount = this.defaultInitWaitDuration / this.minimumInitWaitDuration;
           for(int jnx = 0; jnx < loopCount; ++jnx) {
             Thread.sleep(this.minimumInitWaitDuration);
-            System.out.print(".");
+            DataLogManager.log(".");
           }
         }
         else{
@@ -72,7 +73,7 @@ public class IntakeSubsystem extends SubsystemBase {
         }
       }
       catch(Exception ex){
-        System.out.println(ex.toString());
+        DataLogManager.log(ex.toString());
       }
     }
   */
@@ -135,7 +136,7 @@ public class IntakeSubsystem extends SubsystemBase {
     REVLibError error = motor.getLastError();
     boolean result = (error == REVLibError.kOk);
     if(!result){
-      System.out.println("Not OK motor last error == " + motor.getLastError());    
+      DataLogManager.log("Not OK motor last error == " + motor.getLastError());    
     }
     return result;
   }
