@@ -41,11 +41,11 @@ public class RobotContainer {
     // init the pdp watcher
     this.initializePowerDistributionPanelWatcherSubsystem();
 
-    // init the data logging
-    this.initializeDataLogging();
-
     // init the camera (before drivetrain)
     this.initializeCameraSubsystem();
+
+    // init the data logging
+    this.initializeDataLogging();
 
     // intake subsystem init
         // intake subsystem init
