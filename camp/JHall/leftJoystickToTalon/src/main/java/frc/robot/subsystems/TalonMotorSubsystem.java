@@ -34,17 +34,17 @@ public class TalonMotorSubsystem extends SubsystemBase{
         velocityController.Slot = 0;
     }
 
-    public void setSpeed(double speed){
+    public void setMotorSpeed(double motorSpeed){
         // TODO if speed = 0 use voltage controller like line 125
-        if(Math.abs(speed) < 0.1){
-            speed = 0;
+        if(Math.abs(motorSpeed) < 0.1){
+            motorSpeed = 0;
         }
-        if(speed == 0){
+        if(motorSpeed == 0){
             motor.setControl(this.voltageController.withOutput(0));
             //System.out.println("0");
         }
         else{
-            this.motor.setControl(velocityController.withVelocity(speed));
+            this.motor.setControl(velocityController.withVelocity(motorSpeed));
             //System.out.println(Double.toString(speed));
         }
         // else use velocity controller like line 136
