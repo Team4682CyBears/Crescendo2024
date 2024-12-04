@@ -17,10 +17,11 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class MotorTalon extends SubsystemBase{
-    private TalonFX motorTalon = new TalonFX(Constants.OperatorConstants.motorTalonPort);
+    private TalonFX motorTalon;
     private final VelocityVoltage motorTalonVelocityController = new VelocityVoltage(0);
     private final VoltageOut motorTalonVoltageController = new VoltageOut(0);
     private TalonFXConfiguration motorTalonMotorConfiguration = null;
+    private Slot0Configs motorRpmGains = new Slot0Configs().withKP(0.36).withKI(0.1).withKD(0.0075).withKV(0.10);
 
     private Slot0Configs motorTalonMotorHighRpmGains = new Slot0Configs().withKP(0.36).withKI(0.1).withKD(0.0075).withKV(0.10);
     private Slot1Configs motorTalonMotorLowRpmGains = new Slot1Configs().withKP(0.20).withKI(0.2).withKD(0.0075).withKV(0.05);
@@ -30,6 +31,8 @@ public class MotorTalon extends SubsystemBase{
       
 
     public MotorTalon(){
+        motorTalon = new TalonFX(Constants.OperatorConstants.motorTalonPort);
+        configureMotor();
         System.out.print("Motor doing stuff");
     }
 
@@ -45,43 +48,32 @@ public class MotorTalon extends SubsystemBase{
         motorTalon.setControl(this.motorTalonVoltageController.withOutput(0));
     }
 
-    private void configurefeedMotors() {
+    private void configureMotor(){
+        // Config motor
+        motorTalonMotorConfiguration = new TalonFXConfiguration();
+        motorTalonMotorConfiguration.MotorOutput.NeutralMode = this.outfeedMotorTargetNeutralModeValue;
+        motorTalonMotorConfiguration.MotorOutput.withDutyCycleNeutralDeadband(kMinDeadband);
+        motorTalonMotorConfiguration.Slot0 = motorRpmGains;
+        // do not config feedbacksource, since the default is the internal one.
+        motorTalonMotorConfiguration.Voltage.PeakForwardVoltage = 12;
+        motorTalonMotorConfiguration.Voltage.PeakReverseVoltage = -12;
+        motorTalonMotorConfiguration.Voltage.SupplyVoltageTimeConstant = Constants.OperatorConstants.shooterOutfeedSupplyVoltageTimeConstant;
+        // maximum current settings
+        motorTalonMotorConfiguration.CurrentLimits.StatorCurrentLimit = Constants.OperatorConstants.shooterOutfeedSupplyCurrentMaximumAmps;
+        motorTalonMotorConfiguration.CurrentLimits.StatorCurrentLimitEnable = true;
+        motorTalonMotorConfiguration.CurrentLimits.SupplyCurrentLimit = Constants.OperatorConstants.shooterOutfeedSupplyCurrentMaximumAmps;
+        motorTalonMotorConfiguration.CurrentLimits.SupplyCurrentLimitEnable = true;
+        // motor direction
+        motorTalonMotorConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+    
         StatusCode response = motorTalon.getConfigurator().apply(this.motorTalonMotorConfiguration);
-        this.motorTalonMotorConfiguration = this.getMotorConfiguration(
-          Constants.OperatorConstants.rightTalonShooterMotorDefaultDirection,
-          motorTalonMotorHighRpmGains,
-          motorTalonMotorLowRpmGains);
-        response = motorTalon.getConfigurator().apply(this.motorTalonMotorConfiguration);
         if (!response.isOK()) {
           System.out.println(
               "TalonFX ID " + motorTalon.getDeviceID() + " failed config with error " + response.toString());
         }
-    }
-
-    private TalonFXConfiguration getMotorConfiguration(
-        InvertedValue targetInvert,
-        Slot0Configs targetSlot0Configs,
-        Slot1Configs targetSlot1Configs) {
     
-        // Config left motor
-        TalonFXConfiguration talonConfigs = new TalonFXConfiguration();
-        talonConfigs.MotorOutput.NeutralMode = this.outfeedMotorTargetNeutralModeValue;
-        talonConfigs.MotorOutput.withDutyCycleNeutralDeadband(kMinDeadband);
-        talonConfigs.Slot0 = targetSlot0Configs;
-        talonConfigs.Slot1 = targetSlot1Configs;
-        // do not config feedbacksource, since the default is the internal one.
-        talonConfigs.Voltage.PeakForwardVoltage = 12;
-        talonConfigs.Voltage.PeakReverseVoltage = -12;
-        talonConfigs.Voltage.SupplyVoltageTimeConstant = Constants.OperatorConstants.shooterOutfeedSupplyVoltageTimeConstant;
-        // maximum current settings
-        talonConfigs.CurrentLimits.StatorCurrentLimit = Constants.OperatorConstants.shooterOutfeedStatorCurrentMaximumAmps;
-        talonConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
-        talonConfigs.CurrentLimits.SupplyCurrentLimit = Constants.OperatorConstants.shooterOutfeedSupplyCurrentMaximumAmps;
-        talonConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
-        // left motor direction
-        talonConfigs.MotorOutput.Inverted = targetInvert;
-        return talonConfigs;
-      }
+        }
+    
     
 
     @Override
