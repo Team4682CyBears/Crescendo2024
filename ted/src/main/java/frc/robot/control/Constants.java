@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import frc.robot.common.DrivetrainSwerveConfig;
 import frc.robot.swerveHelpers.WcpModuleConfigurations;
 
+import com.ctre.phoenix.led.CANdle.LEDStripType;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
@@ -109,8 +110,9 @@ public final class Constants {
     public static final int ledCanID = 30;
     public static final int ledLength = 72;
     public static final int ledStartIdx = 0;
-    public static final int ledBlinkDurationInHertz = 2; 
-    public static final double ledBrightness = 0.5;   
+    public static final int ledBlinkFrquencyInHertz = 2; 
+    public static final double ledBrightness = 0.5; 
+    public static final LEDStripType ledStripType = LEDStripType.RGB;
 
     // ******************************************************************
     // intake constants

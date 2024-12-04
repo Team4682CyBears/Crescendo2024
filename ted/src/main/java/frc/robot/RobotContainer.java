@@ -210,7 +210,6 @@ public class RobotContainer {
       System.out.println("FAIL: initializePowerDistributionPanelWatcherSubsystem");
     }
   }
-  
   /**
    * A method to init items for the debug dashboard
    */
@@ -271,13 +270,12 @@ public class RobotContainer {
    */
   private void initializeLEDSubsystem(){
     if(InstalledHardware.LEDSInstalled){
-      subsystems.setLEDSubsystem(new LEDSubsystem(Constants.ledCanID, LEDStripType.RGB));
+      subsystems.setLEDSubsystem(new LEDSubsystem(Constants.ledCanID, Constants.ledStripType));
       System.out.println("SUCCESS: initializeLEDS");
     }
     else {
       System.out.println("FAIL: initializeLEDS");
     }
-    
   }
 
   /**

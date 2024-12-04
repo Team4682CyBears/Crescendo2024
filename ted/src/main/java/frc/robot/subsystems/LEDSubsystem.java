@@ -145,7 +145,7 @@ public class LEDSubsystem extends SubsystemBase {
   private void updateBlinkCounterState() {
     this.lastBlinkState = this.currentBlinkState;
     this.blinkCounter++;
-    if(this.blinkCounter % (ticksPerSecond / Constants.ledBlinkDurationInHertz) == 0){
+    if(this.blinkCounter % (ticksPerSecond / Constants.ledBlinkFrquencyInHertz) == 0){
       this.currentBlinkState = !this.currentBlinkState;
     }
   }
