@@ -22,15 +22,12 @@ public class MotorSubsystem implements Subsystem {
     }
 
     /**
-     * Clamps a value between a minimum and maximum range.
-     *
-     * @param value The value to be clamped.
-     * @param min   The minimum value of the range.
-     * @param max   The maximum value of the range.
-     * @return The clamped value.
+     * Gets the current speed of the motor.
+     * 
+     * @return the current speed of the motor
      */
-    private double clamp(double value, double min, double max) {
-        return Math.max(min, Math.min(max, value));
+    public double getSpeed() {
+        return motor.get();
     }
 
     /**
@@ -43,11 +40,14 @@ public class MotorSubsystem implements Subsystem {
     }
 
     /**
-     * Gets the current speed of the motor.
-     * 
-     * @return the current speed of the motor
+     * Clamps a value between a minimum and maximum range.
+     *
+     * @param value The value to be clamped.
+     * @param min   The minimum value of the range.
+     * @param max   The maximum value of the range.
+     * @return The clamped value.
      */
-    public double getSpeed() {
-        return motor.get();
+    private double clamp(double value, double min, double max) {
+        return Math.max(min, Math.min(max, value));
     }
 }
