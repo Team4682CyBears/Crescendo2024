@@ -16,11 +16,11 @@ public class TalonMotorSubsystem extends SubsystemBase{
     private final TalonFX motor;
     private final VelocityVoltage velocityController = new VelocityVoltage(0);
     private final VoltageOut voltageController = new VoltageOut(0);
-    private Slot0Configs motorRpmGains = new Slot0Configs().withKP(0.36).withKI(0.1).withKD(0.0075).withKV(0.10);
     // Magic numbers copied from Ted ShooterOutfeedMotor
+    private Slot0Configs motorRpmGains = new Slot0Configs().withKP(0.36).withKI(0.1).withKD(0.0075).withKV(0.10);
     private TalonFXConfiguration motorConfiguration = null;
-    private static final double kMinDeadband = 0.001;
     // Numbers copied from Ted ShooterOutfeedMotor
+    private static final double kMinDeadband = 0.001;
     private NeutralModeValue outfeedMotorTargetNeutralModeValue = NeutralModeValue.Coast;
 
 
@@ -32,9 +32,10 @@ public class TalonMotorSubsystem extends SubsystemBase{
     }
 
     public void setMotorSpeed(double motorSpeed){
+        //This code is meant to implement a deadband
         if(Math.abs(motorSpeed) < Constants.joystickDeadband){
             motorSpeed = 0;
-        } //This code is meant to implement a deadband
+        }
         if(motorSpeed == 0){
             motor.setControl(this.voltageController.withOutput(0));
         }
@@ -63,7 +64,7 @@ public class TalonMotorSubsystem extends SubsystemBase{
     motorConfiguration.CurrentLimits.StatorCurrentLimitEnable = true;
     motorConfiguration.CurrentLimits.SupplyCurrentLimit = Constants.motorSupplyCurrentMaximumAmps;
     motorConfiguration.CurrentLimits.SupplyCurrentLimitEnable = true;
-    // left motor direction
+    // motor direction
     motorConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
     StatusCode response = motor.getConfigurator().apply(this.motorConfiguration);
