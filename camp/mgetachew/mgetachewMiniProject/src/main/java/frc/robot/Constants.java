@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
+import com.ctre.phoenix6.signals.InvertedValue;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -18,7 +19,10 @@ import edu.wpi.first.wpilibj.motorcontrol.Talon;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+    public static final double shooterOutfeedStatorCurrentMaximumAmps = 100.0;
+    public static final double shooterOutfeedSupplyCurrentMaximumAmps = 50.0;
+    public static final double shooterOutfeedSupplyVoltageTimeConstant = 0.02;
     public static final int motorTalonPort = 1;
     public static final int xboxControllerPort = 0;
-  }
+    public static InvertedValue rightTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;  }
 }
