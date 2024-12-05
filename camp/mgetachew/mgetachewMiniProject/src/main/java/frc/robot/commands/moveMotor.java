@@ -21,7 +21,6 @@ public class moveMotor extends Command{
 
     @Override
     public void execute(){
-        super.execute();
         if(leftBumperSupplier.getAsBoolean()){
             motorTalonToMove.motorReverse();
         } else if(rightBumperSupplier.getAsBoolean()){
@@ -33,6 +32,6 @@ public class moveMotor extends Command{
 
     @Override
     public boolean isFinished(){
-        return super.isFinished();
+        return false;
     }
 }
