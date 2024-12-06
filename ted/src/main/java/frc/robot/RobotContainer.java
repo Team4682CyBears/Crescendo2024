@@ -304,17 +304,13 @@ public class RobotContainer {
         new InstantCommand(
           subsystems.getFeederSubsystem()::setAllStop, 
           subsystems.getFeederSubsystem()));
-      
-          // register the led colors when leds are ready to go - OrangeSolid on note in shooter
-          if(subsystems.isLEDSubsystemAvailable()) {
-            subsystems.getLedSubsystem().registerStateAction(
-              LEDState.OrangeSolid,
-              this.subsystems.getFeederSubsystem()::isShooterNoteDetected);
-          }
-          System.out.println("SUCCESS: FeederSubsystem");
-        } else {
-          System.out.println("FAIL: FeederSubsystem");
-        }
+
+      // register the led colors when leds are ready to go - OrangeSolid on note in shooter
+      if(subsystems.isLEDSubsystemAvailable()) {
+        subsystems.getLedSubsystem().registerStateAction(
+        LEDState.OrangeSolid,
+        this.subsystems.getFeederSubsystem()::isShooterNoteDetected);
+      }
       DataLogManager.log("SUCCESS: FeederSubsystem");
     } else {
       DataLogManager.log("FAIL: FeederSubsystem");
@@ -371,6 +367,7 @@ public class RobotContainer {
       // The robot's subsystems and commands are defined here...
       subsystems.setShooterOutfeedSubsystem(new ShooterOutfeedSubsystem());
       SmartDashboard.putData("Debug: ShooterSubsystem", subsystems.getShooterOutfeedSubsystem());
+
 
       // register the led colors when leds are ready to go - Yellow or Green based on speed of outfeed
       if(subsystems.isLEDSubsystemAvailable()) {
