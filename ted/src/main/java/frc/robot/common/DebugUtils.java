@@ -12,6 +12,8 @@ package frc.robot.common;
 
 import java.util.*;
 
+import edu.wpi.first.wpilibj.DataLogManager;
+
 public class DebugUtils {
 
     /**
@@ -58,22 +60,22 @@ public class DebugUtils {
 
         if(doDescriptivePrint && !measurementContinuity)
         {
-            System.out.println("DISCONTINUITY FOUND:");
+            DataLogManager.log("DISCONTINUITY FOUND:");
             // flow through original array looking for outliers
             for(int inx = 0; inx < measurements.size(); ++inx)
             {
                 double nextMeasurement = measurements.get(inx);
                 if(nextMeasurement < lowerFence)
                 {
-                    System.out.println(nextMeasurement + " <- LOW OUTLIER");
+                    DataLogManager.log(nextMeasurement + " <- LOW OUTLIER");
                 }
                 else if(nextMeasurement > upperFence)
                 {
-                    System.out.println(nextMeasurement + " <- HIGH OUTLIER");
+                    DataLogManager.log(nextMeasurement + " <- HIGH OUTLIER");
                 }
                 else
                 {
-                    System.out.println(nextMeasurement);
+                    DataLogManager.log(Double.toString(nextMeasurement));
                 }
             }
         }

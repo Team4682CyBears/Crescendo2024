@@ -12,6 +12,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.Timer;
 
 import java.util.ArrayDeque;
@@ -84,7 +85,7 @@ public class ButtonPressCommand extends Command
   {
     finalTime = timer.get();
     String buttonPressDescription = this.toString();
-    System.out.println(buttonPressDescription);
+    DataLogManager.log(buttonPressDescription);
     previousButtons.addFirst(buttonPressDescription);
   }
 

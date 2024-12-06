@@ -25,6 +25,7 @@ import frc.robot.swerveLib.ctre.Falcon500SteerConfiguration;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -169,7 +170,7 @@ public final class Falcon500SteerControllerFactoryBuilder {
                     "WARNING: Failed to set Falcon 500 encoder position.");
             } else {
                 // abs encoder is synced periodically, every 10s.  If reading the sensor fails, wait 10s before enabling the robot. 
-                System.out.println("WARNING: Reading absolute encoder position failed. Wait 10s before enabling robot.");
+                DataLogManager.log("WARNING: Reading absolute encoder position failed. Wait 10s before enabling robot.");
             } 
 
             // Reduce CAN status frame rates
@@ -241,7 +242,7 @@ public final class Falcon500SteerControllerFactoryBuilder {
 
                         double deltaAngle = Math.abs(MathUtil.angleModulus(absoluteAngle - currentAngleRadians));
                         if (deltaAngle > absAngleTolRadians){
-                            System.out.println("WARNING: Large error encountered when syncing absolute encoder from " + 
+                            DataLogManager.log("WARNING: Large error encountered when syncing absolute encoder from " + 
                                 currentAngleRadians + " to " + absoluteAngle + ". " + specificMotorInfo);
                         }
 
@@ -266,7 +267,7 @@ public final class Falcon500SteerControllerFactoryBuilder {
                         */
 
                     } else {
-                        System.out.println("WARNING: Syncing absolute encoder position failed. " + specificMotorInfo);
+                        DataLogManager.log("WARNING: Syncing absolute encoder position failed. " + specificMotorInfo);
                     }
                 }
             } else {
