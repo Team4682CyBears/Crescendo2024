@@ -78,4 +78,7 @@ public class InstalledHardware
     public static final boolean rightClimberInstalled = true;
     public static final boolean leftClimberSensorInstalled = true;
     public static final boolean rightClimberSensorInstalled = true;
+
+    //LED Hardware
+    public static final boolean LEDSInstalled = true;
 }
