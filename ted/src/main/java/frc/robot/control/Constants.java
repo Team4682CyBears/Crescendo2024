@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import frc.robot.common.DrivetrainSwerveConfig;
 import frc.robot.swerveHelpers.WcpModuleConfigurations;
 
+import com.ctre.phoenix.led.CANdle.LEDStripType;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
@@ -103,6 +104,15 @@ public final class Constants {
         new Translation2d(babybearDrivetrainConfig.getWheelbaseMeters()/2 + Units.inchesToMeters(10), 0.0);
     // velocity for fine placement
     public static final double FinePlacementRotationalVelocity = 0.7;
+
+    // ******************************************************************
+    //led constants
+    public static final int ledCanID = 30;
+    public static final int ledLength = 72;
+    public static final int ledStartIdx = 0;
+    public static final int ledBlinkFrquencyInHertz = 2; 
+    public static final double ledBrightness = 0.5; 
+    public static final LEDStripType ledStripType = LEDStripType.RGB;
 
     // ******************************************************************
     // intake constants
