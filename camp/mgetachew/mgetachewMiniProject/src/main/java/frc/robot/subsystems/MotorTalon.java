@@ -17,7 +17,9 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class MotorTalon extends SubsystemBase{
+    //configurtition for the motor begins here
     private TalonFX motorTalon;
+    //velcity and voltage control
     private final VelocityVoltage motorTalonVelocityController = new VelocityVoltage(0);
     private final VoltageOut motorTalonVoltageController = new VoltageOut(0);
     private TalonFXConfiguration motorTalonMotorConfiguration = null;
@@ -29,25 +31,29 @@ public class MotorTalon extends SubsystemBase{
     private NeutralModeValue outfeedMotorTargetNeutralModeValue = NeutralModeValue.Coast;
     private static final double kMinDeadband = 0.001;
       
-
+    //construct motor and print out the fact that its done.
     public MotorTalon(){
         motorTalon = new TalonFX(Constants.OperatorConstants.motorTalonPort);
         configureMotor();
-        System.out.print("Motor doing stuff");
+        System.out.print("Motor is set");
     }
-
+    //WARNING: Will go back and forth unpredictably
     public void motorReverse(){
+        //reverse motor
         motorTalon.setControl(this.motorTalonVelocityController.withVelocity(-1));
     }
 
     public void motorForwards(){
+        //forwards motor
         motorTalon.setControl(this.motorTalonVelocityController.withVelocity(1));
     }
 
     public void motorStop(){
+        //stop voltage
         motorTalon.setControl(this.motorTalonVoltageController.withOutput(0));
     }
 
+    //required. I wounldnt reccomend touching but if you know what your doing go ahead.
     private void configureMotor(){
         // Config motor
         motorTalonMotorConfiguration = new TalonFXConfiguration();
@@ -78,6 +84,7 @@ public class MotorTalon extends SubsystemBase{
 
     @Override
     public void periodic() {
+        //print out the motor speed for debugging. can be commented out without any damage to the code.
         System.out.println(motorTalon.get());
         super.periodic();
     }

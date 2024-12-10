@@ -27,10 +27,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  //Talon is set here
   private final MotorTalon motorTalonSubsystem = new MotorTalon();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
+  //Xbox controller is set here
   private final CommandXboxController xboxController = new CommandXboxController(Constants.OperatorConstants.xboxControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -50,14 +51,14 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
 
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
+    //Xbox boolean suppliers are set here
     BooleanSupplier booleanXboxControllerSupplierLeft = () -> xboxController.leftBumper().getAsBoolean();
     BooleanSupplier booleanXboxControllerSupplierRight = () -> xboxController.rightBumper().getAsBoolean();
+    //setting the default command for the motor subsystem.
     motorTalonSubsystem.setDefaultCommand(new moveMotor(motorTalonSubsystem, booleanXboxControllerSupplierLeft, booleanXboxControllerSupplierRight));
   }
 
@@ -66,8 +67,4 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
-  }
 }

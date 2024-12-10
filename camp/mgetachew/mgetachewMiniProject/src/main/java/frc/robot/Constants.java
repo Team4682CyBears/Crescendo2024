@@ -22,7 +22,10 @@ public final class Constants {
     public static final double shooterOutfeedStatorCurrentMaximumAmps = 100.0;
     public static final double shooterOutfeedSupplyCurrentMaximumAmps = 50.0;
     public static final double shooterOutfeedSupplyVoltageTimeConstant = 0.02;
+    //Motor Talon Port
     public static final int motorTalonPort = 3;
+    //Change to fit your prefered xbox controller port
     public static final int xboxControllerPort = 0;
+    //Could be related to the bug.
     public static InvertedValue rightTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;  }
 }
