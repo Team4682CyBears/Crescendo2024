@@ -9,7 +9,8 @@ import frc.robot.subsystems.FeederSubsystem;
 public class MotorStop extends Command{
     private FeederSubsystem feeder;
     public MotorStop(FeederSubsystem feeder){
-        feeder = new FeederSubsystem();
+        this.feeder = feeder;
+        addRequirements(feeder);
     }
 
     public void initialize(){

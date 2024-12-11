@@ -6,7 +6,8 @@ import frc.robot.subsystems.FeederSubsystem;
 public class MotorForward extends Command{
     private FeederSubsystem feeder;
     public MotorForward(FeederSubsystem feeder){
-        feeder = new FeederSubsystem();
+        this.feeder = feeder;
+        addRequirements(feeder);
     }
 
     public void initialize(){

@@ -5,8 +5,10 @@ import frc.robot.subsystems.FeederSubsystem;
 
 public class MotorBackward extends Command{
     private FeederSubsystem feeder;
+
     public MotorBackward(FeederSubsystem feeder){
-        feeder = new FeederSubsystem();
+        this.feeder = feeder;
+        addRequirements(feeder);
     }
 
     public void initialize(){

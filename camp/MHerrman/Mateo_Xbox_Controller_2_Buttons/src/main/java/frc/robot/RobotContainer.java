@@ -29,7 +29,7 @@ import frc.robot.commands.MotorBackward;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private FeederSubsystem feeder;
+  private FeederSubsystem feeder =new FeederSubsystem();
   private final MotorBackward backwards = new MotorBackward(feeder);
   private final MotorForward forward = new MotorForward(feeder);
   private final MotorStop stop = new MotorStop(feeder);
@@ -53,8 +53,9 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    System.out.println("!!!!!!!!!!!CONFIGURING BUTTON BINDINGS!!!!!!!!!!!!!!");
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    feeder.setDefaultCommand(stop);
+    this.feeder.setDefaultCommand(stop);
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));
 
