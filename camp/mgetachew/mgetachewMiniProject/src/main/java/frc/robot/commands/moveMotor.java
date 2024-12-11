@@ -10,7 +10,12 @@ public class moveMotor extends Command{
     BooleanSupplier rightBumperSupplier;
     BooleanSupplier leftBumperSupplier;
 
-
+    /**
+     * constucts the motor
+     * @param motorTalon  put your motorTalon class into here. required to run.
+     * @param booleanXboxControllerSupplierLeft boolean supplier left bumper
+     * @param booleanXboxControllerSupplierRight boolean supplier right bumper
+     */
     public moveMotor(MotorTalon motorTalon, BooleanSupplier booleanXboxControllerSupplierLeft, BooleanSupplier booleanXboxControllerSupplierRight){
         addRequirements(motorTalon);
         //save constructor inputs to class variables
@@ -18,7 +23,9 @@ public class moveMotor extends Command{
         leftBumperSupplier = booleanXboxControllerSupplierLeft;
         rightBumperSupplier = booleanXboxControllerSupplierRight;
     }
-
+    /**
+     * Will run the code
+     */
     @Override
     public void execute(){
         //When both bumpers are pressed, the left bumper is used.

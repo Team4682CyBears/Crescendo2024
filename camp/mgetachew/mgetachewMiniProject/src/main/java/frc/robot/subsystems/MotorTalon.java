@@ -25,29 +25,46 @@ public class MotorTalon extends SubsystemBase{
     private NeutralModeValue motorTargetNeutralModeValue = NeutralModeValue.Coast;
     private static final double kMinDeadband = 0.001;
       
-    //construct motor and print out the fact that its done.
+    /**
+     * Makes the motor and configures it automatically
+     */
     public MotorTalon(){
         motorTalon = new TalonFX(Constants.OperatorConstants.motorTalonPort);
         configureMotor();
         System.out.print("Motor is set");
         motorTalonVelocityController.withSlot(0);
     }
-
+    /**
+     * Moves the motor in reverse
+     */
     public void motorReverse(){
         //reverse motor
         motorTalon.setControl(this.motorTalonVelocityController.withVelocity(reverseSpeedRpm));
     }
-
+    /**
+     * Moves the motor forwards
+     */
     public void motorForwards(){
         //forwards motor
         motorTalon.setControl(this.motorTalonVelocityController.withVelocity(forwardSpeedRpm));
     }
 
+    /**
+     * Stops the motor.
+     */
     public void motorStop(){
         //stop voltage
         motorTalon.setControl(this.motorTalonVoltageController.withOutput(0));
     }
 
+    @Override
+    public void periodic() {
+        super.periodic();
+    }
+
+        /**
+     * Quick configuration for a motor
+     */
     private void configureMotor(){
         // Config motor
         motorTalonMotorConfiguration = new TalonFXConfiguration();
@@ -73,13 +90,4 @@ public class MotorTalon extends SubsystemBase{
         }
     
         }
-    
-    
-
-    @Override
-    public void periodic() {
-        //print out the motor speed for debugging. can be commented out without any damage to the code.
-        System.out.println(motorTalon.get());
-        super.periodic();
-    }
 }
