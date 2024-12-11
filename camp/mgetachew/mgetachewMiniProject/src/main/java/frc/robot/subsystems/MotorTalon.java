@@ -35,18 +35,18 @@ public class MotorTalon extends SubsystemBase{
         motorTalonVelocityController.withSlot(0);
     }
     /**
-     * Moves the motor in reverse
-     */
-    public void motorReverse(){
-        //reverse motor
-        motorTalon.setControl(this.motorTalonVelocityController.withVelocity(reverseSpeedRpm));
-    }
-    /**
      * Moves the motor forwards
      */
     public void motorForwards(){
         //forwards motor
         motorTalon.setControl(this.motorTalonVelocityController.withVelocity(forwardSpeedRpm));
+    }
+    /**
+     * Moves the motor in reverse
+     */
+    public void motorReverse(){
+        //reverse motor
+        motorTalon.setControl(this.motorTalonVelocityController.withVelocity(reverseSpeedRpm));
     }
 
     /**
