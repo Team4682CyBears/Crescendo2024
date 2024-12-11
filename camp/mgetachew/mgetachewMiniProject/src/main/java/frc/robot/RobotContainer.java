@@ -5,12 +5,8 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.moveMotor;
 import frc.robot.subsystems.MotorTalon;
-import frc.robot.subsystems.ExampleSubsystem;
-
 import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj.XboxController;
@@ -30,7 +26,6 @@ public class RobotContainer {
   //Talon is set here
   private final MotorTalon motorTalonSubsystem = new MotorTalon();
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
   //Xbox controller is set here
   private final CommandXboxController xboxController = new CommandXboxController(Constants.OperatorConstants.xboxControllerPort);
 
@@ -50,11 +45,6 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
     //Xbox boolean suppliers are set here
     BooleanSupplier booleanXboxControllerSupplierLeft = () -> xboxController.leftBumper().getAsBoolean();
     BooleanSupplier booleanXboxControllerSupplierRight = () -> xboxController.rightBumper().getAsBoolean();

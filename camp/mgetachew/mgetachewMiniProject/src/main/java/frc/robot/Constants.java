@@ -19,13 +19,12 @@ import com.ctre.phoenix6.signals.InvertedValue;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
-    public static final double shooterOutfeedStatorCurrentMaximumAmps = 100.0;
-    public static final double shooterOutfeedSupplyCurrentMaximumAmps = 50.0;
-    public static final double shooterOutfeedSupplyVoltageTimeConstant = 0.02;
+    public static final double motorStatorCurrentMaximumAmps = 100.0;
+    public static final double motorSupplyCurrentMaximumAmps = 50.0;
+    public static final double motorSupplyVoltageTimeConstant = 0.02;
     //Motor Talon Port
     public static final int motorTalonPort = 3;
     //Change to fit your prefered xbox controller port
     public static final int xboxControllerPort = 0;
-    //Could be related to the bug.
-    public static InvertedValue rightTalonShooterMotorDefaultDirection = InvertedValue.CounterClockwise_Positive;  }
+    public static InvertedValue motorDefaultDirection = InvertedValue.CounterClockwise_Positive;  }
 }
