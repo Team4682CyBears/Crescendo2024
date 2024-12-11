@@ -26,7 +26,7 @@ public class FeederSubsystem extends SubsystemBase {
   private TalonSRX feederMotor = new TalonSRX(Constants.FEEDER_MOTOR_CAN_ID);
 
   /**
-   * Constructor for the IntakeSubsystem
+   * Constructor for the FeederSubsystem
    */
   public FeederSubsystem() {
     feederMotor.setNeutralMode(NeutralMode.Brake);
