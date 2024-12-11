@@ -24,7 +24,7 @@ import frc.robot.Constants;
  */
 public class FeederSubsystem extends SubsystemBase {
   // Bag motor
-  private TalonSRX feederMotor = new TalonSRX(Constants.feederMotorCanId);
+  private TalonSRX feederMotor = new TalonSRX(Constants.FEEDER_MOTOR_CAN_ID);
   // Direction Mode default is feed to shooter
   private int shooterDirection = -1; // set 1 for not inverted, set -1 for inverted
   private int feederDirection = 1; // set 1 for not inverted, set -1 for inverted
@@ -48,11 +48,11 @@ public class FeederSubsystem extends SubsystemBase {
    * @param percent (between 0 and 1)
    */
   public void setForwardSpeed() {
-    feederMotor.set(TalonSRXControlMode.PercentOutput, Constants.forwardSpeed);
+    feederMotor.set(TalonSRXControlMode.PercentOutput, Constants.FORWARD_SPEED);
   }
 
   public void setBackwardSpeed() {
-    feederMotor.set(TalonSRXControlMode.PercentOutput, Constants.backwardSpeed);
+    feederMotor.set(TalonSRXControlMode.PercentOutput, Constants.BACKWARD_SPEED);
   }
 
   /**
