@@ -47,10 +47,13 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -62,6 +65,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
   private CameraSubsystem cameraSubsystem;
 
   private boolean useVision = false;
+
+  StructArrayPublisher<SwerveModuleState> publisher;
 
   /**
    * The maximum voltage that will be delivered to the drive motors.
@@ -162,6 +167,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     if(InstalledHardware.limelightInstalled){
       cameraSubsystem = subsystems.getCameraSubsystem();
     }
+
+    publisher = NetworkTableInstance.getDefault().getStructArrayTopic("MyStates", SwerveModuleState.struct).publish();
 
     ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
 
@@ -300,7 +307,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     frontRightModule.setAbsoluteEncoderOffset();
     backLeftModule.setAbsoluteEncoderOffset();
     backRightModule.setAbsoluteEncoderOffset();
-    System.out.println("Setting Absolute Encoder Offsets");
+    DataLogManager.log("Setting Absolute Encoder Offsets");
   }
   
   /**
@@ -359,7 +366,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     /* 
     if (swerveNavx.isMagnetometerCalibrated()) {
 
-      // System.out.println("getGyroscopeRotation() using: swerveNavx.getFusedHeading()");
+      // DataLogManager.log("getGyroscopeRotation() using: swerveNavx.getFusedHeading()");
 
       // We will only get valid fused headings if the magnetometer is calibrated
       return Rotation2d.fromRadians(
@@ -368,7 +375,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
     */
 
-    // System.out.println("getGyroscopeRotation() using: swerveNavx.getYaw()");
+    // DataLogManager.log("getGyroscopeRotation() using: swerveNavx.getYaw()");
 
     // We have to invert the angle of the NavX so that rotating the robot counter-clockwise makes the angle increase.
     // TODO test angleModulus again with the NavX1.  We disabled it during debugging the NavX2, but it might have been
@@ -498,17 +505,19 @@ public class DrivetrainSubsystem extends SubsystemBase {
     } 
     // next we take the state and set the states on the swerve modules
     setSwerveModuleStates(states);
+
+    publisher.set(states);
   }
 
   /**
    * a method to print relevant state of the navx
    */
   public void printState(){
-    System.out.println("**** NavX State ****");
-    System.out.println("Quaternion ------>" + this.getQuaterion());
-    System.out.println("Roll, Pitch, Yaw ------>" + this.getEulerAngle());
-    System.out.println("Is the robot level? -------->" + this.isLevel());
-    System.out.println("SteepestAscent --->" + VectorUtils.getAngleOfSteepestAscent(getEulerAngle()));
+    DataLogManager.log("**** NavX State ****");
+    DataLogManager.log("Quaternion ------>" + this.getQuaterion());
+    DataLogManager.log("Roll, Pitch, Yaw ------>" + this.getEulerAngle());
+    DataLogManager.log("Is the robot level? -------->" + this.isLevel());
+    DataLogManager.log("SteepestAscent --->" + VectorUtils.getAngleOfSteepestAscent(getEulerAngle()));
   }
 
   /**
@@ -516,7 +525,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @param updatedPosition
    */
   public void printAbsoluteEncoderOrrsets(){
-    System.out.println("AbsoluteEncoderOffsets -----> " + this.getAbsoluteEncoderOffsets());
+    DataLogManager.log("AbsoluteEncoderOffsets -----> " + this.getAbsoluteEncoderOffsets());
   }
 
   /**
@@ -596,7 +605,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public void zeroGyroscope() {
     if(swerveNavx.isCalibrating()){
       // From the NavX Docs: This method has no effect if the sensor is currently calibrating
-      System.out.println("WARNING: Gyro is calibrating. Zeroing gyro has no effect while it is calibrating.");
+      DataLogManager.log("WARNING: Gyro is calibrating. Zeroing gyro has no effect while it is calibrating.");
     }
     swerveNavx.zeroYaw();
     this.yawOffsetDegrees = 0.0;
@@ -639,7 +648,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         levelChecker = false;
       }
     }
-    System.out.println("Is Level? " + levelChecker);
+    DataLogManager.log("Is Level? " + levelChecker);
     return levelChecker;
   }
 

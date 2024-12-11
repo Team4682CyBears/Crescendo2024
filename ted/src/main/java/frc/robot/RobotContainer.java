@@ -10,6 +10,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.led.CANdle.LEDStripType;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -20,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.common.TestTrajectories;
 import frc.robot.common.FeederMode;
+import frc.robot.common.LEDState;
 import frc.robot.control.InstalledHardware;
 import frc.robot.control.ManualInputInterfaces;
 import frc.robot.control.SubsystemCollection;
@@ -27,6 +30,9 @@ import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 import frc.robot.control.AutonomousChooser;
 import frc.robot.control.Constants;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 
 public class RobotContainer {
 
@@ -35,11 +41,17 @@ public class RobotContainer {
 
   public RobotContainer() {
 
+    // init the data logging
+    this.initializeDataLogging();
+
     // init the pdp watcher
     this.initializePowerDistributionPanelWatcherSubsystem();
 
     // init the camera (before drivetrain)
     this.initializeCameraSubsystem();
+
+    // init the leds
+    this.initializeLEDSubsystem();
 
     // intake subsystem init
         // intake subsystem init
@@ -73,9 +85,9 @@ public class RobotContainer {
 
     // Configure the button bindings
     if(this.subsystems.isManualInputInterfacesAvailable()) {
-      System.out.println(">>>> Initializing button bindings.");
+      DataLogManager.log(">>>> Initializing button bindings.");
       this.subsystems.getManualInputInterfaces().initializeButtonCommandBindings();
-      System.out.println(">>>> Finished initializing button bindings.");
+      DataLogManager.log(">>>> Finished initializing button bindings.");
     }
     
     // TODO For debugging. Can remove for final competition build. 
@@ -178,7 +190,7 @@ public class RobotContainer {
     if((InstalledHardware.leftClimberInstalled && InstalledHardware.leftClimberSensorInstalled) || 
     (InstalledHardware.rightClimberInstalled && InstalledHardware.rightClimberSensorInstalled)) {
       subsystems.setClimberSubsystem(new ClimberSubsystem());
-      System.out.println("SUCCESS: ClimberSubsystem");
+      DataLogManager.log("SUCCESS: ClimberSubsystem");
       subsystems.getClimberSubsystem().setDefaultCommand(
         new ClimberArmDefaultSpeed(
           subsystems.getClimberSubsystem(),
@@ -188,8 +200,16 @@ public class RobotContainer {
       SmartDashboard.putData("Right Climber",   new ClimberArmDefaultSpeed(subsystems.getClimberSubsystem(), () -> 0, () -> -.2));
     }
     else {
-      System.out.println("FAIL: ClimberSubsystem");
+      DataLogManager.log("FAIL: ClimberSubsystem");
     }
+  }
+
+   /**
+   * A method to init all the data logging
+   */
+  private void initializeDataLogging() {
+    DataLogManager.start();
+    DriverStation.startDataLog(DataLogManager.getLog());
   }
 
   /**
@@ -198,13 +218,12 @@ public class RobotContainer {
   private void initializePowerDistributionPanelWatcherSubsystem() {
     if(InstalledHardware.powerDistributionPanelInstalled) {
       subsystems.setPowerDistributionPanelWatcherSubsystem(new PowerDistributionPanelWatcherSubsystem());
-      System.out.println("SUCCESS: initializePowerDistributionPanelWatcherSubsystem");
+      DataLogManager.log("SUCCESS: initializePowerDistributionPanelWatcherSubsystem");
     }
     else {
-      System.out.println("FAIL: initializePowerDistributionPanelWatcherSubsystem");
+      DataLogManager.log("FAIL: initializePowerDistributionPanelWatcherSubsystem");
     }
   }
-
   /**
    * A method to init items for the debug dashboard
    */
@@ -227,7 +246,7 @@ public class RobotContainer {
       subsystems.setDriveTrainPowerSubsystem(new DrivetrainPowerSubsystem(subsystems.getDriveTrainSubsystem()));
       subsystems.setDriveTrainAccelerationSubsystem(new DrivetrainAccelerationSubsystem(subsystems.getDriveTrainSubsystem()));
       SmartDashboard.putData("Debug: DrivetrainSub", subsystems.getDriveTrainSubsystem());
-      System.out.println("SUCCESS: initializeDrivetrain");
+      DataLogManager.log("SUCCESS: initializeDrivetrain");
 
       // Set up the default command for the drivetrain.
       // The controls are for field-oriented driving:
@@ -243,7 +262,7 @@ public class RobotContainer {
           ));
     }
     else {
-      System.out.println("FAIL: initializeDrivetrain");
+      DataLogManager.log("FAIL: initializeDrivetrain");
     }
   }
 
@@ -253,13 +272,26 @@ public class RobotContainer {
   private void initializeCameraSubsystem(){
     if(InstalledHardware.limelightInstalled) {
       subsystems.setCameraSubsystem(new CameraSubsystem());
-      System.out.println("SUCCESS: initializeCamera");
+      DataLogManager.log("SUCCESS: initializeCamera");
     }
     else {
-      System.out.println("FAIL: initializeCamera");
+      DataLogManager.log("FAIL: initializeCamera");
     }
   }
-  
+
+  /**
+   * A method to init the LEDSubsystem
+   */
+  private void initializeLEDSubsystem(){
+    if(InstalledHardware.LEDSInstalled){
+      subsystems.setLEDSubsystem(new LEDSubsystem(Constants.ledCanID, Constants.ledStripType));
+      System.out.println("SUCCESS: initializeLEDS");
+    }
+    else {
+      System.out.println("FAIL: initializeLEDS");
+    }
+  }
+
   /**
    * A method to init the feeder subsystem
    */
@@ -272,9 +304,16 @@ public class RobotContainer {
         new InstantCommand(
           subsystems.getFeederSubsystem()::setAllStop, 
           subsystems.getFeederSubsystem()));
-      System.out.println("SUCCESS: FeederSubsystem");
+
+      // register the led colors when leds are ready to go - OrangeSolid on note in shooter
+      if(subsystems.isLEDSubsystemAvailable()) {
+        subsystems.getLedSubsystem().registerStateAction(
+        LEDState.OrangeSolid,
+        this.subsystems.getFeederSubsystem()::isShooterNoteDetected);
+      }
+      DataLogManager.log("SUCCESS: FeederSubsystem");
     } else {
-      System.out.println("FAIL: FeederSubsystem");
+      DataLogManager.log("FAIL: FeederSubsystem");
     }
   }
 
@@ -290,9 +329,17 @@ public class RobotContainer {
         new InstantCommand(
           subsystems.getIntakeSubsystem()::setAllStop, 
           subsystems.getIntakeSubsystem()));
+
+      // register the led colors when leds are ready to go - OrangeBlink on note in intake
+      if(subsystems.isLEDSubsystemAvailable()) {
+        subsystems.getLedSubsystem().registerStateAction(
+          LEDState.OrangeBlink,
+          this.subsystems.getIntakeSubsystem()::isNoteDetected);
+      }
       System.out.println("SUCCESS: IntakeSubsystem");
+      DataLogManager.log("SUCCESS: IntakeSubsystem");
     } else {
-      System.out.println("FAIL: IntakeSubsystem");
+      DataLogManager.log("FAIL: IntakeSubsystem");
     }
   }
 
@@ -305,10 +352,10 @@ public class RobotContainer {
     if(InstalledHardware.driverXboxControllerInstalled ||
       InstalledHardware.coDriverXboxControllerInstalled) {
       subsystems.setManualInputInterfaces(new ManualInputInterfaces(subsystems));
-      System.out.println("SUCCESS: initializeManualInputInterfaces");
+      DataLogManager.log("SUCCESS: initializeManualInputInterfaces");
     }
     else {
-      System.out.println("FAIL: initializeManualInputInterfaces");
+      DataLogManager.log("FAIL: initializeManualInputInterfaces");
     }
   }
 
@@ -320,10 +367,22 @@ public class RobotContainer {
       // The robot's subsystems and commands are defined here...
       subsystems.setShooterOutfeedSubsystem(new ShooterOutfeedSubsystem());
       SmartDashboard.putData("Debug: ShooterSubsystem", subsystems.getShooterOutfeedSubsystem());
+
+
+      // register the led colors when leds are ready to go - Yellow or Green based on speed of outfeed
+      if(subsystems.isLEDSubsystemAvailable()) {
+        subsystems.getLedSubsystem().registerStateAction(
+          LEDState.Yellow,
+          this.subsystems.getShooterOutfeedSubsystem()::isNearSpeed);
+        subsystems.getLedSubsystem().registerStateAction(
+          LEDState.Green,
+          this.subsystems.getShooterOutfeedSubsystem()::isAtSpeed);
+      }
       System.out.println("SUCCESS: ShooterOutfeedSubsystem");
+      DataLogManager.log("SUCCESS: ShooterOutfeedSubsystem");
     }
     else {
-      System.out.println("FAIL: ShooterOutfeedSubsystem");
+      DataLogManager.log("FAIL: ShooterOutfeedSubsystem");
     }
   }
 
@@ -335,10 +394,10 @@ public class RobotContainer {
       // The robot's subsystems and commands are defined here...
       subsystems.setShooterAngleSubsystem(new ShooterAngleSubsystem());
       SmartDashboard.putData("Debug: ShooterAngleSubsystem", subsystems.getShooterAngleSubsystem());
-      System.out.println("SUCCESS: ShooterAngleSubsystem");
+      DataLogManager.log("SUCCESS: ShooterAngleSubsystem");
     }
     else {
-      System.out.println("FAIL: ShooterAngleSubsystem");
+      DataLogManager.log("FAIL: ShooterAngleSubsystem");
     }
   }
 

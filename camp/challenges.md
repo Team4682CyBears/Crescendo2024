@@ -13,10 +13,10 @@ The table below highlights various challanges that coder members will be assigne
 
 |Input Hardware | Output Hardware | Expected Outcome | Target Owner | Owner |
 |--|--|--|--|--|
-| XBox Controller Left and Right bumper | Talon | Left bumper press drives the motor backwards or when not pressed use right bumper press to drive motor forwards | 1st year | Matthew Getachew  |
-| XBox Controller Left Stick Y direction | Neo motor  | Use of the input of the Left stick y double/floating point value to control the speed of the motor | 1st year | Isaac Bess  |
-| Multi-function joystick twist | Talon Motor | Use of the input of the joystick twist axist double/floating point value to control the speed of the motor | 1st year | ??  |
-| Button board two buttons | bag motor on/off in forward and reverse directions | Use one button to drive the motor in forward direction and the other button press to run the motor in the other direction | 1st year | ??  |
+| XBox Controller Left and Right bumper | Talon Motor | Left bumper press drives the motor backwards or when not pressed use right bumper press to drive motor forwards | 1st year | Matthew Getachew  |
+| XBox Controller Left Stick Y direction | Neo motor  | Use of the input of the Left stick y double/floating point value to control the speed of the motor | 1st year | Isaac Bess, Ahni Reynolds |
+| XBox Controller Right Stick X direction | Talon Motor | Use of the input of the Right stick y double/ floating point value to control the speed of the motor | 1st year | Jasper Hall |
+| XBox Controller two buttons (X and B) | bag motor on/off in forward and reverse directions | Use one button to drive the motor in forward direction and the other button press to run the motor in the other direction | 1st year | Zach Sitlani, Mateo Herrman, Abhay Gupta |
 | XBox Controller D-Pad up/down | Pneumatic double soleniod enable/disable | The intent here is to trigger a pneumatic solenoid using the xbox controller D-pad input as boolean values. | 1st year | ??  |
 
 ## Second/Third Year Coders (or others already completed AP Comp Science)
@@ -51,8 +51,9 @@ All team members should follow the getting starting guide.  See: [2023 Getting S
 
 1. Create a New WPILib Project<br>
     a. by using one of the WPILib 'command' based examples<br>
-       i. Select Command Example<br>
-       ii. Motor Control with Encoder<br>
+        i. Select a project type -> Template <br>
+        ii. Select a language -> java <br>
+        iii. Select a project base -> Command Robot <br>
     b. select project directory - e.g., %root%/camp/username<br>
     c. Name your project with something that reflects the expected outcome<br>
     d. Team Number - 4682<br>

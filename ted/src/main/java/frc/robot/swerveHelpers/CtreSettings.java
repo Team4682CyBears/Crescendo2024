@@ -14,6 +14,8 @@ package frc.robot.swerveHelpers;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
+
+import edu.wpi.first.wpilibj.DataLogManager;
 import frc.robot.control.Constants;
 
 public class CtreSettings {
@@ -45,14 +47,14 @@ public class CtreSettings {
     {
         // NOTE: see: https://v6.docs.ctr-electronics.com/en/2023-v6/docs/migration/migration-guide/feature-replacements-guide.html#sensor-initialization-strategy
         // "The Talon FX and CANcoder sensors are always initialized to their absolute position in Phoenix 6."
-        System.out.println("Get side, has angle: " + canCoder.getAbsolutePosition());
+        DataLogManager.log("Get side, has angle: " + canCoder.getAbsolutePosition());
     }
     
     private static void UpdateSingleCanEncoderDefaultSettings(CANcoder canCoder)
     {
         CANcoderConfiguration config = new CANcoderConfiguration();
         StatusCode returnVal = canCoder.getConfigurator().apply(config);
-        System.out.println("Set side, getDeviceID == " + canCoder.getDeviceID() + " Error Code: " + returnVal);
+        DataLogManager.log("Set side, getDeviceID == " + canCoder.getDeviceID() + " Error Code: " + returnVal);
         CtreSettings.PrintCanEncoderCurrentSettings(canCoder);
     }
 }
