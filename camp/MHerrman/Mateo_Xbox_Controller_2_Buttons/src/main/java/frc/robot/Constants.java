@@ -12,6 +12,6 @@ public final class Constants {
   }
 
   public static final double FORWARD_SPEED = 0.2; // Creates our forward speed constant.
-  public static final int FEEDER_MOTOR_CAN_ID = 15; // Establishes what ID our feeder is.
   public static final double BACKWARD_SPEED = -0.2; // Creates our backward speed constant.
+  public static final int FEEDER_MOTOR_CAN_ID = 15; // Establishes what ID our feeder is.
 }

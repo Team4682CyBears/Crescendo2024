@@ -39,23 +39,24 @@ public class FeederSubsystem extends SubsystemBase {
 
 
   /**
-   * A method to set the motor to the given percent in the 
-   * direction of the shooter or feeder depending on the mode
-   * @param percent (between 0 and 1)
+   * A method to set the motor speed to 0
    */
-  public void setForwardSpeed() {
-    feederMotor.set(TalonSRXControlMode.PercentOutput, Constants.FORWARD_SPEED);
+  public void setAllStop() {
+    feederMotor.set(TalonSRXControlMode.PercentOutput, 0.0);
   }
 
-  public void setBackwardSpeed() {
+  /**
+   * A method to set the motor speed to BACKWARD_SPEED
+   */
+    public void setBackwardSpeed() {
     feederMotor.set(TalonSRXControlMode.PercentOutput, Constants.BACKWARD_SPEED);
   }
 
   /**
-   * A method to stop the intake subsystem
+   * A method to set the motor speed to FORWARD_SPEED
    */
-  public void setAllStop() {
-    feederMotor.set(TalonSRXControlMode.PercentOutput, 0.0);
+  public void setForwardSpeed() {
+    feederMotor.set(TalonSRXControlMode.PercentOutput, Constants.FORWARD_SPEED);
   }
 
   /**

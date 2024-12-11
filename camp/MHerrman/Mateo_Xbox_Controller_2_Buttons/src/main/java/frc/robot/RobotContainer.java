@@ -21,11 +21,9 @@ import frc.robot.commands.MotorBackward;
 public class RobotContainer {
 // The robot's subsystems and commands are defined here...
   private FeederSubsystem feeder =new FeederSubsystem(); //Creates our feeder subsystem. Takes in no arguments.
-  private final MotorBackward backwards = new MotorBackward(feeder); //creates our backwards command. Takes in our feeder.
-  private final MotorForward forward = new MotorForward(feeder); //creates our forwards command. Takes in our feeder.
-  private final MotorStop stop = new MotorStop(feeder); //creates our stop command. Takes in our feeder.
-
-  // Replace with CommandPS4Controller or CommandJoystick if needed
+  private final MotorBackward backwards; //creates our backwards command. Takes in our feeder.
+  private final MotorForward forward; //creates our forwards command. Takes in our feeder.
+  private final MotorStop stop; //creates our stop command. Takes in our feeder.
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
@@ -45,10 +43,10 @@ public class RobotContainer {
    */
   private void configureBindings() {
     System.out.println("!!!!!!!!!!!CONFIGURING BUTTON BINDINGS!!!!!!!!!!!!!!");
-    this.feeder.setDefaultCommand(stop); // Sets the default command to "stop." This way, when no buttons are being pressed, the motor doesn't move.
-
-    m_driverController.b().whileTrue(backwards); // Binds the "b" button to the backwards command.
-    m_driverController.x().whileTrue(forward); // Binds the "x" button to the forward command.
+    this.feeder.setDefaultCommand(new MotorStop(feeder)); // Sets the default command to "stop." This way, when no buttons are being pressed, the motor doesn't move.
+    
+    m_driverController.b().whileTrue(new MotorBackward(feeder)); // Binds the "b" button to the backwards command.
+    m_driverController.x().whileTrue(new MotorForward(feeder)); // Binds the "x" button to the forward command.
   }
 
   /**
@@ -57,7 +55,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
     return new InstantCommand();
   }
 }
