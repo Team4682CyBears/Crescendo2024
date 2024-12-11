@@ -57,12 +57,7 @@ public class MotorTalon extends SubsystemBase{
         motorTalon.setControl(this.motorTalonVoltageController.withOutput(0));
     }
 
-    @Override
-    public void periodic() {
-        super.periodic();
-    }
-
-        /**
+    /**
      * Quick configuration for a motor
      */
     private void configureMotor(){
