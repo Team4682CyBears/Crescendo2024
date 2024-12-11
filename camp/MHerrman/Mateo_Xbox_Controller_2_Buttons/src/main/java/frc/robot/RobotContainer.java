@@ -21,9 +21,6 @@ import frc.robot.commands.MotorBackward;
 public class RobotContainer {
 // The robot's subsystems and commands are defined here...
   private FeederSubsystem feeder =new FeederSubsystem(); //Creates our feeder subsystem. Takes in no arguments.
-  private final MotorBackward backwards; //creates our backwards command. Takes in our feeder.
-  private final MotorForward forward; //creates our forwards command. Takes in our feeder.
-  private final MotorStop stop; //creates our stop command. Takes in our feeder.
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
