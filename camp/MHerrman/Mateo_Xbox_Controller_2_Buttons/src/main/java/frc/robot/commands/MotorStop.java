@@ -1,24 +1,21 @@
 package frc.robot.commands;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.Command;
-
 import frc.robot.subsystems.FeederSubsystem;
 
 public class MotorStop extends Command{
-    private FeederSubsystem feeder;
+// Our motorstop class. It extends Command.
+    private FeederSubsystem feeder; // Lets us use our subsystem's feeder for this command.
+
     public MotorStop(FeederSubsystem feeder){
-        this.feeder = feeder;
-        addRequirements(feeder);
-    }
-
-    public void initialize(){
-
+    // Our initializer. Initializes all the variables we need, and adds any requirements we need.
+        this.feeder = feeder; // Initializes this instance of feeder to feeder.
+        addRequirements(feeder); // Adds feeder as a requirement.
     }
 
     public void execute(){
-        feeder.setAllStop();
+    // Our executor. Executes all of our commands and code that is needed.
+        feeder.setAllStop(); // Calls on the setAllStop command in our feeder subsystem.
     }
 
     public boolean isFinished(){

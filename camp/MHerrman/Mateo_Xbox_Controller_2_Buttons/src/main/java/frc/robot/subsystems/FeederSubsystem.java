@@ -19,15 +19,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 /**
- * Forms a class for the feeder subsystem consisting of
- * a Bag motor and two TOF sensors
+ * Forms a class for the feeder subsystem consisting of a Bag motor
  */
 public class FeederSubsystem extends SubsystemBase {
   // Bag motor
   private TalonSRX feederMotor = new TalonSRX(Constants.FEEDER_MOTOR_CAN_ID);
-  // Direction Mode default is feed to shooter
-  private int shooterDirection = -1; // set 1 for not inverted, set -1 for inverted
-  private int feederDirection = 1; // set 1 for not inverted, set -1 for inverted
 
   /**
    * Constructor for the IntakeSubsystem

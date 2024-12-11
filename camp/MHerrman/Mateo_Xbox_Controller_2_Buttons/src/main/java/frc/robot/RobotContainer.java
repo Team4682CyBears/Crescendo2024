@@ -5,14 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.FeederSubsystem;
-
-import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
-
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.MotorForward;
@@ -21,18 +14,14 @@ import frc.robot.commands.MotorBackward;
 
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and trigger mappings) should be declared here.
+//The robot's container. Contains our subsystems and commands.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private FeederSubsystem feeder =new FeederSubsystem();
-  private final MotorBackward backwards = new MotorBackward(feeder);
-  private final MotorForward forward = new MotorForward(feeder);
-  private final MotorStop stop = new MotorStop(feeder);
+// The robot's subsystems and commands are defined here...
+  private FeederSubsystem feeder =new FeederSubsystem(); //Creates our feeder subsystem. Takes in no arguments.
+  private final MotorBackward backwards = new MotorBackward(feeder); //creates our backwards command. Takes in our feeder.
+  private final MotorForward forward = new MotorForward(feeder); //creates our forwards command. Takes in our feeder.
+  private final MotorStop stop = new MotorStop(feeder); //creates our stop command. Takes in our feeder.
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -41,7 +30,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
-    configureBindings();
+  configureBindings();
   }
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -54,15 +43,10 @@ public class RobotContainer {
    */
   private void configureBindings() {
     System.out.println("!!!!!!!!!!!CONFIGURING BUTTON BINDINGS!!!!!!!!!!!!!!");
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    this.feeder.setDefaultCommand(stop);
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
+    this.feeder.setDefaultCommand(stop); // Sets the default command to "stop." This way, when no buttons are being pressed, the motor doesn't move.
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    m_driverController.b().whileTrue(backwards);
-    m_driverController.x().whileTrue(forward);
+    m_driverController.b().whileTrue(backwards); // Binds the "b" button to the backwards command.
+    m_driverController.x().whileTrue(forward); // Binds the "x" button to the forward command.
   }
 
   /**
