@@ -19,6 +19,7 @@ import frc.robot.subsystems.PowerDistributionPanelWatcherSubsystem;
 import frc.robot.subsystems.ShooterAngleSubsystem;
 import frc.robot.subsystems.ShooterOutfeedSubsystem;
 import frc.robot.subsystems.CameraSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 
 public class SubsystemCollection
 {
@@ -36,6 +37,7 @@ public class SubsystemCollection
     private ShooterAngleSubsystem shooterAngleSubsystem = null;
     private IntakeSubsystem intakeSubsystem = null;
     private FeederSubsystem feederSubsystem = null;
+    private LEDSubsystem ledSubsystem = null;
 
     /**
      * Default constructor
@@ -85,4 +87,8 @@ public class SubsystemCollection
     public ShooterAngleSubsystem getShooterAngleSubsystem() { return shooterAngleSubsystem; }
     public void setShooterAngleSubsystem(ShooterAngleSubsystem value) { shooterAngleSubsystem = value; }
     public boolean isShooterAngleSubsystemAvailable() { return shooterAngleSubsystem != null; }
+
+    public LEDSubsystem getLedSubsystem() { return ledSubsystem; }
+    public void setLEDSubsystem(LEDSubsystem value) { ledSubsystem = value; }
+    public boolean isLEDSubsystemAvailable() { return cameraSubsystem != null; }
 }
