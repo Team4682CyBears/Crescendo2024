@@ -351,3 +351,9 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+# obsidian files (abhay)
+app.json
+appearance.json
+core-plugins.json
+workspace.json
