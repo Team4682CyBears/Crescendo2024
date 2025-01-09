@@ -15,9 +15,9 @@ package frc.robot;
 public final class Constants {
   public static int motorCanID = 3;
   public static final int kDriverControllerPort = 0;
-  public static final double shooterOutfeedSupplyCurrentMaximumAmps = Constants.ctreSupplyCurrentMaximumAmps;
-  public static final double shooterOutfeedSupplyVoltageTimeConstant = Constants.ctreSupplyVoltageTimeConstant;
+  public static final double motorSupplyCurrentMaximumAmps = Constants.ctreSupplyCurrentMaximumAmps;
+  public static final double motorSupplyVoltageTimeConstant = Constants.ctreSupplyVoltageTimeConstant;
   public static final double ctreSupplyCurrentMaximumAmps = 50.0;
   public static final double ctreSupplyVoltageTimeConstant = 0.02;
-    
+  public static final double joystickDeadband = 0.1;
 }

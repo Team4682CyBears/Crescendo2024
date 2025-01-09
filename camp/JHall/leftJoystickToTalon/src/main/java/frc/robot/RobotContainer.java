@@ -4,9 +4,7 @@
 
 package frc.robot;
 
-import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.changeSpeed;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.commands.ChangeSpeed;
 import frc.robot.subsystems.TalonMotorSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -21,9 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  // TODO create your motor subsystem here.
   TalonMotorSubsystem motor = new TalonMotorSubsystem(Constants.motorCanID);
-  // TODO create your xbox controller here
   CommandXboxController controller = new CommandXboxController(Constants.kDriverControllerPort);
       
 
@@ -43,7 +39,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    motor.setDefaultCommand(new changeSpeed(motor, 
+    motor.setDefaultCommand(new ChangeSpeed(motor, 
       () -> controller.getLeftX()));
   }
 
