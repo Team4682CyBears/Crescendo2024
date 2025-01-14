@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.common.FeederMode;
+import frc.robot.control.Constants;
 import frc.robot.subsystems.FeederSubsystem;
 
 public class RewindFeederCommand extends Command{
@@ -39,6 +40,38 @@ public class RewindFeederCommand extends Command{
     done = false;
     DataLogManager.log("Starting RewindFeederCommand");
   }
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute()
+  {
+    if (timer.hasElapsed(Constants.feederRewindSeconds))
+    {
+      feeder.setAllStop();
+      done = true;
+    }
+    else {
+        feeder.setFeederSpeed(-1 * Constants.feederSpeed);
+    }
+  }
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted)
+  {
+    // Intentionally *not* setting feeder speed to 0 here. 
+    // the two conditions above (note detected and timer elasped)
+    // already stop the motor. 
+    // If this command is interrupted, e.g. by the codriver hitting the button multiple times
+    // we don't want to stop and restart the intake. 
+    // There is a default command registered on this sybsystem that stops the motor if no 
+    // other command is running. 
+    if(interrupted)
+    {
+    done = true;      
+    }
+  }
+
 
   // Returns true when the command should end.
   @Override

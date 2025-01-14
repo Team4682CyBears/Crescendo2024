@@ -18,7 +18,9 @@
 package frc.robot.control;
 
 public class Constants {
-
+    // *****************************************************************
+    // input device constants
+    public static final int portDriverController = 0;
 
     // ******************************************************************
     // intake will run until note is detected or this timeout has expired

@@ -20,7 +20,7 @@ import frc.robot.common.FeederMode;
 
 /**
  * Forms a class for the feeder subsystem consisting of
- * a Bag motor and two TOF sensors
+ * a Bag motor
  */
 public class FeederSubsystem extends SubsystemBase {
   // Bag motor
@@ -76,6 +76,7 @@ public class FeederSubsystem extends SubsystemBase {
 
     // change feeder direction based of feeder mode shooter or feeder
     // if in wrong direction, don't shoot
+    // negative percentage to change direction
     int direction = feederMode == FeederMode.FeedToShooter ? shooterDirection : feederDirection; 
 
     // set feeder speed

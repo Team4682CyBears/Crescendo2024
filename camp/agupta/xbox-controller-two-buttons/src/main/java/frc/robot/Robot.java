@@ -2,11 +2,13 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+// Declare package this class belongs to
 package frc.robot;
 
-import edu.wpi.first.wpilibj.TimedRobot;
+// Import wpi classes
+import edu.wpi.first.wpilibj.TimedRobot; // interface for this class
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.CommandScheduler; // scheduler responsible for running commands
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to

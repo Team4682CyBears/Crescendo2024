@@ -5,12 +5,16 @@
 package frc.robot;
 
 import frc.robot.control.Constants.OperatorConstants;
+import frc.robot.control.InstalledHardware;
+import frc.robot.control.ManualInputInterfaces;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.control.SubsystemCollection;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.FeederSubsystem;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -34,8 +38,15 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
+    // feeder subsystem init
+    this.initializeFeederSubsystem();
+
+    // init the input system 
+    this.initializeManualInputInterfaces();
+
     // Configure the trigger bindings
-    configureBindings();
+    //configureBindings();
 
     // Configure the button bindings
     if(this.subsystems.isManualInputInterfacesAvailable()) {
@@ -44,6 +55,7 @@ public class RobotContainer {
       DataLogManager.log(">>>> Finished initializing button bindings.");
     }
     
+    // Generally has a lot of smart dashboard commands
   }
 
   /**
@@ -55,14 +67,50 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-  private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
+
+  /*
+     private void configureBindings() {
+     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
+     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
     m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+  }
+  */
+
+    /**
+   * A method to init the feeder subsystem
+   */
+  private void initializeFeederSubsystem(){
+    if(InstalledHardware.feederInstalled){
+      subsystems.setFeederSubsystem(new FeederSubsystem());
+
+      // default command for feeder is to stop
+      subsystems.getFeederSubsystem().setDefaultCommand(
+        new InstantCommand(
+          subsystems.getFeederSubsystem()::setAllStop, 
+          subsystems.getFeederSubsystem()));
+      DataLogManager.log("SUCCESS: FeederSubsystem");
+    } else {
+      DataLogManager.log("FAIL: FeederSubsystem");
+    }
+  }
+
+    /**
+   * A method to init the input interfaces
+   */
+  private void initializeManualInputInterfaces() {
+    // note: in this case it is safe to build the interfaces if only one of the controllers is present
+    // because button binding assignment code checks that each is installed later (see: initializeButtonCommandBindings)
+    if(InstalledHardware.driverXboxControllerInstalled) {
+      subsystems.setManualInputInterfaces(new ManualInputInterfaces(subsystems));
+      DataLogManager.log("SUCCESS: initializeManualInputInterfaces");
+    }
+    else {
+      DataLogManager.log("FAIL: initializeManualInputInterfaces");
+    }
   }
 
   /**

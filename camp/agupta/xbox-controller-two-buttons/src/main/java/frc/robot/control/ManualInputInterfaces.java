@@ -63,7 +63,10 @@ public class ManualInputInterfaces {
             new RewindFeederCommand(
                 this.subsystemCollection.getFeederSubsystem(), 
                 FeederMode.FeedToShooter
-            )
+            ),
+            new ButtonPressCommand(
+              "driverController.b()",
+              "bag motor in reverse")
             //new ButtonPressCommand(
               //"driverController.y()",
               //"Remove Note")

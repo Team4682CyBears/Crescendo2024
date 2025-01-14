@@ -16,15 +16,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 // project code
 import java.util.ArrayDeque;
 
-// tutorial code
-import java.util.HashMap;
 
 public class ButtonPressCommand extends Command
 {
     /**
      * The constructor 
      */
-    public ButtonPressCommand()
+    public ButtonPressCommand(
+        String inputDeviceDescription,
+        String inputActionDescription)
     {}
 
     // Called when the command is initially scheduled.
