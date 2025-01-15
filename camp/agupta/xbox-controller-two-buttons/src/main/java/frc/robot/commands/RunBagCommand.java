@@ -68,7 +68,6 @@ public class RunBagCommand extends Command
   @Override
   public boolean isFinished()
   {
-    bag.setAllStop();
     return done;
   }
 
