@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup; // run commands in p
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController; // button commands for Xbox controller
 
 // import local classes
-import frc.robot.commands.ButtonPressCommand;
 import frc.robot.commands.RunBagCommand;
 import frc.robot.common.BagMode;
 
@@ -58,21 +57,14 @@ public class ManualInputInterfaces {
         // not used due to both bag commands being under same subsystem
         new ParallelCommandGroup( // allows different subsystems to run in parallel
           new RunBagCommand( // run bag motor
-            this.subsystemCollection.getBagSubsystem(), BagMode.Forward),
-          new ButtonPressCommand( // log commands
-              "driverController.x()", 
-              "bag motor forward")
-
+            this.subsystemCollection.getBagSubsystem(), BagMode.Forward)
         )
       );
       // move bag motor in reverse
       this.driverController.b().onTrue( // runs backward while button is pressed
         new ParallelCommandGroup(
           new RunBagCommand( // run bag motor
-            this.subsystemCollection.getBagSubsystem(), BagMode.Reverse),
-          new ButtonPressCommand( // log commands
-            "driverController.b()",
-            "bag motor reverse")
+            this.subsystemCollection.getBagSubsystem(), BagMode.Reverse)
         )
       );
     }

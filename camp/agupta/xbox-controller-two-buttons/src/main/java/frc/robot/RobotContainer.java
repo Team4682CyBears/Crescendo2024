@@ -14,14 +14,11 @@ package frc.robot;
 // import local classes
 import frc.robot.control.InstalledHardware;
 import frc.robot.control.ManualInputInterfaces;
-import frc.robot.commands.Autos;
 import frc.robot.control.SubsystemCollection;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.BagSubsystem;
 
 // import wpi libraries
 import edu.wpi.first.wpilibj.DataLogManager;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 /**
@@ -35,9 +32,6 @@ public class RobotContainer {
   // Create instance of SubsystemCollection
   private SubsystemCollection subsystems = new SubsystemCollection();
 
-  // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
@@ -46,9 +40,6 @@ public class RobotContainer {
 
     // init the input system 
     this.initializeManualInputInterfaces();
-
-    // Configure the trigger bindings
-    //configureBindings();
 
     // Configure the button bindings
     if(this.subsystems.isManualInputInterfacesAvailable()) {
@@ -61,28 +52,6 @@ public class RobotContainer {
   }
 
   /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
-   */
-
-  /*
-     private void configureBindings() {
-     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-     new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-  }
-  */
-
-    /**
    * A method to init the bag subsystem
    */
   private void initializeBagSubsystem(){
@@ -100,7 +69,7 @@ public class RobotContainer {
     }
   }
 
-    /**
+  /**
    * A method to init the input interfaces
    */
   private void initializeManualInputInterfaces() {
@@ -115,13 +84,4 @@ public class RobotContainer {
     }
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
-  }
 }

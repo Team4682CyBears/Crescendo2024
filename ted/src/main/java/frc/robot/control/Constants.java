@@ -129,7 +129,7 @@ public final class Constants {
     public static final double feederTimeoutSeconds = 3.0;
     public static final double feederLaunchTimeoutSecondsInAuto = .75;
     public static final double feederLaunchTimeoutSecondsInTele = 2.00;
-    public static final double feederRewindSeconds = intakeTimeoutSeconds;
+    public static final double feederSpeedfeederRewindSeconds = intakeTimeoutSeconds;
 
     // *******************************************************************
     // shooter outfeed constants
