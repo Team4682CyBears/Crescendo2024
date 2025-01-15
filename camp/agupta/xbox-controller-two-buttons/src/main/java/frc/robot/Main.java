@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.RobotBase;
 
 public final class Main {
   private Main() {}
-
   /**
    * Main initialization function.
    * Left the same on the main robot code

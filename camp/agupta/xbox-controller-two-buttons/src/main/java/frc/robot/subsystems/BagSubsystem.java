@@ -6,30 +6,32 @@
 // Intent: Forms the prelminary code for bag subsystem.
 // ************************************************************
 
+// declare package containing class
 package frc.robot.subsystems;
 
+// import motor controller libraries
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 
+// import wpi libraries
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+// import local classes
 import frc.robot.control.Constants;
-import frc.robot.control.InstalledHardware;
 import frc.robot.common.BagMode;
 
-
 /**
- * Forms a class for the bag subsystem consisting of
- * a Bag motor
+ * Forms a class for the bag subsystem
  */
 public class BagSubsystem extends SubsystemBase {
-  // Bag motor
+  // create new instance of bag motor controller class
   private TalonSRX bagMotor = new TalonSRX(Constants.bagMotorCanId);
   // vendordeps library:
   // https://maven.ctr-electronics.com/release/com/ctre/phoenix/Phoenix5-frc2024-latest.json
 
-  // Direction Mode default is feed to shooter
+  // Direction Mode default is forward
   BagMode bagMode = BagMode.Forward;
   private int backward = -1; // set 1 for not inverted, set -1 for inverted
   private int forward = 1; // set 1 for not inverted, set -1 for inverted
@@ -38,8 +40,8 @@ public class BagSubsystem extends SubsystemBase {
    * Constructor for the IntakeSubsystem
    */
   public BagSubsystem() {
-    bagMotor.setNeutralMode(NeutralMode.Brake);
-    TalonSRXConfiguration config = new TalonSRXConfiguration();
+    bagMotor.setNeutralMode(NeutralMode.Brake); // set motor off
+    TalonSRXConfiguration config = new TalonSRXConfiguration(); //create a new config instance
     config.peakCurrentLimit = 40; // the peak current, in amps
     config.peakCurrentDuration = 1500; // the time at the peak current before the limit triggers, in ms
     config.continuousCurrentLimit = 30; // the current to maintain if the peak limit is triggered

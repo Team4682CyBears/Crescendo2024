@@ -44,7 +44,6 @@ public class ManualInputInterfaces {
     if(InstalledHardware.driverXboxControllerInstalled){ // check if xbox-controller driver installed
       this.bindCommandsToDriverXBboxButtons();
     }
-
   }
   
   /**

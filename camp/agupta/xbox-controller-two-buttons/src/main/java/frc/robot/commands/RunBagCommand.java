@@ -1,8 +1,22 @@
+// ************************************************************
+// Bishop Blanchet Robotics
+// Home of the Cybears
+// FRC - Crescendo - 2024
+// File: FeederSubsystem.java
+// Intent: Forms the prelminary code for feeder subsystem.
+// ************************************************************
+
+// ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ ʕ •ᴥ•ʔ ʕ•ᴥ•  ʔ ʕ  •ᴥ•ʔ ʕ •`ᴥ´•ʔ ʕ° •° ʔ 
+
+// declare package to contain current class
 package frc.robot.commands;
 
+// import wpi libraries
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+
+// import local classes
 import frc.robot.common.BagMode;
 import frc.robot.subsystems.BagSubsystem;
 
