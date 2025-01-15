@@ -41,14 +41,14 @@ public class ManualInputInterfaces {
   {
     // Configure the driver xbox controller bindings
     if(InstalledHardware.driverXboxControllerInstalled){ // check if xbox-controller driver installed
-      this.bindCommandsToDriverXBboxButtons();
+      this.bindCommandsToDriverXboxButtons();
     }
   }
   
   /**
    * Will attach commands to the driver Xbox buttons 
    */
-  private void bindCommandsToDriverXBboxButtons(){
+  private void bindCommandsToDriverXboxButtons(){
 
     // check if subsystem is available 
     if(this.subsystemCollection.isBagSubsystemAvailable()) { // runs forward while button is pressed
