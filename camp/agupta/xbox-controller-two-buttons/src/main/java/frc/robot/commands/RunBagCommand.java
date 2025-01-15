@@ -12,7 +12,7 @@
 package frc.robot.commands;
 
 // import wpi libraries
-import edu.wpi.first.wpilibj.DataLogManager;
+//import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.Command;
 
 // import local classes
@@ -43,18 +43,14 @@ public class RunBagCommand extends Command
   @Override
   public void initialize()
   {
+    bag.setBagMode(direction);
     done = false;
-    DataLogManager.log("Starting RunBagCommand");
+    //DataLogManager.log("Starting RunBagCommand");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute()
-  {
-    if(!done) {
-      bag.setBagMode(direction);
-    }
-  }
+  public void execute(){}
 
   // Called once the command ends or is interrupted.
   @Override
@@ -72,6 +68,7 @@ public class RunBagCommand extends Command
   @Override
   public boolean isFinished()
   {
+    bag.setAllStop();
     return done;
   }
 
