@@ -2,13 +2,13 @@
 // Bishop Blanchet Robotics
 // Home of the Cybears
 // FRC - Crescendo - 2024
-// File: FeederMode.java
+// File: BagMode.java
 // Intent: Forms enum of where notes will be fed into.
 // ************************************************************
 
 package frc.robot.common;
 
-public enum FeederMode{
-    FeedToShooter,
-    FeedToDunker
+public enum BagMode{
+    Forward,
+    Reverse
 }

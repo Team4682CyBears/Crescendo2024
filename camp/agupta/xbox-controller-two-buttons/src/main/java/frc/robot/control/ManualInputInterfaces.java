@@ -5,15 +5,20 @@
 // File: ManualInputInterfaces.java
 // Intent: Forms a class that grants access to driver controlled inputs.
 // ************************************************************
+
+// declare package containing class
 package frc.robot.control;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.ButtonPressCommand;
-import frc.robot.commands.FeederLaunchNote;
-import frc.robot.commands.RewindFeederCommand;
-import frc.robot.common.FeederMode;
+// import wpi libraries
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup; // run commands in parallel
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController; // button commands for Xbox controller
 
+// import local classes
+import frc.robot.commands.ButtonPressCommand;
+import frc.robot.commands.RunBagCommand;
+import frc.robot.common.BagMode;
+
+// define class
 public class ManualInputInterfaces {
 
   // subsystems needed for inputs
@@ -43,38 +48,37 @@ public class ManualInputInterfaces {
   }
   
   /**
-   * Will attach commands to the Driver XBox buttons 
+   * Will attach commands to the Driver Xbox buttons 
    */
   private void bindCommandsToDriverXBboxButtons(){
-    if(InstalledHardware.driverXboxControllerInstalled){ // check if xbox-controller driver installed
 
-      if(this.subsystemCollection.isFeederSubsystemAvailable()) {
-        // angle change commands 
-        // forward
-        this.driverController.x().whileTrue(
-          new ParallelCommandGroup(
-            new FeederLaunchNote(
-              subsystemCollection.getFeederSubsystem(), FeederMode.FeedToShooter, Constants.feederLaunchTimeoutSecondsInTele)
-          )
-        );
-        // backward
-        this.driverController.b().whileTrue(
-          new ParallelCommandGroup(
-            new RewindFeederCommand(
-                this.subsystemCollection.getFeederSubsystem(), 
-                FeederMode.FeedToShooter
-            ),
-            new ButtonPressCommand(
-              "driverController.b()",
-              "bag motor in reverse")
-            //new ButtonPressCommand(
-              //"driverController.y()",
-              //"Remove Note")
-              //)
-          )
-        );
-   
-      }
+    // check if subsystem is available 
+    if(this.subsystemCollection.isBagSubsystemAvailable()) {
+      // forward
+      this.driverController.x().whileTrue(
+        new ParallelCommandGroup(
+          new RunBagCommand(
+            this.subsystemCollection.getBagSubsystem(), BagMode.Forward),
+          new ButtonPressCommand(
+              "driverController.b()", 
+              "bag motor forward")
+
+        )
+      );
+      // backward
+      this.driverController.b().whileTrue(
+        new ParallelCommandGroup(
+          new RunBagCommand(
+            this.subsystemCollection.getBagSubsystem(), BagMode.Reverse),
+          new ButtonPressCommand(
+            "driverController.b()",
+            "bag motor reverse")
+          //new ButtonPressCommand(
+            //"driverController.y()",
+            //"Remove Note")
+            //)
+        )
+      );
     }
   }
 }

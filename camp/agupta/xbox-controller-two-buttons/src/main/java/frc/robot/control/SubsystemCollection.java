@@ -1,10 +1,10 @@
 package frc.robot.control;
 
-import frc.robot.subsystems.FeederSubsystem;
+import frc.robot.subsystems.BagSubsystem;
 
 public class SubsystemCollection {
 
-    private FeederSubsystem feederSubsystem = null;
+    private BagSubsystem bagSubsystem = null;
     
     // declaring input classes
     private ManualInputInterfaces manualInput = null;
@@ -13,9 +13,9 @@ public class SubsystemCollection {
     public void setManualInputInterfaces(ManualInputInterfaces value) { manualInput = value; }
     public boolean isManualInputInterfacesAvailable() { return manualInput != null; }
  
-    // Feeder subsystem
+    // bag subsystem
     // Uses bag motors, so using it for the 
-    public FeederSubsystem getFeederSubsystem() { return feederSubsystem; }
-    public void setFeederSubsystem(FeederSubsystem value) { feederSubsystem = value; }
-    public boolean isFeederSubsystemAvailable() { return feederSubsystem != null; }
+    public BagSubsystem getBagSubsystem() { return bagSubsystem; }
+    public void setBagSubsystem(BagSubsystem value) { bagSubsystem = value; }
+    public boolean isBagSubsystemAvailable() { return bagSubsystem != null; } // 
 }

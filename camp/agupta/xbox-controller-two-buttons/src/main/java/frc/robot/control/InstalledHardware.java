@@ -30,8 +30,8 @@ public class InstalledHardware
     public static final boolean driverXboxControllerInstalled = true;
 
     // ** -- bag motors on TED robot
-    // Feeder Related Hardware
-    public static final boolean feederInstalled = true;
+    // Bag Related Hardware
+    public static final boolean bagInstalled = true;
 
     // ************************************************************
     //
@@ -62,9 +62,9 @@ public class InstalledHardware
     // If you try to configure a TOF sensor that is not installed
     // the other TOF sensors that are installed will not work. 
     public static final boolean intakeTofInstalled = false;
-    public static final boolean firstFeederToShooterTofInstalled = false;
-    public static final boolean secondFeederToShooterTofInstalled = false;
-    public static final boolean feederToDunkerTofInstalled = false;
+    public static final boolean firstBagToShooterTofInstalled = false;
+    public static final boolean secondBagToShooterTofInstalled = false;
+    public static final boolean bagToDunkerTofInstalled = false;
 
     // Shooter Related Hardware
     public static final boolean shooterOutfeedInstalled = false;

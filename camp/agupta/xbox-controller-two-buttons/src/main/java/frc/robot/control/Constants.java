@@ -27,20 +27,20 @@ public class Constants {
     public static final double intakeTimeoutSeconds = 4.0;
 
     // ******************************************************************
-    // feeder constants
-    public static final int feederMotorCanId = 15;
-    public static final int firstFeederToShooterTofCanId = 16;
-    public static final int secondFeederToShooterTofCanId = 17;
-    // feederSpeed is [0.0 .. 1.0]
+    // bag constants
+    public static final int bagMotorCanId = 15;
+    public static final int firstBagToShooterTofCanId = 16;
+    public static final int secondBagToShooterTofCanId = 17;
+    // bagSpeed is [0.0 .. 1.0]
     // it runs in one direction for the shooter 
     // and the opposite direction for the dunker/amp
-    public static final double feederSpeed = 0.50;
-    public static final double feederReverseSpeed = 0.10;
-    // feeder will run until note is detected or this timeout has expired
-    public static final double feederTimeoutSeconds = 3.0;
-    public static final double feederLaunchTimeoutSecondsInAuto = .75;
-    public static final double feederLaunchTimeoutSecondsInTele = 2.00;
-    public static final double feederRewindSeconds = intakeTimeoutSeconds;
+    public static final double bagSpeed = 0.50;
+    public static final double bagReverseSpeed = 0.10;
+    // bag will run until note is detected or this timeout has expired
+    public static final double bagTimeoutSeconds = 3.0;
+    public static final double bagLaunchTimeoutSecondsInAuto = .75;
+    public static final double bagLaunchTimeoutSecondsInTele = 2.00;
+    public static final double bagRewindSeconds = intakeTimeoutSeconds;
 
     public static class OperatorConstants {
         public static final int kDriverControllerPort = 0;

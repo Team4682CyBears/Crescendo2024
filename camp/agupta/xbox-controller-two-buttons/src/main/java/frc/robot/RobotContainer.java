@@ -11,7 +11,7 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.control.SubsystemCollection;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.FeederSubsystem;
+import frc.robot.subsystems.BagSubsystem;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -39,8 +39,8 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
-    // feeder subsystem init
-    this.initializeFeederSubsystem();
+    // bag subsystem init
+    this.initializeBagSubsystem();
 
     // init the input system 
     this.initializeManualInputInterfaces();
@@ -81,20 +81,20 @@ public class RobotContainer {
   */
 
     /**
-   * A method to init the feeder subsystem
+   * A method to init the bag subsystem
    */
-  private void initializeFeederSubsystem(){
-    if(InstalledHardware.feederInstalled){
-      subsystems.setFeederSubsystem(new FeederSubsystem());
+  private void initializeBagSubsystem(){
+    if(InstalledHardware.bagInstalled){
+      subsystems.setBagSubsystem(new BagSubsystem());
 
-      // default command for feeder is to stop
-      subsystems.getFeederSubsystem().setDefaultCommand(
+      // default command for bag is to stop
+      subsystems.getBagSubsystem().setDefaultCommand(
         new InstantCommand(
-          subsystems.getFeederSubsystem()::setAllStop, 
-          subsystems.getFeederSubsystem()));
-      DataLogManager.log("SUCCESS: FeederSubsystem");
+          subsystems.getBagSubsystem()::setAllStop, 
+          subsystems.getBagSubsystem()));
+      DataLogManager.log("SUCCESS: BagSubsystem");
     } else {
-      DataLogManager.log("FAIL: FeederSubsystem");
+      DataLogManager.log("FAIL: BagSubsystem");
     }
   }
 
