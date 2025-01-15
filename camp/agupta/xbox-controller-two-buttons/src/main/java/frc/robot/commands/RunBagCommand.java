@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.common.BagMode;
-import frc.robot.control.Constants;
 import frc.robot.subsystems.BagSubsystem;
 
 public class RunBagCommand extends Command

@@ -48,35 +48,32 @@ public class ManualInputInterfaces {
   }
   
   /**
-   * Will attach commands to the Driver Xbox buttons 
+   * Will attach commands to the driver Xbox buttons 
    */
   private void bindCommandsToDriverXBboxButtons(){
 
     // check if subsystem is available 
-    if(this.subsystemCollection.isBagSubsystemAvailable()) {
-      // forward
-      this.driverController.x().whileTrue(
-        new ParallelCommandGroup(
-          new RunBagCommand(
+    if(this.subsystemCollection.isBagSubsystemAvailable()) { // runs forward while button is pressed
+      // move bag motor forward
+      this.driverController.x().onTrue(
+        // not used due to both bag commands being under same subsystem
+        new ParallelCommandGroup( // allows different subsystems to run in parallel
+          new RunBagCommand( // run bag motor
             this.subsystemCollection.getBagSubsystem(), BagMode.Forward),
-          new ButtonPressCommand(
-              "driverController.b()", 
+          new ButtonPressCommand( // log commands
+              "driverController.x()", 
               "bag motor forward")
 
         )
       );
-      // backward
-      this.driverController.b().whileTrue(
+      // move bag motor in reverse
+      this.driverController.b().onTrue( // runs backward while button is pressed
         new ParallelCommandGroup(
-          new RunBagCommand(
+          new RunBagCommand( // run bag motor
             this.subsystemCollection.getBagSubsystem(), BagMode.Reverse),
-          new ButtonPressCommand(
+          new ButtonPressCommand( // log commands
             "driverController.b()",
             "bag motor reverse")
-          //new ButtonPressCommand(
-            //"driverController.y()",
-            //"Remove Note")
-            //)
         )
       );
     }
