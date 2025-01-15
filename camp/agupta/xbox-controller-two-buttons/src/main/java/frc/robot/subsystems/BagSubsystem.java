@@ -41,7 +41,10 @@ public class BagSubsystem extends SubsystemBase {
    */
   public BagSubsystem() {
     bagMotor.setNeutralMode(NeutralMode.Brake); // set motor off
-    TalonSRXConfiguration config = new TalonSRXConfiguration(); //create a new config instance
+
+    // set configuration
+    // https://api.ctr-electronics.com/phoenix/release/java/com/ctre/phoenix/motorcontrol/can/TalonSRX.html
+    TalonSRXConfiguration config = new TalonSRXConfiguration(); // create a new config instance
     config.peakCurrentLimit = 40; // the peak current, in amps
     config.peakCurrentDuration = 1500; // the time at the peak current before the limit triggers, in ms
     config.continuousCurrentLimit = 30; // the current to maintain if the peak limit is triggered
