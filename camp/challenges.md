@@ -26,7 +26,7 @@ The table below highlights various challanges that coder members will be assigne
 | Beam break sensor | bag motor on/off in a single direction | Every time a beam break sensor is broken turn motor on, otherwise turn off motor | 2nd year | ??  |
 | Distance sensor | Small neo | As something comes into view of the sensor closer and closer motor speed increases.  When nothing is in view the motor is off | 2nd year | ??  |
 | NavX various movements | Musical notes functionality on a Talon motor | Every time an axis movement on the navx occurs one of 6 notes is played on the Talon. | 2nd year | ??  |
-| XBox Controller left/right triggers | Talon motor | Use the input of BOTH the left and right triggers as double/floating point value to control the speed of the motor (where left is negative and right is positive).  | 2nd year | ??  |
+| XBox Controller left/right triggers | Talon motor | Use the input of BOTH the left and right triggers as double/floating point value to control the speed of the motor (where left is negative and right is positive).  | 2nd year | Mateo |
 | Button board three+ buttons | Neo Motor | Use of the input of three or more buttons on the button board to control motor.  Idea is to use buttons to both hold speed of a motor constant as well as gradually increase the speed of a motor in both forward and reverse directions. | 2nd year | ??  |
 | Shuffle board setting and/or XBox controller button, Limelight and April Tag | BearMax+ 4-wheel Swerve | Add feature to do April Tag following.  Robot should be able to center itself on an April tag that is within the field of vision. | 2nd year | ?? |
 
